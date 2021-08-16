@@ -353,7 +353,6 @@ export class ObjectDescriptor {
         this.traits.push( ...traits )
 
         for ( let trait of traits ) {
-            console.log(`Adding ${trait.name} to ${this.target.constructor.name}` )
 
             if ( typeof trait === "function" ) trait  = trait.prototype
 

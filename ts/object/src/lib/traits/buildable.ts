@@ -7,7 +7,7 @@ export class Buildable {
             constructor( ...args ) {
                 super(...args)
 
-                console.log( "Building ", ...args )
+                // console.log( "Building ", ...args )
 
             }   
         }

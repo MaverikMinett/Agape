@@ -1,6 +1,9 @@
 import {} from "jasmine"
 
 import { meta } from '../meta'
+import { build } from "./build";
+import { include } from "./include";
+import { lazy } from "./lazy";
 import { stack } from './stack'
 
 
@@ -128,4 +131,33 @@ describe('stack decorator', () => {
         o.foo()
         expect( o.stack ).toEqual(11)
     })
+
+
+	it('removes the default method implementation', () => {
+		class ATrait {
+
+			@lazy(0)
+			calls:number
+
+			@stack
+			init() {
+				this.calls++
+			}
+
+		}
+
+		interface AClass extends ATrait { };
+		@include( ATrait )
+		class AClass {
+
+		}
+
+		const o = new AClass()
+		o.init()
+		expect( o.calls ).toBe(1)
+
+		expect( meta(AClass).method('init').ʘdefault ).toBeUndefined()
+	})
+
+
 })

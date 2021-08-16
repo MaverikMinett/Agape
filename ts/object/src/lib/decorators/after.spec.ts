@@ -3,6 +3,8 @@ import {} from "jasmine"
 import { meta } from '../meta'
 
 import { after } from './after'
+import { include } from "./include";
+import { lazy } from "./lazy";
 
 
 let o;
@@ -133,5 +135,29 @@ describe('after decorator', () => {
         o.foo()
         expect( o.count ).toEqual(2)
     })
+	it('removes the default method implementation', () => {
+		class ATrait {
 
+			@lazy(0)
+			calls:number
+
+			@after
+			init() {
+				this.calls++
+			}
+
+		}
+
+		interface AClass extends ATrait { };
+		@include( ATrait )
+		class AClass {
+
+		}
+
+		const o = new AClass()
+		o.init()
+		expect( o.calls ).toBe(1)
+
+		expect( meta(AClass).method('init').ʘdefault ).toBeUndefined()
+	})
 })

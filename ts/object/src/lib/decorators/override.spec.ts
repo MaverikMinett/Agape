@@ -2,6 +2,8 @@ import {} from "jasmine"
 
 import { override } from '../decorators/override'
 import { meta } from "../meta";
+import { include } from "./include";
+import { lazy } from "./lazy";
 import { property } from "./property";
 
 let o;
@@ -305,6 +307,30 @@ describe('override decorator', () => {
         expect( o.action() ).toBe("a")
     })
 
+	it('removes the default method implementation', () => {
+		class ATrait {
 
+			@lazy(0)
+			calls:number
+
+			@override
+			init() {
+				this.calls++
+			}
+
+		}
+
+		interface AClass extends ATrait { };
+		@include( ATrait )
+		class AClass {
+
+		}
+
+		const o = new AClass()
+		o.init()
+		expect( o.calls ).toBe(1)
+
+		expect( meta(AClass).method('init').ʘdefault ).toBeUndefined()
+	})
 
 })
