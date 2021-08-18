@@ -4,7 +4,7 @@ import { property } from "./property"
 
 
 let o;
-describe('property decorator', () => {
+xdescribe('property decorator', () => {
 
     afterEach( () => {
         o = undefined;

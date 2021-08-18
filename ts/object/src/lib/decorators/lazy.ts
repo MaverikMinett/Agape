@@ -7,7 +7,7 @@ export function lazy( value:any, propertyName?: string,  descriptor?: TypedPrope
 
     function lazy(target:any, propertyName: string,  descriptor?: TypedPropertyDescriptor<Function>) {
         if ( descriptor ) throw new Error("Cannot use the lazy decorator on a method")
-        meta(target).property( propertyName ).default(value)
+        meta(target).property( propertyName ).lazy(value)
     }
 
     if ( propertyName === undefined ) {

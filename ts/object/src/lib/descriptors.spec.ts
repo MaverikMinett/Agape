@@ -2,6 +2,7 @@ import { } from 'jasmine'
 import { include } from './decorators/include';
 
 import { MethodDescriptor, MethodDescriptorSet, ObjectDescriptor, PropertyDescriptor, PropertyDescriptorSet  } from './descriptors'
+import { meta } from './meta';
 
 
 let d, o, m;
@@ -203,6 +204,7 @@ describe('PropertyDescriptor', () => {
         b = new ObjectDescriptor( o )
         d = new PropertyDescriptor(b, 'foo')
         d.default(32)
+        d.performBuild(o)
 
         expect( d.get(o) ).toEqual(32) 
     })
@@ -211,7 +213,7 @@ describe('PropertyDescriptor', () => {
         o = {  }
         b = new ObjectDescriptor( o )
         d = new PropertyDescriptor(b, 'foo')
-        d.default( o => ['hello'] )
+        d.default( o => ['hello'] ).lazy()
 
         expect( d.get(o) ).toEqual(['hello']) 
     })
@@ -229,7 +231,7 @@ describe('PropertyDescriptor', () => {
         o = {  }
         b = new ObjectDescriptor( o )
         d = new PropertyDescriptor(b, 'foo')
-        d.default( o => 'bar' ).readonly(true)
+        d.default( o => 'bar' ).lazy().readonly(true)
 
         o = {  }
         b = new ObjectDescriptor( o )
@@ -334,7 +336,7 @@ describe('PropertyDescriptor', () => {
         b = new ObjectDescriptor( o )
 
         d = new PropertyDescriptor(b, 'foo')
-        d.default(42)
+        d.default(42).lazy()
         d.install_dispatcher()
 
         expect(o.foo).toEqual(42)
@@ -354,7 +356,7 @@ describe('PropertyDescriptor', () => {
         b = new ObjectDescriptor( o )
 
         d = new PropertyDescriptor(b, 'foo')
-        d.default(42).enumerable(false)
+        d.default(42).enumerable(false).lazy()
         d.install_dispatcher()
 
         expect(o.foo).toEqual(42)
@@ -367,12 +369,110 @@ describe('PropertyDescriptor', () => {
 
         d = new PropertyDescriptor(b, 'foo')
         d.install_dispatcher()
-        d.default(42).enumerable(false)
+        d.default(42).enumerable(false).lazy()
         
 
         expect(o.foo).toEqual(42)
         expect(JSON.parse(JSON.stringify(o))).toEqual({})
     })
+
+    describe('build & performBuild', () => {
+
+        describe('build', () => {
+            it('should set the ʘbuild property to true', () => {
+                class AClass {
+                    foo:string
+                }
+
+                const q = new ObjectDescriptor(AClass)
+                q.property('foo').build()
+                expect( q.property('foo').ʘbuild ).toBeTrue()
+            })
+
+            it('should set the default value', () => {
+                class AClass {
+                    foo:string
+                }
+
+                const q = new ObjectDescriptor(AClass)
+                q.property('foo').build()
+                expect( q.property('foo').ʘdefault ).toBeTruthy()
+            })
+        })
+
+        describe('performBuild', () => {
+            it('should set the value on an instance', () => {
+                class AClass {
+                    foo:string
+                }
+
+                const o = {
+                    _build_foo: () => {
+                        return "bar"
+                    }
+                }
+
+                const q = new ObjectDescriptor(AClass)
+                q.property('foo').build()
+
+                q.property('foo').performBuild(o)
+
+                expect( o['ʘfoo'] ).toBe("bar")
+            })
+        })
+
+
+        it('should use a default method name if no arguments provided', () => {
+            class AClass {
+                foo:string
+            }
+
+            const o = {
+                _build_foo: jasmine.createSpy()
+            }
+
+            const q = new ObjectDescriptor(AClass)
+            q.property('foo').build()
+
+            q.property('foo').performBuild(o)
+
+            expect( o._build_foo ).toHaveBeenCalled()
+        })
+
+
+        it('should use the provided method name to build the value', () => {
+            class AClass {
+                foo:string
+            }
+
+            const o = {
+                _build_foosie_doosie: jasmine.createSpy()
+            }
+
+            const q = new ObjectDescriptor(AClass)
+            q.property('foo').build('_build_foosie_doosie')
+
+            q.property('foo').performBuild(o)
+
+            expect( o._build_foosie_doosie ).toHaveBeenCalled()
+        })
+
+        it('should use the provided function to build the value', () => {
+            class AClass {
+                foo:string
+            }
+
+            const o = { }
+
+            const q = new ObjectDescriptor(AClass)
+            q.property('foo').build( o => 42 )
+
+            q.property('foo').performBuild(o)
+
+            expect( o['ʘfoo'] ).toBe(42)
+        })
+    })
+
 
 })
 
@@ -396,7 +496,7 @@ describe('ObjectDescriptor', () => {
 
     })
 
-    it('should define a property on an onject', () => {
+    it('should define a property on an object', () => {
 
         class SimpleObject { }
 
@@ -404,7 +504,7 @@ describe('ObjectDescriptor', () => {
 
         if ( ! p.Δmeta ) p.Δmeta = new ObjectDescriptor(p)
 
-        p.Δmeta.property('foo').default(32)
+        p.Δmeta.property('foo').default(32).lazy()
 
         let o:any = new SimpleObject()
 
@@ -517,7 +617,7 @@ describe('ObjectDescriptor', () => {
         class SimpleTrait { }
         let p: any = SimpleTrait.prototype
         p.Δmeta = new ObjectDescriptor(p)
-        p.Δmeta.property('foo').default(32)
+        p.Δmeta.property('foo').default(32).lazy()
 
         class SimpleObject  {}
         let q: any = SimpleObject.prototype
@@ -618,6 +718,36 @@ describe('ObjectDescriptor', () => {
             ac.Δmeta.include(BTrait)
 
             expect( ac.Δmeta.does(ATrait) ).toBeTrue()
+        })
+    })
+
+    describe('building', () => {
+        describe('addBuildProperty', () => {
+            it('should add the property to the build properties', () => {
+                class AClass {
+                    
+                }    
+                const p = meta(AClass).property('foo')
+                meta(AClass).addBuildProperty( p )
+                expect( meta(AClass).properties.all() ).toEqual([p])
+            })
+        })
+        describe('performBuild', () => {
+            it('should build a property', () => {
+                class AClass {
+                    
+                }    
+
+                const p = meta(AClass).property('foo').default(42)
+                meta(AClass).addBuildProperty( p )
+
+                spyOn( meta(AClass), 'performBuild' ).and.callThrough()
+                const o = new AClass()
+                meta(AClass).performBuild(o)
+
+                expect( meta(AClass).performBuild ).toHaveBeenCalled()
+                expect( o['foo'] ).toEqual(42)
+            })
         })
     })
 

@@ -1,4 +1,5 @@
 import {} from "jasmine"
+import { build } from "../decorators/build";
 import { include } from "../decorators/include";
 import { meta } from "../meta";
 import { Buildable } from "./buildable";
@@ -26,6 +27,8 @@ describe('Buildable trait', () => {
 
         expect( meta(AClass).does( Buildable ) ).toBeTrue()
     })
+
+
 
 
 })

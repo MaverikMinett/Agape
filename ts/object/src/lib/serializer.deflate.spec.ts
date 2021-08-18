@@ -43,7 +43,7 @@ describe('deflate', () => {
 
     it('should deflate agape managed properties without the special character', () => {
         class SimpleObject{  }
-        meta(SimpleObject).property('bar').default('baz')
+        meta(SimpleObject).property('bar').default('baz').lazy()
 
         o = new SimpleObject()
         expect( o.bar ).toEqual('baz')

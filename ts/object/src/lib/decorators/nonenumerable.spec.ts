@@ -4,6 +4,10 @@ import { lazy } from './lazy'
 import { property } from './property'
 import { readonly } from './readonly'
 import { nonenumerable } from './nonenumerable'
+import { build } from "./build"
+import { include } from "./include"
+import { Buildable } from "../traits/buildable"
+import { meta } from "../meta"
 
 
 
@@ -19,7 +23,7 @@ describe('nonenumerable decorator', () => {
 
         class SimpleObject { 
 
-            @property('bar')  foo: string
+            @lazy('bar')  foo: string
 
         }
 
@@ -69,11 +73,12 @@ describe('nonenumerable decorator', () => {
         expect( inheritedEnumerables.includes('ʘfoo') ).toBeFalse()
     })
 
-    it('should work with the property decorator', () => {
+    it('should work with the build decorator', () => {
 
+        @include( Buildable )
         class SimpleObject { 
 
-            @nonenumerable @property('bar') foo: string
+            @nonenumerable @build(o => 'bar') foo: string
 
         }
 
@@ -90,22 +95,21 @@ describe('nonenumerable decorator', () => {
 
     it('should work with the readonly decorator', () => {
 
-        class SimpleObject { 
-
-            @nonenumerable @readonly @property('bar') foo: string
-
+        @include( Buildable )
+        class SimpleObject {
+            @nonenumerable @readonly @build( o => "42" ) foo: string
         }
 
         o = new SimpleObject()
+        expect(o.foo).toEqual('42')
+        expect( meta(SimpleObject).property('foo').ʘreadonly ).toBeTrue()
 
-        expect(o.foo).toEqual('bar')
+
         
         let inheritedEnumerables = []
         for ( let field in o ) { inheritedEnumerables.push(field) }
-
         expect( inheritedEnumerables.includes('foo') ).toBeFalse()
         expect( inheritedEnumerables.includes('ʘfoo') ).toBeFalse()
-
         expect( () => { o.foo = "baz" }).toThrowError()
     })
 

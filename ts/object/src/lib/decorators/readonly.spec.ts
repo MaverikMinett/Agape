@@ -2,6 +2,7 @@ import {} from "jasmine"
 import { meta } from "../meta";
 import { readonly } from "./readonly"
 import { property } from "./property"
+import { lazy } from "./lazy";
 
 let o:any;
 describe('readonly decorator', () => {
@@ -43,7 +44,7 @@ describe('readonly decorator', () => {
 
     it('should be readonly and have a default value', () => {
         class SimpleObject  { 
-            @readonly @property(32)
+            @readonly @lazy(32)
             foo: Number
         }
 
@@ -54,7 +55,7 @@ describe('readonly decorator', () => {
 
     it('should be used inside a trait', () => {
         class SimpleObject  { 
-            @readonly @property(32)
+            @readonly @lazy(32)
             foo: Number
         }
 
@@ -65,7 +66,7 @@ describe('readonly decorator', () => {
 
     it('should be used inside a trait', () => {
         class SimpleTrait  { 
-            @readonly @property(32)
+            @readonly @lazy(32)
             foo: Number
         }
 

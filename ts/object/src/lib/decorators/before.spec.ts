@@ -4,7 +4,7 @@ import { before } from './before'
 
 
 
-let o;
+let o:any
 describe('before decorator', () => {
 
     beforeEach( () => {
