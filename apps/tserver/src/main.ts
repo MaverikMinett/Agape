@@ -1,6 +1,6 @@
 import express from 'express';
 
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+const port = process.env.PORT ? Number(process.env.PORT) : 3002;
 
 const app = express();
 
@@ -9,5 +9,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Express (with libs) started at http://localhost:${port}`);
+  console.log(`Express (without libs) started at http://localhost:${port}`);
 });
