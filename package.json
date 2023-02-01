@@ -2,12 +2,19 @@
   "name": "project-zed",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start": "nx serve server",
+    "test": "nx test lib-api server",
+    "test:server": "nx test server",
+    "test:lib-api": "nx test lib-api"
+  },
   "private": true,
   "dependencies": {
+    "axios": "^1.0.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@nrwl/esbuild": "15.6.3",
     "@nrwl/eslint-plugin-nx": "15.6.3",
     "@nrwl/jest": "^15.6.3",
     "@nrwl/js": "^15.6.3",
@@ -16,9 +23,10 @@
     "@nrwl/nx-cloud": "^15.0.3",
     "@nrwl/workspace": "15.5.3",
     "@types/jest": "28.1.1",
-    "@types/node": "16.11.7",
+    "@types/node": "18.7.1",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
+    "esbuild": "^0.15.7",
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",
     "jest": "28.1.1",
