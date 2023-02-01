@@ -9,5 +9,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`[ ready ] http://localhost:${port}`);
+  console.log(`Express started at http://localhost:${port}`);
 });

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx serve server",
+    "start": "concurrently \"npm:start:server\" \"npm:start:express\" ",
     "start:express": "nx serve eserver",
     "start:server": "nx serve server",
     "test": "nx test lib-api server",
@@ -30,6 +30,7 @@
     "@types/node": "18.7.1",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
+    "concurrently": "^7.6.0",
     "esbuild": "^0.15.7",
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",
