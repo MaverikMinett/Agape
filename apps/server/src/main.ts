@@ -1,6 +1,6 @@
 import * as http from 'http';
 
-const port = 3000;
+const port = process.env.PORT ? Number(process.env.PORT) : 4000;
 
 http.createServer( 
     ( request, response ) => {
