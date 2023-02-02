@@ -1,5 +1,5 @@
 import * as http from 'http';
-import { proxy } from '@lib/server';
+import { log, proxy } from '@lib/server';
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3001;
 const verbose = true;
@@ -10,13 +10,7 @@ server.on('request', async ( request, response ) => {
 
     /* logging */
     if ( verbose ) {
-        const { method, url } = request;
-        const { statusCode, statusMessage } = response;
-      
-        response.on('finish', () => {
-          console.log(`${statusCode} ${method} ${url}`)
-          if ( statusMessage ) console.log(`        ${statusMessage}`)
-        })
+        response.on('finish', () => log( request, response ) )
     }
 
     /* redirect to angular app */
