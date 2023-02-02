@@ -9,12 +9,19 @@ const server = http.createServer()
 server.on('request', async ( request, response ) => {
 
     /* logging */
-    if ( verbose ) console.log( request.url )
+    if ( verbose ) {
+        const { method, url } = request;
+        const { statusCode, statusMessage } = response;
+      
+        response.on('finish', () => {
+          console.log(`${statusCode} ${method} ${url}`)
+          if ( statusMessage ) console.log(`        ${statusMessage}`)
+        })
+    }
 
     /* redirect to angular app */
     let match: RegExpMatchArray = request.url.match(/^\/(?<path>.*)$/)
     if ( match ) {
-        console.log(match.groups)
         proxy('http://localhost:4200', match.groups.path, request, response )
         return;
     }
