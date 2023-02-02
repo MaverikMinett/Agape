@@ -1,5 +1,5 @@
 import * as http from 'http';
-import { proxy } from './proxy';
+import { proxy } from '@lib/server';
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3001;
 const verbose = true;
@@ -35,3 +35,5 @@ server.on('request', async ( request, response ) => {
 server.listen(
     port, () => console.log(`Server started at http://localhost:${port}`)
 )
+
+

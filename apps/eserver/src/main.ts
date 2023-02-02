@@ -1,4 +1,5 @@
 import express from 'express';
+import { proxy } from '@lib/server';
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 const verbose = true;
@@ -20,9 +21,9 @@ if ( verbose ) {
   })
 }
 
-
-app.get('/', (req, res) => {
-  res.send({ message: 'Hello API' });
+app.get(['/','/*'], (req, res) => {
+  console.log(req.params)
+  proxy('http://localhost:4200', `/${req.params['0']}`, req, res )
 });
 
 app.listen(port, () => {
