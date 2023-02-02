@@ -1,1 +1,1 @@
-export * from './lib/lib-express';
+export * from './lib/middleware/proxy.middleware';

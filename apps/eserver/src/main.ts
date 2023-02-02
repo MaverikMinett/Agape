@@ -1,5 +1,5 @@
 import express from 'express';
-import { proxy } from '@lib/server';
+import { proxy } from '@lib/express';
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 const verbose = true;
@@ -21,10 +21,13 @@ if ( verbose ) {
   })
 }
 
-app.get(['/','/*'], (req, res) => {
-  console.log(req.params)
-  proxy('http://localhost:4200', `/${req.params['0']}`, req, res )
-});
+app.use(['/', '/*'], proxy('http://localhost:4200') )
+
+app.use('*', (req, res) => {
+  console.log("base", req.baseUrl)
+  console.log("url", req.url)
+  res.send('404 Page not found')
+})
 
 app.listen(port, () => {
   console.log(`Express (with libs) started at http://localhost:${port}`);

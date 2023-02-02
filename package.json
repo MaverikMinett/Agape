@@ -8,10 +8,13 @@
     "start:eserver": "nx serve eserver",
     "start:server": "nx serve server",
     "start:tserver": "nx serve tserver",
-    "test": "nx test lib-api server",
+    "test": "nx test lib-api lib-server lib-express server eserver tserver",
     "test:server": "nx test server",
-    "test:express": "nx test eserver",
-    "test:lib-api": "nx test lib-api"
+    "test:eserver": "nx test eserver",
+    "test:tserver": "nx test tserver",
+    "test:lib-api": "nx test lib-api",
+    "test:lib-server": "nx test lib-server",
+    "test:lib-express": "nx test lib-express"
   },
   "private": true,
   "dependencies": {
