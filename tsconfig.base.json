@@ -15,9 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@lib/server": ["libs/lib-server/src/index.ts"],
       "@zed/api": ["libs/lib-api/src/index.ts"]
     },
-    "outDir": "dist"
+    "outDir": "dist",
+    "esModuleInterop": true
   },
   "exclude": ["node_modules", "tmp"]
 }
