@@ -1,0 +1,122 @@
+<html>
+
+<head>
+    <title>Project ZED Service Index</title>
+    <style>
+        :root {
+            --card-padding: 18px;
+        }
+        body {
+            font-family: Inter var,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";
+            font-feature-settings: "cv02","cv03","cv04","cv11";
+            font-size: 12px;
+            background: rgb(4,114,117);
+            background: linear-gradient(329deg, rgba(4,114,117,1) 0%, rgba(9,102,121,1) 28%, rgba(0,212,255,1) 100%);
+        }
+        .layout {
+            display: flex;
+            flex-direction: row;
+        }
+        .layout > .card {
+            flex: 1;
+        }
+        .card {
+            display: inline-block;
+            min-width: 400px;
+            border-radius: 2px;
+            -webkit-box-shadow: 3px 3px 5px -3px rgba(0,0,0,0.75);
+            -moz-box-shadow: 3px 3px 5px -3px rgba(0,0,0,0.75);
+            box-shadow: 3px 3px 5px -3px rgba(0,0,0,0.75);
+            background-color: #fff;
+            margin: 40px;
+            padding: var(--card-padding);
+        }
+        .card-header {
+            margin: calc( var(--card-padding) * -1 ) calc( var(--card-padding) * -1 ) var(--card-padding);
+            border-bottom: 1px solid rgba(0,0,0,0.11);
+        }
+        .card-title {
+            font-size: 16px;
+            letter-spacing: 1px;
+            padding: calc( var(--card-padding) * .5 );
+        }
+        td { 
+            font-size: 13px;
+            padding: 13px 0px;
+            border-top: 1px solid rgba(0,0,0,0.11);
+        }
+        .card-body table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .text-right {
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    Backend
+                </div>
+                <div class="card-header-description">
+    
+                </div>
+            </div>
+    
+            <div class="card-body">
+                <table>
+                    <tr>
+                        <td width="*">Express Server (with Libraries)</td>
+                        <td class="text-right"><a href="http://localhost:3000" target="_blank">http://localhost:3000</a></td>
+                    </tr>
+                    <tr>
+                        <td>Lib-Server (no Libraries)</td>
+                        <td class="text-right"><a href="http://localhost:3001" target="_blank">http://localhost:3001</a></td>
+                    </tr>
+                    <tr>
+                        <td>MVC Express Server (no Libraries)</td>
+                        <td class="text-right"><a href="http://localhost:3002" target="_blank">http://localhost:3002</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+
+            <div class="card-header">
+                <div class="card-title">
+                    Frontend
+                </div>
+                <div class="card-header-description">
+    
+                </div>
+            </div>
+    
+            <div class="card-body">
+                <table>
+                    <tr>
+                        <td width="*">Angular</td>
+                        <td class="text-right"><a href="http://localhost:4200" target="_blank">http://localhost:4200</a></td>
+                    </tr>
+                    <tr>
+                        <td>Agape</td>
+                        <td class="text-right"><a href="http://localhost:4201" target="_blank">http://localhost:4201</a></td>
+                    </tr>
+                </table>
+            </div>
+    
+        </div>
+    </div>
+
+    
+
+
+</body>
+
+
+</html>

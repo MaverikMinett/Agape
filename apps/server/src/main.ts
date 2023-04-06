@@ -1,5 +1,6 @@
 import * as http from 'http';
 import { log, proxy } from '@lib/server';
+import * as fs from 'fs';
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3001;
 const verbose = true;
@@ -13,11 +14,11 @@ server.on('request', async ( request, response ) => {
         response.on('finish', () => log( request, response ) )
     }
 
-    /* redirect to angular app */
-    let match: RegExpMatchArray = request.url.match(/^\/(?<path>.*)$/)
-    if ( match ) {
-        proxy('http://localhost:4200', match.groups.path, request, response )
-        return;
+    /* display service index */
+    if ( request.url.match(/^\/$/) ) {
+        let indexHtml = fs.readFileSync('./apps/_common/index.html')
+        response.write( indexHtml )
+        response.end()
     }
     else {
         response.write('404 Page not found')
