@@ -1,0 +1,75 @@
+{
+  "name": "clientag",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/clientag/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/clientag",
+        "compiler": "babel",
+        "main": "apps/clientag/src/main.ts",
+        "tsConfig": "apps/clientag/tsconfig.app.json",
+        "webpackConfig": "apps/clientag/webpack.config.js",
+        "assets": ["apps/clientag/src/favicon.ico", "apps/clientag/src/assets"],
+        "index": "apps/clientag/src/index.html",
+        "baseHref": "/",
+        "styles": ["apps/clientag/src/styles.css"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/clientag/src/environments/environment.ts",
+              "with": "apps/clientag/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/webpack:dev-server",
+      "options": {
+        "buildTarget": "clientag:build",
+        "port": 4201
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "clientag:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/clientag/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/clientag/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  }
+}
