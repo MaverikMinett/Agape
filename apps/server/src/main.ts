@@ -19,11 +19,20 @@ server.on('request', async ( request, response ) => {
         let indexHtml = fs.readFileSync('./apps/_common/index.html')
         response.write( indexHtml )
         response.end()
+        return;
     }
-    else {
-        response.write('404 Page not found')
-        response.end()
+
+    /* redirect to angular app */
+    let match: RegExpMatchArray = request.url.match(/^\/ng(?<path>.*\/?)$/)
+    if ( match ) {
+        console.log(`Forwarding to angular app ${match.groups.path}`)
+        proxy('http://localhost:4200', match.groups.path ?? "", request, response )
+        return;
     }
+
+    /* page not found error */
+    response.write('404 Page not found')
+    response.end()
 
 } )
 
