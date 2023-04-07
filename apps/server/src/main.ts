@@ -22,18 +22,28 @@ server.on('request', async ( request, response ) => {
         return;
     }
 
+    /** redirects **/
+    let match: RegExpMatchArray
+
     /* redirect to angular app */
-    let match: RegExpMatchArray = request.url.match(/^\/ng(?<path>.*\/?)$/)
+    match = request.url.match(/^\/ng(?<path>.*\/?)$/)
     if ( match ) {
-        console.log(`Forwarding to angular app ${match.groups.path}`)
+        console.log(`Forwarding to angular frontend ${match.groups.path}`)
         proxy('http://localhost:4200', match.groups.path ?? "", request, response )
+
+        return;
+    }
+
+    match = request.url.match(/^\/zed(?<path>.*\/?)$/)
+    if ( match ) {
+        console.log(`Forwarding to agape frontend http://localhost:4201${match.groups.path}`)
+        proxy('http://localhost:4201', match.groups.path ?? "", request, response )
         return;
     }
 
     /* page not found error */
     response.write('404 Page not found')
     response.end()
-
 } )
 
 server.listen(
