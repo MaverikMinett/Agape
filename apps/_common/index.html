@@ -6,6 +6,9 @@
         :root {
             --card-padding: 18px;
         }
+        * {
+            box-sizing: border-box;
+        }
         body {
             font-family: Inter var,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";
             font-feature-settings: "cv02","cv03","cv04","cv11";
@@ -14,21 +17,34 @@
             background: linear-gradient(329deg, rgba(4,114,117,1) 0%, rgba(9,102,121,1) 28%, rgba(0,212,255,1) 100%);
         }
         .layout {
-            display: flex;
-            flex-direction: row;
+            display: grid;
+            grid-template-columns: minmax( 400px, 1fr ) minmax( 400px, 1fr );
+            row-gap: 40px;
+            column-gap: 60px;
+            margin: 40px;
         }
-        .layout > .card {
-            flex: 1;
+        .layout > .card.section-header {
+            grid-column: span 2;
+        }
+        .layout > .card.section-header > .card-title {
+            margin: 0px calc( var(--card-padding) * -1 );
+        }
+        @media screen and (max-width: 959px) {
+            .layout {
+                grid-template-columns: minmax( 350px, 1fr );
+            }
+            .layout > .card.section-header {
+                grid-column: span 1;
+            }
         }
         .card {
             display: inline-block;
-            min-width: 400px;
             border-radius: 2px;
             -webkit-box-shadow: 3px 3px 5px -3px rgba(0,0,0,0.75);
             -moz-box-shadow: 3px 3px 5px -3px rgba(0,0,0,0.75);
             box-shadow: 3px 3px 5px -3px rgba(0,0,0,0.75);
             background-color: #fff;
-            margin: 40px;
+            /* margin: 40px; */
             padding: var(--card-padding);
         }
         .card-header {
@@ -39,6 +55,10 @@
             font-size: 16px;
             letter-spacing: 1px;
             padding: calc( var(--card-padding) * .5 );
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
         }
         td { 
             font-size: 13px;
@@ -52,12 +72,126 @@
         .text-right {
             text-align: right;
         }
+        a {
+            color: rgba(0,0,0,0.38);
+        }
+        a:hover {
+            color: rgba(0,0,0,0.66);
+        }
+        a:visited {
+            color: rgba(0,0,0,0.38);
+        }
+        a.service-link {
+            display: inline-block;
+            max-width: 150px;
+            text-decoration: none;
+            padding: 18px;
+        }
+        .service-icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+            justify-items: center;
+        }
+        .service-icon {
+            margin: auto;
+            height: 40px;
+            width: 40px;
+            color: rgba(0,0,0,0.38);
+        }
+        .service-link:hover .service-icon {
+            color: rgba(0,0,0,0.66);
+        }
+        .service-label {
+            text-align: center;
+            padding: 18px;
+            letter-spacing: 1;
+            font-weight: bolder;
+        }
+
     </style>
 </head>
 
 <body>
 
     <div class="layout">
+
+        <div class="card section-header">
+            <div class="card-title">
+                On This Server
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    Backend
+                </div>
+            </div>
+    
+            <div class="card-body">
+                <div class="service-icon-grid">
+                    <a class="service-link" href="/api">
+                        <div class="service-icon-label">
+                            <div class="service-icon">
+                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <use href="#pineapple"></use>
+                                </svg>
+                            </div>
+                            <div class="service-label">
+                                API
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    Frontend
+                </div>
+            </div>
+    
+            <div class="card-body">
+                <div class="service-icon-grid">
+
+                    <a class="service-link" href="/ng/">
+                        <div class="service-icon-label">
+                            <div class="service-icon">
+                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <use href="#pineapple"></use>
+                                </svg>
+                            </div>
+                            <div class="service-label">
+                                Angular
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="service-link" href="/zed/">
+                        <div class="service-icon-label">
+                            <div class="service-icon">
+                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <use href="#pineapple"></use>
+                                </svg>
+                            </div>
+                            <div class="service-label">
+                                Project Zed
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card section-header">
+            <div class="card-title">
+                Services by Port
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-header">
                 <div class="card-title">
@@ -104,7 +238,7 @@
                         <td class="text-right"><a href="http://localhost:4200" target="_blank">http://localhost:4200</a></td>
                     </tr>
                     <tr>
-                        <td>Agape</td>
+                        <td>Project Zed Library</td>
                         <td class="text-right"><a href="http://localhost:4201" target="_blank">http://localhost:4201</a></td>
                     </tr>
                 </table>
@@ -114,7 +248,16 @@
     </div>
 
     
+    <div style="display: none">
 
+        <!-- Dashboard -->
+        <svg id="pineapple" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path fill="currentColor" d="M391 2.4l8.2 24.6 5.5 16.6 56.2-11.2 23.5-4.7-4.7 23.5-11.2 56.1 16.6 5.5 24.6 8.2-18.3 18.3L470.6 160l12.7 12.7L499.6 189l-21 9.6L432 219.8V208l-16.1-16.1L444.4 179l-7.7-7.7L425.4 160l11.3-11.3L450.4 135l-5.4-1.8-13.4-4.5 2.8-13.9 9.3-46.5-46.5 9.3-13.8 2.8-4.5-13.4L377 61.6 363.3 75.3 352 86.6 340.7 75.3 333 67.6 320.1 96.1 304 80H292.2l21.2-46.6 9.6-21 16.3 16.3L352 41.4l20.7-20.7L391 2.4zM141.3 480H242.7L400 322.7V221.3L290.7 112H189.3L32 269.3V370.7L141.3 480zM256 512H128L0 384V256L176 80H304L432 208V336L256 512zM160 201.4l11.3 11.3L192 233.4l20.7-20.7L224 201.4 246.6 224l-11.3 11.3-32 32L192 278.6l-11.3-11.3-32-32L137.4 224 160 201.4zm-64 88l11.3 11.3L128 321.4l20.7-20.7L160 289.4 182.6 312l-11.3 11.3-32 32L128 366.6l-11.3-11.3-32-32L73.4 312 96 289.4zm128 0l11.3 11.3L256 321.4l20.7-20.7L288 289.4 310.6 312l-11.3 11.3-32 32L256 366.6l-11.3-11.3-32-32L201.4 312 224 289.4zm-64 88l11.3 11.3L192 409.4l20.7-20.7L224 377.4 246.6 400l-11.3 11.3-32 32L192 454.6l-11.3-11.3-32-32L137.4 400 160 377.4z"/>
+        </svg>
+      
+        ...
+        
+      </div>
 
 </body>
 
