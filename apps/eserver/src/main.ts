@@ -9,8 +9,14 @@ const app = express();
 /* logging */
 if ( verbose ) app.use( log )
 
+/* show common index.html */
+app.use(express.static('./apps/_common') )
+
 /* redirect to angular app */
-app.use(['/', '/*'], proxy('http://localhost:4200') )
+app.use(['/ng', '/ng/*'], proxy('http://localhost:4200') )
+
+/* redirect to project zed frontend */
+app.use(['/zed', '/zed/*'], proxy('http://localhost:4201') )
 
 /* 404 */
 app.use('*', (req, res) => {

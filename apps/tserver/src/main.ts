@@ -14,6 +14,7 @@ if ( verbose ) app.use( log )
 /* application routes */
 app.use('/api', router )
 
+/* show common index.html */
 app.use(express.static('./apps/_common') )
 
 /* redirect to angular app */
