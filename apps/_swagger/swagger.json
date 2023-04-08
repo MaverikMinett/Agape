@@ -1,0 +1,92 @@
+{
+    "title": "Project Zed",
+    "summary": "Backend/frontend",
+    "description": "Mongo, Express, Angular, Node",
+    "termsOfService": "https://example.com/terms/",
+    "contact": {
+        "name": "API Support",
+        "url": "https://www.example.com/support",
+        "email": "maverik@maverik.io"
+    },
+    "license": {
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.1",
+    "openapi": "3.0.0",
+    "servers": [
+        {
+        "url": "./",
+        "description": "Project Zed Application Programming Interface"
+        }
+    ],
+    "schemes": [
+      "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "tags": [
+        {
+            "name": "events",
+            "description": "Events module"
+        }
+    ],
+    "paths": {
+        "/events": {
+            "get": {
+                "summary": "Get all events",
+                "tags": ["events"],
+                "responses": {
+                    "200": {
+                        "description": "Events"
+                    }
+                }
+            }
+        },
+        "/events/{id}": {
+            "get": {
+                "Summary": "Get a single event",
+                "tags": ["events"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": "true"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Event"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Event": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "parameters": {
+            "id": {
+                "name": "id",
+                "in": "path",
+                "description": "Item ID",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
