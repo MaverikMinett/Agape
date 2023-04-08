@@ -3,8 +3,7 @@ const { Select } = require('enquirer');
 
 
 import { banner } from '../shared';
-
-import { events } from './model';
+import { events, Event} from './model';
 
 /**
  * Display the events menu
@@ -48,14 +47,21 @@ export function eventsIndex() {
 function eventsListView() {
   
     /* choices */
-    const choices = events.map( event => { return { value: event.name } } )
-    choices.unshift( { value: '< back' } )
+    const choices = events.map( event =>  { 
+            return { 
+                value: event,
+                message: event.name,
+                name: event.id
+            } 
+        } 
+    )
+    choices.unshift( { value: null, message: '< back', name: "< back" } )
 
     /* prompt */
     const prompt = new Select({
         name: 'Events List',
         message: " ",
-        choices: choices.map( choice => choice.value )
+        choices: choices
     })
 
     /* display */
@@ -66,8 +72,10 @@ function eventsListView() {
     prompt.run()
         .then( 
             ( answer: string ) => {
-                console.log( answer )
-                if ( answer === '< back' ) eventsIndex()
+                const item = choices.find( choice => choice.name === answer )?.value
+                if ( ! item ) throw new Error(`Could not find record with id ${answer}`)
+                if ( item.name === '< back' ) eventsIndex()
+                else eventsItemView({ item })
             }
         )
         .catch( 
@@ -75,6 +83,21 @@ function eventsListView() {
         );  
 }
 
+/**
+ * Event item view
+ * @param params View parameters
+ * @param params.item The event to display
+ */
+function eventsItemView( params?: { item: Event } ) {
+    const { item } = params
+
+    /* display */
+    clear()
+
+    banner( 'Event' )   
+
+    console.log( item.name + "\n" )
+}
 
 /**
  * Event edit view
