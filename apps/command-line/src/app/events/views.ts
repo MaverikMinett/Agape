@@ -6,7 +6,9 @@ import { banner } from '../shared';
 
 import { events } from './model';
 
-
+/**
+ * Display the events menu
+ */
 export function eventsIndex() {
 
     /* choices */
@@ -40,6 +42,9 @@ export function eventsIndex() {
         );
 }
 
+/**
+ * Events list view
+ */
 function eventsListView() {
   
     /* choices */
@@ -70,11 +75,17 @@ function eventsListView() {
         );  
 }
 
+
+/**
+ * Event edit view
+ * @param params View parameters
+ * @param params.item The event to display
+ */
 function eventsEditView( params?: { item: Event } ) {
     /* display */
     clear()
 
-    banner( 'Create Item' ) 
+    banner( 'Create Event' ) 
     
-    console.log(' Not implmented' )
+    console.log(' Not implemented' )
 }
