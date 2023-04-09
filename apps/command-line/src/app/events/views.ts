@@ -1,8 +1,11 @@
 import clear from 'clear';
 const { Select } = require('enquirer');
+import enquirer from 'enquirer';
+import inquirer from 'inquirer';
 
 
 import { banner } from '../shared';
+import { menu } from '../../lib/menu';
 import { events, Event} from './model';
 
 /**
@@ -39,7 +42,7 @@ export function eventsIndex() {
         .catch( 
             console.error 
         );
-}
+}                           
 
 /**
  * Events list view
@@ -94,9 +97,15 @@ function eventsItemView( params?: { item: Event } ) {
     /* display */
     clear()
 
-    banner( 'Event' )   
-
+    banner( 'Event' )
+    
     console.log( item.name + "\n" )
+
+    /* menu */
+    menu(" ", [
+        { label: "< back", view: eventsListView },
+        { label: "Edit event", view: eventsEditView, params: { item } },
+    ])
 }
 
 /**
@@ -105,10 +114,28 @@ function eventsItemView( params?: { item: Event } ) {
  * @param params.item The event to display
  */
 function eventsEditView( params?: { item: Event } ) {
+    let { item } = params
+    item ?? ( item = { name: '' } )
+
     /* display */
     clear()
 
-    banner( 'Create Event' ) 
-    
-    console.log(' Not implemented' )
+    banner( item ? 'Edit Event' : 'Create Event' ) 
+
+    inquirer
+        .prompt([
+            {
+                'type': 'input',
+                'name': 'name',
+                'message': 'Name',
+                'default': item.name
+            }
+        ])
+        .then(
+            ( answers ) => {
+                console.log( answers )
+            }
+        )
+        .catch( console.error )
+        
 }

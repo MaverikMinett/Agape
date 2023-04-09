@@ -1,6 +1,6 @@
 /* model */
 export interface Event {
-    id: string;
+    id?: string;
     name: string;
 }
 
