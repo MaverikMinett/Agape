@@ -30,11 +30,6 @@ describe('FormGroup', () => {
             f = new FormGroup().string('name')  
             expect(f.has('name')).toBe(true)
         })
-        // describe('errors', () => {
-        //     it('should error if name or label are undefined', () => {
-                
-        //     })
-        // })
     })
 
     describe('has', () => {
@@ -63,6 +58,25 @@ describe('FormGroup', () => {
         })
     })
 
+    describe('number', () => {
+        it('should create a number field', () => {
+            f = new FormGroup()
+            f.number('age')   
+        })
+        it('should return itself', () => {
+            f = new FormGroup()
+            const g = f.number('age')  
+            expect(f).toBe(g)
+        })
+        it('usage', () => {
+            f = new FormGroup().number('age')  
+            expect(f).toBeInstanceOf(FormGroup)
+        })
+        it('should have the number fields', () => {
+            f = new FormGroup().number('age')  
+            expect(f.has('age')).toBe(true)
+        })
+    })
 });
 
 

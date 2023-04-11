@@ -36,22 +36,30 @@ export class FormField {
 export class FormGroup {
    fields: FormField[] = []
 
-    number( name: string, label: string ) {
-        const field = new FormField('number', name, label)
-    }
+   number( name: string, label?: string ): this 
+   number( ...args: any[] ): this {
+       const fieldType = 'number';
+       let name: string;
+       let label: string;
+       
+       [ name, label ] = args
+
+       const field = new FormField(fieldType, name, label )
+       this.fields.push(field)
+       return this
+   }
 
     string( name: string, label?: string, length?: number ): this 
     string( ...args: any[] ): this {
+        const fieldType = 'string';
         let name: string;
         let label: string;
         let length: number;
-        const fieldType: string = 'string';
-
         [ name, label, length ] = args
 
         length ??= 256
 
-        const field = new FormField('string', name, label, { length } )
+        const field = new FormField(fieldType, name, label, { length } )
         this.fields.push(field)
         return this
     }

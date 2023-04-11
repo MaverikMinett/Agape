@@ -23,8 +23,16 @@ describe('FormField', () => {
             f = new FormField('string', 'foo')
             expect(f.type).toBe('string')
         })
-    })
+        // if('should have a default length of 256', () => {
 
+        // })
+    })
+    describe('number field', () => {
+        it('should create a number field', () => {
+            f = new FormField('number', 'foo')
+            expect(f.type).toBe('number')
+        })
+    })
 });
 
 
