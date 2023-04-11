@@ -1,0 +1,52 @@
+{
+  "name": "command-line-lib-forms",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/command-line-lib-forms/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/command-line-lib-forms",
+        "format": ["cjs"],
+        "main": "apps/command-line-lib-forms/src/main.ts",
+        "tsConfig": "apps/command-line-lib-forms/tsconfig.app.json",
+        "assets": ["apps/command-line-lib-forms/src/assets"]
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "command-line-lib-forms:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "command-line-lib-forms:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/command-line-lib-forms/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/command-line-lib-forms/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}
