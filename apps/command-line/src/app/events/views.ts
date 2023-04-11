@@ -8,7 +8,7 @@ import { banner } from '../shared';
 import { menu } from '../../lib/menu';
 import { events, Event} from './model';
 import { saveEvent } from './controllers';
-import { showMessage } from '../../lib/messages';
+
 
 /**
  * Display the events menu
@@ -76,7 +76,7 @@ async function eventsItemView( params?: { item: Event } ) {
 
     banner( 'Event' )
     
-    console.log( item.name + "\n" )
+    console.log( " " + item.name + "\n" )
 
     /* menu */
     menu(" ", [
@@ -85,13 +85,21 @@ async function eventsItemView( params?: { item: Event } ) {
     ])
 }
 
+
+interface InquirerQuestion {
+    type: 'input';
+    name: string;
+    message: string;
+    default?: any;
+}
+
 /**
  * Event edit view
  * @param params View parameters
  * @param params.item The event to display
  */
 async function eventsEditView( params?: { item: Event } ) {
-    let { item } = params
+    let { item } = params ?? {}
     item ?? ( item = { name: '' } )
 
     /* display */
@@ -99,15 +107,16 @@ async function eventsEditView( params?: { item: Event } ) {
 
     banner( item?.id ? 'Edit Event' : 'Create Event' ) 
 
-    const answers = await inquirer
-        .prompt([
-            {
-                'type': 'input',
-                'name': 'name',
-                'message': 'Name',
-                'default': item.name
-            }
-        ])
+    const questions: InquirerQuestion[] = []
+    const question: InquirerQuestion = {
+        'type': 'input',
+        'name': 'name',
+        'message': 'Name',
+    }
+    if ( item.name !== undefined ) question.default = item.name
+    questions.push(question)
+
+    const answers = await inquirer.prompt(questions)
 
     await menu(" ", [
         { 
