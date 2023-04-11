@@ -1,12 +1,14 @@
 import clear from 'clear';
+import chalk from 'chalk';
 const { Select } = require('enquirer');
-import enquirer from 'enquirer';
 import inquirer from 'inquirer';
 
 
 import { banner } from '../shared';
 import { menu } from '../../lib/menu';
 import { events, Event} from './model';
+import { saveEvent } from './controllers';
+import { showMessage } from '../../lib/messages';
 
 /**
  * Display the events menu
@@ -29,11 +31,15 @@ export async function eventsIndex() {
 /**
  * Events list view
  */
-async function eventsListView() {
+async function eventsListView(params: any, input: any ) {
     /* display */
     clear()
 
     banner( 'Events List' )   
+
+    if ( input?.message ) {
+        console.log( chalk.blue(input?.message) + "\n" )
+    } 
 
     /* choices */
     const choices = events.map( event =>  { 
@@ -91,7 +97,7 @@ async function eventsEditView( params?: { item: Event } ) {
     /* display */
     clear()
 
-    banner( item ? 'Edit Event' : 'Create Event' ) 
+    banner( item?.id ? 'Edit Event' : 'Create Event' ) 
 
     const answers = await inquirer
         .prompt([
@@ -104,8 +110,16 @@ async function eventsEditView( params?: { item: Event } ) {
         ])
 
     await menu(" ", [
-        { label: "Save event", view: eventsEditView, params: { item } },
-        { label: "< back", view: eventsListView },
+        { 
+            label: "Save event", 
+            controller: saveEvent, 
+            controllerParams: [{ ...item, ...answers}],
+            view: eventsListView
+         },
+        { 
+            label: "< back", 
+            view: eventsListView 
+        },
     ])
 }
 

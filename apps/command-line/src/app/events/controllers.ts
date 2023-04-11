@@ -1,12 +1,11 @@
 
 import { events, Event } from './model';
-import uuid from 'uuid';
+import { v4 } from 'uuid';
 
-
-export async function saveEvent( item: Event, view: (...args:any[]) => Promise<void> ) {
-    console.log("Save Event Controller")
+export async function saveEvent( item: Event ) {
     if ( item.id ) await updateEvent( item.id, item )
     else await createEvent( item )
+    return { 'message': `Event saved` }
 }
 
 export async  function updateEvent( id: string, item: Event ) {
@@ -20,6 +19,6 @@ export async  function updateEvent( id: string, item: Event ) {
 }
 
 export async function createEvent( item: Event ) {
-    item.id ??= uuid.v4()
+    (item.id) || (item.id=v4())
     events.push( item )
 }
