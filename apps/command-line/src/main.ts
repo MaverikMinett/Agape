@@ -3,8 +3,8 @@
 import { eventsIndex } from './app/events/views';
 
 /** main **/
-function main() {
-    eventsIndex()
+async function main() {
+    await eventsIndex()
 }
 
 main();
