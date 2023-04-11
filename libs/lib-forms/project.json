@@ -1,31 +1,31 @@
 {
-  "name": "forms",
+  "name": "lib-forms",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/forms/src",
+  "sourceRoot": "libs/lib-forms/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/forms",
-        "main": "libs/forms/src/index.ts",
-        "tsConfig": "libs/forms/tsconfig.lib.json",
-        "assets": ["libs/forms/*.md"]
+        "outputPath": "dist/libs/lib-forms",
+        "main": "libs/lib-forms/src/index.ts",
+        "tsConfig": "libs/lib-forms/tsconfig.lib.json",
+        "assets": ["libs/lib-forms/*.md"]
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/forms/**/*.ts"]
+        "lintFilePatterns": ["libs/lib-forms/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/forms/jest.config.ts",
+        "jestConfig": "libs/lib-forms/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {
