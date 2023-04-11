@@ -11,79 +11,50 @@ import { events, Event} from './model';
 /**
  * Display the events menu
  */
-export function eventsIndex() {
-
-    /* choices */
-    const choices = [
-        { label: "View events", view: eventsListView },
-        { label: "Create event", view: eventsEditView }
-    ]
-
-    /* prompt */
-    const prompt = new Select({
-        name: 'Events Menu',
-        message: " ",
-        choices: choices.map( choice => choice.label )
-    })
-
+export async function eventsIndex() {
     /* display */
     clear()
 
     banner( 'Events' )   
 
-    prompt.run()
-        .then( 
-            ( answer: string ) => {
-                const view = choices.find( choice => choice.label === answer )?.view
-                if ( ! view ) eventsIndex()
-                else view()
-            }
-        )
-        .catch( 
-            console.error 
-        );
+    /* menu */
+    await menu("Events Menu", 
+        [
+            { label: "View events", view: eventsListView },
+            { label: "Create event", view: eventsEditView },
+        ]
+    )
 }                           
 
 /**
  * Events list view
  */
-function eventsListView() {
-  
-    /* choices */
-    const choices = events.map( event =>  { 
-            return { 
-                value: event,
-                message: event.name,
-                name: event.id
-            } 
-        } 
-    )
-    choices.unshift( { value: null, message: '< back', name: "< back" } )
-
-    /* prompt */
-    const prompt = new Select({
-        name: 'Events List',
-        message: " ",
-        choices: choices
-    })
-
+async function eventsListView() {
     /* display */
     clear()
 
     banner( 'Events List' )   
 
-    prompt.run()
-        .then( 
-            ( answer: string ) => {
-                const item = choices.find( choice => choice.name === answer )?.value
-                if ( ! item ) throw new Error(`Could not find record with id ${answer}`)
-                if ( item.name === '< back' ) eventsIndex()
-                else eventsItemView({ item })
-            }
-        )
-        .catch( 
-            console.error 
-        );  
+    /* choices */
+    const choices = events.map( event =>  { 
+            return { 
+                params: { item: event },
+                label: event.name
+            } 
+        } 
+    )
+
+    /* menu */
+    const response = await menu("Events List", 
+        [
+            { label: "< back", view: eventsIndex },
+            ...choices
+        ]
+    )
+    if ( ! response.view ) {
+        const { item } = response.params
+        await eventsItemView({ item })
+    }
 }
 
 /**
@@ -91,7 +62,7 @@ function eventsListView() {
  * @param params View parameters
  * @param params.item The event to display
  */
-function eventsItemView( params?: { item: Event } ) {
+async function eventsItemView( params?: { item: Event } ) {
     const { item } = params
 
     /* display */
@@ -113,7 +84,7 @@ function eventsItemView( params?: { item: Event } ) {
  * @param params View parameters
  * @param params.item The event to display
  */
-function eventsEditView( params?: { item: Event } ) {
+async function eventsEditView( params?: { item: Event } ) {
     let { item } = params
     item ?? ( item = { name: '' } )
 
@@ -122,7 +93,7 @@ function eventsEditView( params?: { item: Event } ) {
 
     banner( item ? 'Edit Event' : 'Create Event' ) 
 
-    inquirer
+    const answers = await inquirer
         .prompt([
             {
                 'type': 'input',
@@ -131,11 +102,10 @@ function eventsEditView( params?: { item: Event } ) {
                 'default': item.name
             }
         ])
-        .then(
-            ( answers ) => {
-                console.log( answers )
-            }
-        )
-        .catch( console.error )
-        
+
+    await menu(" ", [
+        { label: "Save event", view: eventsEditView, params: { item } },
+        { label: "< back", view: eventsListView },
+    ])
 }
+
