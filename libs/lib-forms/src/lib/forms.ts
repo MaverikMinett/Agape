@@ -7,34 +7,15 @@ interface FormFieldParams {
   length?: number;
 }
 
-class FormField {
-  type: string;
-  name: string;
-  label: string;
-  length: number;
+export type FormFieldType = 'string'|'number'
 
-  constructor( type: string, name: string, label: string, params?: FormFieldParams ) {
-      this.type = type
-      this.name = name
-      this.label = label 
-      if ( params ) Object.assign(this, params)
-  }
-}
+export class FormField {
+    type: string;
+    name: string;
+    label: string;
+    length: number;
 
-export class FormGroup {
-   fields: FormField[] = []
-
-    number( name: string, label: string ) {
-        const field = new FormField('input', name, label)
-    }
-    string( ...args: any[] ): this{
-        let name: string;
-        let label: string;
-        let length: string;
-        const fieldType: string = 'string';
-
-        [ name, label, length ] = args
-
+    constructor( type: FormFieldType, name: string, label?: string, params?: FormFieldParams ) {
         if ( 
             (name === undefined || name === null) 
             && (label === undefined || label == null )
@@ -45,13 +26,42 @@ export class FormGroup {
         label ??= verbalize(name)
         name  ??= camelize(label)
 
-        const field = new FormField('string', name, label, { length: 256 } )
+        this.type = type
+        this.name = name
+        this.label = label 
+        if ( params ) Object.assign(this, params)
+    }
+}
+
+export class FormGroup {
+   fields: FormField[] = []
+
+    number( name: string, label: string ) {
+        const field = new FormField('number', name, label)
+    }
+
+    string( name: string, label?: string, length?: number ): this 
+    string( ...args: any[] ): this {
+        let name: string;
+        let label: string;
+        let length: number;
+        const fieldType: string = 'string';
+
+        [ name, label, length ] = args
+
+        length ??= 256
+
+        const field = new FormField('string', name, label, { length } )
         this.fields.push(field)
         return this
     }
+    
+    get( fieldName: string ) {
+        return this.fields.find( f => f.name === fieldName )
+    }
 
     has( fieldName: string ) {
-        return !! this.fields.find( f => f.name === fieldName )
+        return !! this.get( fieldName )
     }
 }
 

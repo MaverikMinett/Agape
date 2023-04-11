@@ -1,4 +1,4 @@
-import { FormGroup } from './forms';
+import { FormGroup, FormField } from './forms';
 
 describe('FormGroup', () => {
 
@@ -30,13 +30,36 @@ describe('FormGroup', () => {
             f = new FormGroup().string('name')  
             expect(f.has('name')).toBe(true)
         })
+        // describe('errors', () => {
+        //     it('should error if name or label are undefined', () => {
+                
+        //     })
+        // })
     })
 
     describe('has', () => {
         it('should have the field', () => {
             f = new FormGroup()
             f.string('name')   
-            expect(f.has('name')).toBeTruthy()
+            expect(f.has('name')).toBe(true)
+        })
+        it('should not have the field', () => {
+            f = new FormGroup()
+            f.string('foo')   
+            expect(f.has('bar')).toBe(false)
+        })
+    })
+
+    describe('get', () => {
+        it('should retrieve the field', () => {
+            f = new FormGroup()
+            f.string('name')   
+            expect(f.get('name')).toBeInstanceOf(FormField)
+        })
+        it('should be undefined if field does not exist', () => {
+            f = new FormGroup()
+            f.string('foo')   
+            expect(f.get('bar')).toBe(undefined)
         })
     })
 
