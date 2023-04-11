@@ -22,3 +22,13 @@ export async function createEvent( item: Event ) {
     (item.id) || (item.id=v4())
     events.push( item )
 }
+
+export async function deleteEvent( id: string ) {
+    let index  = -1;
+
+    const record = events.find( r => { index += 1; return r.id === id } )
+
+    events.splice(index, 1)
+
+    return { 'message': `Deleted event ${record.name}` }
+}

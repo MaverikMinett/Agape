@@ -7,7 +7,7 @@ import inquirer from 'inquirer';
 import { banner } from '../shared';
 import { menu } from '../../lib/menu';
 import { events, Event} from './model';
-import { saveEvent } from './controllers';
+import { deleteEvent, saveEvent } from './controllers';
 
 
 /**
@@ -82,6 +82,12 @@ async function eventsItemView( params?: { item: Event } ) {
     menu(" ", [
         { label: "< back", view: eventsListView },
         { label: "Edit event", view: eventsEditView, params: { item } },
+        { 
+            label: "Delete event",
+            view: eventsListView,
+            controller: deleteEvent,
+            controllerParams: [ item.id ]
+        },
     ])
 }
 
