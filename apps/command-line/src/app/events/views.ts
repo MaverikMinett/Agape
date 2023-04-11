@@ -9,23 +9,21 @@ import { menu } from '../../lib/menu';
 import { events, Event} from './model';
 import { deleteEvent, saveEvent } from './controllers';
 
+import cli from '../../lib/cli';
 
 /**
  * Display the events menu
  */
 export async function eventsIndex() {
-    /* display */
-    clear()
 
-    banner( 'Events' )   
-
-    /* menu */
-    await menu("Events Menu", 
+    cli.banner('Events')
+    cli.menu("Events Menu", 
         [
             { label: "View events", view: eventsListView },
             { label: "Create event", view: eventsEditView },
         ]
     )
+    await cli.run()
 }                           
 
 /**
@@ -82,6 +80,7 @@ async function eventsItemView( params?: { item: Event } ) {
     menu(" ", [
         { label: "< back", view: eventsListView },
         { label: "Edit event", view: eventsEditView, params: { item } },
+        { label: "Buy tickets", view: eventsEditView, params: { item } },
         { 
             label: "Delete event",
             view: eventsListView,
