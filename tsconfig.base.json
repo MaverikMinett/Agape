@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@lib/express": ["libs/lib-express/src/index.ts"],
+      "@lib/forms": ["libs/forms/src/index.ts"],
       "@lib/server": ["libs/lib-server/src/index.ts"],
       "@zed/api": ["libs/lib-api/src/index.ts"]
     },
