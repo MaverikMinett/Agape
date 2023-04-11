@@ -17,6 +17,7 @@ export function banner( text:string, color:string='yellowBright' ) {
     if ( ! chalkMethod ) {
         throw new Error(`Invalid color '${color}'`)
     }
-
+    /* https://instafonts.io/ */
+    console.log( chalk.red('קг๏ןєςՇ չє๔') + ' ' + chalk.green('ᶜᵒᵐᵐᵃⁿᵈ ᴸⁱⁿᵉ') )
     console.log( chalkMethod.call(undefined, bannerText) )
 }
