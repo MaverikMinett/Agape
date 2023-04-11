@@ -15,7 +15,6 @@ import cli from '../../lib/cli';
  * Display the events menu
  */
 export async function eventsIndex() {
-
     cli.banner('Events')
     cli.menu("Events Menu", 
         [
@@ -24,16 +23,23 @@ export async function eventsIndex() {
         ]
     )
     await cli.run()
+    cli.finish()
 }                           
 
 /**
  * Events list view
  */
-async function eventsListView(params: any, input: any ) {
-    /* display */
-    clear()
+async function eventsListView(params: any, input: { message: string } ) {
+    
+    cli.banner('Events List')
+    // cli.message(input?.message)
+    await cli.run()
 
-    banner( 'Events List' )   
+
+    /* display */
+    // clear()
+
+    // banner( 'Events List' )   
 
     if ( input?.message ) {
         console.log( chalk.blue(input?.message) + "\n" )

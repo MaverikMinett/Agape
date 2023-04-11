@@ -17,7 +17,7 @@ export interface CliComponent {
 }
 
 
-export class CliApplicationHeaderComponent {
+export class CliHeaderComponent {
     constructor( public text: string ) { }
     
     run() {
@@ -39,36 +39,64 @@ export class CliBannerComponent {
 
 export class Cli {
 
-    applicationHeader: CliApplicationHeaderComponent
+    applicationHeader: CliHeaderComponent
+
+    applicationBanner: CliBannerComponent
 
     components: CliComponent[] = []
 
+    messages: string[] = []
 
     header( text: string ) {
-        const component = new CliApplicationHeaderComponent(text)
+        const component = new CliHeaderComponent(text)
         this.applicationHeader = component
         return this
     }
 
     banner( text: string ) {
         const component = new CliBannerComponent( text )
-        this.components.push( component )
+        this.applicationBanner = component
         return this
     }
 
-    async run() {
-        let response = this.applicationHeader.run()
 
+    message( message: string ) {
+        if ( message !== undefined) this.messages.push(message)
+        return this
+    }
+
+    clearMessages() {
+        this.messages = []
+    }
+
+    finish() {
+        this.components = []
+        this.clearMessages()
+    }
+
+    async run() {
+        clear()
+
+        /* header */
+        this.awaitComponent(this.applicationHeader)
+
+        /* banner */
+        this.awaitComponent(this.applicationBanner)
+
+        /* components */
+        for ( let component of this.components ) {
+            this.awaitComponent(component)
+        }
+
+        this.clearMessages()
+    }
+
+    protected async awaitComponent( component: CliComponent ) {
+        let response = component.run()
         if ( (response as any) instanceof Promise ) {
             await response
         }
-
-        for ( let component of this.components ) {
-            let response = component.run()
-            if ( response instanceof Promise ) {
-                await response
-            }
-        }
+        return response
     }
 
 
