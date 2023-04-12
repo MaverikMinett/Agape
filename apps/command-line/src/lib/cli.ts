@@ -1,7 +1,9 @@
 
+import { FormGroup } from '@lib/forms';
 import clear from 'clear';
 import { CliBannerComponent } from './cli/components/banner.component';
 import { CliDisplayComponent } from './cli/components/display.component';
+import { CliFormComponent } from './cli/components/form.component';
 import { CliHeaderComponent } from './cli/components/header.component';
 import { CliMenuComponent, CliMenuChoice } from './cli/components/menu.component';
 import { CliMessage, CliMessagesComponent } from './cli/components/messages.component';
@@ -40,6 +42,12 @@ export class Cli {
     display( text: string ): this
     display( ...text: any[] ): this {
         const component = new CliDisplayComponent( ...text )
+        this.components.push(component)
+        return this
+    }
+
+    form( form: FormGroup ) {
+        const component = new CliFormComponent()
         this.components.push(component)
         return this
     }
