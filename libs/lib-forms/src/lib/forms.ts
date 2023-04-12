@@ -23,8 +23,8 @@ export class FormField {
             throw new Error("Cannot create field without a name or a label")
         }
 
-        label ??= verbalize(name)
-        name  ??= camelize(label)
+        if ( label === undefined ) label = verbalize(name)
+        if ( name === undefined ) name = camelize(label)
 
         this.type = type
         this.name = name
@@ -57,7 +57,7 @@ export class FormGroup {
         let length: number;
         [ name, label, length ] = args
 
-        length ??= 256
+        if ( length === undefined ) length = 256
 
         const field = new FormField(fieldType, name, label, { length } )
         this.fields.push(field)
