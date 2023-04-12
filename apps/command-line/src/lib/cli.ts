@@ -1,6 +1,7 @@
 
 import clear from 'clear';
 import { CliBannerComponent } from './cli/components/banner.component';
+import { CliDisplayComponent } from './cli/components/display.component';
 import { CliHeaderComponent } from './cli/components/header.component';
 import { CliMenuComponent, CliMenuChoice } from './cli/components/menu.component';
 import { CliMessage, CliMessagesComponent } from './cli/components/messages.component';
@@ -33,6 +34,13 @@ export class Cli {
     banner( text: string ) {
         const component = new CliBannerComponent( text )
         this.applicationBanner = component
+        return this
+    }
+
+    display( text: string ): this
+    display( ...text: any[] ): this {
+        const component = new CliDisplayComponent( ...text )
+        this.components.push(component)
         return this
     }
 

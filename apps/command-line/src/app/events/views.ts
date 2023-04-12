@@ -53,18 +53,13 @@ async function eventsListView(params: any, input: { message: string } ) {
  * @param params View parameters
  * @param params.item The event to display
  */
-async function eventsItemView( params?: { item: Event } ) {
+async function eventsItemView( params?: { item: Event }, input?: any ) {
     const { item } = params
 
-    /* display */
-    clear()
-
-    banner( 'Event' )
-    
-    console.log( " " + item.name + "\n" )
-
-    /* menu */
-    menu(" ", [
+    cli.banner('event')
+    cli.message(input?.message)
+    cli.display(" " + item.name + "\n")
+    cli.menu(" ", [
         { label: "< back", view: eventsListView },
         { label: "Edit event", view: eventsEditView, params: { item } },
         { label: "Buy tickets", view: eventsEditView, params: { item } },
@@ -73,8 +68,10 @@ async function eventsItemView( params?: { item: Event } ) {
             view: eventsListView,
             controller: deleteEvent,
             controllerParams: [ item.id ]
-        },
+        }
     ])
+    await cli.run()
+    cli.finish()
 }
 
 
@@ -93,6 +90,8 @@ interface InquirerQuestion {
 async function eventsEditView( params?: { item: Event } ) {
     let { item } = params ?? {}
     item ?? ( item = { name: '' } )
+
+    banner( item?.id ? 'Edit Event' : 'Create Event' )
 
     /* display */
     clear()
@@ -123,4 +122,3 @@ async function eventsEditView( params?: { item: Event } ) {
         },
     ])
 }
-
