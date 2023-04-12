@@ -75,14 +75,6 @@ async function eventsItemView( params?: { item: Event }, input?: any ) {
     cli.finish()
 }
 
-
-interface InquirerQuestion {
-    type: 'input';
-    name: string;
-    message: string;
-    default?: any;
-}
-
 /**
  * Event edit view
  * @param params View parameters
@@ -93,41 +85,22 @@ async function eventsEditView( params?: { item: Event } ) {
     item ?? ( item = { name: '' } )
 
     const form = fb.string('name')
-
-    // cli.banner( item?.id ? 'Edit Event' : 'Create Event' )
-    // // cli.form( form )
-    // await cli.run()
-    // cli.finish()
+    cli.banner( item?.id ? 'Edit Event' : 'Create Event' )
+    cli.form( form )
+    // cli.menu(" ", [
+    //     // { 
+    //     //     label: "Save event", 
+    //     //     controller: saveEvent, 
+    //     //     controllerParams: [{ ...item, ...answers}],
+    //     //     view: eventsListView
+    //     //  },
+    //     { 
+    //         label: "< back", 
+    //         view: eventsListView 
+    //     },
+    // ])
+    await cli.run()
+    cli.finish()
     
 
-    banner( item?.id ? 'Edit Event' : 'Create Event' )
-
-    /* display */
-    clear()
-
-    banner( item?.id ? 'Edit Event' : 'Create Event' ) 
-
-    const questions: InquirerQuestion[] = []
-    const question: InquirerQuestion = {
-        'type': 'input',
-        'name': 'name',
-        'message': 'Name',
-    }
-    if ( item.name !== undefined ) question.default = item.name
-    questions.push(question)
-
-    const answers = await inquirer.prompt(questions)
-
-    await menu(" ", [
-        { 
-            label: "Save event", 
-            controller: saveEvent, 
-            controllerParams: [{ ...item, ...answers}],
-            view: eventsListView
-         },
-        { 
-            label: "< back", 
-            view: eventsListView 
-        },
-    ])
 }

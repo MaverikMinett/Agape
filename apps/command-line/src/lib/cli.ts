@@ -47,7 +47,7 @@ export class Cli {
     }
 
     form( form: FormGroup ) {
-        const component = new CliFormComponent()
+        const component = new CliFormComponent(form)
         this.components.push(component)
         return this
     }
