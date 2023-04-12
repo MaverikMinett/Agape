@@ -8,23 +8,30 @@ import util from 'util';
 
 const eol = os.EOL;
 
+
 readline.emitKeypressEvents(process.stdin);
 process.stdin.setRawMode(true); 
 
 function awaitKeypress() {
     const promise = new Promise<string>( (resolve, reject) => {
-        process.stdin.on('keypress', (str, key) => {
+
+        const listener = (str, key) => {
             console.log('Keypress<<')
+            // readline.emitKeypressEvents(undefined);
+            process.stdin.setRawMode(false); 
             resolve('--key-pressed--')
-        })
+            process.stdin.removeListener('keypress', listener)
+        }
+
+        process.stdin.on('keypress', listener )
     } )
     return promise
 }
 
 async function main() {
-    console.log('Press a key to retrieve a stock price');
+    console.log('Press a key');
     const response = await awaitKeypress()
-    console.log(response)
+    console.log("Flow resumed, response is:", response)
 }
 
 main()
