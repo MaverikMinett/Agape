@@ -10,15 +10,8 @@ import { CliHeaderComponent } from './components/header.component';
 import { CliMenuComponent, CliMenuChoice } from './components/menu.component';
 import { CliMessage, CliMessagesComponent } from './components/messages.component';
 
-const { Select } = require('enquirer');
-
-
 export interface CliComponent {
     run(): Promise<void>|void
-}
-
-function isPromise( value: any ): value is Promise<any>  {
-    return value instanceof(Promise)
 }
 
 export class Cli {
@@ -95,50 +88,21 @@ export class Cli {
         this.clearMessages()
     }
 
-    async run( clearScreen: boolean=false ) {
-        if (clearScreen) clear()
 
-        /* header */
-        if ( this.applicationHeader ) this.awaitComponent(this.applicationHeader)
+    async run() {
+        if ( this.applicationHeader ) await this.applicationHeader.run()
 
-        /* banner */
-        if ( this.applicationBanner ) this.awaitComponent(this.applicationBanner)
+        if ( this.applicationBanner ) await this.applicationBanner.run()
 
-        /* banner */
-        if ( this.applicationMessages ) this.awaitComponent(this.applicationMessages, this.messages)
+        if ( this.applicationMessages ) await this.applicationMessages.run(this.messages)
 
-        /* components */
-        if ( this.components ) {
-            for ( let component of this.components ) {
-                this.awaitComponent(component)
-            }
+        for ( let component of this.components ) {
+            await component.run()
         }
 
-        // this.clearMessages()
         this.finish()
     }
 
-    protected async awaitComponent( component: any, ...args: any[] ) {
-        let response = component.run(...args)
-
-        if ( isPromise(response) ) {
-            await response
-        }
-
-        if ( (response as any) instanceof Promise ) {
-            await response
-        }
-        return response
-    }
-
-}
-
-
-
-export class ClearCommand {
-    async run() {
-        return clear()
-    }
 }
 
 export const cli = new Cli()
