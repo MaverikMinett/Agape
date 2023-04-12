@@ -9,6 +9,7 @@ import { events, Event} from './model';
 import { deleteEvent, saveEvent } from './controllers';
 
 import cli from '../../lib/cli';
+import fb from '@lib/forms'
 
 /**
  * Display the events menu
@@ -90,6 +91,14 @@ interface InquirerQuestion {
 async function eventsEditView( params?: { item: Event } ) {
     let { item } = params ?? {}
     item ?? ( item = { name: '' } )
+
+    const form = fb.string('name')
+
+    // cli.banner( item?.id ? 'Edit Event' : 'Create Event' )
+    // // cli.form( form )
+    // await cli.run()
+    // cli.finish()
+    
 
     banner( item?.id ? 'Edit Event' : 'Create Event' )
 
