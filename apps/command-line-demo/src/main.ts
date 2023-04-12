@@ -155,7 +155,7 @@ async function t012_application_messages() {
 }
 
 async function t013_application_messages_and_multiple_any_keys() {
-    console.log("\nTEST 012\nCli with application messages")
+    console.log("\nTEST 013\nCli with application messages")
 
     const cli = new Cli()
     cli.header('Header Text')
@@ -169,21 +169,46 @@ async function t013_application_messages_and_multiple_any_keys() {
     await keypress()
 }
 
-// async function t014_menu() {
-//     console.log("\nTEST 012\nCli with application messages")
+async function t014_menu() {
+    console.log("\nTEST 014\nCli with menu")
 
-//     const cli = new Cli()
-//     cli.header('Header Text')
-//     cli.banner('Banner Text')
-//     cli.message('This is an application message')
-//     cli.menu('Foo Menu',  [
-//         { label: 'Whoa man' }
-//     ])
-//     await cli.run()
+    const cli = new Cli()
+    cli.header('Header Text')
+    cli.banner('Banner Text')
+    cli.message('This is an application message')
+    cli.menu('Foo Menu',  [
+        { label: 'Menu Option 1' },
+        { label: 'Menu Option 2' },
+        { label: 'Menu Option 3' }
+    ])
+    await cli.run()
 
-//     console.log("Press any key to continue")
-//     await keypress()
-// }
+    console.log("Press any key to continue")
+    await keypress()
+}
+
+async function t015_consecutive_menus() {
+    console.log("\nTEST 015\nCli with multiple consecutive menus")
+
+    const cli = new Cli()
+    cli.header('Header Text')
+    cli.banner('Banner Text')
+    cli.message('This is an application message')
+    cli.menu('Foo Menu',  [
+        { label: 'Menu Option 1' },
+        { label: 'Menu Option 2' },
+        { label: 'Menu Option 3' }
+    ])
+    cli.menu('Bar Menu',  [
+        { label: 'Menu Option 1' },
+        { label: 'Menu Option 2' },
+        { label: 'Menu Option 3' }
+    ])
+    await cli.run()
+
+    console.log("Press any key to continue")
+    await keypress()
+}
 
 async function main() {
     await t001_keypress()
@@ -199,6 +224,9 @@ async function main() {
     await t011_cli_with_header_and_banner_text_and_any_key()
     await t012_application_messages()
     await t013_application_messages_and_multiple_any_keys()
+    await t014_menu()
+    await t015_consecutive_menus()
+
 }
 
 main()

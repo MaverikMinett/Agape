@@ -89,7 +89,9 @@ export class Cli {
     }
 
 
-    async run() {
+    async run( clearScreen: boolean = false) {
+        if ( clearScreen ) clear()
+
         if ( this.applicationHeader ) await this.applicationHeader.run()
 
         if ( this.applicationBanner ) await this.applicationBanner.run()
