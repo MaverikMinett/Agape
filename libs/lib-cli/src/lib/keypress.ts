@@ -14,6 +14,7 @@ export function keypress() {
         const listener = (str, key) => {
             process.stdin.removeListener('keypress', listener)
             process.stdin.setRawMode(false); 
+            if ( key.ctrl === true && key.name === 'c' ) process.exit()
             resolve(key)
         }
 
