@@ -3,9 +3,9 @@ import { events, Event } from './model';
 import { v4 } from 'uuid';
 
 export async function saveEvent( item: Event ) {
-    if ( item.id ) await updateEvent( item.id, item )
-    else await createEvent( item )
-    return { 'message': `Event saved` }
+    if ( item.id ) return updateEvent( item.id, item )
+    else return createEvent( item )
+    
 }
 
 export async  function updateEvent( id: string, item: Event ) {
@@ -16,11 +16,15 @@ export async  function updateEvent( id: string, item: Event ) {
     if ( ! record ) throw new Error(`Could not find event with id ${item.id}`)
 
     events[index] = item;
+
+    return { 'message': `Saved event ${item.name}` }
 }
 
 export async function createEvent( item: Event ) {
     (item.id) || (item.id=v4())
     events.push( item )
+    
+    return { 'message': `Created event ${item.name}` }
 }
 
 export async function deleteEvent( id: string ) {

@@ -1,5 +1,4 @@
 import clear from 'clear';
-import { events } from '../app/events/model';
 const { Select } = require('enquirer');
 
 export interface MenuChoice {

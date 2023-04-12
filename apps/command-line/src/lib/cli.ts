@@ -1,40 +1,15 @@
 
 import clear from 'clear';
-const { Select } = require('enquirer');
-import chalk from 'chalk';
-import figlet from 'figlet';
+import { CliBannerComponent } from './cli/components/banner.component';
+import { CliHeaderComponent } from './cli/components/header.component';
+import { CliMenuComponent, CliMenuChoice } from './cli/components/menu.component';
+import { CliMessage, CliMessagesComponent } from './cli/components/messages.component';
 
-export interface MenuChoice {
-    label: string;
-    controller?: ( ...args:any[] ) => Promise<any>;
-    controllerParams?: any[];
-    view?: ( ...args:any[] ) => Promise<void>;
-    params?: any;
-}
+const { Select } = require('enquirer');
+
 
 export interface CliComponent {
     run(): Promise<void>|void
-}
-
-
-export class CliHeaderComponent {
-    constructor( public text: string ) { }
-    
-    run() {
-        console.log(this.text);
-    }
-}
-
-export class CliBannerComponent {
-    constructor( public text: string, public color:string='yellowBright' ) {
-
-    }
-
-    async run() {
-        const bannerText = figlet.textSync( this.text, { font: 'Standard' } )
-        const chalkMethod = chalk[this.color]
-        console.log( chalkMethod.call(undefined, bannerText) )
-    }
 }
 
 export class Cli {
@@ -43,9 +18,11 @@ export class Cli {
 
     applicationBanner: CliBannerComponent
 
-    components: CliComponent[] = []
+    applicationMessages: CliMessagesComponent = new CliMessagesComponent()
 
-    messages: string[] = []
+    components: any[] = []
+
+    messages: CliMessage[] = []
 
     header( text: string ) {
         const component = new CliHeaderComponent(text)
@@ -59,9 +36,19 @@ export class Cli {
         return this
     }
 
+    menu( title: string, choices: CliMenuChoice[] ) {
+        const component = new CliMenuComponent(title, choices)
+        this.components.push( component )
+        return this
+    }
 
-    message( message: string ) {
-        if ( message !== undefined) this.messages.push(message)
+    message( text: string ) {
+
+        if ( text !== undefined) {
+            const message = new CliMessage(text)
+            this.messages.push(message)
+        }
+
         return this
     }
 
@@ -83,6 +70,9 @@ export class Cli {
         /* banner */
         this.awaitComponent(this.applicationBanner)
 
+        /* banner */
+        this.awaitComponent(this.applicationMessages, this.messages)
+
         /* components */
         for ( let component of this.components ) {
             this.awaitComponent(component)
@@ -91,42 +81,14 @@ export class Cli {
         this.clearMessages()
     }
 
-    protected async awaitComponent( component: CliComponent ) {
-        let response = component.run()
+    protected async awaitComponent( component: any, ...args: any[] ) {
+        let response = component.run(...args)
         if ( (response as any) instanceof Promise ) {
             await response
         }
         return response
     }
 
-
-    async menu( title: string, choices: MenuChoice[], clearScreen?: boolean ) {
-        const prompt = new Select({
-            message: title,
-            choices: choices.map( choice => {
-                return {  
-                    value: choice,
-                    message: choice.label
-                }
-             } )
-        })
-    
-        const answer: MenuChoice = await prompt.run()
-        if ( clearScreen ) clear()
-    
-        const { view, params, controller, controllerParams } = answer
-        let controllerResponse: any
-        if ( controller ) {
-            if ( controllerParams ) { 
-                controllerResponse = await controller(...controllerParams) 
-            }
-            else { 
-                controllerResponse = await controller()
-            }
-        }
-        if ( view ) await view(params, controllerResponse)
-        return answer
-    }
 }
 
 

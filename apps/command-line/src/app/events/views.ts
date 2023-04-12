@@ -1,5 +1,4 @@
 import clear from 'clear';
-import chalk from 'chalk';
 const { Select } = require('enquirer');
 import inquirer from 'inquirer';
 
@@ -30,41 +29,23 @@ export async function eventsIndex() {
  * Events list view
  */
 async function eventsListView(params: any, input: { message: string } ) {
-    
-    cli.banner('Events List')
-    // cli.message(input?.message)
-    await cli.run()
-
-
-    /* display */
-    // clear()
-
-    // banner( 'Events List' )   
-
-    if ( input?.message ) {
-        console.log( chalk.blue(input?.message) + "\n" )
-    } 
-
     /* choices */
     const choices = events.map( event =>  { 
-            return { 
-                params: { item: event },
-                label: event.name
-            } 
+        return { 
+            label: event.name,
+            view: eventsItemView,
+            params: { item: event },
         } 
-    )
+    })
 
-    /* menu */
-    const response = await menu("Events List", 
-        [
-            { label: "< back", view: eventsIndex },
-            ...choices
-        ]
-    )
-    if ( ! response.view ) {
-        const { item } = response.params
-        await eventsItemView({ item })
-    }
+    cli.banner('Events List')
+    cli.message(input?.message)
+    cli.menu("Events List", [
+        { label: "< back", view: eventsIndex },
+        ...choices
+    ])
+    await cli.run()
+    cli.finish()
 }
 
 /**
