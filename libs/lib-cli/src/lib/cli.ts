@@ -1,12 +1,13 @@
 
 import { FormGroup } from '@lib/forms';
 import clear from 'clear';
-import { CliBannerComponent } from './cli/components/banner.component';
-import { CliDisplayComponent } from './cli/components/display.component';
-import { CliFormComponent } from './cli/components/form.component';
-import { CliHeaderComponent } from './cli/components/header.component';
-import { CliMenuComponent, CliMenuChoice } from './cli/components/menu.component';
-import { CliMessage, CliMessagesComponent } from './cli/components/messages.component';
+import { CliBannerComponent } from './components/banner.component';
+import { CliDisplayComponent } from './components/display.component';
+import { EnterToContinueComponent } from './components/enter-to-continue.component';
+import { CliFormComponent } from './components/form.component';
+import { CliHeaderComponent } from './components/header.component';
+import { CliMenuComponent, CliMenuChoice } from './components/menu.component';
+import { CliMessage, CliMessagesComponent } from './components/messages.component';
 
 const { Select } = require('enquirer');
 
@@ -50,6 +51,12 @@ export class Cli {
         return this
     }
 
+    enterToContinue() {
+        const component = new EnterToContinueComponent( )
+        this.components.push(component)
+        return this
+    }
+
     form( form: FormGroup ) {
         const component = new CliFormComponent(form)
         this.components.push(component)
@@ -81,24 +88,27 @@ export class Cli {
         this.clearMessages()
     }
 
-    async run() {
-        clear()
+    async run( clearScreen: boolean=false ) {
+        if (clearScreen) clear()
 
         /* header */
-        this.awaitComponent(this.applicationHeader)
+        if ( this.applicationHeader ) this.awaitComponent(this.applicationHeader)
 
         /* banner */
-        this.awaitComponent(this.applicationBanner)
+        if ( this.applicationBanner ) this.awaitComponent(this.applicationBanner)
 
         /* banner */
-        this.awaitComponent(this.applicationMessages, this.messages)
+        if ( this.applicationMessages ) this.awaitComponent(this.applicationMessages, this.messages)
 
         /* components */
-        for ( let component of this.components ) {
-            this.awaitComponent(component)
+        if ( this.components ) {
+            for ( let component of this.components ) {
+                this.awaitComponent(component)
+            }
         }
 
-        this.clearMessages()
+        // this.clearMessages()
+        this.finish()
     }
 
     protected async awaitComponent( component: any, ...args: any[] ) {
