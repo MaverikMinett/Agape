@@ -2,15 +2,15 @@
 
 export class CliDisplayComponent {
 
-    strings: string[]
+    text: string[]
   
     constructor( ...text: string[] )  {
-        this.strings = text        
+        this.text = text        
     }
 
-    async run() {
-        for ( let string of this.strings ) {
-            console.log(string)
+    run() {
+        for ( let text of this.text ) {
+            console.log(text)
         }
     }
 

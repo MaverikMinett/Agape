@@ -1,10 +1,3 @@
-import clear from 'clear';
-const { Select } = require('enquirer');
-import inquirer from 'inquirer';
-
-
-import { banner } from '../shared';
-import { menu } from '../../lib/menu';
 import { events, Event} from './model';
 import { deleteEvent, saveEvent } from './controllers';
 
@@ -84,23 +77,22 @@ async function eventsEditView( params?: { item: Event } ) {
     let { item } = params ?? {}
     item ?? ( item = { name: '' } )
 
-    const form = fb.string('name')
+    const form = fb.string('name').string('description').value(item)
+
     cli.banner( item?.id ? 'Edit Event' : 'Create Event' )
     cli.form( form )
-    // cli.menu(" ", [
-    //     // { 
-    //     //     label: "Save event", 
-    //     //     controller: saveEvent, 
-    //     //     controllerParams: [{ ...item, ...answers}],
-    //     //     view: eventsListView
-    //     //  },
-    //     { 
-    //         label: "< back", 
-    //         view: eventsListView 
-    //     },
-    // ])
+    cli.menu(" ", [
+        { 
+            label: "Save event", 
+            controller: saveEvent, 
+            controllerParams: [{ ...item, ...form.value()}],
+            view: eventsListView
+         },
+        { 
+            label: "< back", 
+            view: eventsListView 
+        },
+    ])
     await cli.run()
     cli.finish()
-    
-
 }

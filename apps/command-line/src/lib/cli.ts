@@ -15,6 +15,10 @@ export interface CliComponent {
     run(): Promise<void>|void
 }
 
+function isPromise( value: any ): value is Promise<any>  {
+    return value instanceof(Promise)
+}
+
 export class Cli {
 
     applicationHeader: CliHeaderComponent
@@ -99,6 +103,11 @@ export class Cli {
 
     protected async awaitComponent( component: any, ...args: any[] ) {
         let response = component.run(...args)
+
+        if ( isPromise(response) ) {
+            await response
+        }
+
         if ( (response as any) instanceof Promise ) {
             await response
         }

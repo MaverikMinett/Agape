@@ -6,7 +6,7 @@ export class CliBannerComponent {
 
     }
 
-    async run() {
+    run() {
         const bannerText = figlet.textSync( this.text, { font: 'Standard' } )
         const chalkMethod = chalk[this.color]
         console.log( chalkMethod.call(undefined, bannerText) )

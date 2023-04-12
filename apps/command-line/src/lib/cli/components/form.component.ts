@@ -11,18 +11,21 @@ interface InquirerQuestion {
 
 export class CliFormComponent {
 
-    constructor( public form: FormGroup, public value: {[key:string]: any} = {} ) {
+    
+
+    constructor( public form: FormGroup ) {
 
     }
 
     async run() {
-        const questions = this.formToInquirerQuestions( this.form, this.value )
+        const value = this.form.value
+        const questions = this.formToInquirerQuestions( this.form )
         const answers = await inquirer.prompt(questions)
-        Object.assign(this.value, answers)
+        this.form.patchValue(answers)
     }
 
-    formToInquirerQuestions( form: FormGroup, value: {[key:string]: any} = {} ) {
-        return form.fields.map( field => this.fieldToInquirerQuestion(field, value[field.name] ) )
+    formToInquirerQuestions( form: FormGroup ) {
+        return form.fields.map( field => this.fieldToInquirerQuestion(field, this.form.answers[field.name] ) )
     }
 
     fieldToInquirerQuestion( field: FormField, value?: any ) {
