@@ -1,9 +1,7 @@
 
-import chalk from 'chalk';
 import cli from '@lib/cli'
-import inquirer from 'inquirer';
-
 import { keypress } from '@lib/cli'
+import { AnyKeyToContinueComponent } from 'libs/lib-cli/src/lib/components/any-key-to-continue.component'
 
 async function t001_keypress() {
     console.log("\nTEST 001\n")
@@ -14,11 +12,10 @@ async function t001_keypress() {
 
 async function t002_any_key_to_continue_component() {
     console.log("\nTEST 002\n")
-    cli.banner("002")
-    await cli.run()
 
-    console.log("Press any key to continue")
-    await keypress()
+    const component = new AnyKeyToContinueComponent()
+    await component.run()
+    console.log("Success")
 }
 
 async function main() {

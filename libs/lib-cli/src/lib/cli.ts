@@ -1,6 +1,7 @@
 
 import { FormGroup } from '@lib/forms';
 import clear from 'clear';
+import { AnyKeyToContinueComponent } from './components/any-key-to-continue.component';
 import { CliBannerComponent } from './components/banner.component';
 import { CliDisplayComponent } from './components/display.component';
 import { EnterToContinueComponent } from './components/enter-to-continue.component';
@@ -47,6 +48,12 @@ export class Cli {
     display( text: string ): this
     display( ...text: any[] ): this {
         const component = new CliDisplayComponent( ...text )
+        this.components.push(component)
+        return this
+    }
+
+    anyKeyToContinue() {
+        const component = new AnyKeyToContinueComponent()
         this.components.push(component)
         return this
     }
