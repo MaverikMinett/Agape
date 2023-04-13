@@ -43,12 +43,17 @@ export class Cli {
      * @param component Component constructor function
      * @returns 
      */
-    component<T extends { new(...args: any[]): any; }>( component: T, ...args: any[] ): this {
-        const instance = new component(...args)
+    // component<T extends { new(...args: any[]): any; }>( component: T, ...args: any[] ): this {
+    //     const instance = new component(...args)
+    //     this.components.push(instance)
+    //     return this
+    // }
+
+    component<T>( instance: T ) {
         this.components.push(instance)
-        return this
     }
 
+    display( )
     display( text: string ): this
     display( ...text: any[] ): this {
         const component = new CliDisplayComponent( ...text )
