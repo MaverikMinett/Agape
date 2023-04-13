@@ -28,18 +28,25 @@ process.stdout.setMaxListeners(0)
  * Wait for a keypress
  * @returns Promise
  */
-export async function keypress() {
+export async function keypress( key?:string ) {
     process.stdin.setRawMode(true); 
 
     const promise = new Promise<KeypressEvent>( (resolve, reject) => {
 
-        const listener = (str, key: KeypressEvent) => {
-            process.stdin.removeListener('keypress', listener)
-            process.stdin.setRawMode(false); 
-            if ( key.ctrl === true && key.name === 'c' ) process.exit()
-            resolve(key)
+        const listener = (str, keypressEvent: KeypressEvent) => {
+
+            if ( keypressEvent.ctrl === true && keypressEvent.name === 'c' ) {
+                process.stdin.removeListener('keypress', listener)
+                process.stdin.setRawMode(false); 
+                process.exit()
+            }
+            if ( key === undefined || key === keypressEvent.name ) {
+                process.stdin.removeListener('keypress', listener)
+                process.stdin.setRawMode(false); 
+                resolve(keypressEvent)
+            }
         }
-        process.stdin.once('keypress', listener )
+        process.stdin.on('keypress', listener )
     } )
     return promise
 }
