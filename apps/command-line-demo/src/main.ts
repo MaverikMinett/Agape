@@ -1,9 +1,10 @@
 
 import chalk from 'chalk';
-import { Cli, keypress } from '@lib/cli'
+import { Cli, getCursorPosition, keypress } from '@lib/cli'
 import { AnyKeyToContinueComponent } from 'libs/lib-cli/src/lib/components/any-key-to-continue.component'
 import { CliBannerComponent } from 'libs/lib-cli/src/lib/components/banner.component'
 import { NavmenuComponent } from './app/navmenu.component';
+import { CliMenuControl } from './app/controls/menu.control';
 
 async function t001_keypress() {
     console.log("\nTEST 001\n")
@@ -170,26 +171,15 @@ async function t013_application_messages_and_multiple_any_keys() {
     await keypress()
 }
 
-async function t014_menu() {
-    console.log("\nTEST 014\nCli with menu")
 
-    const cli = new Cli()
-    cli.header('Header Text')
-    cli.banner('Banner Text')
-    cli.message('This is an application message')
-    cli.menu('Foo Menu',  [
-        { label: 'Menu Option 1' },
-        { label: 'Menu Option 2' },
-        { label: 'Menu Option 3' }
-    ])
-    await cli.run()
-
-    console.log("Press any key to continue")
-    await keypress()
+async function t014_cursor_position() {
+    console.log("\n" + chalk.red("**TEST 014**") + "  Cursor position")
+    const position = await getCursorPosition()
+    console.log("Cursor position", position)
 }
 
-async function t015_menus() {
-    console.log("\n" + chalk.red("**TEST 015**") + "  Cli with menu")
+async function t015_menu_component() {
+    console.log("\n" + chalk.red("**TEST 015**") + "  Menu component")
     
     const c = new NavmenuComponent([
         { label: 'Menu Option 1' },
@@ -203,43 +193,42 @@ async function t015_menus() {
     await keypress()
 }
 
-// async function t015_menus() {
-//     console.log("\n" + chalk.red("**TEST 015**") + "  Cli with menu")
+async function t016_menu_control() {
+    console.log("\n" + chalk.red("**TEST 016**") + "  Menu control")
     
-//     const c = new NavmenuComponent([
-//         { label: 'Menu Option 1' },
-//         { label: 'Menu Option 2' },
-//         { label: 'Menu Option 3' }
-//     ])
-//     const response = await c.run()
-//     console.log( 'Selected', response )
+    const c = new CliMenuControl([
+        { label: 'Menu Option 1' },
+        { label: 'Menu Option 2' },
+        { label: 'Menu Option 3' }
+    ])
+    const response = await c.run()
+    console.log( 'Selected', response )
 
-//     console.log("Press any key to continue")
-//     await keypress()
-// }
+    console.log("Press any key to continue")
+    await keypress()
+}
 
-// async function t015_consecutive_menus() {
-//     console.log("\nTEST 015\nCli with multiple consecutive menus")
 
-//     const cli = new Cli()
-//     cli.header('Header Text')
-//     cli.banner('Banner Text')
-//     cli.message('This is an application message')
-//     cli.menu('Foo Menu',  [
-//         { label: 'Menu Option 1' },
-//         { label: 'Menu Option 2' },
-//         { label: 'Menu Option 3' }
-//     ])
-//     // cli.menu('Bar Menu',  [
-//     //     { label: 'Menu Option 1' },
-//     //     { label: 'Menu Option 2' },
-//     //     { label: 'Menu Option 3' }
-//     // ])
-//     await cli.run()
+async function t016_cli_and_navmenu_component() {
+    console.log("\n" + chalk.red("**TEST 016**") + "  Nav menu in cli")
+    
+    const c = new NavmenuComponent([
+        { label: 'Menu Option 1' },
+        { label: 'Menu Option 2' },
+        { label: 'Menu Option 3' }
+    ])
 
-//     console.log("Press any key to continue")
-//     await keypress()
-// }
+    const cli = new Cli()
+    cli.banner('TEST 016')
+    cli.component(c)
+    await cli.run()
+
+    console.log("Press any key to continue")
+    await keypress()
+}
+
+
+
 
 async function main() {
     // await t001_keypress()
@@ -255,8 +244,12 @@ async function main() {
     // await t011_cli_with_header_and_banner_text_and_any_key()
     // await t012_application_messages()
     // await t013_application_messages_and_multiple_any_keys()
-    await t015_menus()
-    await t014_menu()
+    // await t014_cursor_position();
+    // await t015_menu_component();
+    await t016_menu_control();
+    // await t015_menu_component()
+    // await t016_cli_and_navmenu_component();
+    // await t014_menu()
     
 
 }
