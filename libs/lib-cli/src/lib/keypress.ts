@@ -2,6 +2,16 @@
 import readline from 'readline';
 readline.emitKeypressEvents(process.stdin);
 
+
+interface KeypressEvent {
+    sequence: string;
+    name: string;
+    ctrl: boolean;
+    meta: boolean;
+    shift: boolean;
+    code: string;
+}
+
 /**
  * Get a keypress from STDIN
  * @returns 
@@ -9,9 +19,9 @@ readline.emitKeypressEvents(process.stdin);
 export function keypress() {
     process.stdin.setRawMode(true); 
 
-    const promise = new Promise<string>( (resolve, reject) => {
+    const promise = new Promise<KeypressEvent>( (resolve, reject) => {
 
-        const listener = (str, key) => {
+        const listener = (str, key: KeypressEvent) => {
             process.stdin.removeListener('keypress', listener)
             process.stdin.setRawMode(false); 
             if ( key.ctrl === true && key.name === 'c' ) process.exit()

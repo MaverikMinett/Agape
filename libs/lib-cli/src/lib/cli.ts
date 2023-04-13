@@ -38,6 +38,17 @@ export class Cli {
         return this
     }
 
+    /**
+     * Accepts a component class to instantiate and add to the cli document
+     * @param component Component constructor function
+     * @returns 
+     */
+    component<T extends { new(...args: any[]): any; }>( component: T, ...args: any[] ): this {
+        const instance = new component(...args)
+        this.components.push(instance)
+        return this
+    }
+
     display( text: string ): this
     display( ...text: any[] ): this {
         const component = new CliDisplayComponent( ...text )
