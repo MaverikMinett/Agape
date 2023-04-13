@@ -56,15 +56,19 @@ export class NavmenuComponent {
         else if ( key.name === 'up' ) {
             if ( this.selectedIndex > 0 ) this.selectedIndex--
         }
+        else if ( key.name === 'return' ) {
+            return this.items[this.selectedIndex]
+        }
         return this.rerender()
     }
 
+
     async run() {
-        await this.render()
+        return await this.render()
     }
 
     async rerender() {
-    const rl = readline.createInterface({
+        const rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout
         });
@@ -74,7 +78,7 @@ export class NavmenuComponent {
         readline.cursorTo(process.stdout, 0, Number(pos.rows) - 3 - 1)
         // readline.clearScreenDown(process.stdout);
         // clear three lines of text
-        await this.render()
+        return await this.render()
     }
 
     
