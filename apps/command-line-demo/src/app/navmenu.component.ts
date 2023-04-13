@@ -1,26 +1,6 @@
-import { keypress } from '@lib/cli';
+import { keypress, getCursorPosition } from '@lib/cli';
 import chalk from 'chalk';
 import readline from 'readline';
-
-const getCursorPos = () => new Promise<{rows: string, cols: string}>((resolve) => {
-    const termcodes = { cursorGetPosition: '\u001b[6n' };
-
-    process.stdin.setEncoding('utf8');
-    process.stdin.setRawMode(true);
-
-    const readfx = function () {
-        const buf = process.stdin.read();
-        const str = JSON.stringify(buf); // "\u001b[9;1R"
-        const regex = /\[(.*)/g;
-        const xy = regex.exec(str)[0].replace(/\[|R"/g, '').split(';');
-        const pos = { rows: xy[0], cols: xy[1] };
-        process.stdin.setRawMode(false);
-        resolve(pos);
-    }
-
-    process.stdin.once('readable', readfx);
-    process.stdout.write(termcodes.cursorGetPosition);
-})
 
 export interface NavmenuItem {
     key?: string
@@ -28,7 +8,6 @@ export interface NavmenuItem {
 }
 
 export class NavmenuComponent {
-
 
     selectedIndex: number = -1
 
@@ -50,13 +29,6 @@ export class NavmenuComponent {
 
     async render() {
         let index = 0;
-
-        function selectedFormatter( text ) {
-            "  " + text
-        }
-        function unselectedFormatter( text) {
-            return "  " + text
-        }
 
         for ( let item of this.items ) {
             const formatter = index === this.selectedIndex 
@@ -92,12 +64,8 @@ export class NavmenuComponent {
             input: process.stdin,
             output: process.stdout
         });
-        const pos = await getCursorPos()
-        // console.log(pos)
-
-        readline.cursorTo(process.stdout, 0, Number(pos.rows) - 3 - 1)
-        // readline.clearScreenDown(process.stdout);
-        // clear three lines of text
+        const pos = await getCursorPosition()
+        readline.cursorTo(process.stdout, 0, pos.rows - 3 - 1)
         return await this.render()
     }
 
