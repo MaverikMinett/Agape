@@ -203,6 +203,21 @@ async function t015_menus() {
     await keypress()
 }
 
+// async function t015_menus() {
+//     console.log("\n" + chalk.red("**TEST 015**") + "  Cli with menu")
+    
+//     const c = new NavmenuComponent([
+//         { label: 'Menu Option 1' },
+//         { label: 'Menu Option 2' },
+//         { label: 'Menu Option 3' }
+//     ])
+//     const response = await c.run()
+//     console.log( 'Selected', response )
+
+//     console.log("Press any key to continue")
+//     await keypress()
+// }
+
 // async function t015_consecutive_menus() {
 //     console.log("\nTEST 015\nCli with multiple consecutive menus")
 
@@ -227,21 +242,22 @@ async function t015_menus() {
 // }
 
 async function main() {
-    await t001_keypress()
-    await t002_any_key_to_continue_component()
-    await t003_multiple_any_key_to_continue_components()
-    await t004_banner_component()
-    await t005_banner_and_any_key_to_continue_component()
-    await t006_banner_and_multiple_any_key_to_continue_component()
-    await t007_cli_any_key_to_continue()
-    await t008_cli_with_header_text()
-    await t009_cli_with_banner_text()
-    await t010_cli_with_header_and_banner_text()
-    await t011_cli_with_header_and_banner_text_and_any_key()
-    await t012_application_messages()
-    await t013_application_messages_and_multiple_any_keys()
-    await t014_menu()
+    // await t001_keypress()
+    // await t002_any_key_to_continue_component()
+    // await t003_multiple_any_key_to_continue_components()
+    // await t004_banner_component()
+    // await t005_banner_and_any_key_to_continue_component()
+    // await t006_banner_and_multiple_any_key_to_continue_component()
+    // await t007_cli_any_key_to_continue()
+    // await t008_cli_with_header_text()
+    // await t009_cli_with_banner_text()
+    // await t010_cli_with_header_and_banner_text()
+    // await t011_cli_with_header_and_banner_text_and_any_key()
+    // await t012_application_messages()
+    // await t013_application_messages_and_multiple_any_keys()
     await t015_menus()
+    await t014_menu()
+    
 
 }
 

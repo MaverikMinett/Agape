@@ -30,11 +30,19 @@ export interface NavmenuItem {
 export class NavmenuComponent {
 
 
-    selectedIndex: number = 0
+    selectedIndex: number = -1
 
     selectedItem: NavmenuItem
 
-    // items: NavmenuItem[] = []
+    menuItemFormatter = (item) => {
+        const text =  "  " + item.label
+        return text
+    }
+
+    selectedMenuItemFormatter = (item) => {
+        const text =  chalk.cyan("❯") + " " + chalk.underline.cyan(item.label)
+        return text
+    }
 
     constructor( public items: NavmenuItem[] = [] ) {
         this.selectedItem = items[0]
@@ -42,10 +50,21 @@ export class NavmenuComponent {
 
     async render() {
         let index = 0;
+
+        function selectedFormatter( text ) {
+            "  " + text
+        }
+        function unselectedFormatter( text) {
+            return "  " + text
+        }
+
         for ( let item of this.items ) {
-            const formatter = index === this.selectedIndex ? chalk.green : chalk.blue
-            const formattedText = formatter(item.label)
-            console.log( index + " " + formattedText )
+            const formatter = index === this.selectedIndex 
+                ? this.selectedMenuItemFormatter 
+                : this.menuItemFormatter
+            
+            const formattedText = formatter.call(this, item)
+            console.log( formattedText )
             index++;
         }
         
@@ -55,6 +74,7 @@ export class NavmenuComponent {
         }
         else if ( key.name === 'up' ) {
             if ( this.selectedIndex > 0 ) this.selectedIndex--
+            else if ( this.selectedIndex == -1 ) this.selectedIndex = this.items.length - 1
         }
         else if ( key.name === 'return' ) {
             return this.items[this.selectedIndex]
