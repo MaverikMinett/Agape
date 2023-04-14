@@ -350,8 +350,82 @@ async function t020_input_control() {
     await keypress('return')
 }
 
+async function t021_input_with_label() {
+    console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
 
+    const control = new CliInputControl('Foo')
+    const response = await control.run()
+    console.log( "Received response: ", response )
 
+    console.log("Press any key to continue")
+    await keypress('return')
+}
+
+async function t021_input_with_no_answer() {
+    // console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
+
+    // const control = new CliInputControl('Foo')
+    // const response = await control.run()
+    // console.log( "Received response: ", response )
+
+    // console.log("Press any key to continue")
+    // await keypress('return')
+}
+
+async function t021_input_with_required() {
+    // console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
+
+    // const control = new CliInputControl('Foo')
+    // const response = await control.run()
+    // console.log( "Received response: ", response )
+
+    // console.log("Press any key to continue")
+    // await keypress('return')
+}
+
+async function t021_input_with_navigable_cursor() {
+    // console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
+
+    // const control = new CliInputControl('Foo')
+    // const response = await control.run()
+    // console.log( "Received response: ", response )
+
+    // console.log("Press any key to continue")
+    // await keypress('return')
+}
+
+async function t021_input_with_existing_value() {
+    // console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
+
+    // const control = new CliInputControl('Foo')
+    // const response = await control.run()
+    // console.log( "Received response: ", response )
+
+    // console.log("Press any key to continue")
+    // await keypress('return')
+}
+
+async function t021_input_with_required_validator() {
+    // console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
+
+    // const control = new CliInputControl('Foo')
+    // const response = await control.run()
+    // console.log( "Received response: ", response )
+
+    // console.log("Press any key to continue")
+    // await keypress('return')
+}
+
+async function t021_input_with_error_message() {
+    // console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
+
+    // const control = new CliInputControl('Foo')
+    // const response = await control.run()
+    // console.log( "Received response: ", response )
+
+    // console.log("Press any key to continue")
+    // await keypress('return')
+}
 
 async function t019_move_cursor() {
     console.log("\n" + chalk.red("**TEST 018**") + "  Input control")
@@ -412,7 +486,8 @@ async function main() {
     // await t019_move_cursor()
     // await t019_vanilla_js_input_field()
     await t020_input_control()
-    await t020_input_control()
+    await t021_input_with_label();
+    // await t020_input_control()
     // await t018_input_control();
     // await t018_move_cursor()
     

@@ -12,8 +12,23 @@ export class CliInputControl extends CliControl {
 
     value: string = ""
 
+    label: string = ""
+
+    labelWidth: number = 0
+
+    constructor( label?: string ) {
+        super()
+        this.label = label;
+    }
+
     async drawControl() {
-        process.stdout.write("Question>>> " + this.value )
+        const labelText = this.label !== undefined && this.label !== null
+            ? `${this.label} ` 
+            : ''
+
+        const formattedLabel = chalk.gray(labelText)
+
+        process.stdout.write(formattedLabel + this.value )
     }
 
     async awaitUserInput() {
