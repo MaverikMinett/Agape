@@ -275,10 +275,8 @@ async function t017_menu_component() {
 
 
 
-
-
-
 async function t018_enter_to_contnue() {
+    console.log("\n" + chalk.red("**TEST 018**") + " Keypress awaits specific key")
 
     console.log("Press any key to continue")
     await keypress()
@@ -409,11 +407,11 @@ async function t021_input_with_existing_value() {
 }
 
 
-async function t024_move_cursor() {
+async function t024_cursor_position() {
     console.log("\n" + chalk.red("**TEST 025**") + "  Moving the cursor")
 
-
-
+    const position = await getCursorPosition()
+    console.log(position)
 }
 
 
@@ -469,19 +467,17 @@ async function main() {
     // await t012_application_messages()
     // await t013_application_messages_and_multiple_any_keys()
     // await t014_cursor_position();
-    await t015_spacing_issue();
-    await t016_menu_control();
-    await t017_menu_component();
-    
-
+    // await t015_spacing_issue();
+    // await t016_menu_control();
+    // await t017_menu_component();
     // await t018_enter_to_contnue()
     // await t019_move_cursor()
     // await t019_vanilla_js_input_field()
     // await t020_input_control()
     // await t021_input_with_label();
     // await t022_input_with_no_answer()
-    // await t023_input_with_required()
-
+    await t023_input_with_required()
+    // await t024_cursor_position()
     
     
 
