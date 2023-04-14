@@ -1,12 +1,12 @@
 import { CliControl } from "../control";
-import { getCursorPosition, setCursorPosition } from "../cursor";
+import { keypress } from "../keypress";
 
-import { keypress, KeypressEvent } from "../keypress";
-
-import readline from 'readline';
 import chalk from 'chalk';
 
 
+class ClinInputControlParameters {
+    required: boolean;
+}
 
 export class CliInputControl extends CliControl {
 
@@ -14,11 +14,14 @@ export class CliInputControl extends CliControl {
 
     label: string = ""
 
-    labelWidth: number = 0
+    required: boolean = false
 
-    constructor( label?: string ) {
+    private showRequiredWarning: boolean = false
+
+    constructor( label?: string, params?: ClinInputControlParameters  ) {
         super()
         this.label = label;
+        if ( params ) Object.assign( this, params )
     }
 
     async drawControl() {
@@ -28,12 +31,22 @@ export class CliInputControl extends CliControl {
 
         const formattedLabel = chalk.gray(labelText)
 
-        process.stdout.write(formattedLabel + this.value )
+        let value: string
+        if ( this.showRequiredWarning ) {
+            value = chalk.red('Required')
+        }
+        else { 
+            value = this.value
+        }
+
+        process.stdout.write(formattedLabel + value )
     }
 
     async awaitUserInput() {
 
         const key = await keypress()
+        this.showRequiredWarning = false
+
         if ( key.name == 'down' ) {
             return undefined
         }
@@ -41,7 +54,17 @@ export class CliInputControl extends CliControl {
             return undefined
         }
         else if ( key.name == 'return' ) {
-            return this.value
+           
+            // if ( this.value !== undefined && this.value !== '' ) {
+                // return this.value
+            // }
+            if ( this.required && this.value == '') {
+                this.showRequiredWarning = true
+            }
+            else {
+                return this.value
+            }
+                
         }
         else if ( key.name === 'backspace' ) {
             this.value = this.value.substring(0,this.value.length-1)

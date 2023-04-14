@@ -361,26 +361,26 @@ async function t021_input_with_label() {
     await keypress('return')
 }
 
-async function t021_input_with_no_answer() {
-    // console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
+async function t022_input_with_no_answer() {
+    console.log("\n" + chalk.red("**TEST 022**") + "  Input with no answer")
 
-    // const control = new CliInputControl('Foo')
-    // const response = await control.run()
-    // console.log( "Received response: ", response )
+    const control = new CliInputControl('Foo')
+    const response = await control.run()
+    console.log( "Received response: ", response )
 
-    // console.log("Press any key to continue")
-    // await keypress('return')
+    console.log("Press any key to continue")
+    await keypress('return')
 }
 
-async function t021_input_with_required() {
-    // console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
+async function t023_input_with_required() {
+    console.log("\n" + chalk.red("**TEST 023**") + "  Input with required")
 
-    // const control = new CliInputControl('Foo')
-    // const response = await control.run()
-    // console.log( "Received response: ", response )
+    const control = new CliInputControl('Foo', { required: true })
+    const response = await control.run()
+    console.log( "Received response: ", response )
 
-    // console.log("Press any key to continue")
-    // await keypress('return')
+    console.log("Press any key to continue")
+    await keypress('return')
 }
 
 async function t021_input_with_navigable_cursor() {
@@ -485,8 +485,10 @@ async function main() {
     // await t018_enter_to_contnue()
     // await t019_move_cursor()
     // await t019_vanilla_js_input_field()
-    await t020_input_control()
-    await t021_input_with_label();
+    // await t020_input_control()
+    // await t021_input_with_label();
+    await t022_input_with_no_answer()
+    await t023_input_with_required()
     // await t020_input_control()
     // await t018_input_control();
     // await t018_move_cursor()
