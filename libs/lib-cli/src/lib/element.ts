@@ -63,4 +63,10 @@ export class CliElement {
         }
 
     }
+
+    /**
+     * Run after the element completes (to add new lines after a single
+     * line input elements). Only implement if needed.
+     */
+     // finish() { }
 }

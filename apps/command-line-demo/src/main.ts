@@ -1,11 +1,9 @@
 
+import { AnyKeyToContinueComponent, Cli, CliBannerComponent, CliInputControl, CliMenuControl, getCursorPosition, keypress } from '@lib/cli';
 import chalk from 'chalk';
-import { Cli, getCursorPosition, keypress } from '@lib/cli'
-import { AnyKeyToContinueComponent } from 'libs/lib-cli/src/lib/components/any-key-to-continue.component'
-import { CliBannerComponent } from 'libs/lib-cli/src/lib/components/banner.component'
-import { NavmenuComponent } from './app/navmenu.component';
-import { CliMenuControl, CliInputControl } from '@lib/cli';
+
 import  readline from 'readline';
+import { NavmenuComponent } from './app/navmenu.component';
 
 
 
@@ -384,6 +382,26 @@ async function t023_input_with_required() {
     await keypress('return')
 }
 
+async function t024_cursor_position() {
+    console.log("\n" + chalk.red("**TEST 025**") + "  Moving the cursor")
+
+    const position = await getCursorPosition()
+    console.log(position)
+}
+
+async function t025_input_with_existing_value() {
+    console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
+
+    const control = new CliInputControl('Foo', { value: 'Anything' })
+    const response = await control.run()
+    console.log( "Received response: ", response )
+
+    console.log("Press any key to continue")
+    await keypress('return')
+}
+
+
+
 async function t021_input_with_navigable_cursor() {
     // console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
 
@@ -395,56 +413,7 @@ async function t021_input_with_navigable_cursor() {
     // await keypress('return')
 }
 
-async function t021_input_with_existing_value() {
-    // console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
 
-    // const control = new CliInputControl('Foo')
-    // const response = await control.run()
-    // console.log( "Received response: ", response )
-
-    // console.log("Press any key to continue")
-    // await keypress('return')
-}
-
-
-async function t024_cursor_position() {
-    console.log("\n" + chalk.red("**TEST 025**") + "  Moving the cursor")
-
-    const position = await getCursorPosition()
-    console.log(position)
-}
-
-
-async function t019_move_cursor() {
-    console.log("\n" + chalk.red("**TEST 018**") + "  Input control")
-
-    console.log("012345678901234567801234567890123456789012345678901234")
-    console.log("1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    console.log("2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    console.log("3aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    console.log("4aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    console.log("5aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    console.log("6aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    process.stdin.write("7cccc")
-    console.log("Press return key to continue")
-    await keypress('return')
-
-    console.log("Press any key to continue")
-    await keypress('return')
-}
-
-
-
-async function t018_input_control() {
-    console.log("\n" + chalk.red("**TEST 018**") + "  Input control")
-    
-    const c = new CliInputControl()
-    const response = await c.run()
-    console.log( 'Input', response )
-
-    console.log("Press any key to continue")
-    await keypress()
-}
 
 
 
@@ -476,9 +445,10 @@ async function main() {
     // await t020_input_control()
     // await t021_input_with_label();
     // await t022_input_with_no_answer()
-    await t023_input_with_required()
+    // await t023_input_with_required()
     // await t024_cursor_position()
-    
+    await t025_input_with_existing_value()
+
     
 
 }

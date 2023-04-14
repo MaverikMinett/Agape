@@ -1,11 +1,12 @@
 import { CliControl } from "../control";
 import { keypress, KeypressEvent } from "../keypress";
-import { getCursorPosition } from "../cursor";
+import { CursorPosition, getCursorPosition } from "../cursor";
 import chalk from 'chalk';
 
 
 class ClinInputControlParameters {
-    required: boolean;
+    required?: boolean;
+    value?: string;
 }
 
 export class CliInputControl extends CliControl {
@@ -21,26 +22,25 @@ export class CliInputControl extends CliControl {
 
     protected controlCoordinates: { col: number, row: number } = { col: 0, row: 0 }
 
+    protected absoluteCursorCoordinates: { col: number, row: number } = { col: 0, row: 0 }
+
     constructor( label?: string, params?: ClinInputControlParameters  ) {
         super()
         this.label = label;
         if ( params ) Object.assign( this, params )
+
+        if ( this.value ) {
+            this.cursorPosition = this.value.length
+        }
     }
 
     async drawControl() {
-
 
         const labelText = this.label !== undefined && this.label !== null
             ? `${this.label} ` 
             : ''
 
         const formattedLabel = chalk.gray(labelText)
-
-        // console.log(formattedLabel)
-
-        const coordinates = await getCursorPosition()
-
-        // console.log( coordinates)
 
         if ( this.message  ) {
             process.stdout.write(formattedLabel + this.message )
@@ -49,14 +49,39 @@ export class CliInputControl extends CliControl {
             process.stdout.write(formattedLabel + this.value )
         }
 
-        
-        // this.drawCursor()
+        this.controlCoordinates = await this.determineInputCoordinates(labelText)
+
+        this.absoluteCursorCoordinates = await this.determineAbsoluteCursorCoordinates( this.controlCoordinates, this.cursorPosition )
+
+        this.drawCursor( this.absoluteCursorCoordinates )
+    }
+
+    /**
+     * Adds a new line after the text input so that subsequent elements start
+     * on a new line.
+     */
+    finish() {
+        console.log("")
+    }
+
+    async determineInputCoordinates( predicate: string ) {
+        const cursorCoordinates = await getCursorPosition()
+        const row = cursorCoordinates.row
+        const col = predicate.length 
+        return { row, col }
+    }
+
+    async determineAbsoluteCursorCoordinates( controlCoordinates: CursorPosition, controlCursorPosition: number ) {
+        const col = controlCoordinates.col + controlCursorPosition
+        return { row: controlCoordinates.row, col }
     }
 
 
-    // async drawCursor() {
-    //     this.stdout.write('\u001b[1;1H')
-    // }
+    async drawCursor( position: CursorPosition ) {
+        const row = position.row + 1
+        const col = position.col + 1
+        this.stdout.write(`\u001b[${row};${col}H`)
+    }
 
 
     async clearMessage() {
@@ -108,9 +133,7 @@ export class CliInputControl extends CliControl {
         }
     }
 
-    finish() {
-        console.log("")
-    }
+
 
     protected inputKeypress( key: KeypressEvent, position: number ) {
         const symbol = key.sequence;
