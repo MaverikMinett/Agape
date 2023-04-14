@@ -1,5 +1,5 @@
 import { CliControl } from "../control";
-import { keypress } from "../keypress";
+import { keypress, KeypressEvent } from "../keypress";
 
 import chalk from 'chalk';
 
@@ -16,9 +16,8 @@ export class CliInputControl extends CliControl {
 
     required: boolean = false
 
-    private message: string
-    // private showingMessage: boolean = false
-    // private showRequiredWarning: boolean = false
+    protected message: string
+    protected cursorPosition: number = 0
 
     constructor( label?: string, params?: ClinInputControlParameters  ) {
         super()
@@ -52,37 +51,103 @@ export class CliInputControl extends CliControl {
         const key = await keypress()
         this.clearMessage()
 
-        if ( key.name == 'down' ) {
+        if ( key.name == 'left' ) {
+            this.cursorPosition--
+            // if ( this.cursorPosition < 0 ) this.cursorPosition = 0
+            // return undefined
+        }
+        else if ( key.name == 'right' ) {
+            this.cursorPosition++
+            // if ( this.cursorPosition > this.value.length ) this.value.length
+            // return undefined
+        }
+        else if ( key.name == 'down' ) {
             return undefined
         }
         else if ( key.name == 'up' ) {
             return undefined
         }
         else if ( key.name == 'return' ) {
-           
-            // if ( this.value !== undefined && this.value !== '' ) {
-                // return this.value
-            // }
             if ( this.required && this.value == '') {
                 this.message = chalk.red('Required')
             }
             else {
                 return this.value
             }
-                
         }
         else if ( key.name === 'backspace' ) {
-            this.value = this.value.substring(0,this.value.length-1)
+            this.inputBackspace(this.cursorPosition)
             return undefined
         }
+        else if ( key.name === 'delete' ) {
+            this.inputDelete(this.cursorPosition)
+        }
         else {
-            this.value += key.sequence
-            return undefined
+            this.inputKeypress(key, this.cursorPosition)
         }
      }
 
     finish() {
         console.log("")
+    }
+
+    protected inputKeypress( key: KeypressEvent, position: number ) {
+        const symbol = key.sequence;
+
+        /* if at the end of the input, just append the symbol to the end of the value */
+        if ( position == this.value.length ) {
+            this.value += symbol
+        }
+
+        /* otherwise insert the character in the string */
+        else {
+            const before = this.value.substring(0,position)
+            const after  = this.value.substring(position)
+            
+            console.log("\nValue", this.value )
+            console.log("Before", before)
+            console.log("After", after)
+            console.log("symbol", symbol)
+            console.log("Position", position)
+            this.value = `${before}${symbol}${after}`
+            console.log("New value", this.value)
+        }
+
+        // console.log(`Inserted character at ${position}`)
+        
+        this.cursorPosition++
+    }
+
+    protected inputBackspace( position: number ) {
+        /* if at the end of the input, just remove the last character */
+        if ( position == this.value.length ) {
+            this.value == this.value.substring(0,this.value.length-1)
+            this.cursorPosition--
+        }
+        /* if at the beginning of the input, do nothing */
+        else if ( position === 0 ) {
+            return
+        }
+        /* if within in the input, remove the specified character */
+        else {
+            const before = this.value.substring(0,position-1)
+            const after  = this.value.substring(position)
+            this.value = `${before}${after}`
+            this.cursorPosition--
+        }
+    }
+
+    protected inputDelete( position: number ) {
+        /* if at the end of the input, do nothing */
+        if ( position == this.value.length ) {
+            return
+        }
+        /* if within in the input, remove the specified character */
+        else {
+            const before = this.value.substring(0,position)
+            const after  = this.value.substring(position+1)
+            this.value = `${before}${after}`
+        }
     }
 
 }
