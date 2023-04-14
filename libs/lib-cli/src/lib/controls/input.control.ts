@@ -1,62 +1,149 @@
 import { CliControl } from "../control";
+import { getCursorPosition, setCursorPosition } from "../cursor";
 
-import { keypress } from "../keypress";
-import chalk from 'chalk'
-import { CliMenuItem } from "./menu.control";
+import { keypress, KeypressEvent } from "../keypress";
+
+import readline from 'readline';
+import chalk from 'chalk';
+
 
 
 export class CliInputControl extends CliControl {
 
-    selectedIndex: number = -1
-
-    selectedItem: CliMenuItem
-
     value: string = ""
 
-    menuItemFormatter = (item) => {
-        const text =  "  " + item.label
-        return text
-    }
-
-    selectedMenuItemFormatter = (item) => {
-        const text =  chalk.cyan("❯") + " " + chalk.underline.cyan(item.label)
-        return text
-    }
-
-    constructor( public items: CliMenuItem[] = [] ) {
-        super()
-        this.selectedItem = items[0]
-        this.nLines = items.length
-    }
-
     async drawControl() {
-        this.stdout.write("Draw control " + this.value )
-
+        process.stdout.write("Question>>> " + this.value )
     }
+
 
     async awaitUserInput() {
-        const key = await keypress()
+        let userResponded = false
+        let userResponse: string
+        while( userResponded === false ) {
+            const key = await keypress()
+            if ( key.name == 'down' ) {
+                await this.clearRenderedControl()
+                await this.drawControl()
+            }
+            else if ( key.name == 'up' ) {
+                await this.clearRenderedControl()
+                await this.drawControl()
+            }
+            else if ( key.name == 'return' ) {
+                userResponded = true
+                userResponse = this.value
+            }
+            else if ( key.name === 'backspace' ) {
+                this.value = this.value.substring(0,this.value.length-1)
+                await this.clearRenderedControl()
+                await this.drawControl()
+            }
+            else {
+                this.value += key.sequence
+                await this.clearRenderedControl()
+                await this.drawControl()
+            }
+        }
 
-        if ( key.name === 'backspace' ) {
-            this.value = this.value.substring(0, this.value.length - 1)
-        }
-        else if ( key.sequence.startsWith('\\') ) {
-            return undefined
-        }
-        else if ( key.name === 'return' ) {
-            return this.value
-        }
-        else  {
-            this.value += key.sequence;
-        }
-        return undefined
-    }
+        if ( userResponded ) return this.value
+        else return undefined
+     }
 
-    async finish() {
+
+    finish() {
         console.log("")
     }
-    
+
 }
+
+
+
+
+
+
+    // keyMask = ( key: KeypressEvent ) => {
+    //     if ( key.sequence.startsWith('\\') ) {
+    //         return false
+    //     }
+    //     return true
+    // }
+
+
+
+
+// export class CliInputControl extends CliControl {
+
+//     label: string = ""
+
+//     value: string = ""
+
+//     constructor( ) {
+//         super()
+//         this.nLines = 0
+//     }
+
+//     async drawControl() {
+//         this.stdout.write("Draw control " + this.value )
+
+//     }
+
+//     async awaitUserInput() {
+
+
+//         const key = await keypress()
+
+
+//         // delete characters from value when user presses backspace
+//         if ( key.name === 'backspace' ) {
+//             this.value = this.value.substring(0, this.value.length - 1)
+//         }
+//         // return the final value when user presses enter
+//         else if ( key.name === 'return' ) {
+//             return this.value
+//         }
+//         // don't let the user move up
+//         else if ( key.name === 'up' ) {
+//             // remove the cursor
+//             // process.stdout.write("\x1B[?25l")
+
+//             // show the cursors
+//             // process.stdout.write("\x1B[?25l")
+//             // process.stdout.write("\x1B[?25h")
+
+//             // move the cursors to colum 7
+//             // process.stdout.write('\x1B[?7H')
+//             // process.stdout.write('\u001b[25l')
+//             // const pos = await getCursorPosition()
+//             // process.stdout.write('\a')
+//             // console.log(pos)
+//             // readline.cursorTo(process.stdout, pos.col, pos.row + 1)
+//             // await setCursorPosition({ row: pos.row + 1, col: pos.col })
+//         }
+//         // ignore terminal control characters
+//         if ( key.sequence.startsWith('\\') ) {
+//             return undefined
+//         }
+
+
+        
+
+//         // only allow user permitted characters
+//         // else if ( this.keyMask.call(this,key) === false ) {
+//         //     return this.value
+//         // }
+//         // add the character to the input value
+//         else  {
+//             this.value += key.sequence;
+//         }
+//         return undefined
+//     }
+
+//     async finish() {
+//         console.log("")
+//     }
+    
+// }
 
 
 

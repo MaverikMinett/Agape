@@ -275,9 +275,102 @@ async function t017_spacing_issue() {
 }
 
 
-async function t018_read_user_input() {
+async function t018_enter_to_contnue() {
 
+    console.log("Press any key to continue")
+    await keypress()
+
+    console.log("Press c key to continue")
+    await keypress('c')
+
+    console.log("Press return key to continue")
+    await keypress('return')
+
+    console.log("Done. Press any key to finish.")
+    await keypress()
 }
+
+
+async function t019_vanilla_js_input_field() {
+    console.log("\n" + chalk.red("**TEST 019**") + "  Vanilla JS Input field")
+
+    let value = ""
+
+    async function printControl() {
+        process.stdout.write("Question> " + value )
+    }
+
+    async function clearPrintControl() {
+        const pos = await getCursorPosition()
+        process.stdout.write("\r\x1b[K")
+    }
+    
+    printControl()
+
+    let userResponded = false
+    let userResponse: string
+    while( userResponded === false ) {
+        const key = await keypress()
+        if ( key.name == 'down' ) {
+            await clearPrintControl()
+            await printControl()
+        }
+        else if ( key.name == 'up' ) {
+            await clearPrintControl()
+            await printControl()
+        }
+        else if ( key.name == 'return' ) {
+            userResponded = true
+            userResponse = value
+        }
+        else if ( key.name === 'backspace' ) {
+            value = value.substring(0,value.length-1)
+            await clearPrintControl()
+            await printControl()
+        }
+        else {
+            value += key.sequence
+            await clearPrintControl()
+            await printControl()
+        }
+    }
+
+    return value
+}
+
+
+async function t020_input_control() {
+    console.log("\n" + chalk.red("**TEST 020**") + "  Input control")
+
+    const control = new CliInputControl()
+    const response = await control.run()
+    console.log( "Received response: ", response )
+
+    console.log("Press any key to continue")
+    await keypress('return')
+}
+
+
+
+
+async function t019_move_cursor() {
+    console.log("\n" + chalk.red("**TEST 018**") + "  Input control")
+
+    console.log("012345678901234567801234567890123456789012345678901234")
+    console.log("1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    console.log("2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    console.log("3aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    console.log("4aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    console.log("5aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    console.log("6aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    process.stdin.write("7cccc")
+    console.log("Press return key to continue")
+    await keypress('return')
+
+    console.log("Press any key to continue")
+    await keypress('return')
+}
+
 
 
 async function t018_input_control() {
@@ -285,32 +378,11 @@ async function t018_input_control() {
     
     const c = new CliInputControl()
     const response = await c.run()
-    console.log( 'Selected', response )
+    console.log( 'Input', response )
 
     console.log("Press any key to continue")
     await keypress()
 }
-
-
-
-
-// async function t016_cli_and_navmenu_component() {
-//     console.log("\n" + chalk.red("**TEST 016**") + "  Nav menu in cli")
-    
-//     const c = new NavmenuComponent([
-//         { label: 'Menu Option 1' },
-//         { label: 'Menu Option 2' },
-//         { label: 'Menu Option 3' }
-//     ])
-
-//     const cli = new Cli()
-//     cli.banner('TEST 016')
-//     cli.component(c)
-//     await cli.run()
-
-//     console.log("Press any key to continue")
-//     await keypress()
-// }
 
 
 
@@ -336,8 +408,13 @@ async function main() {
     // await t015_menu_component();
     // await t016_menu_control();
     // await t017_spacing_issue();
-    await t018_input_control();
-
+    // await t018_enter_to_contnue()
+    // await t019_move_cursor()
+    // await t019_vanilla_js_input_field()
+    await t020_input_control()
+    // await t018_input_control();
+    // await t018_move_cursor()
+    
     
 
 }

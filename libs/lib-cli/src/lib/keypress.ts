@@ -3,7 +3,7 @@ import readline from 'readline';
 readline.emitKeypressEvents(process.stdin);
 
 
-interface KeypressEvent {
+export interface KeypressEvent {
     sequence: string;
     name: string;
     ctrl: boolean;
@@ -29,6 +29,7 @@ process.stdout.setMaxListeners(0)
  * @returns Promise
  */
 export async function keypress( key?:string ) {
+    
     process.stdin.setRawMode(true); 
 
     const promise = new Promise<KeypressEvent>( (resolve, reject) => {

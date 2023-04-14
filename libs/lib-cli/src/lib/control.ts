@@ -26,7 +26,7 @@ export abstract class CliControl {
         /* don't provide finish, and don't force the user to have it */
         /* just call it if it's there */
         const $this: any = this
-        if ( $this.finish ) $this.finish()
+        if ( $this.finish ) await $this.finish()
 
         return response
     }
