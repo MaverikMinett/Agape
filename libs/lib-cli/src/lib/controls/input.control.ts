@@ -16,7 +16,9 @@ export class CliInputControl extends CliControl {
 
     required: boolean = false
 
-    private showRequiredWarning: boolean = false
+    private message: string
+    // private showingMessage: boolean = false
+    // private showRequiredWarning: boolean = false
 
     constructor( label?: string, params?: ClinInputControlParameters  ) {
         super()
@@ -31,21 +33,24 @@ export class CliInputControl extends CliControl {
 
         const formattedLabel = chalk.gray(labelText)
 
-        let value: string
-        if ( this.showRequiredWarning ) {
-            value = chalk.red('Required')
+        if ( this.message  ) {
+            process.stdout.write(formattedLabel + this.message )
         }
-        else { 
-            value = this.value
+        else {
+            process.stdout.write(formattedLabel + this.value )
         }
 
-        process.stdout.write(formattedLabel + value )
     }
+
+    async clearMessage() {
+        this.message = "";
+    }
+
 
     async awaitUserInput() {
 
         const key = await keypress()
-        this.showRequiredWarning = false
+        this.clearMessage()
 
         if ( key.name == 'down' ) {
             return undefined
@@ -59,7 +64,7 @@ export class CliInputControl extends CliControl {
                 // return this.value
             // }
             if ( this.required && this.value == '') {
-                this.showRequiredWarning = true
+                this.message = chalk.red('Required')
             }
             else {
                 return this.value
