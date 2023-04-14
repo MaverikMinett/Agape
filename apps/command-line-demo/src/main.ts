@@ -181,39 +181,7 @@ async function t014_cursor_position() {
     console.log("Cursor position", position)
 }
 
-async function t015_menu_component() {
-    console.log("\n" + chalk.red("**TEST 015**") + "  Menu component")
-    
-    const c = new NavmenuComponent([
-        { label: 'Menu Option 1' },
-        { label: 'Menu Option 2' },
-        { label: 'Menu Option 3' }
-    ])
-    const response = await c.run()
-    console.log( 'Selected', response )
-
-    console.log("Press any key to continue")
-    await keypress()
-}
-
-async function t016_menu_control() {
-    console.log("\n" + chalk.red("**TEST 016**") + "  Menu control")
-    
-    const c = new CliMenuControl([
-        { label: 'Menu Option 1' },
-        { label: 'Menu Option 2' },
-        { label: 'Menu Option 3' }
-    ])
-    const response = await c.run()
-    console.log( 'Selected', response )
-
-    console.log("Press any key to continue")
-    await keypress()
-}
-
-
-
-async function t017_spacing_issue() {
+async function t015_spacing_issue() {
     /**
      * Menu component has a spacing issue, this is a Proof of Concept
      * that it should work.
@@ -273,6 +241,41 @@ async function t017_spacing_issue() {
     console.log("Press any key to continue")
     await keypress()
 }
+
+async function t016_menu_control() {
+    console.log("\n" + chalk.red("**TEST 016**") + "  Menu control")
+    
+    const c = new CliMenuControl([
+        { label: 'Menu Option 1' },
+        { label: 'Menu Option 2' },
+        { label: 'Menu Option 3' }
+    ])
+    const response = await c.run()
+    console.log( 'Selected', response )
+
+    console.log("Press any key to continue")
+    await keypress()
+}
+
+
+async function t017_menu_component() {
+    console.log("\n" + chalk.red("**TEST 015**") + "  Menu component")
+    
+    const c = new NavmenuComponent([
+        { label: 'Menu Option 1' },
+        { label: 'Menu Option 2' },
+        { label: 'Menu Option 3' }
+    ])
+    const response = await c.run()
+    console.log( 'Selected', response )
+
+    console.log("Press any key to continue")
+    await keypress()
+}
+
+
+
+
 
 
 async function t018_enter_to_contnue() {
@@ -405,27 +408,14 @@ async function t021_input_with_existing_value() {
     // await keypress('return')
 }
 
-async function t021_input_with_required_validator() {
-    // console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
 
-    // const control = new CliInputControl('Foo')
-    // const response = await control.run()
-    // console.log( "Received response: ", response )
+async function t024_move_cursor() {
+    console.log("\n" + chalk.red("**TEST 025**") + "  Moving the cursor")
 
-    // console.log("Press any key to continue")
-    // await keypress('return')
+
+
 }
 
-async function t021_input_with_error_message() {
-    // console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
-
-    // const control = new CliInputControl('Foo')
-    // const response = await control.run()
-    // console.log( "Received response: ", response )
-
-    // console.log("Press any key to continue")
-    // await keypress('return')
-}
 
 async function t019_move_cursor() {
     console.log("\n" + chalk.red("**TEST 018**") + "  Input control")
@@ -479,19 +469,19 @@ async function main() {
     // await t012_application_messages()
     // await t013_application_messages_and_multiple_any_keys()
     // await t014_cursor_position();
-    // await t015_menu_component();
-    // await t016_menu_control();
-    // await t017_spacing_issue();
+    await t015_spacing_issue();
+    await t016_menu_control();
+    await t017_menu_component();
+    
+
     // await t018_enter_to_contnue()
     // await t019_move_cursor()
     // await t019_vanilla_js_input_field()
     // await t020_input_control()
     // await t021_input_with_label();
-    await t022_input_with_no_answer()
-    await t023_input_with_required()
-    // await t020_input_control()
-    // await t018_input_control();
-    // await t018_move_cursor()
+    // await t022_input_with_no_answer()
+    // await t023_input_with_required()
+
     
     
 

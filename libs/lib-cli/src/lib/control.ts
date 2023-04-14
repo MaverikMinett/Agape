@@ -51,8 +51,8 @@ export abstract class CliControl {
         const pos = await getCursorPosition()
         process.stdout.write("\r\x1b[K")
 
-        for ( let n = 1; n < this.nLines; n++ ) {
-            readline.cursorTo(process.stdout, 0, pos.row - 1)
+        for ( let n = 1; n <= this.nLines; n++ ) {
+            readline.cursorTo(process.stdout, 0, pos.row - n)
             process.stdout.write("\r\x1b[K")
         }
 
