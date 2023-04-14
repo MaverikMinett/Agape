@@ -4,7 +4,10 @@ import { Cli, getCursorPosition, keypress } from '@lib/cli'
 import { AnyKeyToContinueComponent } from 'libs/lib-cli/src/lib/components/any-key-to-continue.component'
 import { CliBannerComponent } from 'libs/lib-cli/src/lib/components/banner.component'
 import { NavmenuComponent } from './app/navmenu.component';
-import { CliMenuControl } from './app/controls/menu.control';
+import { CliMenuControl, CliInputControl } from '@lib/cli';
+import  readline from 'readline';
+
+
 
 async function t001_keypress() {
     console.log("\nTEST 001\n")
@@ -209,19 +212,80 @@ async function t016_menu_control() {
 }
 
 
-async function t016_cli_and_navmenu_component() {
-    console.log("\n" + chalk.red("**TEST 016**") + "  Nav menu in cli")
-    
-    const c = new NavmenuComponent([
-        { label: 'Menu Option 1' },
-        { label: 'Menu Option 2' },
-        { label: 'Menu Option 3' }
-    ])
 
-    const cli = new Cli()
-    cli.banner('TEST 016')
-    cli.component(c)
-    await cli.run()
+async function t017_spacing_issue() {
+    /**
+     * Menu component has a spacing issue, this is a Proof of Concept
+     * that it should work.
+     */
+
+    console.log("\n" + chalk.red("**TEST 017**") + "  Spacing Issue")
+    
+    let selectedIndex = 0
+
+    async function printOptions() {
+        console.log( (selectedIndex == 0 ? ">" : " ") + " Row 1" )
+        console.log( (selectedIndex == 1 ? ">" : " ") + " Row 2" )
+        console.log( (selectedIndex == 2 ? ">" : " ") + " Row 3" )
+    }
+
+    /* this is the fix, changed clearOptions to write "\r\x1b[K" instead of using readline.Clear... */
+    async function clearOptions() {
+        const pos = await getCursorPosition()
+        process.stdout.write("\r\x1b[K")
+        readline.cursorTo(process.stdout, 0, pos.row - 1)
+        process.stdout.write("\r\x1b[K")
+        readline.cursorTo(process.stdout, 0, pos.row - 2)
+        process.stdout.write("\r\x1b[K")
+        readline.cursorTo(process.stdout, 0, pos.row - 3)
+        process.stdout.write("\r\x1b[K")
+    }
+
+    await printOptions()
+
+    let userResponded = false
+    let userResponse: number
+    while( userResponded === false ) {
+        const key = await keypress()
+        if ( key.name == 'down' ) {
+            selectedIndex++
+            if ( selectedIndex > 3 - 1) { selectedIndex = 3 - 1 }
+            await clearOptions()
+            await printOptions()
+        }
+        if ( key.name == 'up' ) {
+            selectedIndex--
+            if ( selectedIndex < 0 ) { selectedIndex = 0 } 
+            await clearOptions()
+            await printOptions()
+        }
+        if ( key.name == 'return' ) {
+            selectedIndex--
+            if ( selectedIndex < 0 ) { selectedIndex = 0 } 
+            await clearOptions()
+            await printOptions()
+            userResponded = true
+            userResponse = selectedIndex
+        }
+    }
+
+    console.log("User Response is "  + selectedIndex )
+    console.log("Press any key to continue")
+    await keypress()
+}
+
+
+async function t018_read_user_input() {
+
+}
+
+
+async function t018_input_control() {
+    console.log("\n" + chalk.red("**TEST 018**") + "  Input control")
+    
+    const c = new CliInputControl()
+    const response = await c.run()
+    console.log( 'Selected', response )
 
     console.log("Press any key to continue")
     await keypress()
@@ -230,7 +294,31 @@ async function t016_cli_and_navmenu_component() {
 
 
 
+// async function t016_cli_and_navmenu_component() {
+//     console.log("\n" + chalk.red("**TEST 016**") + "  Nav menu in cli")
+    
+//     const c = new NavmenuComponent([
+//         { label: 'Menu Option 1' },
+//         { label: 'Menu Option 2' },
+//         { label: 'Menu Option 3' }
+//     ])
+
+//     const cli = new Cli()
+//     cli.banner('TEST 016')
+//     cli.component(c)
+//     await cli.run()
+
+//     console.log("Press any key to continue")
+//     await keypress()
+// }
+
+
+
+
 async function main() {
+
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+    await delay(1000) 
     // await t001_keypress()
     // await t002_any_key_to_continue_component()
     // await t003_multiple_any_key_to_continue_components()
@@ -246,10 +334,10 @@ async function main() {
     // await t013_application_messages_and_multiple_any_keys()
     // await t014_cursor_position();
     // await t015_menu_component();
-    await t016_menu_control();
-    // await t015_menu_component()
-    // await t016_cli_and_navmenu_component();
-    // await t014_menu()
+    // await t016_menu_control();
+    // await t017_spacing_issue();
+    await t018_input_control();
+
     
 
 }

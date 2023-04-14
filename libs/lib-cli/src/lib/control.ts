@@ -7,8 +7,11 @@ export abstract class CliControl {
 
     stdout = process.stdout 
 
+    rl = readline.createInterface(this.stdin)
+
     nLines:number = 0
 
+    active: boolean = false
     rendered: boolean = false
 
     abstract awaitUserInput(): Promise<any>
@@ -16,7 +19,16 @@ export abstract class CliControl {
 
     async run() {
         this.rendered = false
-        return await this.render()
+        this.active = true
+        const response = await this.render()
+        this.active = false
+        
+        /* don't provide finish, and don't force the user to have it */
+        /* just call it if it's there */
+        const $this: any = this
+        if ( $this.finish ) $this.finish()
+
+        return response
     }
 
     protected async render() {
@@ -42,15 +54,7 @@ export abstract class CliControl {
         for ( let n = 1; n < this.nLines; n++ ) {
             readline.cursorTo(process.stdout, 0, pos.row - 1)
             process.stdout.write("\r\x1b[K")
-            readline.cursorTo(process.stdout, 0, pos.row - 2)
-            process.stdout.write("\r\x1b[K")
-            readline.cursorTo(process.stdout, 0, pos.row - 3)
-            process.stdout.write("\r\x1b[K")
         }
 
-
-
-
-        
     }
 }
