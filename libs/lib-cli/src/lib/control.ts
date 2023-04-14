@@ -41,7 +41,7 @@ export abstract class CliControl {
 
         const userInput = await this.awaitUserInput()
 
-        if ( userInput ) return userInput
+        if ( userInput !== undefined ) return userInput
 
         else return this.render()
     }
