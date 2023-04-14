@@ -412,6 +412,7 @@ async function main() {
     // await t019_move_cursor()
     // await t019_vanilla_js_input_field()
     await t020_input_control()
+    await t020_input_control()
     // await t018_input_control();
     // await t018_move_cursor()
     

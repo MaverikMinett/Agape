@@ -16,40 +16,27 @@ export class CliInputControl extends CliControl {
         process.stdout.write("Question>>> " + this.value )
     }
 
-
     async awaitUserInput() {
-        let userResponded = false
-        let userResponse: string
-        while( userResponded === false ) {
-            const key = await keypress()
-            if ( key.name == 'down' ) {
-                await this.clearRenderedControl()
-                await this.drawControl()
-            }
-            else if ( key.name == 'up' ) {
-                await this.clearRenderedControl()
-                await this.drawControl()
-            }
-            else if ( key.name == 'return' ) {
-                userResponded = true
-                userResponse = this.value
-            }
-            else if ( key.name === 'backspace' ) {
-                this.value = this.value.substring(0,this.value.length-1)
-                await this.clearRenderedControl()
-                await this.drawControl()
-            }
-            else {
-                this.value += key.sequence
-                await this.clearRenderedControl()
-                await this.drawControl()
-            }
+
+        const key = await keypress()
+        if ( key.name == 'down' ) {
+            return undefined
         }
-
-        if ( userResponded ) return this.value
-        else return undefined
+        else if ( key.name == 'up' ) {
+            return undefined
+        }
+        else if ( key.name == 'return' ) {
+            return this.value
+        }
+        else if ( key.name === 'backspace' ) {
+            this.value = this.value.substring(0,this.value.length-1)
+            return undefined
+        }
+        else {
+            this.value += key.sequence
+            return undefined
+        }
      }
-
 
     finish() {
         console.log("")
