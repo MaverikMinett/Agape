@@ -1,4 +1,4 @@
-import { CliMenuControl } from './controls/menu.control';
+import { CliMenuControl } from '@lib/cli';
 
 export interface NavmenuItem {
     key?: string

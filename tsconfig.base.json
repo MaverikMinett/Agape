@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@lib/cli": ["libs/lib-cli/src/index.ts"],
       "@lib/express": ["libs/lib-express/src/index.ts"],
       "@lib/forms": ["libs/lib-forms/src/index.ts"],
       "@lib/server": ["libs/lib-server/src/index.ts"],

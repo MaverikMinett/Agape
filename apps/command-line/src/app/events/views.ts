@@ -1,7 +1,7 @@
 import { events, Event} from './model';
 import { deleteEvent, saveEvent } from './controllers';
 
-import cli from '../../lib/cli';
+import { cli } from '@lib/cli';
 import fb from '@lib/forms'
 
 /**
@@ -15,8 +15,7 @@ export async function eventsIndex() {
             { label: "Create event", view: eventsEditView },
         ]
     )
-    await cli.run()
-    cli.finish()
+    await cli.run(true)
 }                           
 
 /**
