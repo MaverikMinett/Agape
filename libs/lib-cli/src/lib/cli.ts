@@ -7,8 +7,10 @@ import { CliDisplayComponent } from './components/display.component';
 import { EnterToContinueComponent } from './components/enter-to-continue.component';
 import { CliFormComponent } from './components/form.component';
 import { CliHeaderComponent } from './components/header.component';
-import { CliMenuComponent, CliMenuChoice } from './components/menu.component';
+import { CliNavMenuComponent, CliNavMenuChoice } from './components/navmenu.component';
 import { CliMessage, CliMessagesComponent } from './components/messages.component';
+import { CliMenuItem } from './controls/menu.control';
+import { CliMenuComponent } from './components/menu.component';
 
 export interface CliComponent {
     run(): Promise<void>|void
@@ -79,8 +81,14 @@ export class Cli {
         return this
     }
 
-    menu( title: string, choices: CliMenuChoice[] ) {
-        const component = new CliMenuComponent(title, choices)
+    menu<T extends CliMenuItem>( name: string, choices: T[] ) {
+        const component = new CliMenuComponent(name, choices)
+        this.components.push( component )
+        return this
+    }
+
+    navmenu( title: string, choices: CliNavMenuChoice[] ) {
+        const component = new CliNavMenuComponent(title, choices)
         this.components.push( component )
         return this
     }
@@ -106,6 +114,9 @@ export class Cli {
 
 
     async run( clearScreen: boolean = false) {
+
+        const stash: any = { }
+
         if ( clearScreen ) clear()
 
         if ( this.applicationHeader ) await this.applicationHeader.run()
@@ -115,10 +126,21 @@ export class Cli {
         if ( this.applicationMessages ) await this.applicationMessages.run(this.messages)
 
         for ( let component of this.components ) {
-            await component.run()
+            const response = await component.run()
+            this.mergeComponentResponseWithStash( stash, response )
         }
 
         this.finish()
+
+        return stash
+    }
+
+    protected mergeComponentResponseWithStash( stash: any, response: any ) {
+        for ( let key of Object.keys(response) ) {
+            if ( !(key in stash) ) stash[key] = { }
+            Object.assign(stash[key], response[key])
+        }
+        
     }
 
 }

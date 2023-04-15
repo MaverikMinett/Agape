@@ -3,19 +3,24 @@ import { deleteEvent, saveEvent } from './controllers';
 
 import { cli } from '@lib/cli';
 import fb from '@lib/forms'
+import { navigateToView } from '../router';
 
 /**
  * Display the events menu
  */
 export async function eventsIndex() {
-    cli.banner('Events')
-    cli.menu("Events Menu", 
+    cli
+    .banner('Events')
+    .menu("Events Menu", 
         [
             { label: "View events", view: eventsListView },
             { label: "Create event", view: eventsEditView },
         ]
     )
-    await cli.run(true)
+    const response = await cli.run(true)
+
+    const view = response['menu']['Events Menu'].view
+    await navigateToView(view)
 }                           
 
 /**
@@ -34,10 +39,10 @@ async function eventsListView(params: any, input: { message: string } ) {
     cli.banner('Events List')
     cli.message(input?.message)
     cli.menu("Events List", [
-        { label: "< back", view: eventsIndex },
+        { label: "< back", view: eventsIndex, indicator: "❰" },
         ...choices
     ])
-    await cli.run()
+    await cli.run(true)
     cli.finish()
 }
 
@@ -52,7 +57,7 @@ async function eventsItemView( params?: { item: Event }, input?: any ) {
     cli.banner('event')
     cli.message(input?.message)
     cli.display(" " + item.name + "\n")
-    cli.menu(" ", [
+    cli.navmenu(" ", [
         { label: "< back", view: eventsListView },
         { label: "Edit event", view: eventsEditView, params: { item } },
         { label: "Buy tickets", view: eventsEditView, params: { item } },
@@ -63,7 +68,7 @@ async function eventsItemView( params?: { item: Event }, input?: any ) {
             controllerParams: [ item.id ]
         }
     ])
-    await cli.run()
+    await cli.run(true)
     cli.finish()
 }
 
@@ -80,7 +85,7 @@ async function eventsEditView( params?: { item: Event } ) {
 
     cli.banner( item?.id ? 'Edit Event' : 'Create Event' )
     cli.form( form )
-    cli.menu(" ", [
+    cli.navmenu(" ", [
         { 
             label: "Save event", 
             controller: saveEvent, 
@@ -92,6 +97,6 @@ async function eventsEditView( params?: { item: Event } ) {
             view: eventsListView 
         },
     ])
-    await cli.run()
+    await cli.run(true)
     cli.finish()
 }

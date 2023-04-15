@@ -37,3 +37,13 @@ export async function setCursorPosition (position: CursorPosition) {
     const col = position.col + 1
     process.stdout.write(`\u001b[${row};${col}H`)
 }
+
+export async function hideCursor() {
+    process.stdout.write(`\u001b[?25l`)
+}
+export async function showCursor() {
+    process.stdout.write(`\u001b[?25h`)
+}
+
+// rl.write('\u001B[?25l'); // hides cursor
+// rl.write('\u001B[?25h'); // show cursor

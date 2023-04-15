@@ -1,7 +1,9 @@
 
 import { keypress } from '../keypress';
 import { CliElement } from '../element';
+import { hideCursor, showCursor } from '../cursor';
 
+export type CliMenuParams = Partial<Pick<CliMenuControl, keyof CliMenuControl>>
 
 export interface CliMenuItem {
     key?: string
@@ -10,7 +12,9 @@ export interface CliMenuItem {
 
 export class CliMenuControl extends CliElement {
 
-    selectedIndex: number = -1
+    indicator: string = "❯"
+
+    selectedIndex: number = 0
 
     selectedItem: CliMenuItem
 
@@ -21,20 +25,27 @@ export class CliMenuControl extends CliElement {
 
     selectedMenuItemFormatter = (item) => {
 
-        const indicator = "\x1b[38;2;0;255;255m" + "❯" + "\x1b[0m"
+        const indicator =  item.indicator ?? this.indicator
+        const indicatorFormatted = "\x1b[38;2;0;255;255m" + indicator + "\x1b[0m"
         const label = "\x1b[38;2;0;255;255m" + "\x1b[4m" + item.label + "\x1b[0m"
 
-        const text =  indicator + " " + label
+        const text =  indicatorFormatted + " " + label
         return text
     }
 
-    constructor( public items: CliMenuItem[] = [] ) {
+    constructor( public items: CliMenuItem[] = [], params?: CliMenuParams  ) {
         super()
+        Object.assign(this, params)
         this.selectedItem = items[0]
         this.nLines = items.length
     }
 
+    // async before() {
+    //     hideCursor()
+    // }
+
     async drawElement() {
+        await hideCursor()
         let index = 0;
         for ( let item of this.items ) {
             const formatter = index === this.selectedIndex 
@@ -62,6 +73,9 @@ export class CliMenuControl extends CliElement {
         return undefined
     }
     
+    async finish() {
+        await showCursor()
+    }
 }
 
 
