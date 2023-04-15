@@ -467,8 +467,7 @@ async function t030_color_no_libs() {
     // ESC[38:5:⟨n⟩m Select foreground color      where n is a number from the table below
     // ESC[48:5:⟨n⟩m Select background color
 
-    // iterm full color palette
-    // console.log("\x1b[38;5;244m" + "Required" + "\x1b[0m")
+    // full color palette with rgb color
     console.log("\x1b[38;2;81;134;219m" + "Required" + "\x1b[0m")
     console.log("\x1b[38;2;98;155;234m" + "Required" + "\x1b[0m")
 }
@@ -492,7 +491,7 @@ async function main() {
     // await t013_application_messages_and_multiple_any_keys()
     // await t014_cursor_position();
     // await t015_spacing_issue();
-    // await t016_menu_control();
+    await t016_menu_control();
     // await t017_menu_component();
     // await t018_enter_to_contnue()
     // await t019_vanilla_js_input_field()
