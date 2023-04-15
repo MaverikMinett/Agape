@@ -1,8 +1,11 @@
 export * from './lib/cli';
 export * from './lib/keypress';
 export * from './lib/cursor';
+
 export * from './lib/controls/input.control';
 export * from './lib/controls/menu.control';
+
+export * from './lib/elements/paragraph.element';
 
 export * from './lib/components/any-key-to-continue.component'
 export * from './lib/components/banner.component'
