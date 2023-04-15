@@ -1,5 +1,5 @@
 
-import { AnyKeyToContinueComponent, Cli, CliBannerComponent, CliInputControl, CliMenuControl, getCursorPosition, getTerminalSize, keypress } from '@lib/cli';
+import { AnyKeyToContinueComponent, Cli, CliBannerComponent, CliInputControl, CliMenuControl, CliParagraphElement, getCursorPosition, getTerminalSize, keypress } from '@lib/cli';
 import chalk from 'chalk';
 
 import  readline from 'readline';
@@ -438,7 +438,40 @@ async function t028_get_terminal_size() {
     await keypress()
 }
 
+async function t029_paragraph_element() {
+    console.log("\n" + chalk.red("**TEST 029**") + "  Pragraph Element")
 
+    const lorum = `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+     sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut 
+     enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi 
+     ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+     in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur 
+     sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+     mollit anim id est laborum.`
+
+    const e = new CliParagraphElement( lorum )
+    await e.run()
+
+    console.log("Press any key to continue")
+    await keypress()
+}
+
+async function t030_color_no_libs() {
+
+    // standard 16 colors
+    console.log("\x1b[31m" + "Required" + "\x1b[0m")
+
+    // 255 extended color palette
+    console.log("\x1b[38;5;244m" + "Required" + "\x1b[0m")
+    console.log("\x1b[38;5;135m" + "Required" + "\x1b[0m")
+    // ESC[38:5:⟨n⟩m Select foreground color      where n is a number from the table below
+    // ESC[48:5:⟨n⟩m Select background color
+
+    // iterm full color palette
+    // console.log("\x1b[38;5;244m" + "Required" + "\x1b[0m")
+    console.log("\x1b[38;2;81;134;219m" + "Required" + "\x1b[0m")
+    console.log("\x1b[38;2;98;155;234m" + "Required" + "\x1b[0m")
+}
 
 async function main() {
 
@@ -471,8 +504,10 @@ async function main() {
     // await t025_input_with_existing_value()
     // await t026_input_with_value_and_cursor_position()
     // await t027_input_with_starting_value_and_cursor_position_via_properties()
+    // await t029_paragraph_element()
+    await t030_color_no_libs()
 
-    await t028_get_terminal_size()
+    // await t028_get_terminal_size()
     // await t028_paragraph_element()
 
 }
