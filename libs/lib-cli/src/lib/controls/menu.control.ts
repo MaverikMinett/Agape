@@ -1,13 +1,14 @@
 import chalk from 'chalk';
 import { keypress } from '../keypress';
-import { CliControl } from '../control'
+import { CliElement } from '../element';
+
 
 export interface CliMenuItem {
     key?: string
     label: string;
 }
 
-export class CliMenuControl extends CliControl {
+export class CliMenuControl extends CliElement {
 
     selectedIndex: number = -1
 
@@ -29,7 +30,7 @@ export class CliMenuControl extends CliControl {
         this.nLines = items.length
     }
 
-    async drawControl() {
+    async drawElement() {
         let index = 0;
         for ( let item of this.items ) {
             const formatter = index === this.selectedIndex 

@@ -1,15 +1,16 @@
-import { CliControl } from "../control";
 import { keypress, KeypressEvent } from "../keypress";
-import { CursorPosition, getCursorPosition } from "../cursor";
+import { CursorPosition, getCursorPosition, setCursorPosition } from "../cursor";
 import chalk from 'chalk';
+import { CliElement } from "../element";
 
 
 class ClinInputControlParameters {
     required?: boolean;
     value?: string;
+    cursorPosition?: number;
 }
 
-export class CliInputControl extends CliControl {
+export class CliInputControl extends CliElement {
 
     value: string = ""
 
@@ -17,8 +18,10 @@ export class CliInputControl extends CliControl {
 
     required: boolean = false
 
+    cursorPosition: number = 0
+
     protected message: string
-    protected cursorPosition: number = 0
+    
 
     protected controlCoordinates: { col: number, row: number } = { col: 0, row: 0 }
 
@@ -29,12 +32,16 @@ export class CliInputControl extends CliControl {
         this.label = label;
         if ( params ) Object.assign( this, params )
 
-        if ( this.value ) {
+        /* set initial cursor position */
+        if ( params?.cursorPosition ) {
+            this.cursorPosition = params.cursorPosition
+        }
+        else if ( this.value ) {
             this.cursorPosition = this.value.length
         }
     }
 
-    async drawControl() {
+    async drawElement() {
 
         const labelText = this.label !== undefined && this.label !== null
             ? `${this.label} ` 
@@ -78,9 +85,7 @@ export class CliInputControl extends CliControl {
 
 
     async drawCursor( position: CursorPosition ) {
-        const row = position.row + 1
-        const col = position.col + 1
-        this.stdout.write(`\u001b[${row};${col}H`)
+        setCursorPosition( position )
     }
 
 
@@ -97,13 +102,13 @@ export class CliInputControl extends CliControl {
 
         if ( key.name == 'left' ) {
             this.cursorPosition--
-            // if ( this.cursorPosition < 0 ) this.cursorPosition = 0
-            // return undefined
+            if ( this.cursorPosition < 0 ) this.cursorPosition = 0
+            return undefined
         }
         else if ( key.name == 'right' ) {
             this.cursorPosition++
-            // if ( this.cursorPosition > this.value.length ) this.value.length
-            // return undefined
+            if ( this.cursorPosition > this.value.length ) this.value.length
+            return undefined
         }
         else if ( key.name == 'down' ) {
             return undefined
@@ -114,6 +119,7 @@ export class CliInputControl extends CliControl {
         else if ( key.name == 'return' ) {
             if ( this.required && this.value == '') {
                 this.message = chalk.red('Required')
+                return undefined
             }
             else {
                 return this.value

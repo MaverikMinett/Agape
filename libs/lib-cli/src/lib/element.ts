@@ -15,7 +15,7 @@ export class CliElement {
     active: boolean = false
     rendered: boolean = false
     
-    async drawControl(): Promise<void> { }
+    async drawElement(): Promise<void> { }
 
     async run() {
         this.rendered = false
@@ -33,9 +33,9 @@ export class CliElement {
 
     protected async render() {
 
-        if ( this.rendered ) await this.clearRenderedControl()
+        if ( this.rendered ) await this.clearRenderedElement()
         
-        await this.drawControl()
+        await this.drawElement()
 
         this.rendered = true
 
@@ -52,7 +52,7 @@ export class CliElement {
         // otherwise we are done here
     }
 
-    async clearRenderedControl() {
+    async clearRenderedElement() {
 
         const pos = await getCursorPosition()
         process.stdout.write("\r\x1b[K")

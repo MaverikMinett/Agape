@@ -30,3 +30,10 @@ export async function getCursorPosition(): Promise<CursorPosition> {
 
     return promise
 }
+
+
+export async function setCursorPosition (position: CursorPosition) {
+    const row = position.row + 1
+    const col = position.col + 1
+    process.stdout.write(`\u001b[${row};${col}H`)
+}

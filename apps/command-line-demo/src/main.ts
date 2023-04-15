@@ -1,5 +1,5 @@
 
-import { AnyKeyToContinueComponent, Cli, CliBannerComponent, CliInputControl, CliMenuControl, getCursorPosition, keypress } from '@lib/cli';
+import { AnyKeyToContinueComponent, Cli, CliBannerComponent, CliInputControl, CliMenuControl, getCursorPosition, getTerminalSize, keypress } from '@lib/cli';
 import chalk from 'chalk';
 
 import  readline from 'readline';
@@ -346,7 +346,7 @@ async function t020_input_control() {
     console.log( "Received response: ", response )
 
     console.log("Press any key to continue")
-    await keypress('return')
+    await keypress()
 }
 
 async function t021_input_with_label() {
@@ -357,7 +357,7 @@ async function t021_input_with_label() {
     console.log( "Received response: ", response )
 
     console.log("Press any key to continue")
-    await keypress('return')
+    await keypress()
 }
 
 async function t022_input_with_no_answer() {
@@ -368,7 +368,7 @@ async function t022_input_with_no_answer() {
     console.log( "Received response: ", response )
 
     console.log("Press any key to continue")
-    await keypress('return')
+    await keypress()
 }
 
 async function t023_input_with_required() {
@@ -379,49 +379,71 @@ async function t023_input_with_required() {
     console.log( "Received response: ", response )
 
     console.log("Press any key to continue")
-    await keypress('return')
+    await keypress()
 }
 
 async function t024_cursor_position() {
-    console.log("\n" + chalk.red("**TEST 025**") + "  Moving the cursor")
+    console.log("\n" + chalk.red("**TEST 025**") + "  Retrieve cursor position using getCursorPosition")
 
     const position = await getCursorPosition()
     console.log(position)
 }
 
 async function t025_input_with_existing_value() {
-    console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
+    console.log("\n" + chalk.red("**TEST 025**") + "  Input with value set")
 
     const control = new CliInputControl('Foo', { value: 'Anything' })
     const response = await control.run()
     console.log( "Received response: ", response )
 
     console.log("Press any key to continue")
-    await keypress('return')
+    await keypress()
 }
 
+async function t026_input_with_value_and_cursor_position() {
+    console.log("\n" + chalk.red("**TEST 026**") + "  Input with starting value and cursor position")
 
+    const control = new CliInputControl(
+        'Foo', 
+        { value: 'Anything', cursorPosition: 3 }
+    )
+    const response = await control.run()
+    console.log( "Received response: ", response )
 
-async function t021_input_with_navigable_cursor() {
-    // console.log("\n" + chalk.red("**TEST 021**") + "  Input with label")
-
-    // const control = new CliInputControl('Foo')
-    // const response = await control.run()
-    // console.log( "Received response: ", response )
-
-    // console.log("Press any key to continue")
-    // await keypress('return')
+    console.log("Press any key to continue")
+    await keypress()
 }
 
+async function t027_input_with_starting_value_and_cursor_position_via_properties() {
+    console.log("\n" + chalk.red("**TEST 027**") + "  Input with starting value and cursor position via property accessors")
 
+    const control = new CliInputControl('Foo')
 
+    control.value = 'Everything'
+    control.cursorPosition = 3
+
+    const response = await control.run()
+    console.log( "Received response: ", response )
+
+    console.log("Press any key to continue")
+    await keypress()
+}
+
+async function t028_get_terminal_size() {
+    console.log("\n" + chalk.red("**TEST 028**") + "  Terminal size")
+    const size = getTerminalSize()
+    console.log(size)
+
+    console.log("Press any key to continue")
+    await keypress()
+}
 
 
 
 async function main() {
 
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
-    await delay(1000) 
+    // await delay(1000) 
     // await t001_keypress()
     // await t002_any_key_to_continue_component()
     // await t003_multiple_any_key_to_continue_components()
@@ -440,16 +462,18 @@ async function main() {
     // await t016_menu_control();
     // await t017_menu_component();
     // await t018_enter_to_contnue()
-    // await t019_move_cursor()
     // await t019_vanilla_js_input_field()
     // await t020_input_control()
     // await t021_input_with_label();
     // await t022_input_with_no_answer()
     // await t023_input_with_required()
     // await t024_cursor_position()
-    await t025_input_with_existing_value()
+    // await t025_input_with_existing_value()
+    // await t026_input_with_value_and_cursor_position()
+    // await t027_input_with_starting_value_and_cursor_position_via_properties()
 
-    
+    await t028_get_terminal_size()
+    // await t028_paragraph_element()
 
 }
 
