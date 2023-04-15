@@ -1,9 +1,9 @@
 
-import { CliInputControl } from './input.control'
+import { CliMenuControl } from './menu.control'
 
-describe('CliInputControl', () => {
+describe('CliMenuControl', () => {
 
-    let c: CliInputControl
+    let c: CliMenuControl
 
     beforeEach( () => {
         c = undefined
@@ -14,7 +14,7 @@ describe('CliInputControl', () => {
         })
     })
     it('should instantiate', () => {
-        c = new CliInputControl()
+        c = new CliMenuControl()
         expect(c).toBeTruthy()
     })
 

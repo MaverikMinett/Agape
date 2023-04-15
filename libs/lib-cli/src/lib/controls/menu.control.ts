@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+
 import { keypress } from '../keypress';
 import { CliElement } from '../element';
 
@@ -20,7 +20,11 @@ export class CliMenuControl extends CliElement {
     }
 
     selectedMenuItemFormatter = (item) => {
-        const text =  chalk.cyan("❯") + " " + chalk.underline.cyan(item.label)
+
+        const indicator = "\x1b[38;2;0;255;255m" + "❯" + "\x1b[0m"
+        const label = "\x1b[38;2;0;255;255m" + "\x1b[4m" + item.label + "\x1b[0m"
+
+        const text =  indicator + " " + label
         return text
     }
 
