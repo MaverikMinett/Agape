@@ -127,7 +127,7 @@ export class Cli {
 
         for ( let component of this.components ) {
             const response = await component.run()
-            this.mergeComponentResponseWithStash( stash, response )
+            if ( response ) this.mergeComponentResponseWithStash( stash, response )
         }
 
         this.finish()

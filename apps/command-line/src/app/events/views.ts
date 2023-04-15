@@ -3,7 +3,9 @@ import { deleteEvent, saveEvent } from './controllers';
 
 import { cli } from '@lib/cli';
 import fb from '@lib/forms'
-import { navigateToView } from '../router';
+import { executeController, navigateToView } from '../router';
+
+
 
 /**
  * Display the events menu
@@ -27,23 +29,20 @@ export async function eventsIndex() {
  * Events list view
  */
 async function eventsListView(params: any, input: { message: string } ) {
-    /* choices */
-    const choices = events.map( event =>  { 
-        return { 
-            label: event.name,
-            view: eventsItemView,
-            params: { item: event },
-        } 
-    })
-
     cli.banner('Events List')
     cli.message(input?.message)
     cli.menu("Events List", [
-        { label: "< back", view: eventsIndex, indicator: "❰" },
-        ...choices
+        { label: "back", indicator: "❰", back: true },
+        ...events.map( event =>  {  return { event, label: event.name } })
     ])
-    await cli.run(true)
-    cli.finish()
+    const response = await cli.run(true)
+
+    if ( response['menu']['Events List'].back === true ) 
+        return navigateToView(eventsIndex)
+
+    const event = response['menu']['Events List'].event
+    console.log(event)
+    navigateToView(eventsItemView, {id: event.id})
 }
 
 /**
@@ -51,25 +50,34 @@ async function eventsListView(params: any, input: { message: string } ) {
  * @param params View parameters
  * @param params.item The event to display
  */
-async function eventsItemView( params?: { item: Event }, input?: any ) {
-    const { item } = params
+async function eventsItemView( params?: { id: string }, input?: any ) {
+    const { id } = params
 
-    cli.banner('event')
+    const event = events.find( e => e.id === id )
+
+    cli.banner('Event')
     cli.message(input?.message)
-    cli.display(" " + item.name + "\n")
-    cli.navmenu(" ", [
-        { label: "< back", view: eventsListView },
-        { label: "Edit event", view: eventsEditView, params: { item } },
-        { label: "Buy tickets", view: eventsEditView, params: { item } },
-        { 
-            label: "Delete event",
-            view: eventsListView,
-            controller: deleteEvent,
-            controllerParams: [ item.id ]
-        }
+    cli.display(event.name)
+    cli.menu('action', [
+        { label: "back", indicator: "❰", back: true },
+        { label: "Edit event", action: "edit-event" },
+        { label: "Buy tickets", action: "buy-tickets" },
+        { label: "Delete event", action: "delete-event" }
     ])
-    await cli.run(true)
-    cli.finish()
+
+    const response = await cli.run(true)
+
+    if ( response['menu']['action'].back )
+        return navigateToView(eventsListView)
+
+    const action = response['menu']['action'].action
+    if ( action === 'edit-event' ) {
+        return navigateToView(eventsEditView, { id: event.id})
+    }
+
+    else if ( action === 'delete-event' ) {
+        executeController(deleteEvent, event.id )
+    }
 }
 
 /**

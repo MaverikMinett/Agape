@@ -4,6 +4,7 @@ import chalk from 'chalk';
 
 import  readline from 'readline';
 import { NavmenuComponent } from './app/navmenu.component';
+import { CliMenuComponent } from 'libs/lib-cli/src/lib/components/menu.component';
 
 
 
@@ -255,8 +256,39 @@ async function t016_menu_control() {
     await keypress()
 }
 
-
 async function t017_menu_component() {
+    console.log("\n" + chalk.red("**TEST 017**") + "  Menu component")
+    
+    const c = new CliMenuComponent('fooMenu',[
+        { label: 'Menu Option 1' },
+        { label: 'Menu Option 2' },
+        { label: 'Menu Option 3' }
+    ])
+    const response = await c.run()
+    console.log( 'Selected', response )
+
+    console.log("Press any key to continue")
+    await keypress()
+}
+
+async function t017a_cli_and_menu_component() {
+    console.log("\n" + chalk.red("**TEST 017a**") + " Cli and  Menu component")
+    
+
+    const cli = new Cli()
+    cli.menu('fooMenu',[
+        { label: 'Menu Option 1' },
+        { label: 'Menu Option 2' },
+        { label: 'Menu Option 3' }
+    ])
+    const response = await cli.run()
+    console.log( 'Cli Response:', response )
+
+    console.log("Press any key to continue")
+    await keypress()
+}
+
+async function t017_navmenu_component() {
     console.log("\n" + chalk.red("**TEST 015**") + "  Menu component")
     
     const c = new NavmenuComponent([
@@ -491,8 +523,9 @@ async function main() {
     // await t013_application_messages_and_multiple_any_keys()
     // await t014_cursor_position();
     // await t015_spacing_issue();
-    await t016_menu_control();
+    // await t016_menu_control();
     // await t017_menu_component();
+    await t017a_cli_and_menu_component();
     // await t018_enter_to_contnue()
     // await t019_vanilla_js_input_field()
     // await t020_input_control()
@@ -504,7 +537,7 @@ async function main() {
     // await t026_input_with_value_and_cursor_position()
     // await t027_input_with_starting_value_and_cursor_position_via_properties()
     // await t029_paragraph_element()
-    await t030_color_no_libs()
+    // await t030_color_no_libs()
 
     // await t028_get_terminal_size()
     // await t028_paragraph_element()
