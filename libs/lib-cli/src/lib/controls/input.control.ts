@@ -1,8 +1,6 @@
 import { keypress, KeypressEvent } from "../keypress";
 import { CursorPosition, getCursorPosition, setCursorPosition } from "../cursor";
-import chalk from 'chalk';
 import { CliElement } from "../element";
-
 
 class ClinInputControlParameters {
     required?: boolean;
@@ -47,7 +45,8 @@ export class CliInputControl extends CliElement {
             ? `${this.label} ` 
             : ''
 
-        const formattedLabel = chalk.gray(labelText)
+        // gray labels
+        const formattedLabel = "\x1b[90m" + labelText + "\x1b[0m"
 
         if ( this.message  ) {
             process.stdout.write(formattedLabel + this.message )
@@ -118,7 +117,7 @@ export class CliInputControl extends CliElement {
         }
         else if ( key.name == 'return' ) {
             if ( this.required && this.value == '') {
-                this.message = chalk.red('Required')
+                this.message = "\x1b[31m" + "Required" + "\x1b[0m"
                 return undefined
             }
             else {
