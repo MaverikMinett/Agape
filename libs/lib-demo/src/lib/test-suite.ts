@@ -148,7 +148,7 @@ export class TestCase {
     }
 
     async printInteractiveBeforeTestBlurb() {
-        console.log("· " + this.getFormattedTestName() )
+        console.log("\x1b[38;5;227m·\x1b[0m " + this.getFormattedTestName() )
     }
 
     // å
@@ -157,7 +157,9 @@ export class TestCase {
     }
 
     private getFormattedTestName() {
-        return this.getTestNameParts().join(" ▸ ")
+        return this.getTestNameParts()
+            .map( description => `\x1b[38;5;27m${description}\x1b[0m` )
+            .join(" \x1b[38;5;227m▸\x1b[0m ")
     }
 
     private getTestNameParts() {
