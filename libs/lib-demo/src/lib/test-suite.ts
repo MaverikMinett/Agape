@@ -47,17 +47,39 @@ export class TestSuite {
             this.status = 'skipped'
             return
         }
-        for ( let test of this.tests ) {
-            await test.run()
+
+        /* focus */
+        if ( this.hasFocusTest() ) {
+            for ( let test of this.tests.filter( test => test.focus === true ) ) {
+                await test.run()
+            }
+            for ( let suite of this.suites.filter( suite => suite.focus === true) ) {
+                await suite.run()
+            }
         }
-        for ( let suite of this.suites ) {
-            await suite.run()
+
+        else {
+            for ( let test of this.tests ) {
+                await test.run()
+            }
+            for ( let suite of this.suites ) {
+                await suite.run()
+            }
         }
+
+
         this.status = 'ran'
     }
 
     addTest( testCase: TestCase ) {
         this.tests.push(testCase)
+    }
+
+    hasFocusTest() {
+        return !! ( 
+                    this.tests.find( test => test.focus ) 
+                    || this.suites.find( suite => suite.focus || suite.hasFocusTest() ) 
+                )
     }
 
     addSuite( suite: TestSuite ) {
@@ -70,6 +92,17 @@ export class TestSuite {
         }
         const suite = new TestSuite(description, params)
         suite.parent = this
+        this.addSuite(suite)
+        return suite
+    }
+
+    fdescribe(description: string, params?: TestSuiteParams ) {
+        if ( this.runningTest ) {
+            throw new Error(`Invalid call to fdescribe, nested inside call to it '${this.runningTest.description}'`)
+        }
+        const suite = new TestSuite(description, params)
+        suite.parent = this
+        suite.focus = true
         this.addSuite(suite)
         return suite
     }
@@ -140,7 +173,6 @@ export class TestCase {
     set interactive(value: boolean) {
         this._interactive = value
     }
-
 
     constructor( 
         public description: string,

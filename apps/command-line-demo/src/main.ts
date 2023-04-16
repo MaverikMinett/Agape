@@ -6,46 +6,78 @@ import  readline from 'readline';
 import { NavmenuComponent } from './app/navmenu.component';
 import { CliMenuComponent } from 'libs/lib-cli/src/lib/components/menu.component';
 
-import { describe, it, expect, runtests } from '@lib/demo'
+import { describe, fdescribe, it, expect, runtests, rootSuite } from '@lib/demo'
 import { getCursorPosition, getTerminalSize, keypress } from '@lib/terminal'
 
 
-describe('sanity', 'interactive', () => {
-    it('false to be true', async () => {
-        expect(false).toBe(true)
-    })
-})
+// describe('sanity', 'interactive', () => {
+//     it('false to be true', async () => {
+//         expect(false).toBe(true)
+//     })
+// })
 
-describe('keypress', 'interactive', () => {
-    it('should await a keypress', async() => {
-        console.log("\n  Press any key to continue\n")
-        const key = await keypress()
-        expect(key).toBeTruthy()
-    })
-})
+// describe('keypress', 'interactive', () => {
+//     it('should await a keypress', async() => {
+//         console.log("\n  Press any key to continue\n")
+//         const key = await keypress()
+//         expect(key).toBeTruthy()
+//     })
+// })
 
-describe('describe with interactive keyword', 'interactive', () => {
-    it('should await a keypress', async() => {
-        console.log("\n  Press any key to continue\n")
-        const key = await keypress()
-        expect(key).toBeTruthy()
-    })
-})
+// describe('describe with interactive keyword', 'interactive', () => {
+//     it('should await a keypress', async() => {
+//         console.log("\n  Press any key to continue\n")
+//         const key = await keypress()
+//         expect(key).toBeTruthy()
+//     })
+// })
 
-describe('AnyKeyToContinueComponent', 'interactive', () => {
-    it('should run', async () => {
-        const component = new AnyKeyToContinueComponent()
+// describe('AnyKeyToContinueComponent', 'interactive', () => {
+//     it('should run', async () => {
+//         const component = new AnyKeyToContinueComponent()
+//         await component.run()
+//     })
+//     it('should run multiple instances', async () => { 
+//         const component1 = new AnyKeyToContinueComponent()
+//         const component2 = new AnyKeyToContinueComponent()
+//         const components = [ component1, component2 ]
+//         for ( let c of components ) {
+//             await c.run()
+//         }
+//     })
+// })
+
+describe('BannerComponent', 'interactive', async () => {
+    it('should display a banner', async () => {
+        const component = new CliBannerComponent('Banner')
         await component.run()
     })
-    it('should run multiple instances', async () => { 
-        const component1 = new AnyKeyToContinueComponent()
+    it('should work with AnyKeyToContinueComponent', async () => {
+        const component1 = new CliBannerComponent('Banner')
         const component2 = new AnyKeyToContinueComponent()
         const components = [ component1, component2 ]
         for ( let c of components ) {
             await c.run()
         }
     })
+    it('should work with multiple AnyKeyToContinueComponent', async () => {
+        const component1 = new CliBannerComponent('Banner')
+        const component2 = new AnyKeyToContinueComponent()
+        const component3 = new AnyKeyToContinueComponent()
+        const components = [ component1, component2, component3 ]
+        for ( let c of components ) {
+            await c.run()
+        }
+    })
 })
+
+fdescribe('Cli', 'interactive', () => {
+    it('should instantiate', () => {
+        const c = new Cli()
+    })
+})
+
+// console.log( rootSuite().hasFocusTest() )
 
 
 async function testMain() {
@@ -57,80 +89,6 @@ testMain()
 
 
 
-
-
-
-// async function t001_keypress() {
-//     console.log("\nTEST 001\n")
-//     console.log("Press any key to continue")
-//     await keypress()
-//     console.log("Success")
-// }
-
-// async function t002_any_key_to_continue_component() {
-//     console.log("\nTEST 002\n")
-
-//     const component = new AnyKeyToContinueComponent()
-//     await component.run()
-//     console.log("Success")
-    
-//     console.log("Press any key to continue")
-//     await keypress()
-// }
-
-async function t003_multiple_any_key_to_continue_components() {
-    console.log("\nTEST 003\nMultiple, consecutive any key to continue components")
-
-    const component1 = new AnyKeyToContinueComponent()
-    const component2 = new AnyKeyToContinueComponent()
-    const components = [ component1, component2 ]
-    for ( let c of components ) {
-        await c.run()
-    }
-    // await component.run()
-    console.log("Success")
-    
-    console.log("Press any key to continue")
-    await keypress()
-}
-
-async function t004_banner_component() {
-    console.log("\nTEST 004\nBanner component")
-
-    const component = new CliBannerComponent('Banner')
-    await component.run()
-    console.log("Press any key to continue")
-    await keypress()
-}
-
-async function t005_banner_and_any_key_to_continue_component() {
-    console.log("\nTEST 005\nBanner component and Any Key to Continue component")
-
-    const component1 = new CliBannerComponent('Banner')
-    const component2 = new AnyKeyToContinueComponent()
-    const components = [ component1, component2 ]
-    for ( let c of components ) {
-        await c.run()
-    }
-    
-    console.log("Press any key to continue")
-    await keypress()
-}
-
-async function t006_banner_and_multiple_any_key_to_continue_component() {
-    console.log("\nTEST 006\nBanner component and multiple Any Key to Continue component")
-
-    const component1 = new CliBannerComponent('Banner')
-    const component2 = new AnyKeyToContinueComponent()
-    const component3 = new AnyKeyToContinueComponent()
-    const components = [ component1, component2, component3 ]
-    for ( let c of components ) {
-        await c.run()
-    }
-    
-    console.log("Press any key to continue")
-    await keypress()
-}
 
 async function t007_cli_any_key_to_continue() {
     console.log("\nTEST 007\nCli with Any Key to Continue component")
