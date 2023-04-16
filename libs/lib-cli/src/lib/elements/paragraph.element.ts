@@ -1,5 +1,6 @@
+import { getTerminalSize } from "@lib/terminal"
 import { CliElement } from "../element"
-import { getTerminalSize } from "../terminal"
+
 
 
 export interface CliParagraphParams {

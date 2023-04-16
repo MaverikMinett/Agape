@@ -1,6 +1,5 @@
 export * from './lib/cli';
-export * from './lib/keypress';
-export * from './lib/cursor';
+
 
 export * from './lib/controls/input.control';
 export * from './lib/controls/menu.control';
@@ -16,7 +15,6 @@ export * from './lib/components/header.component'
 export * from './lib/components/navmenu.component'
 export * from './lib/components/messages.component'
 
-export * from './lib/terminal'
 
 import cli from './lib/cli';
 export { cli };

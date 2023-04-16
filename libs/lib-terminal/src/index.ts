@@ -1,1 +1,3 @@
-export * from './lib/lib-terminal';
+export * from './lib/cursor'
+export * from './lib/keypress'
+export * from './lib/terminal'

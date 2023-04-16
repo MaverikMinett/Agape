@@ -1,6 +1,4 @@
-
-import process from 'process';
-import { keypress } from '../keypress';
+import { keypress } from '@lib/terminal';
 
 export class AnyKeyToContinueComponent {
 

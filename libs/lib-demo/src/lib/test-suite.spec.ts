@@ -1,5 +1,4 @@
-import { TestSuite } from './test-suite'
-import { TestCase  } from './test-case'
+import { TestSuite, TestCase } from './test-suite'
 
 describe('TestSuite', () => {
     let s:TestSuite

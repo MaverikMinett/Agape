@@ -1,7 +1,7 @@
 
-import { keypress } from '../keypress';
+import { keypress, hideCursor, showCursor } from '@lib/terminal';
 import { CliElement } from '../element';
-import { hideCursor, showCursor } from '../cursor';
+
 
 export type CliMenuParams = Partial<Pick<CliMenuControl, keyof CliMenuControl>>
 

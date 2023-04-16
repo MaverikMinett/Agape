@@ -1,5 +1,5 @@
-import { keypress, KeypressEvent } from "../keypress";
-import { CursorPosition, getCursorPosition, setCursorPosition } from "../cursor";
+import { keypress, KeypressEvent } from "@lib/terminal";
+import { CursorPosition, getCursorPosition, setCursorPosition } from "@lib/terminal";
 import { CliElement } from "../element";
 
 class ClinInputControlParameters {

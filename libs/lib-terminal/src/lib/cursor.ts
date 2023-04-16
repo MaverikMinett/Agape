@@ -19,8 +19,9 @@ export async function getCursorPosition(): Promise<CursorPosition> {
                 const buffer = process.stdin.read();
                 const string = JSON.stringify(buffer); // "\u001b[9;1R"
                 const regex = /\[(.*)/g;
-                const xy = regex.exec(string)[0].replace(/\[|R"/g, '').split(';');
-                const position:CursorPosition = { row: Number(xy[0]) - 1, col: Number(xy[1]) - 1 };
+                const match = regex.exec(string)
+                const xy = match ? match[0].replace(/\[|R"/g, '').split(';') : undefined;
+                const position:CursorPosition = xy ? { row: Number(xy[0]) - 1, col: Number(xy[1]) - 1 } : undefined;
                 resolve(position)
             }
 

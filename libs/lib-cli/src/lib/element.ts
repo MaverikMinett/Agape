@@ -1,6 +1,6 @@
 
 import readline from 'readline';
-import { getCursorPosition } from './cursor';
+import { getCursorPosition } from '@lib/terminal';
 
 export class CliElement {
 
