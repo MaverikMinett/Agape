@@ -1,6 +1,6 @@
 import { Expect } from "./expect"
 import { activeTestSuite, closeSuite, openSuite, rootSuite } from "./private" 
-
+import { TestCaseParams } from "./test-suite"
 
 export function describe( description: string, suiteBuilder: Function ) {
     const suite = activeTestSuite().describe( description )
@@ -9,19 +9,20 @@ export function describe( description: string, suiteBuilder: Function ) {
     closeSuite()
 }
 
-export function it( description, test: Function ) {
-    activeTestSuite().it(description, test)
+export function it( description, test: Function, params?: TestCaseParams ) {
+    activeTestSuite().it(description, test, params)
 }
 
-export function fit( description, test: Function ) {
-    activeTestSuite().fit(description, test)
+export function fit( description, test: Function, params?: TestCaseParams  ) {
+    activeTestSuite().fit(description, test, params)
 }
 
-export function xit( description, test: Function ) {
-    activeTestSuite().xit(description, test)
+export function xit( description, test: Function, params?: TestCaseParams  ) {
+    activeTestSuite().xit(description, test, params)
 }
 
 export async function runtests() {
+    console.log("Starting demo test runner....")
     return rootSuite().run()
 }
 

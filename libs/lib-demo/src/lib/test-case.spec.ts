@@ -1,6 +1,6 @@
 
 
-import { TestCase } from './test-case'
+import { TestCase } from './test-suite'
 
 
 describe('TestCase', () => {

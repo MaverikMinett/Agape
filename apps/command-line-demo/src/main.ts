@@ -14,7 +14,8 @@ describe('keypress', () => {
         console.log("Press any key to continue")
         const key = await keypress()
         expect(key).toBeTruthy()
-    })
+    }, {
+    'interactive': true})
 })
 
 async function testMain() {
