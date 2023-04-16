@@ -6,7 +6,27 @@ import  readline from 'readline';
 import { NavmenuComponent } from './app/navmenu.component';
 import { CliMenuComponent } from 'libs/lib-cli/src/lib/components/menu.component';
 
-import { describe } from './test-runner/test-runner'
+import { describe, it, expect, runtests } from '@lib/demo'
+
+
+describe('keypress', () => {
+    it('should await a keypress', async() => {
+        console.log("Press any key to continue")
+        const key = await keypress()
+        expect(key).toBeTruthy()
+    })
+})
+
+async function testMain() {
+    console.log("Starting main")
+    await runtests()
+}
+
+testMain()
+
+
+
+
 
 
 async function t001_keypress() {
@@ -556,5 +576,5 @@ async function main() {
 
 }
 
-main()
+// main()
 

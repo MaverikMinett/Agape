@@ -4,7 +4,7 @@ import { strict as assert } from 'node:assert';
 export class Expect<T> {
 
 
-    constructor( public actual: T ) {
+    constructor( protected actual: T ) {
 
     }
 
@@ -16,5 +16,11 @@ export class Expect<T> {
         assert.deepEqual(this.actual, expected)
     }
 
+    toBeTruthy() {
+        assert.ok(this.actual)
+    }
 
+    toBeFalsy() {
+        assert.ok(!!this.actual)
+    }
 }

@@ -12,3 +12,9 @@ describe('describe', () => {
         expect( activeTestSuite().suites[0].tests.length ).toBe(1)
     })
 })
+
+describe('expect', () => {
+    it('should create and return a new Expect object', () => {
+        fnc.expect(true).toBe(true)
+    })
+})

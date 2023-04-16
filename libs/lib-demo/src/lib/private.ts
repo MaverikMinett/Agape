@@ -21,3 +21,7 @@ export function clearSuite(){
     root = new TestSuite('TestSuite')
     stack = [ root ]
 }
+
+export function rootSuite() {
+  return root
+}

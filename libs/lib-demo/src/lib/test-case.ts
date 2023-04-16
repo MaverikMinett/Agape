@@ -16,13 +16,17 @@ export class TestCase {
 
     }
 
-    async run() {
+    async run( ) {
         /* skip the test */
         if ( this.skip ) {
             this.result = 'skip'
             this.status = 'skipped'
             return
         }
+
+        const interactive = true
+        
+
         /* run the test */
         try {
             await this.test()
@@ -35,4 +39,10 @@ export class TestCase {
             this.status = 'ran'
         }
     }
+
+    async printInteractiveTestScreen() {
+        console.log("Interactive Test")
+        console.log(this.description)
+    }
+
 }
