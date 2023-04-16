@@ -16,7 +16,8 @@
     "test:tserver": "nx test tserver",
     "test:lib-api": "nx test lib-api",
     "test:lib-server": "nx test lib-server",
-    "test:lib-express": "nx test lib-express"
+    "test:lib-express": "nx test lib-express",
+    "test:libs:command-line": "nx test lib-terminal && nx test lib-demo && nx test lib-cli"
   },
   "private": true,
   "dependencies": {
