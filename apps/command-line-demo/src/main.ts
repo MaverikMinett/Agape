@@ -1,5 +1,5 @@
 
-import { AnyKeyToContinueComponent, Cli, CliBannerComponent, CliInputControl, CliMenuControl, CliParagraphElement, getCursorPosition, getTerminalSize, keypress } from '@lib/cli';
+import { AnyKeyToContinueComponent, Cli, CliBannerComponent, CliInputControl, CliMenuControl, CliParagraphElement } from '@lib/cli';
 import chalk from 'chalk';
 
 import  readline from 'readline';
@@ -7,7 +7,7 @@ import { NavmenuComponent } from './app/navmenu.component';
 import { CliMenuComponent } from 'libs/lib-cli/src/lib/components/menu.component';
 
 import { describe, it, expect, runtests } from '@lib/demo'
-
+import { getCursorPosition, getTerminalSize, keypress } from '@lib/terminal'
 
 describe('keypress', () => {
     it('should await a keypress', async() => {
