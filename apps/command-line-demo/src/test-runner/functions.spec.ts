@@ -8,9 +8,6 @@ describe('describe', () => {
 
             })
         })
-
-        console.log(expect( activeTestSuite().suites.length ))
-
         expect( activeTestSuite().suites.length ).toBe(1)
         expect( activeTestSuite().suites[0].tests.length ).toBe(1)
     })
