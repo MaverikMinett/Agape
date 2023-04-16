@@ -1,4 +1,10 @@
-// import { TestCase } from "./test-case"
+import { inherit } from '@agape/object'
+
+export interface TestSuiteParams {
+    focus?: boolean;
+    skip?: boolean;
+    interactive?: boolean;
+}
 
 export class TestSuite {
 
@@ -6,8 +12,8 @@ export class TestSuite {
 
     tests: TestCase[] = []
 
-    focus: boolean 
-
+    focus: boolean
+    
     skip: boolean
 
     result: 'pass'|'fail'|'skip'
@@ -18,8 +24,20 @@ export class TestSuite {
 
     parent: TestSuite
 
-    constructor( public description: string ) {
+    /* inherit interactive state from parent suite if not explicitly set */
+    private _interactive: boolean
 
+    get interactive() {
+        return this._interactive ?? this.parent?.interactive
+    }
+
+    set interactive(value: boolean) {
+        this._interactive = value
+    }
+
+
+    constructor( public description: string, params?: TestSuiteParams ) {
+        if ( params ) Object.assign(this, params)
     }
 
     async run() {
@@ -46,12 +64,11 @@ export class TestSuite {
         this.suites.push(suite)
     }
 
-    describe(description: string ) {
+    describe(description: string, params?: TestSuiteParams ) {
         if ( this.runningTest ) {
             throw new Error(`Invalid call to describe, nested inside call to it '${this.runningTest.description}'`)
         }
-
-        const suite = new TestSuite(description)
+        const suite = new TestSuite(description, params)
         suite.parent = this
         this.addSuite(suite)
         return suite
@@ -111,7 +128,18 @@ export class TestCase {
     suite: TestSuite
 
     instructions: string
-    interactive: boolean
+
+
+    /* inherit interactive state from parent suite if not explicitly set */
+    private _interactive: boolean
+
+    get interactive() {
+        return this._interactive ?? this.suite?.interactive
+    }
+
+    set interactive(value: boolean) {
+        this._interactive = value
+    }
 
 
     constructor( 
@@ -129,7 +157,8 @@ export class TestCase {
             return
         }
 
-        const interactive = this.interactive
+        const interactive = this.interactive 
+        
         if ( interactive ) await this.printInteractiveBeforeTestBlurb()
 
         /* run the test */

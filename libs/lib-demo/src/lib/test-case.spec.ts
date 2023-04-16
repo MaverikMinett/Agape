@@ -1,6 +1,6 @@
 
 
-import { TestCase } from './test-suite'
+import { TestCase, TestSuite } from './test-suite'
 
 
 describe('TestCase', () => {
@@ -58,5 +58,17 @@ describe('TestCase', () => {
         })
     })
 
+    describe('interactive', () => {
+        it('should inherit from parent suite', () => {
+            const ts = new TestSuite('Test suite', {interactive: true})
+            ts.it('a test', () => true )
+            expect(ts.tests[0].interactive).toBe(true)
+        })
+        it('should inherit from parent suite (undefined)', () => {
+            const ts = new TestSuite('Test suite')
+            ts.it('a test', () => true )
+            expect(ts.tests[0].interactive).toBe(undefined)
+        })
+    })
 
 })

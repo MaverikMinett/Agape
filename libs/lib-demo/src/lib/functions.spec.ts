@@ -11,6 +11,14 @@ describe('describe', () => {
         expect( activeTestSuite().suites.length ).toBe(1)
         expect( activeTestSuite().suites[0].tests.length ).toBe(1)
     })
+    
+    it('should call describe with the interactive keyword', () => {
+        fnc.describe('FooBar', 'interactive', () => {
+            fnc.it('should create a test', () => {
+
+            })
+        })
+    })
 })
 
 describe('expect', () => {
