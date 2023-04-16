@@ -9,16 +9,22 @@ import { CliMenuComponent } from 'libs/lib-cli/src/lib/components/menu.component
 import { describe, it, expect, runtests } from '@lib/demo'
 import { getCursorPosition, getTerminalSize, keypress } from '@lib/terminal'
 
-describe('keypress', () => {
+describe('keypress', 'interactive', () => {
     it('should await a keypress', async() => {
-        console.log("Press any key to continue")
+        console.log("\n  Press any key to continue\n")
         const key = await keypress()
         expect(key).toBeTruthy()
-    }, 
-    {
-    'interactive': true
     })
 })
+
+describe('describe with interactive keyword', 'interactive', () => {
+    it('should await a keypress', async() => {
+        console.log("\n  Press any key to continue\n")
+        const key = await keypress()
+        expect(key).toBeTruthy()
+    })
+})
+
 
 async function testMain() {
     console.log("Starting main")
