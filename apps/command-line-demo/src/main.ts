@@ -9,6 +9,13 @@ import { CliMenuComponent } from 'libs/lib-cli/src/lib/components/menu.component
 import { describe, it, expect, runtests } from '@lib/demo'
 import { getCursorPosition, getTerminalSize, keypress } from '@lib/terminal'
 
+
+describe('sanity', 'interactive', () => {
+    it('false to be true', async () => {
+        expect(false).toBe(true)
+    })
+})
+
 describe('keypress', 'interactive', () => {
     it('should await a keypress', async() => {
         console.log("\n  Press any key to continue\n")
@@ -25,6 +32,21 @@ describe('describe with interactive keyword', 'interactive', () => {
     })
 })
 
+describe('AnyKeyToContinueComponent', 'interactive', () => {
+    it('should run', async () => {
+        const component = new AnyKeyToContinueComponent()
+        await component.run()
+    })
+    it('should run multiple instances', async () => { 
+        const component1 = new AnyKeyToContinueComponent()
+        const component2 = new AnyKeyToContinueComponent()
+        const components = [ component1, component2 ]
+        for ( let c of components ) {
+            await c.run()
+        }
+    })
+})
+
 
 async function testMain() {
     console.log("Starting main")
@@ -38,23 +60,23 @@ testMain()
 
 
 
-async function t001_keypress() {
-    console.log("\nTEST 001\n")
-    console.log("Press any key to continue")
-    await keypress()
-    console.log("Success")
-}
+// async function t001_keypress() {
+//     console.log("\nTEST 001\n")
+//     console.log("Press any key to continue")
+//     await keypress()
+//     console.log("Success")
+// }
 
-async function t002_any_key_to_continue_component() {
-    console.log("\nTEST 002\n")
+// async function t002_any_key_to_continue_component() {
+//     console.log("\nTEST 002\n")
 
-    const component = new AnyKeyToContinueComponent()
-    await component.run()
-    console.log("Success")
+//     const component = new AnyKeyToContinueComponent()
+//     await component.run()
+//     console.log("Success")
     
-    console.log("Press any key to continue")
-    await keypress()
-}
+//     console.log("Press any key to continue")
+//     await keypress()
+// }
 
 async function t003_multiple_any_key_to_continue_components() {
     console.log("\nTEST 003\nMultiple, consecutive any key to continue components")

@@ -1,4 +1,4 @@
-import { inherit } from '@agape/object'
+import { getTerminalSize } from '@lib/terminal'
 
 export interface TestSuiteParams {
     focus?: boolean;
@@ -177,12 +177,34 @@ export class TestCase {
     }
 
     async printInteractiveBeforeTestBlurb() {
+        let hr = ''
+        const size = getTerminalSize().columns
+        for ( let i = 0; i < size; i++ ) { hr += '—' }
+
+        console.log( "\x1b[38;5;27m" + hr + "\x1b[0m" )
         console.log("\x1b[38;5;227m·\x1b[0m " + this.getFormattedTestName() )
     }
 
     // å
     async printInteractiveAfterTestBlurb() {
-        console.log(this.result)
+        let color: string
+        let endColor = "\x1b[0m"
+        let bold = "\x1b[1m"
+        switch (this.result) {
+            case 'fail':
+                color = "\x1b[48;2;192;54;101m"
+                break
+            case 'pass':
+                color = "\x1b[48;2;127;187;82m"
+                break
+            case 'skip':
+                color = "\x1b[48;2;229;187;0m"
+                break
+        }
+
+        const resultFormatted = color + bold + ' ' + this.result.toUpperCase() + ' ' + endColor
+
+        console.log(resultFormatted, "\n")
     }
 
     private getFormattedTestName() {
