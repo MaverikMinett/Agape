@@ -6,6 +6,7 @@ import  readline from 'readline';
 import { NavmenuComponent } from './app/navmenu.component';
 import { CliMenuComponent } from 'libs/lib-cli/src/lib/components/menu.component';
 
+import { describe } from './test-runner/test-runner'
 
 
 async function t001_keypress() {
@@ -489,6 +490,7 @@ async function t029_paragraph_element() {
 }
 
 async function t030_color_no_libs() {
+    console.log("\n" + chalk.red("**TEST 030**") + "  Pragraph Element")
 
     // standard 16 colors
     console.log("\x1b[31m" + "Required" + "\x1b[0m")
@@ -503,6 +505,16 @@ async function t030_color_no_libs() {
     console.log("\x1b[38;2;81;134;219m" + "Required" + "\x1b[0m")
     console.log("\x1b[38;2;98;155;234m" + "Required" + "\x1b[0m")
 }
+
+async function t031_test_runner() {
+    describe('A Test', () => {
+
+    })
+}
+
+// async function t031_form_element() {
+//     console.log()
+// }
 
 async function main() {
 
@@ -545,5 +557,4 @@ async function main() {
 }
 
 main()
-
 
