@@ -2,15 +2,8 @@
 import readline from 'readline';
 readline.emitKeypressEvents(process.stdin);
 
+import { KeypressEvent } from './interfaces/keypress-event';
 
-export interface KeypressEvent {
-    sequence: string;
-    name: string;
-    ctrl: boolean;
-    meta: boolean;
-    shift: boolean;
-    code: string;
-}
 
 
 // let listeningToKeypresses = false;
