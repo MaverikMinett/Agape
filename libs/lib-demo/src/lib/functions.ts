@@ -4,11 +4,8 @@ import { TestCaseParams, TestSuiteParams } from "./test-suite"
 
 export { rootSuite } from './private';
 
-export function describe( description: string, interactive: 'interactive', suiteBuilder: ( ...args: any[] ) => void ): void
-export function describe( description: string, suiteBuilder: ( ...args: any[] ) => void, params: TestSuiteParams ): void
-export function describe( description: string, suiteBuilder: ( ...args: any[] ) => void ): void
-export function describe( ...args:any[] ): void {
 
+function describeArgsToParams( ...args: any[] ): [ string, boolean, Function, TestSuiteParams ] {
     let interactiveOption: boolean
     const description: string = args[0]
     let suiteBuilder: Function
@@ -22,7 +19,15 @@ export function describe( ...args:any[] ): void {
         suiteBuilder = args[1]
         params = args[2]
     }
+    return [ description, interactiveOption, suiteBuilder, params ]
+}
 
+
+export function describe( description: string, interactive: 'interactive', suiteBuilder: ( ...args: any[] ) => void ): void
+export function describe( description: string, suiteBuilder: ( ...args: any[] ) => void, params: TestSuiteParams ): void
+export function describe( description: string, suiteBuilder: ( ...args: any[] ) => void ): void
+export function describe( ...args:any[] ): void {
+    const [ description, interactiveOption, suiteBuilder, params ] = describeArgsToParams(...args)
     const suite = activeTestSuite().describe( description, params )
     if ( interactiveOption ) suite.interactive = true
     openSuite(suite)
@@ -34,21 +39,7 @@ export function fdescribe( description: string, interactive: 'interactive', suit
 export function fdescribe( description: string, suiteBuilder: ( ...args: any[] ) => void, params: TestSuiteParams ): void
 export function fdescribe( description: string, suiteBuilder: ( ...args: any[] ) => void ): void
 export function fdescribe( ...args:any[] ): void {
-
-    let interactiveOption: boolean
-    const description: string = args[0]
-    let suiteBuilder: Function
-    let params: TestSuiteParams
-    if ( args[1] === 'interactive' ) {
-        interactiveOption = true
-        suiteBuilder = args[2]
-        params = args[2]
-    }
-    else {
-        suiteBuilder = args[1]
-        params = args[2]
-    }
-
+    const [ description, interactiveOption, suiteBuilder, params ] = describeArgsToParams(...args)
     const suite = activeTestSuite().fdescribe( description, params )
     if ( interactiveOption ) suite.interactive = true
     openSuite(suite)
