@@ -47,6 +47,19 @@ export function fdescribe( ...args:any[] ): void {
     closeSuite()
 }
 
+export function xdescribe( description: string, interactive: 'interactive', suiteBuilder: ( ...args: any[] ) => void ): void
+export function xdescribe( description: string, suiteBuilder: ( ...args: any[] ) => void, params: TestSuiteParams ): void
+export function xdescribe( description: string, suiteBuilder: ( ...args: any[] ) => void ): void
+export function xdescribe( ...args:any[] ): void {
+    const [ description, interactiveOption, suiteBuilder, params ] = describeArgsToParams(...args)
+    const suite = activeTestSuite().xdescribe( description, params )
+    if ( interactiveOption ) suite.interactive = true
+    openSuite(suite)
+    suiteBuilder.call(undefined)
+    closeSuite()
+}
+
+
 export function it( description, test: Function, params?: TestCaseParams ) {
     activeTestSuite().it(description, test, params)
 }

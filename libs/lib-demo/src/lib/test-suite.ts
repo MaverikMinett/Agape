@@ -45,6 +45,14 @@ export class TestSuite {
         if ( this.skip ) {
             this.result = 'skip'
             this.status = 'skipped'
+
+            /* skip this suite, but still run any tests with focus enabled */
+            for ( let test of this.tests.filter( test => test.focus === true ) ) {
+                await test.run()
+            }
+            for ( let suite of this.suites.filter( suite => suite.hasFocusTest() === true) ) {
+                await suite.run()
+            }
             return
         }
 
@@ -104,6 +112,17 @@ export class TestSuite {
         const suite = new TestSuite(description, params)
         suite.parent = this
         suite.focus = true
+        this.addSuite(suite)
+        return suite
+    }
+
+    xdescribe(description: string, params?: TestSuiteParams ) {
+        if ( this.runningTest ) {
+            throw new Error(`Invalid call to fdescribe, nested inside call to it '${this.runningTest.description}'`)
+        }
+        const suite = new TestSuite(description, params)
+        suite.parent = this
+        suite.skip = true
         this.addSuite(suite)
         return suite
     }
