@@ -214,7 +214,7 @@ export class TestCase {
         for ( let i = 0; i < size; i++ ) { hr += '—' }
 
         console.log( "\x1b[38;5;27m" + hr + "\x1b[0m" )
-        console.log("\x1b[38;5;227m·\x1b[0m " + this.getFormattedTestName() )
+        console.log("\x1b[38;5;227m▸\x1b[0m " + this.getFormattedTestName() )
     }
 
     // å
