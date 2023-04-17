@@ -1,5 +1,5 @@
 import { AnyKeyToContinueComponent } from "@lib/cli"
-import { describe, it } from "@lib/demo"
+import { describe, fit, it } from "@lib/demo"
 
 describe('AnyKeyToContinueComponent', 'interactive', () => {
     it('should run', async () => {

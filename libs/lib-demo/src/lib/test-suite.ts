@@ -48,12 +48,12 @@ export class TestSuite {
             return
         }
 
-        /* focus */
-        if ( this.hasFocusTest() ) {
+        /* a test in the suite has focus enabled */
+        else if ( this.hasFocusTest() && ! this.focus ) {
             for ( let test of this.tests.filter( test => test.focus === true ) ) {
                 await test.run()
             }
-            for ( let suite of this.suites.filter( suite => suite.focus === true) ) {
+            for ( let suite of this.suites.filter( suite => suite.hasFocusTest() === true) ) {
                 await suite.run()
             }
         }
@@ -77,7 +77,8 @@ export class TestSuite {
 
     hasFocusTest() {
         return !! ( 
-                    this.tests.find( test => test.focus ) 
+                    this.focus
+                    || this.tests.find( test => test.focus ) 
                     || this.suites.find( suite => suite.focus || suite.hasFocusTest() ) 
                 )
     }
