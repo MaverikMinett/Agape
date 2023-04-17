@@ -1,6 +1,6 @@
 
 import readline from 'readline';
-import { getCursorPosition } from '@lib/terminal';
+import { getCursorPosition } from '@agape/terminal';
 
 export class CliElement {
 

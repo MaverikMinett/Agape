@@ -1,5 +1,5 @@
 
-import { keypress, hideCursor, showCursor } from '@lib/terminal';
+import { keypress, hideCursor, showCursor } from '@agape/terminal';
 import { CliElement } from '../element';
 
 

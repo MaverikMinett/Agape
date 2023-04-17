@@ -1,5 +1,5 @@
 import { describe, it } from "@lib/demo"
-import { getCursorPosition, keypress } from "@lib/terminal"
+import { getCursorPosition, keypress } from "@agape/terminal"
 
 describe('vanilla js input field', 'interactive', () => {
     it('should run', async () => {

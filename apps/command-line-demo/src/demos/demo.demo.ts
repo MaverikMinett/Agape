@@ -1,6 +1,6 @@
 
 import { describe, it, expect } from '@lib/demo'
-import { keypress } from '@lib/terminal'
+import { keypress } from '@agape/terminal'
 
 describe('describe with interactive keyword', 'interactive', () => {
     it('should await a keypress', async() => {

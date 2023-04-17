@@ -1,4 +1,4 @@
-import { getTerminalSize } from '@lib/terminal'
+import { getTerminalSize } from '@agape/terminal'
 
 export interface TestSuiteParams {
     focus?: boolean;

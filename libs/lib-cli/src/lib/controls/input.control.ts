@@ -1,5 +1,5 @@
-import { keypress, KeypressEvent } from "@lib/terminal";
-import { CursorPosition, getCursorPosition, setCursorPosition } from "@lib/terminal";
+import { keypress, KeypressEvent } from "@agape/terminal";
+import { CursorPosition, getCursorPosition, setCursorPosition } from "@agape/terminal";
 import { CliElement } from "../element";
 
 class ClinInputControlParameters {

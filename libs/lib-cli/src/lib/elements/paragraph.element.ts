@@ -1,4 +1,4 @@
-import { getTerminalSize } from "@lib/terminal"
+import { getTerminalSize } from "@agape/terminal"
 import { CliElement } from "../element"
 
 

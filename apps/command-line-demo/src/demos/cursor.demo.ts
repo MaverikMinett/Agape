@@ -1,5 +1,5 @@
 import { describe, it } from "@lib/demo"
-import { getCursorPosition } from "@lib/terminal"
+import { getCursorPosition } from "@agape/terminal"
 
 describe('getCursorPosition', 'interactive', () => {
     it('should run', async () => {

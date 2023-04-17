@@ -1,4 +1,4 @@
-import { keypress } from '@lib/terminal';
+import { keypress } from '@agape/terminal';
 
 export class AnyKeyToContinueComponent {
 

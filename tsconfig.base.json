@@ -21,7 +21,6 @@
       "@lib/express": ["libs/lib-express/src/index.ts"],
       "@lib/forms": ["libs/lib-forms/src/index.ts"],
       "@lib/server": ["libs/lib-server/src/index.ts"],
-      "@lib/terminal": ["libs/lib-terminal/src/index.ts"],
       "@zed/api": ["libs/lib-api/src/index.ts"]
     },
     "outDir": "dist",
