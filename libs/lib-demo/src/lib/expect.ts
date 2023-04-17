@@ -21,6 +21,18 @@ export class Expect<T> {
     }
 
     toBeFalsy() {
-        assert.ok(!!this.actual)
+        assert.ok(!this.actual)
+    }
+
+    toHaveBeenCalled() {
+        const spy = (this.actual as any)?.spy
+        if ( ! spy ) throw new Error("Expected a spy")
+        assert.ok(spy.calls.length > 0)
+    }
+
+    toHaveBeenCalledTimes( n: number ) {
+        const spy = (this.actual as any)?.spy
+        if ( ! spy ) throw new Error("Expected a spy")
+        assert.ok(spy.calls.length >= n)
     }
 }

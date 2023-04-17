@@ -31,7 +31,7 @@ describe('Expect', () => {
         })
     })
     describe('toEqual', () => {
-        it('should ot assert', () => {
+        it('should not assert', () => {
             a = { 'a': 'foo', 'b': 'bar '}
             e = new Expect(a)
             e.toEqual({ 'a': 'foo', 'b': 'bar '})
@@ -47,5 +47,38 @@ describe('Expect', () => {
             }
         })
     })
-
+    describe('toBeTruthy', () => {
+        it('should not assert', () => {
+            a = { 'a': 'foo', 'b': 'bar '}
+            e = new Expect(a)
+            e.toBeTruthy()
+        })
+        it('should assert', () => {
+            a = false
+            e = new Expect(a)
+            try {
+                e.toBeTruthy()
+            }
+            catch ( error ) {
+                expect(error).toBeInstanceOf(AssertionError)
+            }
+        })
+    })
+    describe('toBeFalsy', () => {
+        it('should not assert', () => {
+            a = false
+            e = new Expect(a)
+            e.toBeFalsy()
+        })
+        it('should assert', () => {
+            a = { 'a': 'foo', 'b': 'bar '}
+            e = new Expect(a)
+            try {
+                e.toBeFalsy()
+            }
+            catch ( error ) {
+                expect(error).toBeInstanceOf(AssertionError)
+            }
+        })
+    })
 })
