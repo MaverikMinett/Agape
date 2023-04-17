@@ -6,46 +6,46 @@ import  readline from 'readline';
 import { NavmenuComponent } from './app/navmenu.component';
 import { CliMenuComponent } from 'libs/lib-cli/src/lib/components/menu.component';
 
-import { describe, fdescribe, it, expect, runtests, rootSuite } from '@lib/demo'
+import { describe, fdescribe, fit, it, expect, runtests, rootSuite } from '@lib/demo'
 import { getCursorPosition, getTerminalSize, keypress } from '@lib/terminal'
 
 
-// describe('sanity', 'interactive', () => {
-//     it('false to be true', async () => {
-//         expect(false).toBe(true)
-//     })
-// })
+describe('sanity', 'interactive', () => {
+    it('false to be true', async () => {
+        expect(false).toBe(true)
+    })
+})
 
-// describe('keypress', 'interactive', () => {
-//     it('should await a keypress', async() => {
-//         console.log("\n  Press any key to continue\n")
-//         const key = await keypress()
-//         expect(key).toBeTruthy()
-//     })
-// })
+describe('keypress', 'interactive', () => {
+    it('should await a keypress', async() => {
+        console.log("\n  Press any key to continue\n")
+        const key = await keypress()
+        expect(key).toBeTruthy()
+    })
+})
 
-// describe('describe with interactive keyword', 'interactive', () => {
-//     it('should await a keypress', async() => {
-//         console.log("\n  Press any key to continue\n")
-//         const key = await keypress()
-//         expect(key).toBeTruthy()
-//     })
-// })
+describe('describe with interactive keyword', 'interactive', () => {
+    it('should await a keypress', async() => {
+        console.log("\n  Press any key to continue\n")
+        const key = await keypress()
+        expect(key).toBeTruthy()
+    })
+})
 
-// describe('AnyKeyToContinueComponent', 'interactive', () => {
-//     it('should run', async () => {
-//         const component = new AnyKeyToContinueComponent()
-//         await component.run()
-//     })
-//     it('should run multiple instances', async () => { 
-//         const component1 = new AnyKeyToContinueComponent()
-//         const component2 = new AnyKeyToContinueComponent()
-//         const components = [ component1, component2 ]
-//         for ( let c of components ) {
-//             await c.run()
-//         }
-//     })
-// })
+describe('AnyKeyToContinueComponent', 'interactive', () => {
+    it('should run', async () => {
+        const component = new AnyKeyToContinueComponent()
+        await component.run()
+    })
+    it('should run multiple instances', async () => { 
+        const component1 = new AnyKeyToContinueComponent()
+        const component2 = new AnyKeyToContinueComponent()
+        const components = [ component1, component2 ]
+        for ( let c of components ) {
+            await c.run()
+        }
+    })
+})
 
 describe('BannerComponent', 'interactive', async () => {
     it('should display a banner', async () => {
@@ -71,13 +71,73 @@ describe('BannerComponent', 'interactive', async () => {
     })
 })
 
-fdescribe('Cli', 'interactive', () => {
+describe('Cli', 'interactive', () => {
     it('should instantiate', () => {
         const c = new Cli()
+        expect(c).toBeTruthy()
+    })
+    describe('anyKeyToContinue', () => {
+        it('should run the component', async () => {
+            const cli = new Cli()
+            cli.anyKeyToContinue()
+            await cli.run()
+        })
+    })
+    describe('header', ()  => {
+        it('should run the component', async () => {
+            const cli = new Cli()
+            cli.header('Header Text')
+            await cli.run()
+        })
+    })
+    describe('banner', () => {
+        it('should run the component', async () => {
+            const cli = new Cli()
+            cli.banner('Banner Text')
+            await cli.run()
+        })
+    })
+
+    describe('message', ()  => {
+        it('should run the component', async () => {
+            const cli = new Cli()
+            cli.message('This is an application message')
+            await cli.run()
+        })
+    })
+    describe('run multiple cli components', () => {
+        it('should run header and banner', async () => {
+            const cli = new Cli()
+            cli.header('Header Text')
+            cli.banner('Banner Text')
+            await cli.run()
+        })
+        it('should run header and banner and any key to continue', async () => {
+            const cli = new Cli()
+            cli.header('Header Text')
+            cli.banner('Banner Text')
+            cli.anyKeyToContinue()
+            await cli.run()
+        })
+        it('should run header and banner and messages', async () => {
+            const cli = new Cli()
+            cli.header('Header Text')
+            cli.banner('Banner Text')
+            cli.message('This is an application message')
+            await cli.run()
+        })
+        it('should run header and banner and messages and multiple any keys', async () => {
+            const cli = new Cli()
+            cli.header('Header Text')
+            cli.banner('Banner Text')
+            cli.message('This is an application message')
+            cli.anyKeyToContinue()
+            cli.anyKeyToContinue()
+            await cli.run()
+        })
     })
 })
 
-// console.log( rootSuite().hasFocusTest() )
 
 
 async function testMain() {
@@ -90,98 +150,6 @@ testMain()
 
 
 
-async function t007_cli_any_key_to_continue() {
-    console.log("\nTEST 007\nCli with Any Key to Continue component")
-
-    const cli = new Cli()
-    cli.anyKeyToContinue()
-    await cli.run()
-
-    
-    console.log("Press any key to continue")
-    await keypress()
-}
-
-async function t008_cli_with_header_text() {
-    console.log("\nTEST 008\nCli with header text")
-
-    const cli = new Cli()
-    cli.header('Header Text')
-    await cli.run()
-
-    
-    console.log("Press any key to continue")
-    await keypress()
-}
-
-async function t009_cli_with_banner_text() {
-    console.log("\nTEST 009\nCli with banner text")
-
-    const cli = new Cli()
-    cli.banner('Banner Text')
-    await cli.run()
-
-    
-    console.log("Press any key to continue")
-    await keypress()
-}
-
-async function t010_cli_with_header_and_banner_text() {
-    console.log("\nTEST 010\nCli with header and banner text")
-
-    const cli = new Cli()
-    cli.header('Header Text')
-    cli.banner('Banner Text')
-    await cli.run()
-
-    
-    console.log("Press any key to continue")
-    await keypress()
-}
-
-async function t011_cli_with_header_and_banner_text_and_any_key() {
-    console.log("\nTEST 011\nCli with header and banner and any key to continue")
-
-    const cli = new Cli()
-    cli.header('Header Text')
-    cli.banner('Banner Text')
-    cli.anyKeyToContinue()
-    await cli.run()
-
-    
-    console.log("Press any key to continue")
-    await keypress()
-}
-
-
-
-async function t012_application_messages() {
-    console.log("\nTEST 012\nCli with application messages")
-
-    const cli = new Cli()
-    cli.header('Header Text')
-    cli.banner('Banner Text')
-    cli.message('This is an application message')
-    await cli.run()
-
-    console.log("Press any key to continue")
-    await keypress()
-}
-
-async function t013_application_messages_and_multiple_any_keys() {
-    console.log("\nTEST 013\nCli with application messages")
-
-    const cli = new Cli()
-    cli.header('Header Text')
-    cli.banner('Banner Text')
-    cli.message('This is an application message')
-    cli.anyKeyToContinue()
-    cli.anyKeyToContinue()
-    await cli.run()
-
-    console.log("Press any key to continue")
-    await keypress()
-}
 
 
 async function t014_cursor_position() {
