@@ -14,6 +14,22 @@
         "assets": ["libs/lib-cli/*.md"]
       }
     },
+    "demo-build": {
+      "executor": "@nrwl/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/lib-cli-demo",
+        "format": ["cjs"],
+        "main": "libs/lib-cli/src/foo.ts",
+        "tsConfig": "libs/lib-cli/tsconfig.lib.json"
+      }
+    },
+    "demo": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "lib-cli:demo-build"
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
