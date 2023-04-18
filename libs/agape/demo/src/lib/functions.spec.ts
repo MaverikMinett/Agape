@@ -112,7 +112,7 @@ describe('spyOn', () => {
     })
 
     it('should be a function ', () => {
-        expect(spyOn).toBeInstanceOf(Function)
+        expect(fnc.spyOn).toBeInstanceOf(Function)
     })
     it('should create a spy', () => {
         const spy = fnc.spyOn(target, 'foo')

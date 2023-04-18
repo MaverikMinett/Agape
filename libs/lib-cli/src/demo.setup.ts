@@ -16,6 +16,7 @@ import './lib/components/menu.component.demo'
 import './lib/controls/input.control.demo'
 import './lib/controls/menu.control.demo'
 
+import './lib/elements/form.element.demo'
 import './lib/elements/paragraph.element.demo'
 
 import './lib/cli.demo'

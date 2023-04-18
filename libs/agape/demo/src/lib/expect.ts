@@ -24,6 +24,10 @@ export class Expect<T> {
         assert.ok(!this.actual)
     }
 
+    toBeInstanceOf( expected: { new(...args:any[]): any } ) {
+        assert.ok(this.actual instanceof expected)
+    }
+
     toHaveBeenCalled() {
         const spy = (this.actual as any)?.spy
         if ( ! spy ) throw new Error("Expected a spy")

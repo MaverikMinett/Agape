@@ -81,4 +81,30 @@ describe('Expect', () => {
             }
         })
     })
+    describe('toBeInstanceOf', () => {
+        it('should assert', () => {
+            class Foo { }
+            class Bar { }
+            a = new Foo()
+            e = new Expect(e)
+            try {
+                e.toBeInstanceOf(Bar)
+            }
+            catch ( error ) {
+                expect(error).toBeInstanceOf(AssertionError)
+            }
+        })
+        it('should not assert', () => {
+            class Foo { }
+            class Bar { }
+            a = new Foo()
+            e = new Expect(e)
+            try {
+                e.toBeInstanceOf(Foo)
+            }
+            catch ( error ) {
+                expect(error).toBeInstanceOf(AssertionError)
+            }
+        })
+    })
 })
