@@ -1,10 +1,5 @@
 import { getTerminalSize } from '@agape/terminal'
-
-export interface TestSuiteParams {
-    focus?: boolean;
-    skip?: boolean;
-    interactive?: boolean;
-}
+import { TestCaseParams, TestSuiteParams } from "./interfaces"
 
 export class TestSuite {
 
@@ -40,9 +35,13 @@ export class TestSuite {
         if ( params ) Object.assign(this, params)
     }
 
+    /**
+     * Run the test suite
+     * @returns 
+     */
     async run() {
         /* skip the suite */
-        if ( this.skip ) {
+        if ( this.skip && ! this.hasFocusTest()) {
             this.result = 'skip'
             this.status = 'skipped'
 
@@ -79,10 +78,26 @@ export class TestSuite {
         this.status = 'ran'
     }
 
+    /**
+     * Add test to the suite
+     * @param testCase 
+     */
     addTest( testCase: TestCase ) {
         this.tests.push(testCase)
     }
 
+    /**
+     * Add child suite to the suite
+     * @param suite 
+     */
+    addSuite( suite: TestSuite ) {
+        this.suites.push(suite)
+    }
+
+    /**
+     * If the suite or any member of the suite has focus enabled
+     * @returns 
+     */
     hasFocusTest() {
         return !! ( 
                     this.focus
@@ -91,10 +106,12 @@ export class TestSuite {
                 )
     }
 
-    addSuite( suite: TestSuite ) {
-        this.suites.push(suite)
-    }
-
+    /**
+     * Create a new child suite and add it to the suite
+     * @param description 
+     * @param params 
+     * @returns 
+     */
     describe(description: string, params?: TestSuiteParams ) {
         if ( this.runningTest ) {
             throw new Error(`Invalid call to describe, nested inside call to it '${this.runningTest.description}'`)
@@ -105,6 +122,12 @@ export class TestSuite {
         return suite
     }
 
+    /**
+     * Focus on a new child suite
+     * @param description 
+     * @param params 
+     * @returns 
+     */
     fdescribe(description: string, params?: TestSuiteParams ) {
         if ( this.runningTest ) {
             throw new Error(`Invalid call to fdescribe, nested inside call to it '${this.runningTest.description}'`)
@@ -116,6 +139,12 @@ export class TestSuite {
         return suite
     }
 
+    /**
+     * Skip a new child suite
+     * @param description 
+     * @param params 
+     * @returns 
+     */
     xdescribe(description: string, params?: TestSuiteParams ) {
         if ( this.runningTest ) {
             throw new Error(`Invalid call to fdescribe, nested inside call to it '${this.runningTest.description}'`)
@@ -127,6 +156,12 @@ export class TestSuite {
         return suite
     }
 
+    /**
+     * Create a new test and add it to the suite
+     * @param description 
+     * @param test 
+     * @param params 
+     */
     it(description: string, test: Function, params?: TestCaseParams ) {
         if ( this.runningTest ) {
             throw new Error(`Invalid call to it, nested inside other call to it '${this.runningTest.description}'`)
@@ -136,6 +171,12 @@ export class TestSuite {
         this.addTest(testCase)
     }
 
+    /**
+     * Focus on a new test
+     * @param description 
+     * @param test 
+     * @param params 
+     */
     fit(description: string, test: Function, params?: TestCaseParams) {
         if ( this.runningTest ) {
             throw new Error(`Invalid call to fit, nested inside call to it '${this.runningTest.description}'`)
@@ -146,6 +187,12 @@ export class TestSuite {
         this.addTest(testCase)
     }
 
+    /**
+     * Skip a new test
+     * @param description 
+     * @param test 
+     * @param params 
+     */
     xit(description: string, test: Function, params?: TestCaseParams) {
         if ( this.runningTest ) {
             throw new Error(`Invalid call to xit, nested inside call to it '${this.runningTest.description}'`)
@@ -158,12 +205,6 @@ export class TestSuite {
 }
 
 
-export interface TestCaseParams {
-    focus?: boolean;
-    skip?: boolean;
-    interactive?: boolean;
-    instructions?: string;
-}
 
 /**
  * 
@@ -201,6 +242,10 @@ export class TestCase {
         if (params ) Object.assign(this,params)
     }
 
+    /**
+     * Run the test, pausing for user interaction if interactive
+     * @returns 
+     */
     async run( ) {
         /* skip the test */
         if ( this.skip ) {

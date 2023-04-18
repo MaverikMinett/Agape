@@ -15,8 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@agape/demo": ["libs/agape/demo/src/index.ts"],
       "@agape/terminal": ["libs/agape/terminal/src/index.ts"],
+      "@agape/demo": ["libs/agape/demo/src/index.ts"],
       "@lib/cli": ["libs/lib-cli/src/index.ts"],
       "@lib/express": ["libs/lib-express/src/index.ts"],
       "@lib/forms": ["libs/lib-forms/src/index.ts"],
