@@ -1,5 +1,5 @@
 
-import { describe, it, expect } from '@lib/demo'
+import { describe, it, expect } from '@agape/demo'
 
 describe('sanity', 'interactive', () => {
     it('false to be true', async () => {

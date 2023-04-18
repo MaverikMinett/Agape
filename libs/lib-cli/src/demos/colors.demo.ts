@@ -1,4 +1,4 @@
-import { describe, it } from "@lib/demo"
+import { describe, it } from "@agape/demo"
 
 describe('colors', 'interactive', () => {
     it('no libs', async () => {

@@ -1,5 +1,5 @@
 import { CliParagraphElement } from "@lib/cli"
-import { describe, it } from "@lib/demo"
+import { describe, it } from "@agape/demo"
 
 describe('CliParagraphElement', 'interactive', () => {
     it('should run', async () => {

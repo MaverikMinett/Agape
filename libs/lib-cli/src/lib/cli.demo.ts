@@ -1,5 +1,5 @@
 import { Cli } from "@lib/cli"
-import { describe, expect, it } from "@lib/demo"
+import { describe, expect, it } from "@agape/demo"
 
 describe('Cli', 'interactive', () => {
     it('should instantiate', () => {

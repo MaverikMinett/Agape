@@ -1,4 +1,4 @@
-import { describe, it } from "@lib/demo"
+import { describe, it } from "@agape/demo"
 import { getTerminalSize } from "@agape/terminal"
 
 describe('getTerminalSize', 'interactive', () => {

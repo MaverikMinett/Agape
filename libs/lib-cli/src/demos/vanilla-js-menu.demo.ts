@@ -1,4 +1,4 @@
-import { describe, it } from "@lib/demo"
+import { describe, it } from "@agape/demo"
 import { getCursorPosition, keypress } from "@agape/terminal"
 import readline from 'readline'
 

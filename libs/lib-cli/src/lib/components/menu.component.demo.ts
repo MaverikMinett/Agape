@@ -1,4 +1,4 @@
-import { describe, fdescribe, expect, it } from "@lib/demo"
+import { describe, fdescribe, expect, it } from "@agape/demo"
 import { CliMenuComponent } from "libs/lib-cli/src/lib/components/menu.component"
 
 describe('CliMenuComponent', 'interactive', () => {

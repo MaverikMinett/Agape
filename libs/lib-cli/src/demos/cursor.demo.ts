@@ -1,4 +1,4 @@
-import { describe, fit, it } from "@lib/demo"
+import { describe, fit, it } from "@agape/demo"
 import { getCursorPosition } from "@agape/terminal"
 
 describe('getCursorPosition', 'interactive', () => {

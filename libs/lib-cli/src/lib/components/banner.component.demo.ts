@@ -1,5 +1,5 @@
 import { AnyKeyToContinueComponent, CliBannerComponent } from "@lib/cli"
-import { describe, it } from "@lib/demo"
+import { describe, it } from "@agape/demo"
 
 describe('BannerComponent', 'interactive', async () => {
     it('should display a banner', async () => {

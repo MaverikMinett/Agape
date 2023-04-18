@@ -1,4 +1,4 @@
-import { runtests } from '@lib/demo'
+import { runtests } from '@agape/demo'
 
 import './demos/sanity.demo'
 import './demos/colors.demo'

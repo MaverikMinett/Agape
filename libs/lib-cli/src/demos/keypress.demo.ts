@@ -1,5 +1,5 @@
 
-import { fdescribe, describe, it, expect } from '@lib/demo'
+import { fdescribe, describe, it, expect } from '@agape/demo'
 import { keypress } from '@agape/terminal'
 
 describe('keypress', 'interactive', () => {

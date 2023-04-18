@@ -1,5 +1,5 @@
 import { CliInputControl } from "@lib/cli"
-import { describe, it } from "@lib/demo"
+import { describe, it } from "@agape/demo"
 
 describe('CliInputControl', 'interactive', () => {
     it('should run', async () => {
