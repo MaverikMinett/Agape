@@ -24,7 +24,7 @@
         "tsConfig": "libs/lib-cli/tsconfig.lib.json"
       }
     },
-    "demo": {
+    "serve": {
       "executor": "@nrwl/js:node",
       "options": {
         "buildTarget": "lib-cli:demo-build"
