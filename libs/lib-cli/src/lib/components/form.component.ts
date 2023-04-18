@@ -38,6 +38,7 @@ export class CliFormComponent {
             }
             return question
         }
+        return undefined
     }
 
 }

@@ -1,15 +1,23 @@
+import { runtests } from '@lib/demo'
 
+import './demos/sanity.demo'
+import './demos/colors.demo'
+import './demos/cursor.demo'
+import './demos/demo.demo'
+import './demos/keypress.demo'
+import './demos/terminal.demo'
+import './demos/vanilla-js-input.demo'
+import './demos/vanilla-js-menu.demo'
 
-import { describe, it, runtests } from '@lib/demo'
+import './lib/components/any-key-to-continue.component.demo'
+import './lib/components/banner.component.demo'
+import './lib/components/menu.component.demo'
 
-describe('Hello World', 'interactive', () => {
-    it('should be ok', () => {
+import './lib/controls/input.control.demo'
+import './lib/controls/menu.control.demo'
 
-    })
-    it('and another', () => {
-        
-    })
-})
+import './lib/elements/paragraph.element.demo'
 
+import './lib/cli.demo'
 
 runtests()
