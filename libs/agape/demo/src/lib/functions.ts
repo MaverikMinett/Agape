@@ -25,7 +25,6 @@ function describeArgsToParams( ...args: any[] ): [ string, boolean, Function, Te
 
 export function describe( description: string, interactive: 'interactive', suiteBuilder: ( ...args: any[] ) => void ): void
 export function describe( description: string, suiteBuilder: ( ...args: any[] ) => void, params: TestSuiteParams ): void
-export function describe( description: string, suiteBuilder: ( ...args: any[] ) => void ): void
 export function describe( ...args:any[] ): void {
     const [ description, interactiveOption, suiteBuilder, params ] = describeArgsToParams(...args)
     const suite = activeTestSuite().describe( description, params )
@@ -35,9 +34,9 @@ export function describe( ...args:any[] ): void {
     closeSuite()
 }
 
+export function fdescribe( description: string, suiteBuilder: ( ...args: any[] ) => void ): void
 export function fdescribe( description: string, interactive: 'interactive', suiteBuilder: ( ...args: any[] ) => void ): void
 export function fdescribe( description: string, suiteBuilder: ( ...args: any[] ) => void, params: TestSuiteParams ): void
-export function fdescribe( description: string, suiteBuilder: ( ...args: any[] ) => void ): void
 export function fdescribe( ...args:any[] ): void {
     const [ description, interactiveOption, suiteBuilder, params ] = describeArgsToParams(...args)
     const suite = activeTestSuite().fdescribe( description, params )
@@ -47,9 +46,9 @@ export function fdescribe( ...args:any[] ): void {
     closeSuite()
 }
 
+export function xdescribe( description: string, suiteBuilder: ( ...args: any[] ) => void ): void
 export function xdescribe( description: string, interactive: 'interactive', suiteBuilder: ( ...args: any[] ) => void ): void
 export function xdescribe( description: string, suiteBuilder: ( ...args: any[] ) => void, params: TestSuiteParams ): void
-export function xdescribe( description: string, suiteBuilder: ( ...args: any[] ) => void ): void
 export function xdescribe( ...args:any[] ): void {
     const [ description, interactiveOption, suiteBuilder, params ] = describeArgsToParams(...args)
     const suite = activeTestSuite().xdescribe( description, params )
@@ -59,15 +58,20 @@ export function xdescribe( ...args:any[] ): void {
     closeSuite()
 }
 
-
+export function it( description, test: Function)
+export function it( description, test: Function, params: TestCaseParams )
 export function it( description, test: Function, params?: TestCaseParams ) {
     activeTestSuite().it(description, test, params)
 }
 
+export function fit( description, test: Function)
+export function fit( description, test: Function, params: TestCaseParams )
 export function fit( description, test: Function, params?: TestCaseParams  ) {
     activeTestSuite().fit(description, test, params)
 }
 
+export function xit( description, test: Function)
+export function xit( description, test: Function, params: TestCaseParams )
 export function xit( description, test: Function, params?: TestCaseParams  ) {
     activeTestSuite().xit(description, test, params)
 }
