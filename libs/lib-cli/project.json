@@ -20,7 +20,7 @@
       "options": {
         "outputPath": "dist/libs/lib-cli-demo",
         "format": ["cjs"],
-        "main": "libs/lib-cli/src/foo.ts",
+        "main": "libs/lib-cli/src/demo.setup.ts",
         "tsConfig": "libs/lib-cli/tsconfig.lib.json"
       }
     },
