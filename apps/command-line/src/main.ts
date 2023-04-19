@@ -8,11 +8,16 @@ import { cli } from '@agape/cli'
 import standard from 'figlet/importable-fonts/Standard.js'
 figlet.parseFont('Standard', standard);
 
-cli.header( chalk.red('קг๏ןєςՇ չє๔') + ' ' + chalk.green('ᶜᵒᵐᵐᵃⁿᵈ ᴸⁱⁿᵉ') );
+const yellow = '\x1b[38;2;255;241;1m'
+const red    = '\x1b[38;2;231;0;0m'
+const green  = '\x1b[38;2;99;167;1m'
+const reset  = '\x1b[0m'
+
+cli.header( red + 'קг๏ןєςՇ չє๔' + reset + ' ' + green + 'ᶜᵒᵐᵐᵃⁿᵈ ᴸⁱⁿᵉ' + reset );
 
 cli.bannerFormat( (text) => {
     const figger = figlet.textSync( text, { font: 'Standard' } )
-    const colored = chalk.yellowBright(figger)
+    const colored = yellow + figger + reset
     return colored
 } )
 

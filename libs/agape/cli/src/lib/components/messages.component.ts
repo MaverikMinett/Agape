@@ -29,12 +29,13 @@ export const messageColors = {
 
 export class CliMessagesComponent {
     async run( messages: CliMessage[] ) {
-        for (let message of messages ) {
-            const color = messageColors[message.type];
-            const reset = "\x1b[0m"
-            console.log( color + message.text + reset )
+        if ( messages.length ) {
+            for (let message of messages ) {
+                const color = messageColors[message.type];
+                const reset = "\x1b[0m"
+                console.log( color + message.text + reset )
+            }
+            console.log("")
         }
-        console.log(""
-        )
     }
 }
