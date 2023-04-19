@@ -1,7 +1,7 @@
 
 import { keypress, hideCursor, showCursor } from '@agape/terminal';
 import { CliElement } from '../element';
-import { Menu } from '@lib/menu';
+import { Menu } from '@agape/menu';
 
 
 export type CliMenuParams = Partial<Pick<CliMenuControl, keyof CliMenuControl>>

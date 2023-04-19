@@ -1,7 +1,7 @@
 import { Cli } from "./cli"
 import { describe, expect, fit, it } from "@agape/demo"
-import { FormGroup } from "@lib/forms"
-import { Menu } from "@lib/menu"
+import { FormGroup } from "@agape/forms"
+import { Menu } from "@agape/menu"
 
 describe('Cli', 'interactive', () => {
     it('should instantiate', () => {

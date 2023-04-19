@@ -1,6 +1,6 @@
 import { CliMenuControl } from "../controls/menu.control"
 import { describe, expect, it } from "@agape/demo"
-import { Menu } from "@lib/menu"
+import { Menu } from "@agape/menu"
 
 
 describe('CliMenuControl', 'interactive', () => {

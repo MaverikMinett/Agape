@@ -1,5 +1,5 @@
 
-import { Menu } from '@lib/menu'
+import { Menu } from '@agape/menu'
 import { CliMenuControl } from './menu.control'
 
 describe('CliMenuControl', () => {

@@ -1,5 +1,5 @@
 import { CliMenuControl, CliMenuParams } from '../controls/menu.control';
-import { Menu } from '@lib/menu';
+import { Menu } from '@agape/menu';
 
 export class CliMenuComponent {
 

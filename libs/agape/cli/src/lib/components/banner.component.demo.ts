@@ -5,11 +5,11 @@ import { AnyKeyToContinueComponent } from './any-key-to-continue.component'
 
 
 describe('BannerComponent', 'interactive', async () => {
-    fit('should display a banner', async () => {
+    it('should display a banner', async () => {
         const component = new CliBannerComponent('Banner')
         await component.run()
     })
-    fit('should work with AnyKeyToContinueComponent', async () => {
+    it('should work with AnyKeyToContinueComponent', async () => {
         const component1 = new CliBannerComponent('Banner')
         const component2 = new AnyKeyToContinueComponent()
         const components = [ component1, component2 ]

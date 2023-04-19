@@ -1,6 +1,6 @@
 import { describe, fdescribe, fit, it, expect } from "@agape/demo";
 import { Clip } from "./clip";
-import { Menu } from "@lib/menu";
+import { Menu } from "@agape/menu";
 
 
 describe('CLip', 'interactive', () => {

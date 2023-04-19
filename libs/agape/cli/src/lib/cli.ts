@@ -9,7 +9,7 @@ import { CliFormComponent } from './components/form.component';
 import { CliHeaderComponent } from './components/header.component';
 import { CliMessage, CliMessagesComponent } from './components/messages.component';
 import { CliMenuComponent } from './components/menu.component';
-import { Menu } from '@lib/menu'
+import { Menu } from '@agape/menu'
 
 export interface CliComponent {
     run(): Promise<void>|void

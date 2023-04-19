@@ -1,5 +1,5 @@
 import { expect, describe, fdescribe, it, xit, fit } from '@agape/demo'
-import { FormGroup } from '@lib/forms'
+import { FormGroup } from '@agape/forms'
 
 import { CliFormComponent } from './form.component'
 
