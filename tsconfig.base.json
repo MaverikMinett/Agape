@@ -20,6 +20,7 @@
       "@lib/cli": ["libs/lib-cli/src/index.ts"],
       "@lib/express": ["libs/lib-express/src/index.ts"],
       "@lib/forms": ["libs/lib-forms/src/index.ts"],
+      "@lib/menu": ["libs/lib-menu/src/index.ts"],
       "@lib/server": ["libs/lib-server/src/index.ts"],
       "@zed/api": ["libs/lib-api/src/index.ts"]
     },
