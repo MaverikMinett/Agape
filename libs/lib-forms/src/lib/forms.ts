@@ -44,6 +44,10 @@ export class FormGroup {
 
     get answers() { return this.value }
     set answers( value: FormGroupValue ) { this.value = value }
+
+    constructor( value?: FormGroupValue ) {
+        if ( value !== undefined ) this.value = value
+    }
     
     patchValue( value: FormGroupValue ) {
         Object.assign(this.value, value)

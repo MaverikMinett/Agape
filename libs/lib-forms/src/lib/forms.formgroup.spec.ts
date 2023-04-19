@@ -78,37 +78,35 @@ describe('FormGroup', () => {
         })
     })
 
-    describe('value', () => {
+    describe('setValue', () => {
         it('should set the value of the form', () => {
             const v = { 'age': 42 }
             f = new FormGroup()
                 .number('age')  
-                .value(v)
+                .setValue(v)
             
-            expect( (f as any)._value ).toBe(v)
+            expect( f.value ).toBe(v)
         })
 
         it('should retrieve the value of the form', () => {
             const v = { 'age': 42 }
             f = new FormGroup()
                 .number('age')  
-                .value(v)
+                .setValue(v)
             
-            expect( f.value() ).toBe(v)
+            expect( f.value ).toBe(v)
         })
     })
 
     describe('patchValue', () => {
         it('should patch the form value', () => {
             const v = { 'age': 42 }
-            f = new FormGroup()
+            f = new FormGroup(v)
                 .number('age')  
-                .value(v)
             
-            expect( f.value() ).toBe(v)
-
             f.patchValue({ age: 36})
-            expect( f.value() ).toEqual({'age': 36})
+            expect( f.value ).toEqual({'age': 36})
+            expect( v ).toEqual({'age': 36})
         })
     })
 
