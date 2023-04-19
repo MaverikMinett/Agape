@@ -12,7 +12,6 @@ export * from './lib/components/display.component'
 export * from './lib/components/enter-to-continue.component'
 export * from './lib/components/form.component'
 export * from './lib/components/header.component'
-export * from './lib/components/navmenu.component'
 export * from './lib/components/messages.component'
 
 

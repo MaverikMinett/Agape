@@ -1,7 +1,7 @@
 import { events, Event} from './model';
 import { deleteEvent, saveEvent } from './controllers';
 
-import { cli } from '@lib/cli';
+import { cli } from '@agape/cli';
 import fb from '@lib/forms'
 import { Menu } from '@lib/menu'
 import { executeControllerAndNavigate, navigateToView } from '../router';

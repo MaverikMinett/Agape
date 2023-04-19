@@ -1,15 +1,15 @@
-import { describe, it } from "@agape/demo"
+import { describe, fit, it } from "@agape/demo"
 
 import { CliBannerComponent } from './banner.component'
 import { AnyKeyToContinueComponent } from './any-key-to-continue.component'
 
 
 describe('BannerComponent', 'interactive', async () => {
-    it('should display a banner', async () => {
+    fit('should display a banner', async () => {
         const component = new CliBannerComponent('Banner')
         await component.run()
     })
-    it('should work with AnyKeyToContinueComponent', async () => {
+    fit('should work with AnyKeyToContinueComponent', async () => {
         const component1 = new CliBannerComponent('Banner')
         const component2 = new AnyKeyToContinueComponent()
         const components = [ component1, component2 ]

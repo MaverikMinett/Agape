@@ -2,12 +2,11 @@
 import { FormGroup } from '@lib/forms';
 import clear from 'clear';
 import { AnyKeyToContinueComponent } from './components/any-key-to-continue.component';
-import { CliBannerComponent } from './components/banner.component';
+import { CliBannerComponent, CliBannerFormatFunction } from './components/banner.component';
 import { CliDisplayComponent } from './components/display.component';
 import { EnterToContinueComponent } from './components/enter-to-continue.component';
 import { CliFormComponent } from './components/form.component';
 import { CliHeaderComponent } from './components/header.component';
-import { CliNavMenuComponent, CliNavMenuChoice } from './components/navmenu.component';
 import { CliMessage, CliMessagesComponent } from './components/messages.component';
 import { CliMenuItem } from './controls/menu.control';
 import { CliMenuComponent } from './components/menu.component';
@@ -16,6 +15,10 @@ import { Menu } from '@lib/menu'
 export interface CliComponent {
     run(): Promise<void>|void
 }
+
+
+
+
 
 export class Cli {
 
@@ -29,16 +32,26 @@ export class Cli {
 
     messages: CliMessage[] = []
 
+    private bannerFormatter: CliBannerFormatFunction
+
     header( text: string ) {
         const component = new CliHeaderComponent(text)
         this.applicationHeader = component
         return this
     }
 
-    banner( text: string ) {
-        const component = new CliBannerComponent( text )
-        this.applicationBanner = component
+    banner( text: string ) {  
+        if ( text === undefined || text === null )
+            this.applicationBanner = undefined
+        else {
+            const component = new CliBannerComponent( text, this.bannerFormatter )
+            this.applicationBanner = component
+        }
         return this
+    }
+
+    bannerFormat( formatter: CliBannerFormatFunction )  {
+        this.bannerFormatter = formatter
     }
 
     /**
