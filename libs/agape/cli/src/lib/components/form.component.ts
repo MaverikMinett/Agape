@@ -1,4 +1,4 @@
-import { FormGroup } from "@lib/forms";
+import { FormGroup } from "@agape/forms";
 import { CliFormControl } from "../controls/form.control";
 
 export class CliFormComponent {

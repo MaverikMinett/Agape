@@ -1,5 +1,5 @@
 
-import { FormGroup } from '@lib/forms';
+import { FormGroup } from '@agape/forms';
 import clear from 'clear';
 import { AnyKeyToContinueComponent } from './components/any-key-to-continue.component';
 import { CliBannerComponent, CliBannerFormatFunction } from './components/banner.component';

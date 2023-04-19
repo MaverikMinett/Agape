@@ -1,4 +1,4 @@
-import { FormGroup } from "@lib/forms";
+import { FormGroup } from "@agape/forms";
 import { CliElement } from "../element";
 import { CliInputControl } from "./input.control";
 
