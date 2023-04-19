@@ -1,4 +1,4 @@
-import { CliMenuControl } from "@lib/cli"
+import { CliMenuControl } from "../controls/menu.control"
 import { describe, expect, it } from "@agape/demo"
 import { Menu } from "@lib/menu"
 

@@ -18,7 +18,6 @@
       "@agape/cli": ["libs/agape/cli/src/index.ts"],
       "@agape/demo": ["libs/agape/demo/src/index.ts"],
       "@agape/terminal": ["libs/agape/terminal/src/index.ts"],
-      "@lib/cli": ["libs/lib-cli/src/index.ts"],
       "@lib/express": ["libs/lib-express/src/index.ts"],
       "@lib/forms": ["libs/lib-forms/src/index.ts"],
       "@lib/menu": ["libs/lib-menu/src/index.ts"],

@@ -1,4 +1,4 @@
-import { Cli } from "@lib/cli"
+import { Cli } from "./cli"
 import { describe, expect, fit, it } from "@agape/demo"
 import { FormGroup } from "@lib/forms"
 import { Menu } from "@lib/menu"

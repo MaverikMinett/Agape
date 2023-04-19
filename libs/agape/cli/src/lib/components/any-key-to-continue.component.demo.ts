@@ -1,4 +1,4 @@
-import { AnyKeyToContinueComponent } from "@lib/cli"
+import { AnyKeyToContinueComponent } from "./any-key-to-continue.component"
 import { describe, fit, it } from "@agape/demo"
 
 describe('AnyKeyToContinueComponent', 'interactive', () => {

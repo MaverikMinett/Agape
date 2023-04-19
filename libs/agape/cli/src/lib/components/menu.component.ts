@@ -1,4 +1,4 @@
-import { CliMenuControl, CliMenuItem, CliMenuParams } from '@lib/cli';
+import { CliMenuControl, CliMenuParams } from '../controls/menu.control';
 import { Menu } from '@lib/menu';
 
 export class CliMenuComponent {

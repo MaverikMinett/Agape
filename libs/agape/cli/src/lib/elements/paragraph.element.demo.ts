@@ -1,4 +1,4 @@
-import { CliParagraphElement } from "@lib/cli"
+import { CliParagraphElement } from "./paragraph.element"
 import { describe, it } from "@agape/demo"
 
 describe('CliParagraphElement', 'interactive', () => {

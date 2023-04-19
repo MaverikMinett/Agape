@@ -1,4 +1,4 @@
-import { CliInputControl } from "@lib/cli"
+import { CliInputControl } from "./input.control"
 import { describe, it } from "@agape/demo"
 
 describe('CliInputControl', 'interactive', () => {

@@ -1,6 +1,7 @@
 import { expect, describe, fdescribe, it, xit, fit } from '@agape/demo'
-import { CliFormComponent } from './form.component'
 import { FormGroup } from '@lib/forms'
+
+import { CliFormComponent } from './form.component'
 
 describe('CliFormComponent', 'interactive', () => {
     it('should instantiate', () => {
