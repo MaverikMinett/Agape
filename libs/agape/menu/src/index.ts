@@ -1,1 +1,1 @@
-export * from './lib/agape-menu';
+export * from './lib/menu';
