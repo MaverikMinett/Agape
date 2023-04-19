@@ -40,23 +40,23 @@ export class FormGroup {
 
     fields: FormField[] = []
 
-    private _value: FormGroupValue = {}
+    value: FormGroupValue = {}
 
-    get answers() { return this._value }
-    set answers( value: FormGroupValue ) { this._value = value }
+    get answers() { return this.value }
+    set answers( value: FormGroupValue ) { this.value = value }
     
-    value( ): FormGroupValue
-    value( value: FormGroupValue ): this
-    value( value?: FormGroupValue): this|FormGroupValue {
-        if ( value !== undefined ) {
-            this._value = value
-            return this
-        }
-        else return this._value
+    patchValue( value: FormGroupValue ) {
+        Object.assign(this.value, value)
     }
 
-    patchValue( value: FormGroupValue ) {
-        Object.assign(this._value, value)
+    setValue( ): FormGroupValue
+    setValue( value: FormGroupValue ): this
+    setValue( value?: FormGroupValue): this|FormGroupValue {
+        if ( value !== undefined ) {
+            this.value = value
+            return this
+        }
+        else return this.value
     }
 
     /**
