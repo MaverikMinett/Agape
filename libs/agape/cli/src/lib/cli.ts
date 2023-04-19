@@ -8,7 +8,6 @@ import { EnterToContinueComponent } from './components/enter-to-continue.compone
 import { CliFormComponent } from './components/form.component';
 import { CliHeaderComponent } from './components/header.component';
 import { CliMessage, CliMessagesComponent } from './components/messages.component';
-import { CliMenuItem } from './controls/menu.control';
 import { CliMenuComponent } from './components/menu.component';
 import { Menu } from '@lib/menu'
 
