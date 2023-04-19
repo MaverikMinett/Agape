@@ -65,7 +65,7 @@ export class Menu {
     }
 
     async execute() {
-        await this.selectedItem.execute()
+        await this.selectedItem?.execute()
     }
 
 }
