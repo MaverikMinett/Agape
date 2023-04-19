@@ -28,9 +28,9 @@ describe('keypress', () => {
     describe('render', () => {
         it('should draw the control', () => {
             e = new CliElement()
-            jest.spyOn(e,'drawElement')
+            jest.spyOn( (e as any),'drawElement')
             e.run()
-            expect(e.drawElement).toHaveBeenCalled()
+            expect((e as any).drawElement).toHaveBeenCalled()
         })
     })
 })

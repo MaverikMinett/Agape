@@ -75,8 +75,21 @@ export class Cli {
         return this
     }
 
-    form( form: FormGroup ) {
-        const component = new CliFormComponent(form)
+    form( form: FormGroup ) 
+    form( name: string, form: FormGroup ) 
+    form( ...args: any[]) {
+        let form: FormGroup
+        let name: string
+
+        if ( args.length === 1 ) {
+            form = args[0]
+            name = " "
+        }
+        else {
+            [ name, form ] = args
+        }
+
+        const component = new CliFormComponent(name, form)
         this.components.push(component)
         return this
     }
@@ -142,8 +155,9 @@ export class Cli {
         }
         
     }
-
 }
+
+
 
 export const cli = new Cli()
 export default cli

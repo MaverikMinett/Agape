@@ -1,5 +1,6 @@
 import { Cli } from "@lib/cli"
-import { describe, expect, it } from "@agape/demo"
+import { describe, expect, fit, it } from "@agape/demo"
+import { FormGroup } from "@lib/forms"
 
 describe('Cli', 'interactive', () => {
     it('should instantiate', () => {
@@ -27,7 +28,6 @@ describe('Cli', 'interactive', () => {
             await cli.run()
         })
     })
-
     describe('menu', () => {
         it('should run the component', async () => {
             const cli = new Cli()
@@ -38,6 +38,14 @@ describe('Cli', 'interactive', () => {
             ])
             const response = await cli.run()
             console.log( 'Cli Response:', response )
+        })
+    })
+    describe('form', () => {
+        fit('should run the component', async () => {
+            const form = new FormGroup().string('foo')
+            const cli = new Cli()
+            cli.form(form)
+            const response = await cli.run()
         })
     })
     describe('message', ()  => {

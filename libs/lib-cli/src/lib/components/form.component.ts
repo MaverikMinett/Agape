@@ -1,5 +1,5 @@
-import { FormField, FormGroup } from "@lib/forms";
-import inquirer from 'inquirer';
+import { FormGroup } from "@lib/forms";
+import { CliFormControl } from "../controls/form.control";
 
 interface InquirerQuestion {
     type: 'input';
@@ -11,34 +11,17 @@ interface InquirerQuestion {
 
 export class CliFormComponent {
 
-    
-
-    constructor( public form: FormGroup ) {
+    constructor( public name: string, public form: FormGroup ) {
 
     }
 
     async run() {
-        const value = this.form.value
-        const questions = this.formToInquirerQuestions( this.form )
-        const answers = await inquirer.prompt(questions)
-        this.form.patchValue(answers)
-    }
-
-    formToInquirerQuestions( form: FormGroup ) {
-        return form.fields.map( field => this.fieldToInquirerQuestion(field, this.form.answers[field.name] ) )
-    }
-
-    fieldToInquirerQuestion( field: FormField, value?: any ) {
-        if ( field.type === 'string' ) { 
-            const question: InquirerQuestion = {
-                'type': 'input',
-                'name': field.name,
-                'message': field.label,
-                'default': value
-            }
-            return question
+        const control = new CliFormControl(this.form)
+        const answer = await control.run()
+        return { 
+            form: { [this.name]: answer }
         }
-        return undefined
+
     }
 
 }

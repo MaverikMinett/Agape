@@ -15,7 +15,7 @@ export class CliElement {
     active: boolean = false
     rendered: boolean = false
     
-    async drawElement(): Promise<void> { }
+    protected async drawElement(): Promise<void> { }
 
     async run() {
         this.rendered = false
@@ -30,6 +30,19 @@ export class CliElement {
 
         return response
     }
+
+    // async draw( ) {
+    //     if ( this.rendered ) await this.clearRenderedElement()
+        
+    //     await this.drawElement()
+
+    //     this.rendered = true
+
+    //     /* don't provide finish, and don't force the user to have it */
+    //     /* just call it if it's there */
+    //     const $this: any = this
+    //     if ( $this.finish ) await $this.finish()
+    // }
 
     protected async render() {
 
@@ -52,7 +65,7 @@ export class CliElement {
         // otherwise we are done here
     }
 
-    async clearRenderedElement() {
+    protected async clearRenderedElement() {
 
         const pos = await getCursorPosition()
         process.stdout.write("\r\x1b[K")
