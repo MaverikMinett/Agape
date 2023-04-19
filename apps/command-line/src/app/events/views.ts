@@ -19,8 +19,6 @@ export async function eventsIndex() {
     .menu(menu)
     await cli.run(true)
     await menu.execute()
-
-    console.log("Awaiting Cli")
 }                           
 
 /**
