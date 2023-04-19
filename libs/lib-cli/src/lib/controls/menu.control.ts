@@ -1,12 +1,12 @@
 
 import { keypress, hideCursor, showCursor } from '@agape/terminal';
 import { CliElement } from '../element';
+import { Menu } from '@lib/menu';
 
 
 export type CliMenuParams = Partial<Pick<CliMenuControl, keyof CliMenuControl>>
 
 export interface CliMenuItem {
-    key?: string
     label: string;
 }
 
@@ -14,9 +14,9 @@ export class CliMenuControl extends CliElement {
 
     indicator: string = "❯"
 
-    selectedIndex: number = 0
+    // selectedIndex: number = 0
 
-    selectedItem: CliMenuItem
+    // selectedItem: CliMenuItem
 
     menuItemFormatter = (item) => {
         const text =  "  " + item.label
@@ -33,11 +33,12 @@ export class CliMenuControl extends CliElement {
         return text
     }
 
-    constructor( public items: CliMenuItem[] = [], params?: CliMenuParams  ) {
+    // constructor( public items: CliMenuItem[] = [], params?: CliMenuParams  ) {
+    constructor( public menu: Menu, params?: CliMenuParams ) {
         super()
         Object.assign(this, params)
-        this.selectedItem = items[0]
-        this.nLines = items.length
+        menu.selectedIndex = 0
+        this.nLines = menu.items.length
     }
 
     // async before() {
@@ -47,8 +48,8 @@ export class CliMenuControl extends CliElement {
     async drawElement() {
         await hideCursor()
         let index = 0;
-        for ( let item of this.items ) {
-            const formatter = index === this.selectedIndex 
+        for ( let item of this.menu.items ) {
+            const formatter = index === this.menu.selectedIndex 
                 ? this.selectedMenuItemFormatter 
                 : this.menuItemFormatter
             
@@ -56,19 +57,22 @@ export class CliMenuControl extends CliElement {
             console.log( formattedText )
             index++;
         }
+        await showCursor()
     }
 
     async awaitUserInput() {
+        const menu = this.menu;
+
         const key = await keypress()
         if ( key.name === 'down' ) {
-            if ( this.selectedIndex < this.items.length - 1 ) this.selectedIndex++
+            if ( menu.selectedIndex < menu.items.length - 1 ) menu.selectedIndex++
         }
         else if ( key.name === 'up' ) {
-            if ( this.selectedIndex > 0 ) this.selectedIndex--
-            else if ( this.selectedIndex == -1 ) this.selectedIndex = this.items.length - 1
+            if ( menu.selectedIndex > 0 ) menu.selectedIndex--
+            else if ( menu.selectedIndex == -1 ) menu.selectedIndex = menu.items.length - 1
         }
         else if ( key.name === 'return' ) {
-            if ( this.selectedIndex >= 0 ) return this.items[this.selectedIndex]
+            if ( menu.selectedIndex >= 0 ) return menu.items[menu.selectedIndex]
         }
         return undefined
     }

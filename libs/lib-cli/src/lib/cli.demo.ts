@@ -1,6 +1,7 @@
 import { Cli } from "@lib/cli"
 import { describe, expect, fit, it } from "@agape/demo"
 import { FormGroup } from "@lib/forms"
+import { Menu } from "@lib/menu"
 
 describe('Cli', 'interactive', () => {
     it('should instantiate', () => {
@@ -31,11 +32,13 @@ describe('Cli', 'interactive', () => {
     describe('menu', () => {
         it('should run the component', async () => {
             const cli = new Cli()
-            cli.menu('fooMenu',[
-                { label: 'Menu Option 1' },
-                { label: 'Menu Option 2' },
-                { label: 'Menu Option 3' }
-            ])
+
+            const m = new Menu()
+            .item('Menu Option 1')
+            .item('Menu Option 2')
+            .item('Menu Option 3')
+
+            cli.menu('fooMenu',m)
             const response = await cli.run()
             console.log( 'Cli Response:', response )
         })

@@ -1,49 +1,48 @@
 import { events, Event} from './model';
 import { deleteEvent, saveEvent } from './controllers';
 
-import { cli, clip } from '@lib/cli';
+import { cli } from '@lib/cli';
 import fb from '@lib/forms'
-import { executeController, executeControllerAndNavigate, navigateToView } from '../router';
-
-
+import { Menu } from '@lib/menu'
+import { executeControllerAndNavigate, navigateToView } from '../router';
 
 /**
  * Display the events menu
  */
 export async function eventsIndex() {
+    const menu = new Menu()
+    .item('View events', () => navigateToView(eventsListView) )
+    .item('Create event', () => navigateToView(eventsEditView) )
+
     cli
     .banner('Events')
-    .menu("Events Menu", 
-        [
-            { label: "View events", view: eventsListView },
-            { label: "Create event", view: eventsEditView },
-        ]
-    )
-    const response = await cli.run(true)
+    .menu(menu)
+    await cli.run(true)
+    await menu.execute()
 
-    const view = response['menu']['Events Menu'].view
-    await navigateToView(view)
+    console.log("Awaiting Cli")
 }                           
 
 /**
  * Events list view
  */
 async function eventsListView(params: any, input: { message: string } ) {
-    clip.banner('Events List')
-    clip.message(input?.message)
-    clip.menu("Events List", [
-        { label: "back", indicator: "❰", back: true },
-        ...events.map( event =>  {  return { event, label: event.name } })
-    ])
+    /* menu */
+    const menu = new Menu()
+    .item('back', () => navigateToView(eventsIndex), { indicator: "❰" } )
+    .item('Create event', () => navigateToView(eventsEditView) )
 
-    const response = await clip.run(true)
+    for ( let event of events ) {
+        menu.item(event.name, () => navigateToView(eventsItemView, {id: event.id}) )
+    }
 
-    if ( response['menu'].back === true ) 
-        return navigateToView(eventsIndex)
+    /* cli */
+    cli.banner('Events List')
+    cli.message(input?.message)
+    cli.menu(menu)
 
-    const event = response['menu'].event
-    console.log(event)
-    navigateToView(eventsItemView, {id: event.id})
+    await cli.run(true)
+    await menu.execute()
 }
 
 /**
@@ -56,29 +55,18 @@ async function eventsItemView( params?: { id: string }, input?: any ) {
 
     const event = events.find( e => e.id === id )
 
-    clip.banner('Event')
-    clip.message(input?.message)
-    clip.display(event.name)
-    clip.menu('action', [
-        { label: "back", indicator: "❰", back: true },
-        { label: "Edit event", action: "edit-event" },
-        { label: "Buy tickets", action: "buy-tickets" },
-        { label: "Delete event", action: "delete-event" }
-    ])
+    const menu = new Menu()
+    .item('back', () => navigateToView(eventsListView), { indicator: "❰" } )
+    .item('Edit event', () => navigateToView(eventsEditView, { id: event.id}) )
+    .item('Delete event', () => executeControllerAndNavigate(deleteEvent, [event.id], eventsListView ) )
 
-    
-    const response = await clip.run(true)
+    cli.banner('Event')
+    cli.message(input?.message)
+    cli.display(event.name)
+    cli.menu(menu)
 
-    if ( response['menu'].back ) return navigateToView(eventsListView)
-
-    const action = response['menu'].action
-    if ( action === 'edit-event' ) {
-        return navigateToView(eventsEditView, { id: event.id})
-    }
-
-    else if ( action === 'delete-event' ) {
-        return executeControllerAndNavigate(deleteEvent, [event.id], eventsListView )
-    }
+    await cli.run(true)
+    await menu.execute()
 }
 
 /**
@@ -90,25 +78,22 @@ async function eventsEditView( params?: { item: Event } ) {
     let { item } = params ?? {}
     item ?? ( item = { name: '' } )
 
+    /* form */
     const form = fb.string('name').string('description').setValue(item)
 
+    /* menu */
+    const menu = new Menu()
+    .item('Save event', () => {
+        const editedEvent = {...item, ...form.value}
+        executeControllerAndNavigate(saveEvent, [editedEvent], eventsListView )
+    })
+    .item('cancel', () => navigateToView(eventsListView), { indicator: "❰" } )
+
+    /* cli */
     cli.banner( item?.id ? 'Edit Event' : 'Create Event' )
     cli.form( form )
-    cli.menu(" ", [
-        { label: "Save event", save: true },
-        { label: "cancel", view: eventsListView, indicator: "❰"  },
-    ])
+    cli.menu( menu )
 
-    const response = await cli.run(true)
-    cli.finish()
-
-    const menuResponse = response['menu'][' ']
-    if ( menuResponse.back ) {
-        return navigateToView(eventsListView)
-    }
-    else if ( menuResponse.save ) {
-        const editedEvent = {...item, ...form.value}
-        const controllerResponse = executeController(saveEvent, editedEvent )
-        navigateToView(eventsListView, undefined, controllerResponse)
-    }
+    await cli.run(true)
+    await menu.execute()
 }

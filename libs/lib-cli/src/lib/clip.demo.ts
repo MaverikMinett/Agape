@@ -1,5 +1,6 @@
 import { describe, fdescribe, fit, it, expect } from "@agape/demo";
 import { Clip } from "./clip";
+import { Menu } from "@lib/menu";
 
 
 describe('CLip', 'interactive', () => {
@@ -11,11 +12,12 @@ describe('CLip', 'interactive', () => {
 
     it('should have the menu directly at the menu accessor', async () => {
         const clip = new Clip()
-        clip.menu(' ', [
-            {label: 'back', back: true},
-            {label: 'some option' },
-            {label: 'some other option' }
-        ])
+        const m = new Menu()
+        .item('Menu Option 1')
+        .item('Menu Option 2')
+        .item('Menu Option 3')
+
+        clip.menu(m)
         const response = await clip.run()
         console.log(response )
     })

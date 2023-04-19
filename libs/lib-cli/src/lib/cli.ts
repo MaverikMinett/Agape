@@ -11,6 +11,7 @@ import { CliNavMenuComponent, CliNavMenuChoice } from './components/navmenu.comp
 import { CliMessage, CliMessagesComponent } from './components/messages.component';
 import { CliMenuItem } from './controls/menu.control';
 import { CliMenuComponent } from './components/menu.component';
+import { Menu } from '@lib/menu'
 
 export interface CliComponent {
     run(): Promise<void>|void
@@ -94,24 +95,45 @@ export class Cli {
         return this
     }
 
-    menu<T extends CliMenuItem>( choices: T[] ): this
-    menu<T extends CliMenuItem>( name: string, choices: T[] ): this
-    menu<T extends CliMenuItem>( ...args:any[] ) {
-        let choices: T[]
+    menu( menu: Menu ): this 
+    menu( name: string, menu: Menu ): this
+    menu( ...args: any[] ) {
+        let menu: Menu
         let name: string
 
         if ( args.length === 1 ) {
-            choices = args[0]
+            menu = args[0]
             name = " "
         }
         else {
-            [ name, choices ] = args
+            [ name, menu ] = args
         }
 
-        const component = new CliMenuComponent(name, choices)
+        const component = new CliMenuComponent(name, menu)
         this.components.push( component )
         return this
     }
+
+
+    // menu( menu: Menu ): this
+    // menu<T extends CliMenuItem>( choices: T[] ): this
+    // menu<T extends CliMenuItem>( name: string, choices: T[] ): this
+    // menu<T extends CliMenuItem>( ...args:any[] ) {
+    //     let choices: T[]
+    //     let name: string
+
+    //     if ( args.length === 1 ) {
+    //         choices = args[0]
+    //         name = " "
+    //     }
+    //     else {
+    //         [ name, choices ] = args
+    //     }
+
+    //     const component = new CliMenuComponent(name, choices)
+    //     this.components.push( component )
+    //     return this
+    // }
 
     navmenu( title: string, choices: CliNavMenuChoice[] ) {
         const component = new CliNavMenuComponent(title, choices)

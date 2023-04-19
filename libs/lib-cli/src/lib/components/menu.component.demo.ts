@@ -1,23 +1,26 @@
 import { describe, fdescribe, expect, it } from "@agape/demo"
+import { Menu } from "@lib/menu"
 import { CliMenuComponent } from "libs/lib-cli/src/lib/components/menu.component"
 
 describe('CliMenuComponent', 'interactive', () => {
 
     it('should instantiate', () => {
-        const c = new CliMenuComponent('fooMenu',[
-            { label: 'Menu Option 1' },
-            { label: 'Menu Option 2' },
-            { label: 'Menu Option 3' }
-        ])
+        const m = new Menu()
+        .item('Menu Option 1')
+        .item('Menu Option 2')
+        .item('Menu Option 3')
+
+        const c = new CliMenuComponent('fooMenu',m)
         expect(c).toBeTruthy()
     })
 
     it('should run', async () => {
-        const c = new CliMenuComponent('fooMenu',[
-            { label: 'Menu Option 1' },
-            { label: 'Menu Option 2' },
-            { label: 'Menu Option 3' }
-        ])
+        const m = new Menu()
+        .item('Menu Option 1')
+        .item('Menu Option 2')
+        .item('Menu Option 3')
+
+        const c = new CliMenuComponent('fooMenu',m)
         const response = await c.run()
         console.log( 'Selected', response )
     })
