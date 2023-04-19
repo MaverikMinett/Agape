@@ -114,33 +114,6 @@ export class Cli {
         return this
     }
 
-
-    // menu( menu: Menu ): this
-    // menu<T extends CliMenuItem>( choices: T[] ): this
-    // menu<T extends CliMenuItem>( name: string, choices: T[] ): this
-    // menu<T extends CliMenuItem>( ...args:any[] ) {
-    //     let choices: T[]
-    //     let name: string
-
-    //     if ( args.length === 1 ) {
-    //         choices = args[0]
-    //         name = " "
-    //     }
-    //     else {
-    //         [ name, choices ] = args
-    //     }
-
-    //     const component = new CliMenuComponent(name, choices)
-    //     this.components.push( component )
-    //     return this
-    // }
-
-    navmenu( title: string, choices: CliNavMenuChoice[] ) {
-        const component = new CliNavMenuComponent(title, choices)
-        this.components.push( component )
-        return this
-    }
-
     message( text: string ) {
 
         if ( text !== undefined) {
