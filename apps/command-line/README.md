@@ -1,6 +1,6 @@
 # Command Line Application
 
-A command line application using enquirer, figlet, chalk
+A command line application
 
 
 ## Author

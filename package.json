@@ -31,15 +31,15 @@
     "@angular/platform-browser-dynamic": "~15.1.0",
     "@angular/router": "~15.1.0",
     "axios": "^1.0.0",
-    "chalk": "^5.2.0",
     "clear": "^0.1.0",
     "core-js": "^3.6.5",
-    "enquirer": "^2.3.6",
     "figlet": "^1.5.2",
     "regenerator-runtime": "0.13.7",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.4",
+    "express": "^4.18.1",
+    "http": "0.0.1-security"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~15.1.0",
@@ -75,8 +75,6 @@
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
-    "express": "^4.18.1",
-    "http": "0.0.1-security",
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",
     "jest-preset-angular": "~12.2.3",
