@@ -14,6 +14,22 @@
         "assets": ["libs/agape/cli/*.md"]
       }
     },
+    "demo-build": {
+      "executor": "@nrwl/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/agape/cli",
+        "format": ["cjs"],
+        "main": "libs/agape/cli/src/demo.setup.ts",
+        "tsConfig": "libs/agape/cli/tsconfig.lib.json"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "agape-cli:demo-build"
+      }
+    },
     "publish": {
       "executor": "nx:run-commands",
       "options": {

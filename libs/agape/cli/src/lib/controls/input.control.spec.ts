@@ -1,10 +1,9 @@
 
-import { Menu } from '@lib/menu'
-import { CliMenuControl } from './menu.control'
+import { CliInputControl } from './input.control'
 
-describe('CliMenuControl', () => {
+describe('CliInputControl', () => {
 
-    let c: CliMenuControl
+    let c: CliInputControl
 
     beforeEach( () => {
         c = undefined
@@ -15,8 +14,7 @@ describe('CliMenuControl', () => {
         })
     })
     it('should instantiate', () => {
-        const m = new Menu()
-        c = new CliMenuControl(m)
+        c = new CliInputControl()
         expect(c).toBeTruthy()
     })
 
