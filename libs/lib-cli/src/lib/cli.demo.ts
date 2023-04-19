@@ -41,7 +41,7 @@ describe('Cli', 'interactive', () => {
         })
     })
     describe('form', () => {
-        fit('should run the component', async () => {
+        it('should run the component', async () => {
             const form = new FormGroup().string('foo')
             const cli = new Cli()
             cli.form(form)

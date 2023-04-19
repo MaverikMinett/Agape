@@ -75,8 +75,8 @@ export class Cli {
         return this
     }
 
-    form( form: FormGroup ) 
-    form( name: string, form: FormGroup ) 
+    form( form: FormGroup ): this
+    form( name: string, form: FormGroup ): this
     form( ...args: any[]) {
         let form: FormGroup
         let name: string
@@ -94,7 +94,20 @@ export class Cli {
         return this
     }
 
-    menu<T extends CliMenuItem>( name: string, choices: T[] ) {
+    menu<T extends CliMenuItem>( choices: T[] ): this
+    menu<T extends CliMenuItem>( name: string, choices: T[] ): this
+    menu<T extends CliMenuItem>( ...args:any[] ) {
+        let choices: T[]
+        let name: string
+
+        if ( args.length === 1 ) {
+            choices = args[0]
+            name = " "
+        }
+        else {
+            [ name, choices ] = args
+        }
+
         const component = new CliMenuComponent(name, choices)
         this.components.push( component )
         return this
@@ -156,7 +169,6 @@ export class Cli {
         
     }
 }
-
 
 
 export const cli = new Cli()

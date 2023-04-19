@@ -21,5 +21,6 @@ import './lib/controls/menu.control.demo'
 import './lib/elements/paragraph.element.demo'
 
 import './lib/cli.demo'
+import './lib/clip.demo'
 
 runtests()

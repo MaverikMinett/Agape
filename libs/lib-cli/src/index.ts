@@ -17,6 +17,7 @@ export * from './lib/components/messages.component'
 
 
 import cli from './lib/cli';
-export { cli };
+import { clip } from './lib/clip';
+export { cli, clip };
 export default cli;
 

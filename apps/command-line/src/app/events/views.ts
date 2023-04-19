@@ -1,7 +1,7 @@
 import { events, Event} from './model';
 import { deleteEvent, saveEvent } from './controllers';
 
-import { cli } from '@lib/cli';
+import { cli, clip } from '@lib/cli';
 import fb from '@lib/forms'
 import { executeController, navigateToView } from '../router';
 
@@ -29,18 +29,19 @@ export async function eventsIndex() {
  * Events list view
  */
 async function eventsListView(params: any, input: { message: string } ) {
-    cli.banner('Events List')
-    cli.message(input?.message)
-    cli.menu("Events List", [
+    clip.banner('Events List')
+    clip.message(input?.message)
+    clip.menu("Events List", [
         { label: "back", indicator: "❰", back: true },
         ...events.map( event =>  {  return { event, label: event.name } })
     ])
-    const response = await cli.run(true)
 
-    if ( response['menu']['Events List'].back === true ) 
+    const response = await clip.run(true)
+
+    if ( response['menu'].back === true ) 
         return navigateToView(eventsIndex)
 
-    const event = response['menu']['Events List'].event
+    const event = response['menu'].event
     console.log(event)
     navigateToView(eventsItemView, {id: event.id})
 }
@@ -67,10 +68,9 @@ async function eventsItemView( params?: { id: string }, input?: any ) {
 
     const response = await cli.run(true)
 
-    if ( response['menu']['action'].back )
-        return navigateToView(eventsListView)
+    if ( response['menu'].back ) return navigateToView(eventsListView)
 
-    const action = response['menu']['action'].action
+    const action = response['menu'].action
     if ( action === 'edit-event' ) {
         return navigateToView(eventsEditView, { id: event.id})
     }
@@ -89,7 +89,7 @@ async function eventsEditView( params?: { item: Event } ) {
     let { item } = params ?? {}
     item ?? ( item = { name: '' } )
 
-    const form = fb.string('name').string('description').value(item)
+    const form = fb.string('name').string('description').setValue(item)
 
     cli.banner( item?.id ? 'Edit Event' : 'Create Event' )
     cli.form( form )
@@ -97,7 +97,7 @@ async function eventsEditView( params?: { item: Event } ) {
         { 
             label: "Save event", 
             controller: saveEvent, 
-            controllerParams: [{ ...item, ...form.value()}],
+            controllerParams: [{ ...item, ...form.value}],
             view: eventsListView
          },
         { 
