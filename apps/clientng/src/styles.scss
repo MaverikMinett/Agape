@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #e7e4e5;
+    margin: 0px;
+}
+
+/* default layout */
+body, .app-root {
+    display: flex;
+    flex-direction: column;
+}
+
+.page {
+    padding: 24px;
+}
+
+.app-root {
+    border: 1px solid black;
+}
