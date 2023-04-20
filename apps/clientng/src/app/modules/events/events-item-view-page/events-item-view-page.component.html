@@ -2,21 +2,23 @@
 <div *ngIf="requestLoading">Loading...</div>
 
 <div *ngIf="! requestLoading">
-    <div class="card">
-        <div class="card-header">
-            <div class="card-title">
-                {{ event?.name }}
+
+    <div class="layout">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    {{ event?.name }}
+                </div>
             </div>
-        </div>
-    
-        <div class="card-body">
-            
+        
+            <div class="card-body">
+                <a class="standalone" routerLink="/events/edit/{{event?.id}}">Edit Event</a>
+            </div>
         </div>
     </div>
     
-    <a routerLink="/events/edit/{{event?.id}}">Edit Event</a>
-    <br/>
-    <a routerLink="/events/list">&lt; Back to Events List</a>    
-
+    <div class="footer-actions">
+        <a class="standalone" routerLink="/events/list">← Back to Events List</a>    
+    </div>    
 </div>
 

@@ -1,25 +1,93 @@
 /* You can add global styles to this file, and also import other style files */
 
-
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    background-color: #e7e4e5;
-    margin: 0px;
+  font-family: Inter var,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";
+  font-feature-settings: "cv02","cv03","cv04","cv11";
+  font-size: 18px;
+  line-height: 1.33;
+  background-color: #e7e4e5;
+  margin: 0px;
 }
 
+a {
+  text-decoration: none;
+  color: rgba(0,0,0,.88)
+}
+a:hover {
+  color: #0245f2;
+}
+a:vistited {
+  color: rgba(0,0,0,.88)
+}
+
+:root {
+  --card-padding: 36px;
+}
 /* default layout */
-body, .app-root {
-    display: flex;
-    flex-direction: column;
+body,
+.app-root {
+  display: flex;
+  flex-direction: column;
 }
 
 .page {
-    padding: 24px;
+  padding: 24px;
+}
+.card {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #fff;
+  padding: var(--card-padding);
+}
+.card-header {
+}
+.card-title {
+  font-size: 16px;
+  grid-area: title;
+  font-size: 32px;
+  line-height: 1.25;
+  font-weight: bold;
+  margin-bottom: 24px;
+
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
 }
 
-.app-root {
-    border: 1px solid black;
+ul {
+  list-style-type: none;
+  padding: 16px 24px;
+}
+
+li {
+  margin-top: 16px;
+  padding-bottom: 16px;
+}
+
+.btn {
+  border-radius: 24px;
+  height: 48px;
+  display: inline-block;
+  border: 1px solid white;
+  padding: 0px 32px;
+  line-height: 48px;
+  color: white;
+}
+
+.btn.blue {
+  border-color: #0245f2;
+  color: #0245f2;
+}
+
+a.standalone {
+  color: #005bd7;
+}
+
+.layout {
+  margin-bottom: 24px;
 }
