@@ -1,0 +1,42 @@
+
+
+
+<div *ngIf="requestLoading">Loading...</div>
+
+<div *ngIf="! requestLoading">
+
+    <div class="card" *ngIf="! requestLoading">
+        <div class="card-header">
+            <div class="card-title">
+                {{ event?.name }}
+            </div>
+        </div>
+    
+        <div class="card-body">
+            <form #form="ngForm">
+                <div class="form-control">
+                    <div class="form-control-label">
+                        <label>Name*</label>
+                    </div>
+                    <div class="form-control-element">
+                        <input 
+                            type="text"
+                            name="name"
+                            required="true"
+                            [(ngModel)]="event.name"
+                            required>
+                    </div>
+                </div>
+                <div class="actions-area">
+                    <button 
+                    type="button" 
+                    (click)="submit()" 
+                    [disabled]="this.transactionLoading">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <a href="/events/view/{{event?.id}}">View Event</a>    
+</div>
+
