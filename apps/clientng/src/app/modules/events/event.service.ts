@@ -4,7 +4,7 @@ import { Event, events } from './events.model'
 
 import { v4 } from 'uuid'
 
-import { Observable, of, delay } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({ providedIn: 'root'})
 export class EventService {
@@ -21,13 +21,13 @@ export class EventService {
     create(item: Event) {
         item.id = v4()
         events.push(item)
-        return of(undefined).pipe( delay(500) )
+        return of(undefined)
     }
 
     retrieve(id: string): Observable<Event> {
         const event = events.find( event => event.id === id)
         const copy = JSON.parse(JSON.stringify(event))
-        return of(copy).pipe( delay(1500) )
+        return of(copy)
     }
 
     update(id: string, item: Event) {
