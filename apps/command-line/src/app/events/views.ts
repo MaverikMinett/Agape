@@ -3,7 +3,7 @@ import { deleteEvent, saveEvent } from './controllers';
 
 import { cli } from '@agape/cli';
 import fb from '@agape/forms'
-import { Menu } from '@lib/menu'
+import { Menu } from '@agape/menu'
 import { executeControllerAndNavigate, navigateToView } from '../router';
 
 /**
