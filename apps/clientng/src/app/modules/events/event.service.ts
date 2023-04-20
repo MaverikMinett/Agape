@@ -24,7 +24,7 @@ export class EventService {
         return of()
     }
 
-    retreive(id: string): Observable<Event> {
+    retrieve(id: string): Observable<Event> {
         const event = events.find( event => event.id === id)
         const copy = JSON.parse(JSON.stringify(event))
         return of(copy)

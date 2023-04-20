@@ -9,8 +9,13 @@
 
     <div class="card-body">
         <ul>
-            <li *ngFor="let event of events">{{event.name}}</li>
+            <li *ngFor="let event of events">
+                <a href="/events/view/{{event.id}}">
+                {{event.name}}
+                </a>
+            </li>
         </ul>
     </div>
 </div>
 
+<a href="/events">&lt; Back to Events Index</a>

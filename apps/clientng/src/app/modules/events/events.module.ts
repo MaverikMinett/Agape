@@ -5,6 +5,7 @@ import { eventsRoutes } from "./events.routes";
 import { EventsMenuComponent } from "./events-menu/events-menu.component";
 import { EventsIndexPageComponent } from "./events-index-page/events-index-page.component";
 import { EventsListViewPageComponent } from "./events-list-view-page/events-list-view-page.component";
+import { EventsItemViewPageComponent } from "./events-item-view-page/events-item-view-page.component";
 
 
 
@@ -16,6 +17,7 @@ import { EventsListViewPageComponent } from "./events-list-view-page/events-list
         EventsIndexPageComponent,
         EventsMenuComponent,
         EventsListViewPageComponent,
+        EventsItemViewPageComponent,
      ],
     imports: [
         CommonModule,
