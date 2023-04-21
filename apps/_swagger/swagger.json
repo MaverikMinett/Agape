@@ -51,7 +51,19 @@
                 "tags": ["Events"],
                 "responses": {
                     "201": {
-                        "description": "Ok"
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 "requestBody": {
