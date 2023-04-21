@@ -91,3 +91,28 @@ a.standalone {
 .layout {
   margin-bottom: 24px;
 }
+
+.form-control {
+  width: 100%;
+}
+.form-control-label {
+  margin-bottom: 8px;
+}
+.form-control-element > input {
+  width: 100%;
+}
+
+input {
+  font-size: 18px;
+  padding: 8px;
+}
+
+button {
+  font-size: 18px;
+  padding: 8px 16px;
+}
+
+form .action-area {
+  padding: 24px 0px;
+  direction: rtl;
+}

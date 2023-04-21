@@ -14,21 +14,21 @@
             </div>
         
             <div class="card-body">
-                <form #form="ngForm">
-                    <div class="form-control">
+                <form #htmlForm="ngForm">
+                    <div class="form-control" *ngFor="let field of form.fields">
                         <div class="form-control-label">
-                            <label>Name*</label>
+                            <label>{{field.label}}*</label>
                         </div>
                         <div class="form-control-element">
                             <input 
                                 type="text"
-                                name="name"
+                                [name]="field.name"
                                 required="true"
                                 [(ngModel)]="event.name"
                                 required>
                         </div>
                     </div>
-                    <div class="actions-area">
+                    <div class="action-area">
                         <button 
                         type="button" 
                         (click)="submit()" 

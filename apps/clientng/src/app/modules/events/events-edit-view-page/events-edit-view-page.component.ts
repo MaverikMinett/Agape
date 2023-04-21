@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 
 import { finalize } from 'rxjs';
 
+import fb, { FormGroup } from '@agape/forms'
+
 @Component({
     selector: 'app-events-edit-view-page',
     templateUrl: './events-edit-view-page.component.html',
@@ -18,12 +20,14 @@ export class EventsEditViewPageComponent {
     requestLoading: boolean = false
     transactionLoading: boolean = false
 
+    form: FormGroup
+
     constructor( 
         public service: EventService,
         public route: ActivatedRoute,
         public router: Router
          ) {
-
+        this.form = fb.string('name')
     }
 
     ngOnInit() {
