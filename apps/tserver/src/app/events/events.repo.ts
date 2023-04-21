@@ -2,7 +2,6 @@
 import db from '../../db'
 import { ObjectId } from 'mongodb'
 import { IEvent } from './event.interface'
-import { MongoDocument } from '../../types'
 import { documentFrom } from '../../lib/mongo-helper'
 
 export async function listEvents() {
@@ -43,7 +42,9 @@ export async function retrieveEvent( id: string ) {
                 }
             }
         )
-
+    if ( ! event ) {
+        throw new Error(`Could not find event with id $id, record not found`)
+    }
     return event
 }
 
@@ -55,7 +56,7 @@ export async function updateEvent( id: string, event: IEvent ) {
     const _id = new ObjectId(id)
     const _event = documentFrom(event)
 
-    await db()
+    const result = await db()
         .collection('events')
         .updateOne(
             { _id },
@@ -63,13 +64,28 @@ export async function updateEvent( id: string, event: IEvent ) {
                 $set: _event
             }
         )
+
+    if ( result.matchedCount === 0 ) {
+        throw new Error(`Could not update event with id $id, record not found`)
+    }
+    if ( result.acknowledged === false ) {
+        // throw new unkown error
+    }
 }
 
 export async function deleteEvent( id: string ) {
 
     const _id = new ObjectId(id)
 
-    await db()
+    const result = await db()
         .collection('events')
         .deleteOne({ _id })
+
+    if ( result.deletedCount === 0 ) {
+        throw new Error(`Could not delete event with id $id, record not found`)
+    }    
+    if ( result.acknowledged === false ) {
+        // throw new unkown error
+    }
+
 }
