@@ -102,7 +102,14 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Event"
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Event"
+                                }
+                            }
+                        }
                     }
                 }
             },
