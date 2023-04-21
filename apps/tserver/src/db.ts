@@ -6,14 +6,18 @@ const client = new MongoClient(url)
 
 const dbName = 'zed'
 
-let db: Db
+let _db: Db
 
-async function connect() {
+export async function connect() {
 
     await client.connect()
-    
-    db = client.db(dbName)
+
+    _db = client.db('zed')
+}
+
+export function db() {
+    return _db
 }
 
 export default db;
-export { connect, db };
+
