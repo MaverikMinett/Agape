@@ -12,6 +12,10 @@ const app = express();
 /* logging */
 if ( verbose ) app.use( log )
 
+/* json */
+app.use( express.json() )
+app.use( express.urlencoded({ extended: true }))
+
 /* application routes */
 app.use('/api', router )
 

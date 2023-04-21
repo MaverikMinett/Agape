@@ -1,5 +1,5 @@
 
-import { listEvents, retrieveEvent } from './events.repo'
+import { listEvents, createEvent, retrieveEvent } from './events.repo'
 
 export async function getEvents() {
     return await listEvents()
@@ -7,4 +7,8 @@ export async function getEvents() {
 
 export async function getEvent({ id }) {
     return await retrieveEvent(id)
+}
+
+export async function newEvent({payload}) {
+    return await createEvent(payload)
 }
