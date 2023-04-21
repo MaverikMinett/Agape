@@ -64,3 +64,12 @@ export async function updateEvent( id: string, event: IEvent ) {
             }
         )
 }
+
+export async function deleteEvent( id: string ) {
+
+    const _id = new ObjectId(id)
+
+    await db()
+        .collection('events')
+        .deleteOne({ _id })
+}
