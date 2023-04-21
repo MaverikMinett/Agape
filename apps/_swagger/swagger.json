@@ -38,19 +38,28 @@
     "paths": {
         "/events": {
             "get": {
-                "summary": "Get all events",
-                "tags": ["events"],
+                "summary": "List all events",
+                "tags": ["Events"],
                 "responses": {
                     "200": {
-                        "description": "Events"
+                        "description": "Event"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create new event",
+                "tags": ["Events"],
+                "responses": {
+                    "201": {
+                        "description": "Ok"
                     }
                 }
             }
         },
         "/events/{id}": {
             "get": {
-                "Summary": "Get a single event",
-                "tags": ["events"],
+                "summary": "Retrieve an event",
+                "tags": ["Events"],
                 "parameters": [
                     {
                         "in": "path",
@@ -61,6 +70,38 @@
                 "responses": {
                     "200": {
                         "description": "Event"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update an event",
+                "tags": ["Events"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": "true"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete an event",
+                "tags": ["Events"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": "true"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
                     }
                 }
             }
