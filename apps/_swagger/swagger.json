@@ -31,7 +31,7 @@
     ],
     "tags": [
         {
-            "name": "events",
+            "name": "Events",
             "description": "Events module"
         }
     ],
@@ -65,7 +65,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Event"
+                                "$ref": "#/components/schemas/OmitId<Event>"
                             }
                         }
                     }
@@ -121,7 +121,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Event"
+                                "$ref": "#/components/schemas/OmitId<Event>"
                             }
                         }
                     }
@@ -166,6 +166,15 @@
                     "id": {
                         "type": "string"
                     },
+                    "name": {
+                        "type": "string",
+                        "example": "An Interesting Event"
+                    }
+                }
+            },
+            "OmitId<Event>": {
+                "type": "object",
+                "properties": {
                     "name": {
                         "type": "string",
                         "example": "An Interesting Event"
