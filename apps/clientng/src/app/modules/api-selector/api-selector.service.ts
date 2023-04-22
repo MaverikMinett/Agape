@@ -12,13 +12,19 @@ export class ApiSelectorService {
 
     private subject: BehaviorSubject<ApiDefinition>
 
-    constructor( public environment: Environment ) {
-        const defaultApi = environment.get('apis')[0]
-        this.subject = new BehaviorSubject<ApiDefinition>(defaultApi)
+    constructor( private environment: Environment ) {
+        const index = localStorage.getItem('selectedApi') 
+            ? Number(localStorage.getItem('selectedApi'))
+            : 0
+
+        const selected = environment.get('apis')[index]
+        this.subject = new BehaviorSubject<ApiDefinition>(selected)
     }
 
     select( api: ApiDefinition ) {
         this.subject.next(api)
+        const index = this.environment.get('apis').indexOf(api)
+        localStorage.setItem('selectedApi', index)
     }
 
     selected( ) {
