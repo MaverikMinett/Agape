@@ -20,10 +20,10 @@
       "@agape/forms": ["libs/agape/forms/src/index.ts"],
       "@agape/menu": ["libs/agape/menu/src/index.ts"],
       "@agape/terminal": ["libs/agape/terminal/src/index.ts"],
+      "@lib/api": ["libs/lib-api/src/index.ts"],
       "@lib/express": ["libs/lib-express/src/index.ts"],
       "@lib/server": ["libs/lib-server/src/index.ts"],
-      "@lib/types": ["libs/lib-types/src/index.ts"],
-      "@zed/api": ["libs/lib-api/src/index.ts"]
+      "@lib/types": ["libs/lib-types/src/index.ts"]
     },
     "outDir": "dist",
     "esModuleInterop": true
