@@ -1,5 +1,5 @@
 {
-  "name": "@zed/api",
+  "name": "@lib/api",
   "version": "0.0.1",
   "type": "commonjs"
 }
