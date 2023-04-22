@@ -17,10 +17,7 @@ export class EventService {
         private http: HttpClient
         ) {
             this.apiSelector.selected().subscribe(
-                (api) => {
-                    console.log("Selected API CHanged")
-                    this.apiUrl = api.url
-                }
+                api => this.apiUrl = api.url
             )
     }
 
@@ -35,9 +32,7 @@ export class EventService {
     }
 
     retrieve(id: string): Observable<Event> {
-        const event = events.find( event => event.id === id)
-        const copy = JSON.parse(JSON.stringify(event))
-        return of(copy)
+        return this.http.get<Event>( `${this.apiUrl}/events/${id}` )
     }
 
     update(id: string, item: Event) {
