@@ -3,7 +3,7 @@ import { Event } from '../events.model'
 import { EventService } from '../event.service'
 import { ActivatedRoute, Router } from "@angular/router";
 
-import { finalize } from 'rxjs';
+import { Observable, finalize } from 'rxjs';
 
 import fb, { FormGroup } from '@agape/forms'
 
@@ -31,13 +31,12 @@ export class EventsEditViewPageComponent {
     }
 
     ngOnInit() {
-        this.requestLoading = true
-
         this.route.params
             .subscribe(
                 (params) => {
                     this.id = params['id']
-                    this.retrieveEvent( this.id )
+                    if ( this.id ) this.retrieveEvent( this.id )
+                    else this.event = { name: '' }
                 }
             )
     }
@@ -58,19 +57,32 @@ export class EventsEditViewPageComponent {
 
     submit() {
         this.transactionLoading = false
-        this.service.update(this.id, this.event)
-        .subscribe({
-            next: () => {
-                console.log("Success")
-                this.transactionLoading = false
-                this.router.navigate([`/events/view/${this.id}`])
-            },
-            error: (error) => {
-                console.log("Error")
-                this.transactionLoading = false
-                console.error(error)
-            }
-        })
+
+        if ( this.event.id ) {
+            this.service.update(this.id, this.event).subscribe({
+                next: () => {
+                    this.transactionLoading = false
+                    this.router.navigate([`/events/view/${this.id}`])
+                },
+                error: (error) => {
+                    this.transactionLoading = false
+                    console.error(error)
+                }
+            })
+        }
+        else {
+            this.service.create(this.event).subscribe({
+                next: ( result ) => {
+                    this.transactionLoading = false
+                    this.router.navigate([`/events/view/${result.id}`])
+                },
+                error: (error) => {
+                    this.transactionLoading = false
+                    console.error(error)
+                }
+            })
+        }
+
     }
     
 }

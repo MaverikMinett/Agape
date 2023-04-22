@@ -7,6 +7,7 @@ import { EventsEditViewPageComponent } from './events-edit-view-page/events-edit
 export const eventsRoutes: Route[] = [
     { path: 'events', component: EventsIndexPageComponent },
     { path: 'events/list', component: EventsListViewPageComponent },
+    { path: 'events/create', component: EventsEditViewPageComponent },
     { path: 'events/view/:id', component: EventsItemViewPageComponent },
     { path: 'events/edit/:id', component: EventsEditViewPageComponent },
 ];

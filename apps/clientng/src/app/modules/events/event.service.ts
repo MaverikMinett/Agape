@@ -26,9 +26,7 @@ export class EventService {
     }
 
     create(item: Event) {
-        item.id = v4()
-        events.push(item)
-        return of(undefined)
+        return this.http.post<{id: string}>( `${this.apiUrl}/events`, item )
     }
 
     retrieve(id: string): Observable<Event> {
@@ -36,14 +34,7 @@ export class EventService {
     }
 
     update(id: string, item: Event) {
-        const event = events.find( event => event.id === id )
-
-        if ( ! event ) 
-            throw new Error(`Could not find event with id ${id}`)
-        
-        const index = events.indexOf(event)
-        events.splice(index,1,item)
-        return of(undefined)
+        return this.http.put( `${this.apiUrl}/events/${id}`, item )
     }
 
     delete(id: string) {
