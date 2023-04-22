@@ -8,6 +8,7 @@ import { EventsModule } from './modules/events/events.module';
 import { EnvironmentModule } from './shared/environment/environment.module';
 
 import env from '../environments/environment';
+import { ApiSelectorModule } from './modules/api-selector/api-selector.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,6 +17,7 @@ import env from '../environments/environment';
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
     EnvironmentModule.forRoot(env),
     EventsModule,
+    ApiSelectorModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

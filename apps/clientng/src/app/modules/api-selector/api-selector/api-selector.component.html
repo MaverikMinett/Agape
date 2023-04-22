@@ -1,0 +1,11 @@
+<form #form="ngForm">
+    API
+    <select 
+    name="api"
+    (change)="onControlChange($event)"
+    [(ngModel)]="selected"
+    >
+        <option *ngFor="let item of apis" [value]="item">{{item.name}}</option>
+    </select>
+</form>
+
