@@ -2,7 +2,6 @@
 import db from '../../db'
 import { ObjectId } from 'mongodb'
 import { IEvent } from './event.interface'
-import { documentFrom } from '../../lib/mongo-helper'
 
 export async function listEvents() {
     const events = await db()
@@ -28,7 +27,14 @@ export async function createEvent( event: Omit<IEvent, 'id'> ) {
 }
 
 export async function retrieveEvent( id: string ) {
-    const _id = new ObjectId(id)
+    let _id: ObjectId
+    try {
+        _id = new ObjectId(id)
+    }
+    catch {
+        throw new Error("Record not found")
+    }
+    
 
     const event = await db()
         .collection('events')
@@ -49,19 +55,25 @@ export async function retrieveEvent( id: string ) {
 }
 
 export async function updateEvent( id: string, event: IEvent ) {
-    if ( id !== event.id ) {
-        throw new Error("Cannot change the ID of a record. Not permitted.")
-    }
+    // if ( id !== event.id ) {
+    //     throw new Error("Cannot change the ID of a record. Not permitted.")
+    // }
 
-    const _id = new ObjectId(id)
-    const _event = documentFrom(event)
+    let _id: ObjectId
+    try {
+        _id = new ObjectId(id)
+    }
+    catch {
+        throw new Error("Record not found")
+    }
+    // const _event = documentFrom(event)
 
     const result = await db()
         .collection('events')
         .updateOne(
             { _id },
             {
-                $set: _event
+                $set: event
             }
         )
 
@@ -75,7 +87,13 @@ export async function updateEvent( id: string, event: IEvent ) {
 
 export async function deleteEvent( id: string ) {
 
-    const _id = new ObjectId(id)
+    let _id: ObjectId
+    try {
+        _id = new ObjectId(id)
+    }
+    catch {
+        throw new Error("Record not found")
+    }
 
     const result = await db()
         .collection('events')
