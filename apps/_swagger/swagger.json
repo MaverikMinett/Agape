@@ -93,7 +93,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/OmitId<Event>"
+                                "$ref": "#/components/schemas/Event"
                             }
                         }
                     }
@@ -149,7 +149,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/OmitId<Event>"
+                                "$ref": "#/components/schemas/Event"
                             }
                         }
                     }
@@ -194,15 +194,6 @@
                     "id": {
                         "type": "string"
                     },
-                    "name": {
-                        "type": "string",
-                        "example": "An Interesting Event"
-                    }
-                }
-            },
-            "OmitId<Event>": {
-                "type": "object",
-                "properties": {
                     "name": {
                         "type": "string",
                         "example": "An Interesting Event"
