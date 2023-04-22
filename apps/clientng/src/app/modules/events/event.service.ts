@@ -38,14 +38,7 @@ export class EventService {
     }
 
     delete(id: string) {
-        const event = events.find( event => event.id === id )
-
-        if ( ! event ) 
-            throw new Error(`Could not find event with id ${id}`)
-        
-        const index = events.indexOf(event)
-        events.splice(index,1)
-        return of()
+        return this.http.delete<Event>( `${this.apiUrl}/events/${id}` )
     }
 
 }

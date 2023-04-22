@@ -15,7 +15,7 @@ body {
 
 a {
   text-decoration: none;
-  color: rgba(0,0,0,.88)
+  color: rgba(0,0,0,.88);
 }
 a:hover {
   color: #0245f2;
@@ -86,8 +86,20 @@ li {
   color: #0245f2;
 }
 
-a.standalone {
+a.standalone,
+.card-actions a {
   color: #005bd7;
+  transition: color .6s ease-in-out;
+}
+
+a.standalone:hover,
+.card-actions a:hover {
+  color: #0245f2;
+  cursor: pointer;
+}
+
+.card-actions a:not(:last-of-type) {
+  margin-right: 24px;
 }
 
 .layout {

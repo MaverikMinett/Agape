@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Event } from '../events.model'
 import { EventService } from '../event.service'
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 
 
@@ -16,11 +16,12 @@ export class EventsItemViewPageComponent {
     event: Event
 
     requestLoading: boolean
-
+    deleteTransactionLoading: boolean
 
     constructor( 
         public service: EventService,
-        public route: ActivatedRoute
+        public route: ActivatedRoute,
+        public router: Router
          ) {
 
     }
@@ -42,6 +43,20 @@ export class EventsItemViewPageComponent {
         this.service.retrieve(id).subscribe({
             next: (event) => {
                 this.event = event
+                this.requestLoading = false
+            },
+            error: (error) => {
+                this.requestLoading = false
+                console.error(error)
+            }
+        })
+    }
+
+    deleteEvent( id: string ) {
+        this.deleteTransactionLoading = true
+        this.service.delete(id).subscribe({
+            next: () => {
+                this.router.navigate(['/events/list'])
                 this.requestLoading = false
             },
             error: (error) => {

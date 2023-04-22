@@ -10,9 +10,13 @@
                     {{ event?.name }}
                 </div>
             </div>
+
+            <div class="card-actions">
+                <a routerLink="/events/edit/{{event?.id}}">Edit Event</a>
+                <a (click)="deleteEvent(event.id)">Delete Event</a>
+            </div>
         
             <div class="card-body">
-                <a class="standalone" routerLink="/events/edit/{{event?.id}}">Edit Event</a>
             </div>
         </div>
     </div>
