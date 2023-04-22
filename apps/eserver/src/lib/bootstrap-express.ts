@@ -3,7 +3,6 @@ import { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 
 import { Api } from "./api"
 import { Controller } from "./decorators"
-import { FooModule } from "../app/api/foo/foo.module"
 
 import { ActionDescriptor } from "./descriptors"
 import { Class } from "@lib/types"
@@ -20,7 +19,6 @@ export function routeTo( controllerInstance: any, actionDescriptor: ActionDescri
 }
 
 export function bootstrap( router: ExpressRouter, module: Class ) {
-    router.get('/ping', ( req, res ) => res.send( { message: 'pong'} ) )
 
     const api = new Api()
     api.registerModule(module)

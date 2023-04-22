@@ -7,9 +7,7 @@ const router = Router()
 
 router.use('/', express.static('./apps/_swagger') )
 
-// router.get('/ping', ( req, res ) => res.send( ping() ) )
-
-
+router.get('/ping', ( req, res ) => res.send( { message: 'pong' } ) )
 
 bootstrap(router, FooModule)
 
