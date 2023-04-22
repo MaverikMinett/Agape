@@ -18,6 +18,7 @@ eventsRouter.get( '/events',
 )
 
 const createEventValidationSchema = Joi.object({
+    id: Joi.string(),
     name: Joi.string().required()
 })
 
@@ -44,6 +45,7 @@ eventsRouter.delete( '/events/:id',
 )
 
 const updateEventValidationSchema = Joi.object({
+    id: Joi.string(),
     name: Joi.string().required()
 })
 
