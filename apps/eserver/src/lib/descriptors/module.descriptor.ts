@@ -14,11 +14,12 @@ export class ModuleDescriptor extends AspectDescriptor {
     // modules: ModuleDescriptor[] = []
 
     getControllers() {
-        const controllers = [...this.controllers]
+        const controllers = this.controllers ? [...this.controllers] : []
 
         if ( this.modules ) {
             for ( let module of this.modules ) {
-                const descriptor: ModuleDescriptor = Reflect.getMetadata( "api:module:descriptor", module ) 
+
+                const descriptor: ModuleDescriptor = Reflect.getMetadata( "api:module:descriptor", module.prototype ) 
                 controllers.push( ...descriptor.getControllers() )
             }
         }

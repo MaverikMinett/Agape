@@ -6,13 +6,22 @@ import { Controller } from "./decorators"
 
 import { ActionDescriptor } from "./descriptors"
 import { Class } from "@lib/types"
+import { ApiRequest } from "./api-request"
+import { ApiResponse } from "./api-response"
 
 export function routeTo( controllerInstance: any, actionDescriptor: ActionDescriptor ) {
 
     const method = controllerInstance[actionDescriptor.name]
 
     return async function (req: ExpressRequest, res: ExpressResponse ) {
-        const content = await method.call(controllerInstance)
+        const apiRequest = new ApiRequest()
+        const apiResponse = new ApiResponse()
+
+        // this is where disposable service action needs to happen
+        // methods should be called through the api app context so
+        // that disposable services can be injected into the controller
+        // method
+        const content = await method.call(controllerInstance, apiRequest, apiResponse)
         res.send( content )
     }
 
