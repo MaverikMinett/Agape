@@ -1,13 +1,15 @@
 import cors from 'cors';
-import express from 'express';
+import express, { Application, Router } from 'express';
 import { log, proxy } from '@lib/express';
 
 import router from './app/app.routes'
 
+import { main } from './app';
+
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 const verbose = true;
 
-const app = express();
+const app: Application = express();
 
 /* logging */
 if ( verbose ) app.use( log )
@@ -22,6 +24,8 @@ app.use( cors({origin: '*'}) )
 /* application routes */
 app.use('/api', router )
 
+
+
 /* show common index.html */
 app.use(express.static('./apps/_common') )
 
@@ -35,6 +39,8 @@ app.use(['/zed', '/zed/*'], proxy('http://localhost:4201') )
 app.use('*', (req, res) => {
   res.send('404 Page not found')
 })
+
+// main(app)
 
 app.listen(port, () => {
   console.log(`Express (with libs) started at http://localhost:${port}`);
