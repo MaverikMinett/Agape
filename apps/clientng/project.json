@@ -33,6 +33,12 @@
               "maximumError": "4kb"
             }
           ],
+          "fileReplacements": [
+            {
+              "replace": "apps/clientng/src/enironments/environment.ts",
+              "with": "apps/clientng/src/enironments/environment.prod.ts"
+            }
+          ],
           "outputHashing": "all"
         },
         "development": {
