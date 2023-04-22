@@ -15,6 +15,11 @@ export function routeTo( controllerInstance: any, actionDescriptor: ActionDescri
 
     return async function (req: ExpressRequest, res: ExpressResponse ) {
         const apiRequest = new ApiRequest()
+        apiRequest.params = req.params
+        apiRequest.body   = req.body
+        apiRequest.query  = req.query
+
+
         const apiResponse = new ApiResponse()
 
         // this is where disposable service action needs to happen

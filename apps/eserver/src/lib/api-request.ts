@@ -10,7 +10,7 @@ export class ApiRequest {
 
     params: Dictionary
 
-    queryParams: Dictionary
+    query: Dictionary
 
     route: string[]
 
