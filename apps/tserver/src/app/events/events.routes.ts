@@ -48,7 +48,7 @@ const updateEventValidationSchema = Joi.object({
 })
 
 eventsRouter.put( '/events/:id', 
-returnResponse( async ({request}) => {
+    returnResponse( async ({request}) => {
 
         const id = request.params.id
         const payload: IEvent = request.body
