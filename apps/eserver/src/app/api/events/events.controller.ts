@@ -1,6 +1,4 @@
-import { ApiRequest } from "apps/eserver/src/lib/api-request";
-import { ApiResponse } from "apps/eserver/src/lib/api-response";
-import { Controller, Delete, Get, Post, Put } from "apps/eserver/src/lib/decorators";
+import { Controller, Delete, Get, Post, Put, ApiRequest, ApiResponse } from "@lib/api";
 
 import { events } from './events.model'
 

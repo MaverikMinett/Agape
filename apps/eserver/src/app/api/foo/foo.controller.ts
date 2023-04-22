@@ -1,7 +1,5 @@
-import { Controller, Get } from "apps/eserver/src/lib/decorators";
+import { Controller, Get, ApiRequest, ApiResponse } from "@lib/api";
 
-import { ApiRequest } from "apps/eserver/src/lib/api-request";
-import { ApiResponse } from "apps/eserver/src/lib/api-response";
 
 
 @Controller({})

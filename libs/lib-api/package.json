@@ -1,5 +1,8 @@
 {
   "name": "@lib/api",
   "version": "0.0.1",
-  "type": "commonjs"
+  "type": "commonjs",
+  "peerDependencies": {
+    "express": "^4.18.1"
+  }
 }

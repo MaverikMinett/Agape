@@ -1,4 +1,4 @@
-import { Module } from "apps/eserver/src/lib/decorators";
+import { Module } from "@lib/api";
 import { FooController } from "./foo.controller";
 
 

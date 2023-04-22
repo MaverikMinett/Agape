@@ -4,8 +4,6 @@ import { log, proxy } from '@lib/express';
 
 import router from './app/app.routes'
 
-import { main } from './app';
-
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 const verbose = true;
 

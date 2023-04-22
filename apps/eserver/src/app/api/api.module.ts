@@ -1,4 +1,4 @@
-import { Module } from "apps/eserver/src/lib/decorators";
+import { Module } from "@lib/api";
 import { FooModule } from "./foo/foo.module";
 import { EventsModule } from "./events/events.module";
 

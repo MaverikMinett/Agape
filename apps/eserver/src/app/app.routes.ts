@@ -1,6 +1,5 @@
 import express, { Router } from 'express';
-import { bootstrap } from '../lib/bootstrap-express';
-import { FooModule } from './api/foo/foo.module';
+import { bootstrap } from '@lib/api';
 import { ApiModule } from './api/api.module';
 
 
