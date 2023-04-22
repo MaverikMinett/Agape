@@ -1,27 +1,29 @@
-import { Router } from "express"
+import { Router as ExpressRouter } from "express"
+import { Request as ExpressRequest, Response as ExpressResponse } from 'express'
+
 import { Api } from "./api"
 import { Controller } from "./decorators"
 import { FooModule } from "../app/api/foo/foo.module"
 
-import { Request, Response } from 'express'
 import { ActionDescriptor } from "./descriptors"
+import { Class } from "@lib/types"
 
 export function routeTo( controllerInstance: any, actionDescriptor: ActionDescriptor ) {
 
     const method = controllerInstance[actionDescriptor.name]
 
-    return async function (req: Request, res: Response ) {
+    return async function (req: ExpressRequest, res: ExpressResponse ) {
         const content = await method.call(controllerInstance)
         res.send( content )
     }
 
 }
 
-export function bootstrap( router: Router ) {
+export function bootstrap( router: ExpressRouter, module: Class ) {
     router.get('/ping', ( req, res ) => res.send( { message: 'pong'} ) )
 
     const api = new Api()
-    api.registerModule(FooModule)
+    api.registerModule(module)
 
     for ( const controller of api.controllers ) {
         const controllerDescriptor = Controller.descriptor(controller)
