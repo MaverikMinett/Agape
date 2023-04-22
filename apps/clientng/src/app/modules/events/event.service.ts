@@ -1,21 +1,31 @@
 import { Injectable } from "@angular/core";
-
+import { HttpClient } from '@angular/common/http'
 import { Event, events } from './events.model'
 
 import { v4 } from 'uuid'
 
 import { Observable, of } from 'rxjs';
+import { ApiSelectorService } from "../api-selector/api-selector.service";
 
 @Injectable({ providedIn: 'root'})
 export class EventService {
 
+    apiUrl: string
+
+    constructor( 
+        private apiSelector: ApiSelectorService,
+        private http: HttpClient
+        ) {
+            this.apiSelector.selected().subscribe(
+                (api) => {
+                    console.log("Selected API CHanged")
+                    this.apiUrl = api.url
+                }
+            )
+    }
+
     list(): Observable<Event[]> {
-        const immutable = []
-        for ( let event of events ) {
-            const copy = JSON.parse(JSON.stringify(event))
-            immutable.push(copy)
-        }
-        return of(immutable)
+        return this.http.get<Event[]>( `${this.apiUrl}/events` )
     }
 
     create(item: Event) {

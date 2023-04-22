@@ -8,6 +8,7 @@ import { EventsListViewPageComponent } from "./events-list-view-page/events-list
 import { EventsItemViewPageComponent } from "./events-item-view-page/events-item-view-page.component";
 import { FormsModule } from "@angular/forms";
 import { EventsEditViewPageComponent } from "./events-edit-view-page/events-edit-view-page.component";
+import { HttpClientModule } from "@angular/common/http";
 
 
 
@@ -24,6 +25,7 @@ import { EventsEditViewPageComponent } from "./events-edit-view-page/events-edit
      ],
     imports: [
         CommonModule,
+        HttpClientModule,
         FormsModule,
         RouterModule.forChild(eventsRoutes),
     ],
