@@ -31,11 +31,39 @@
     ],
     "tags": [
         {
+            "name": "Ping",
+            "description": "Sanity"
+        },
+        {
             "name": "Events",
             "description": "Events module"
         }
     ],
     "paths": {
+        "/ping": {
+            "get": {
+                "summary": "Pong",
+                "tags": ["Ping"],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "pong"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/events": {
             "get": {
                 "summary": "List all events",
