@@ -5,8 +5,8 @@ export class FooController {
 
 
     @Get('foo')
-    bar( request: Request, response: Response ) {
-
+    async bar( request: Request, response: Response ) {
+       return { message: "BARRRRRRGHHHH" }
     }
 
 }
