@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 import { log, proxy } from '@lib/express'
 
@@ -15,6 +16,9 @@ if ( verbose ) app.use( log )
 /* json */
 app.use( express.json() )
 app.use( express.urlencoded({ extended: true }))
+
+/* cors */
+app.use( cors({origin: '*'}) )
 
 /* application routes */
 app.use('/api', router )
