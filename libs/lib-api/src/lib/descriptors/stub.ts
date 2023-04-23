@@ -1,17 +1,17 @@
 
 import { ActionDescriptor } from './action';
-import { BackendDescriptor } from './backend';
+import { ServiceDescriptor } from './service';
 import { ControllerDescriptor } from './controller';
 import { AspectDescriptor } from './aspect.descriptor';
 
 import { include } from '@agape/object';
 /**
  * Provide a stub descriptor that property decorators can attach to during
- * class construction time; before the actual Backend or Controller descriptors
+ * class construction time; before the actual service or Controller descriptors
  * are available.
  */
-export interface StubDescriptor extends BackendDescriptor, ControllerDescriptor{ }
-@include(BackendDescriptor, ControllerDescriptor)
+export interface StubDescriptor extends ServiceDescriptor, ControllerDescriptor{ }
+@include(ServiceDescriptor, ControllerDescriptor)
 export class StubDescriptor {
 
     actions: Map<string, ActionDescriptor> = new Map()
@@ -38,9 +38,9 @@ export class StubDescriptor {
         Reflect.deleteMetadata("stub:descriptor", this.target)
     }
 
-    finalizeBackend( backend: BackendDescriptor ) {
+    finalizeService( service: ServiceDescriptor ) {
         for ( const [name, operation] of this.operations.entries() ) {
-            backend.operations.set(name, operation)
+            service.operations.set(name, operation)
         }
     }
 

@@ -1,5 +1,5 @@
 /**
- * Describe a backend service method
+ * Describe a service method
  */
 import { OperationDescription } from '../types';
 

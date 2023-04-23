@@ -1,5 +1,5 @@
 export * from './action'
-export * from './backend'
+export * from './service'
 export * from './aspect.descriptor'
 export * from './controller'
 export * from './body';

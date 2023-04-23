@@ -5,7 +5,7 @@ import { AspectDescriptor } from './aspect.descriptor';
 /**
  * Describe a backend service
  */
-export class BackendDescriptor extends AspectDescriptor {
+export class ServiceDescriptor extends AspectDescriptor {
 
     operations: Map<string, OperationDescriptor> = new Map()
 

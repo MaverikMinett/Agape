@@ -1,5 +1,5 @@
 
-export * from './class/backend'
+export * from './class/service'
 export * from './class/controller'
 export * from './class/module.decorator'
 
