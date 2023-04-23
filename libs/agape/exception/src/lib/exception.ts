@@ -38,10 +38,10 @@ export class Exception extends Error {
     status: number
     statusText: string
 
-    constructor( status: number, message: string ) 
-    constructor( status: number, statusText: string, message: string )
     constructor( message: string )
-    constructor( status: number) 
+    constructor( status: number, message: string ) 
+    constructor( status: number ) 
+    constructor( status: number, statusText: string, message: string )
     constructor( ...args: any[] ){
         const { status, message, statusText } = parseConstructorArgs(...args);
         super(message)
