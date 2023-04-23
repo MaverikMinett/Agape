@@ -25,8 +25,6 @@ export class EventsController {
 
     @Post('events')
     async create( request: ApiRequest, response: ApiResponse ) {
-        
-        
         const payload = request.body  // TODO: should be injecting and validating this
         const event = payload
         event.id = v4()
