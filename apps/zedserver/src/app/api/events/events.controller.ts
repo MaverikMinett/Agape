@@ -1,16 +1,11 @@
 import { Controller, Delete, Get, Post, Put, ApiRequest, ApiResponse } from "@lib/api";
-import { Exception } from '@lib/exception'
-
-
-import { v4 } from 'uuid';
 import { EventService } from "./event.service";
 
 @Controller()
 export class EventsController {
 
     constructor( public service: EventService ) {
-        console.log("Services", this.service)
-        // console.log(this.service.list())
+
     }
 
     @Get('events')
@@ -31,8 +26,6 @@ export class EventsController {
         return event
     }
 
-
-
     @Put('events/:id')
     async update( request: ApiRequest, response: ApiResponse ) {
         const { id } = request.params
@@ -40,9 +33,6 @@ export class EventsController {
         const payload = request.body  // TODO: should be injecting and validating this
         
         this.service.update(id, payload)
-
-
-        // TODO: this.service.update(id, payload)
     }
 
     @Delete('events/:id')
