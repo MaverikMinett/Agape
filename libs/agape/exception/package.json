@@ -1,5 +1,11 @@
 {
   "name": "@agape/exception",
-  "version": "0.0.1",
-  "type": "commonjs"
+  "description": "Error with status code",
+  "version": "0.1.0",
+  "type": "module",
+  "author": {
+    "name": "Maverik Minett",
+    "email": "maverik.minett@gmail.com"
+  },
+  "license": "MIT"
 }
