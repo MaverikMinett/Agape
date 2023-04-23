@@ -1,5 +1,5 @@
 import { Controller, Delete, Get, Post, Put, ApiRequest, ApiResponse } from "@lib/api";
-
+import { Exception } from '@lib/exception'
 import { events } from './events.model'
 
 import { v4 } from 'uuid';
@@ -17,11 +17,10 @@ export class EventsController {
     async retrieve( request: ApiRequest, response: ApiResponse ) {
         const { id } = request.params
         const event = events.find( e => e.id === id )
-        return event
+
+        if ( ! event ) throw new Exception(404, "Could not find event with that ID.")
         
-        // TODO: if ( ! event ) {
-        //     throw new Error("404 Not found")
-        // }
+        return event
     }
 
     @Post('events')
