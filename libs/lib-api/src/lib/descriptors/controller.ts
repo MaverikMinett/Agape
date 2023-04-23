@@ -8,6 +8,8 @@ export class ControllerDescriptor extends AspectDescriptor {
 
     actions: Map<string, ActionDescriptor> = new Map()
 
+    injectionTokens: any[] = []
+
     action( name: string ) {
         let action = this.actions.get(name)
         if ( ! action ) {

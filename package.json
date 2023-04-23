@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"npm:start:server\" \"npm:start:eserver\" \"npm:start:tserver\" \"npm:start:command-line\" \"npm:start:clientag\"  \"npm:start:clientng\" ",
+    "start": "concurrently \"npm:start:server\" \"npm:start:zedserver\" \"npm:start:tserver\" \"npm:start:command-line\" \"npm:start:clientag\"  \"npm:start:clientng\" ",
     "start:clientag": "nx serve clientag",
     "start:clientng": "nx serve clientng",
     "start:command-line": "nx serve command-line",
-    "start:eserver": "nx serve eserver",
+    "start:zedserver": "nx serve zedserver",
     "start:server": "nx serve server",
     "start:tserver": "nx serve tserver",
     "test": "nx test lib-api lib-server lib-express server eserver tserver",

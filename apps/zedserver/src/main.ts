@@ -22,8 +22,6 @@ app.use( cors({origin: '*'}) )
 /* application routes */
 app.use('/api', router )
 
-
-
 /* show common index.html */
 app.use(express.static('./apps/_common') )
 
@@ -37,8 +35,6 @@ app.use(['/zed', '/zed/*'], proxy('http://localhost:4201') )
 app.use('*', (req, res) => {
   res.send('404 Page not found')
 })
-
-// main(app)
 
 app.listen(port, () => {
   console.log(`Express (with libs) started at http://localhost:${port}`);

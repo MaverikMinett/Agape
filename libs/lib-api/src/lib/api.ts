@@ -4,7 +4,7 @@ import { Module } from './decorators/class/module.decorator'
 import { ActionDescriptor } from './descriptors';
 import { ApiRequest } from './api-request';
 import { ApiResponse } from './api-response';
-
+import { Controller } from './decorators';
 
 
 
@@ -68,8 +68,33 @@ export class Api {
     }
 
     protected instantiateController<T extends Class>( controller: T ): InstanceType<T> {
-        const instance = new controller()
+        const descriptor = Controller.descriptor(controller)
+
+        const injectionTokens = descriptor.injectionTokens
+
+        const constructionArgs = this.getControllerConstructionArgs( injectionTokens )
+
+        const instance = new controller(...constructionArgs)
+
         return instance
+    }
+
+    getInjectable( injectable: any ) {
+        // if injectable is a function
+        // and has the new property
+        // then it is a class (a service)
+
+        const instance = new injectable()
+        return instance
+    }
+
+    getControllerConstructionArgs( injectionTokens: any[] ) {
+        const forInjection = []
+        for ( let injectionToken of injectionTokens ) {
+            const service = new injectionToken()
+            forInjection.push(service)
+        }
+        return forInjection
     }
 
 }

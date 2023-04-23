@@ -1,28 +1,37 @@
 {
-  "name": "eserver",
+  "name": "zedserver",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/eserver/src",
+  "sourceRoot": "apps/zedserver/src",
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/esbuild:esbuild",
+      "executor": "@nrwl/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/eserver",
-        "format": ["cjs"],
-        "main": "apps/eserver/src/main.ts",
-        "tsConfig": "apps/eserver/tsconfig.app.json",
-        "assets": ["apps/eserver/src/assets"]
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/zedserver",
+        "main": "apps/zedserver/src/main.ts",
+        "tsConfig": "apps/zedserver/tsconfig.app.json",
+        "assets": ["apps/zedserver/src/assets"],
+        "webpackConfig": "apps/zedserver/webpack.config.js"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false
+        }
       }
     },
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "eserver:build"
+        "buildTarget": "zedserver:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "eserver:build:production"
+          "buildTarget": "zedserver:build:production"
         }
       }
     },
@@ -30,14 +39,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/eserver/**/*.ts"]
+        "lintFilePatterns": ["apps/zedserver/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/eserver/jest.config.ts",
+        "jestConfig": "apps/zedserver/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {

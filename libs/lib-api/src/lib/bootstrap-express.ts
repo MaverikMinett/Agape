@@ -11,8 +11,8 @@ import { ApiResponse } from "./api-response"
 
 export function routeTo( api: Api, controller: Class, actionDescriptor: ActionDescriptor ) {
 
-    const controllerInstance   = api.getController( controller )
-    const method = controllerInstance[actionDescriptor.name]
+    // const controllerInstance   = api.getController( controller )
+    // const method = controllerInstance[actionDescriptor.name]
 
     return async function (req: ExpressRequest, res: ExpressResponse ) {
         const apiRequest = new ApiRequest()

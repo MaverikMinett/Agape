@@ -18,6 +18,13 @@ export function Controller( params?: ControllerParams|string ) {
 
         if ( stub ) stub.finalizeController( descriptor )
 
+        /* dependency injection */
+        const injectionTokens = Reflect.getMetadata('design:paramtypes', target);
+
+        if ( injectionTokens ) descriptor.injectionTokens = [...injectionTokens]
+
+        descriptor.injectionTokens = injectionTokens
+
         return target
     }
 }
