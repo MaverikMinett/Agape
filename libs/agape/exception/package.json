@@ -1,11 +1,22 @@
 {
   "name": "@agape/exception",
   "description": "Error with status code",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "type": "commonjs",
   "author": {
     "name": "Maverik Minett",
     "email": "maverik.minett@gmail.com"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaverikIO/project-zed"
+  },
+  "keywords": [
+    "error",
+    "exception"
+  ],
   "license": "MIT"
 }

@@ -18,9 +18,15 @@
     "test:lib-server": "nx test lib-server",
     "test:lib-express": "nx test lib-express",
     "test:libs:command-line": "nx test lib-terminal && nx test lib-demo && nx test lib-cli",
+    
     "build:exception": "nx build agape-exception",
     "publish:exception": "cd dist/libs/agape/exception && npm publish --access public",
-    "release:exception": "npm run build:exception && npm run publish:exception"
+    "release:exception": "npm run build:exception && npm run publish:exception",
+
+    "test:terminal": "nx text agape-terminal",
+    "build:terminal": "nx build agape-terminal",
+    "publish:terminal": "cd dist/libs/agape/terminal && npm publish --access public",
+    "release:terminal": "npm run build:terminal && npm run publish:terminal"
   },
   "private": true,
   "dependencies": {

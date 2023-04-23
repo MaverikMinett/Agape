@@ -2,6 +2,10 @@
   "name": "@agape/terminal",
   "version": "0.0.1",
   "description": "Await keypress from user, hide/move/query the input cursor, get terminal size",
+  "author": {
+    "name": "Maverik Minett",
+    "email": "maverik.minett@gmail.com"
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -13,7 +17,5 @@
     "terminal",
     "keypress"
   ],
-  "author": {
-    "name": "Maverik Minett"
-  }
+  "license": "MIT"
 }
