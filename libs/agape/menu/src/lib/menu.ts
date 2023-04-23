@@ -1,39 +1,5 @@
+import { MenuItem, MenuItemAction, MenuItemParams } from "./menu-item"
 
-
-/**
- * Menu item actions are just callback functions
- */
-export type MenuItemAction = (...args:any[]) => any
-
-/**
- * Menu items parameters can be passed in to the MenuItem constructor
- */
-export interface MenuItemParams {
-    name?: string;
-    indicator?: string;
-}
-
-/**
- * Abstraction for describing a menu item
- */
-class MenuItem {
-    name: string;
-
-    constructor( 
-        public label: string, 
-        public action?: MenuItemAction, 
-        public params?: MenuItemParams ) {
-        
-        if ( params ) Object.assign( this, params )
-    }
-
-    /**
-     * Execute the action callback function
-     */
-    async execute() {
-        await this.action.call(undefined)
-    }
-}
 
 /**
  * Abstraction for describing a menu and it's state
@@ -55,10 +21,11 @@ export class Menu {
      * @param action Callback for the menu item
      */
     item( label: string, action: MenuItemAction ): this
+    item( label: string, params: MenuItemParams ): this
     item( label: string, action: MenuItemAction, params: MenuItemParams ): this
     item( label: string ): this
-    item( label: string, action?: MenuItemAction, params?: MenuItemParams ): this {
-        const item = new MenuItem( label, action, params )
+    item( ...args: any[] ): this {
+        const item = new MenuItem( ...(args as [string, MenuItemAction, MenuItemParams]) )
         this.items.push( item )
         return this
     }
@@ -86,6 +53,9 @@ export class Menu {
     selectIndex( index: number ): this {
         if ( index > this.items.length - 1) {
             throw new Error(`Could not set selected index to ${index}, exceeds number of menu items`)
+        }
+        if ( index < -1) {
+            throw new Error(`Cannot set selected index below -1`)
         }
         this.selectedIndex = index
         return this
