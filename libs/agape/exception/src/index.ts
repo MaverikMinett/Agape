@@ -1,1 +1,1 @@
-export * from './lib/agape-exception';
+export * from './lib/exception';

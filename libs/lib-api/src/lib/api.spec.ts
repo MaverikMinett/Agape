@@ -12,7 +12,7 @@ describe('Api', () => {
     it('should instantiate', () => {
 
         a = new Api()
-
+        expect(a).toBeInstanceOf(Api)
     })
 
 
