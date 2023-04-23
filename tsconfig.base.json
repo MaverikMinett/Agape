@@ -23,7 +23,6 @@
       "@agape/terminal": ["libs/agape/terminal/src/index.ts"],
       "@agape/types": ["libs/agape/types/src/index.ts"],
       "@lib/api": ["libs/lib-api/src/index.ts"],
-      "@lib/exception": ["libs/lib-exception/src/index.ts"],
       "@lib/express": ["libs/lib-express/src/index.ts"],
       "@lib/server": ["libs/lib-server/src/index.ts"],
       "@lib/types": ["libs/lib-types/src/index.ts"]
