@@ -17,6 +17,7 @@
     "paths": {
       "@agape/cli": ["libs/agape/cli/src/index.ts"],
       "@agape/demo": ["libs/agape/demo/src/index.ts"],
+      "@agape/exception": ["libs/agape/exception/src/index.ts"],
       "@agape/forms": ["libs/agape/forms/src/index.ts"],
       "@agape/menu": ["libs/agape/menu/src/index.ts"],
       "@agape/terminal": ["libs/agape/terminal/src/index.ts"],

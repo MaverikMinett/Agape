@@ -6,8 +6,7 @@ import { ApiRequest } from './api-request';
 import { ApiResponse } from './api-response';
 
 
-
-
+import { agapeException } from '@agape/exception'
 
 export class Api {
 
