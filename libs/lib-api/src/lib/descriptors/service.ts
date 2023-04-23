@@ -1,5 +1,6 @@
 import { OperationDescriptor } from './operation';
 import { AspectDescriptor } from './aspect.descriptor';
+import { Class } from '@lib/types';
 
 
 /**
@@ -8,6 +9,8 @@ import { AspectDescriptor } from './aspect.descriptor';
 export class ServiceDescriptor extends AspectDescriptor {
 
     operations: Map<string, OperationDescriptor> = new Map()
+
+    services: Class[] = []
 
     operation( name: string ) {
         let operation = this.operations.get(name)

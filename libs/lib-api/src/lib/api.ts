@@ -5,6 +5,7 @@ import { ActionDescriptor } from './descriptors';
 import { ApiRequest } from './api-request';
 import { ApiResponse } from './api-response';
 import { Controller } from './decorators';
+import { Injector } from './injector';
 
 
 
@@ -14,6 +15,8 @@ export class Api {
     controllers: Class[] = []
 
     modules: Class[] = []
+
+    injector: Injector = new Injector()
 
     constructor( modules?: Class[] ) {
         if ( modules ) modules.forEach( module => this.registerModule(module) )
@@ -70,31 +73,11 @@ export class Api {
     protected instantiateController<T extends Class>( controller: T ): InstanceType<T> {
         const descriptor = Controller.descriptor(controller)
 
-        const injectionTokens = descriptor.injectionTokens
+        const services = descriptor.services.map( s => this.injector.get(s) )
 
-        const constructionArgs = this.getControllerConstructionArgs( injectionTokens )
-
-        const instance = new controller(...constructionArgs)
+        const instance = new controller(...services)
 
         return instance
-    }
-
-    getInjectable( injectable: any ) {
-        // if injectable is a function
-        // and has the new property
-        // then it is a class (a service)
-
-        const instance = new injectable()
-        return instance
-    }
-
-    getControllerConstructionArgs( injectionTokens: any[] ) {
-        const forInjection = []
-        for ( let injectionToken of injectionTokens ) {
-            const service = new injectionToken()
-            forInjection.push(service)
-        }
-        return forInjection
     }
 
 }

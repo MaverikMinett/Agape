@@ -1,3 +1,4 @@
+import { Class } from '@lib/types';
 import { ActionDescriptor } from './action';
 import { AspectDescriptor } from './aspect.descriptor';
 
@@ -8,7 +9,7 @@ export class ControllerDescriptor extends AspectDescriptor {
 
     actions: Map<string, ActionDescriptor> = new Map()
 
-    injectionTokens: any[] = []
+    services: Class[] = []
 
     action( name: string ) {
         let action = this.actions.get(name)

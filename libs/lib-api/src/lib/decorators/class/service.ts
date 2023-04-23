@@ -14,8 +14,12 @@ export function Service( params?: any ) {
 
         if ( stub ) stub.finalizeService( descriptor )
 
-        return target
+        /* dependency injection */
+        const services = Reflect.getMetadata('design:paramtypes', target);
 
+        if ( services ) descriptor.services = [...services]
+
+        return target
     }
 
 }
