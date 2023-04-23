@@ -1,1 +1,1 @@
-export * from './lib/agape-types';
+export * from './lib/types';
