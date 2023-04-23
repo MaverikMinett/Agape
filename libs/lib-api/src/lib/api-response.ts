@@ -3,11 +3,18 @@
 
 export class ApiResponse {
 
-    status( code: number ) {
-        console.log("==> api response status ", code )
+    statusCode: number = 200
+
+    statusText: string
+
+    content: any[] = []
+
+    status( code: number, text?: string ) {
+        this.statusCode = code
+        if ( text !== undefined ) this.statusText = text
     }
 
     send( response: any ) {
-        console.log("==> api response", response)
+        this.content.push(response)
     }
 }

@@ -18,7 +18,7 @@ export class EventsController {
         const { id } = request.params
         const event = events.find( e => e.id === id )
 
-        if ( ! event ) throw new Exception(404, "Could not find event with that ID.")
+        if ( ! event ) throw new Exception(404, "Could not find event with that ID")
         
         return event
     }
@@ -44,9 +44,7 @@ export class EventsController {
 
         const index = events.findIndex( e => e.id === id )
         
-        // TODO: if ( ! index ) {
-        //     throw new Error("404 Not found")
-        // }
+        if ( ! index ) throw new Exception(404, "Could not find event with that ID")
 
         events.splice(index,1,event)
 
@@ -57,9 +55,9 @@ export class EventsController {
     async delete( request: ApiRequest, response: ApiResponse ) {
         const { id } = request.params
         const index = events.findIndex( e => e.id === id )
-        // TODO: if ( ! index ) {
-        //     throw new Error("404 Not found")
-        // }
+
+        if ( ! index ) throw new Exception(404, "Could not find event with that ID.")
+        
         events.splice(index,1)
     }
 }

@@ -9,8 +9,9 @@ import { Class } from "@lib/types"
 import { ApiRequest } from "./api-request"
 import { ApiResponse } from "./api-response"
 
-export function routeTo( controllerInstance: any, actionDescriptor: ActionDescriptor ) {
+export function routeTo( api: Api, controller: Class, actionDescriptor: ActionDescriptor ) {
 
+    const controllerInstance   = api.getController( controller )
     const method = controllerInstance[actionDescriptor.name]
 
     return async function (req: ExpressRequest, res: ExpressResponse ) {
@@ -19,15 +20,17 @@ export function routeTo( controllerInstance: any, actionDescriptor: ActionDescri
         apiRequest.body   = req.body
         apiRequest.query  = req.query
 
-
         const apiResponse = new ApiResponse()
 
-        // this is where disposable service action needs to happen
-        // methods should be called through the api app context so
-        // that disposable services can be injected into the controller
-        // method
-        const content = await method.call(controllerInstance, apiRequest, apiResponse)
-        res.send( content )
+        await api.callAction(controller, actionDescriptor, apiRequest, apiResponse)
+        res.status(apiResponse.statusCode)
+
+        if ( apiResponse.statusText !== undefined )
+            res.statusMessage = apiResponse.statusText
+
+        for ( let content of apiResponse.content ) {
+            res.send(content)
+        }
     }
 
 }
@@ -39,12 +42,11 @@ export function bootstrap( router: ExpressRouter, module: Class ) {
 
     for ( const controller of api.controllers ) {
         const controllerDescriptor = Controller.descriptor(controller)
-        const controllerInstance   = api.getController( controller )
 
         for ( let [name, action] of controllerDescriptor.actions.entries() ) {
             router[action.ʘroute.method](
                 `/${action.ʘroute.path}`, 
-                routeTo(controllerInstance, action)
+                routeTo(api, controller, action)
             )
         }
     }

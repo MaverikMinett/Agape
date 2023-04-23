@@ -35,14 +35,19 @@ function parseConstructorArgs( ...args:any[] ) {
 
 export class Exception extends Error {
 
-  constructor( status: number, message: string ) 
-  constructor( status: number, statusText: string, message: string )
-  constructor( message: string )
-  constructor( status: number) 
-  constructor( ...args: any[] ){
-      const { status, message, statusText } = parseConstructorArgs(...args)
-      super(message)
-  }
+    status: number
+    statusText: string
+
+    constructor( status: number, message: string ) 
+    constructor( status: number, statusText: string, message: string )
+    constructor( message: string )
+    constructor( status: number) 
+    constructor( ...args: any[] ){
+        const { status, message, statusText } = parseConstructorArgs(...args);
+        super(message)
+        this.status = status
+        this.statusText = statusText
+    }
 
 }
 
