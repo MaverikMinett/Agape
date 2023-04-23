@@ -1,4 +1,4 @@
-import { Dictionary } from '@lib/types'
+import { Dictionary } from '@agape/types'
 
 export const texts: Dictionary = {
     '400': "Bad Request",

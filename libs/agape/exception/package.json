@@ -1,11 +1,14 @@
 {
   "name": "@agape/exception",
   "description": "Error with status code",
-  "version": "0.1.0",
-  "type": "module",
+  "version": "0.1.2",
+  "type": "commonjs",
   "author": {
     "name": "Maverik Minett",
     "email": "maverik.minett@gmail.com"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "peerDependencies": {
+    "@agape/types": "^0.1.0"
+  }
 }
