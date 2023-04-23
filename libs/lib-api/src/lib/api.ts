@@ -48,9 +48,21 @@ export class Api {
         const method = controllerInstance[actionDescriptor.name]
 
         // this is where disposable service action needs to happen
+        const params = []
+        if ( actionDescriptor.ʘinject ) {
+            for ( const [name,type] of Object.entries(actionDescriptor.ʘinject) ) {
+                if ( name === 'payload' || name === 'body' ) params.push(apiRequest.body)
+                else if ( name === 'params' ) params.push(apiRequest.params)
+                else if ( name === 'query' || name === 'queryParams' ) params.push(apiRequest.params)
+                else if ( name === 'request' || name === 'req') params.push(apiRequest)
+                else if ( name === 'response' || name === 'res' ) params.push(apiResponse)
+                else throw new Error(`Invalid paramter name '${name}'`)
+            }
+        }
+
 
         try {
-            const content = await method.call(controllerInstance, apiRequest, apiResponse)
+            const content = await method.call(controllerInstance, ...params)
             apiResponse.send(content)
         }
         catch ( error ) {

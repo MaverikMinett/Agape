@@ -9,35 +9,35 @@ export class EventsController {
     }
 
     @Get('events')
-    async list( request: ApiRequest, response: ApiResponse ) {
+    async list( body: any, params: any ) {
         return this.service.list()
     }
 
     @Post('events')
-    async create( request: ApiRequest, response: ApiResponse ) {
-        const payload = request.body  // TODO: should be injecting and validating this
+    async create( body: any, params: any ) {
+        const payload = body  // TODO: should be injecting and validating this
         this.service.create(payload)
     }
 
     @Get('events/:id')
-    async retrieve( request: ApiRequest, response: ApiResponse ) {
-        const { id } = request.params
+    async retrieve( body: any, params: any  ) {
+        const { id } = params
         const event = this.service.retrieve(id)
         return event
     }
 
     @Put('events/:id')
-    async update( request: ApiRequest, response: ApiResponse ) {
-        const { id } = request.params
+    async update( body: any, params: any  ) {
+        const { id } = params
         
-        const payload = request.body  // TODO: should be injecting and validating this
+        const payload = body  // TODO: should be injecting and validating this
         
         this.service.update(id, payload)
     }
 
     @Delete('events/:id')
-    async delete( request: ApiRequest, response: ApiResponse ) {
-        const { id } = request.params
+    async delete( body: any, params: any  ) {
+        const { id } = params
         this.service.delete(id)
 
     }

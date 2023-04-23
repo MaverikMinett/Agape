@@ -7,6 +7,11 @@ export function Post( path?: string, params?: any ) {
 
         stub.action(name).route('post', path, params).status(201)
 
+        /* fake dependency injection */
+        /* let methodParameters = Reflect.getMetadata('controller:action:params', descriptor) */
+        let methodParameters = { 'payload': 'any', 'params': 'any' }
+        stub.action(name).inject(methodParameters)
+
         return target
     }
 

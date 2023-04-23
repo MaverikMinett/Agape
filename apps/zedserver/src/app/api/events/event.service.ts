@@ -2,7 +2,9 @@ import { events } from './events.model'
 import { v4 } from 'uuid';
 
 import { Exception } from '@lib/exception';
+import { Service } from '@lib/api';
 
+@Service()
 export class EventService {
 
     list() {

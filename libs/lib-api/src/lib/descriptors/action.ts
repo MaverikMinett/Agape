@@ -1,8 +1,9 @@
 import { ActionDescription, HttMethod, ResponseDescription } from '../types';
-import { Class } from '@lib/types';
+import { Class, Dictionary } from '@lib/types';
 import { ResponseDescriptor } from './response';
 import { BodyDescriptor, BodyDescriptorParams } from './body';
 import { ControllerDescriptor } from './controller';
+import { inherit } from '@agape/object';
 
 
 export class ActionDescriptor {
@@ -16,6 +17,8 @@ export class ActionDescriptor {
     ʘdescription: ActionDescription
 
     ʘresponses: ResponseDescriptor[]
+
+    ʘinject: Dictionary
 
     constructor( public name: string ) {
 
@@ -41,6 +44,10 @@ export class ActionDescriptor {
             return this.ʘdescription.call(this, controller, this )
         }
         return this.ʘdescription
+    }
+
+    inject( params: Dictionary ) {
+        this.ʘinject = params
     }
 
 
