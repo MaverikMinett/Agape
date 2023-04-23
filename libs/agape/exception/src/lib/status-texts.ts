@@ -1,6 +1,6 @@
-import { Dictionary } from '@agape/types'
 
-export const texts: Dictionary = {
+
+export const texts: { [key:string]: string } = {
     '400': "Bad Request",
     '401': "Unathorized",
     '402': "Payment Required",
