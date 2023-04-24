@@ -133,17 +133,12 @@ export function expect<T>( actual: T ) {
  */
 export function spyOn( object:any, method: string ) {
 
-    const spy = new Spy()
-    const original = object[method]
+    const spy = new Spy( object, method )
 
-    function spyMethod (...args: any[] ) {
-        const $: any = spyMethod
-        $.spy.calls.push({ args: args})
-        if ( $.spy.callThrough ) original.call(this, ...args)
-    }
+    function spyMethod (...args: any[] ) { spy.call(...args) }
 
     object[method] = spyMethod
     object[method].spy = spy
-    
+
     return spy
 }
