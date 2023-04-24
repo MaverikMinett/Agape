@@ -1,4 +1,4 @@
-import { Class } from '@lib/types';
+import { Class } from '@agape/types';
 import { Service } from './decorators'
 
 export class Injector {

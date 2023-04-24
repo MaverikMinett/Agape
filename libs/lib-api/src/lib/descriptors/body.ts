@@ -1,4 +1,4 @@
-import { Class } from '@lib/types';
+import { Class } from '@agape/types';
 
 /**
  * Describe the body of an incoming HTTP request

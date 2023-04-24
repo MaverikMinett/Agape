@@ -5,7 +5,7 @@ import { Api } from "./api"
 import { Controller } from "./decorators"
 
 import { ActionDescriptor } from "./descriptors"
-import { Class } from "@lib/types"
+import { Class } from "@agape/types"
 import { ApiRequest } from "./api-request"
 import { ApiResponse } from "./api-response"
 

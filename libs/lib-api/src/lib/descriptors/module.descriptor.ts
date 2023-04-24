@@ -1,6 +1,6 @@
-import { Class } from '@lib/types';
+import { Class } from '@agape/types';
 import { AspectDescriptor } from './aspect.descriptor';
-import { ControllerDescriptor } from './controller';
+
 
 
 export class ModuleDescriptor extends AspectDescriptor {
@@ -8,10 +8,6 @@ export class ModuleDescriptor extends AspectDescriptor {
     controllers: Class[]
 
     modules: Class[]
-
-    // controllers: ControllerDescriptor[] = []
-
-    // modules: ModuleDescriptor[] = []
 
     getControllers() {
         const controllers = this.controllers ? [...this.controllers] : []

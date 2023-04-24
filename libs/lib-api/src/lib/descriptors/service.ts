@@ -1,6 +1,6 @@
 import { OperationDescriptor } from './operation';
 import { AspectDescriptor } from './aspect.descriptor';
-import { Class } from '@lib/types';
+import { Class } from '@agape/types';
 
 
 /**

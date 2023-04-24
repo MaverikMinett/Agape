@@ -1,4 +1,4 @@
-import { Class } from '@lib/types';
+import { Class } from '@agape/types';
 import { ActionDescriptor } from './action';
 import { AspectDescriptor } from './aspect.descriptor';
 

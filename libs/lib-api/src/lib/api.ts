@@ -1,4 +1,4 @@
-import { Class } from '@lib/types';
+import { Class } from '@agape/types';
 import { Exception } from '@agape/exception';
 import { Module } from './decorators/class/module.decorator'
 import { ActionDescriptor } from './descriptors';
