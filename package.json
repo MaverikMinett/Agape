@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"npm:start:server\" \"npm:start:zedserver\" \"npm:start:nestserver\" \"npm:start:tserver\" \"npm:start:command-line\" \"npm:start:clientag\"  \"npm:start:clientng\" ",
+    "start": "concurrently \"npm:start:server\" \"npm:start:zedserver\" \"npm:start:nestserver\" \"npm:start:express-no-db\" \"npm:start:tserver\" \"npm:start:command-line\" \"npm:start:clientag\"  \"npm:start:clientng\" ",
     "start:clientag": "nx serve clientag",
     "start:clientng": "nx serve clientng",
     "start:command-line": "nx serve command-line",
@@ -11,6 +11,7 @@
     "start:server": "nx serve server",
     "start:tserver": "nx serve tserver",
     "start:nestserver": "nx serve nest-server",
+    "start:express-no-db": "nx serve express-no-db",
     "test": "nx test lib-api lib-server lib-express server eserver tserver",
     "test:server": "nx test server",
     "test:eserver": "nx test eserver",
