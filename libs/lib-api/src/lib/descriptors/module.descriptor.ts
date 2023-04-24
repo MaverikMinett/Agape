@@ -5,9 +5,11 @@ import { AspectDescriptor } from './aspect.descriptor';
 
 export class ModuleDescriptor extends AspectDescriptor {
 
-    controllers: Class[]
+    controllers: Class[] = []
 
-    modules: Class[]
+    modules: Class[] = []
+
+    path?: string
 
     getControllers() {
         const controllers = this.controllers ? [...this.controllers] : []

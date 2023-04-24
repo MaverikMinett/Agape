@@ -1,6 +1,12 @@
+import { Class } from '@agape/types';
 import { ModuleDescriptor } from '../../descriptors/module.descriptor';
 
 
+export interface ModuleParams {
+    path: string,
+    modules: Class[],
+    controllers: Class[],
+}
 
 export function Module( params?: any ) {
 
