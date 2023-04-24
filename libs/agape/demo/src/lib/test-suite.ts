@@ -273,7 +273,10 @@ export class TestCase {
         if ( interactive ) await this.printInteractiveAfterTestBlurb()
     }
 
-    async printInteractiveBeforeTestBlurb() {
+    /**
+     * Print test information before interactive tests to alert the user
+     */
+    private async printInteractiveBeforeTestBlurb() {
         let hr = ''
         const size = getTerminalSize().columns
         for ( let i = 0; i < size; i++ ) { hr += '—' }
@@ -282,8 +285,10 @@ export class TestCase {
         console.log("\x1b[38;5;227m▸\x1b[0m " + this.getFormattedTestName() )
     }
 
-    // å
-    async printInteractiveAfterTestBlurb() {
+    /**
+     * Print a pass/fail message after an interactive test to alert the user
+     */
+    private async printInteractiveAfterTestBlurb() {
         let color: string
         let endColor = "\x1b[0m"
         let bold = "\x1b[1m"
@@ -304,12 +309,20 @@ export class TestCase {
         console.log(resultFormatted, "\n")
     }
 
+    /**
+     * Format the test name with symbols and colors
+     * @returns Formatted test name
+     */
     private getFormattedTestName() {
         return this.getTestNameParts()
             .map( description => `\x1b[38;5;27m${description}\x1b[0m` )
             .join(" \x1b[38;5;227m▸\x1b[0m ")
     }
 
+    /**
+     * Get the fully qualified test name
+     * @returns 
+     */
     private getTestNameParts() {
         let suite = this.suite;
         let descriptions = [ suite.description ]
