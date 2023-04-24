@@ -3,6 +3,9 @@ import { FormField } from "./form-field"
 
 export type FormGroupValue = { [key:string]: any }
 
+/**
+ * Abstraction representing a group of form fields
+ */
 export class FormGroup {
 
     fields: FormField[] = []

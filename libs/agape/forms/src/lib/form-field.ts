@@ -9,6 +9,9 @@ interface FormFieldParams {
 
 export type FormFieldType = 'string'|'number'
 
+/**
+ * Abstraction representing a single form field
+ */
 export class FormField {
     type: string;
     name: string;
