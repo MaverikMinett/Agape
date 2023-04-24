@@ -8,8 +8,12 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getHello( @Res() response: Response ): string {
+    /* display service index */
+    let indexHtml = fs.readFileSync('./apps/_common/index.html')
+    response.write( indexHtml )
+    response.end()
+    return;
   }
 
 
