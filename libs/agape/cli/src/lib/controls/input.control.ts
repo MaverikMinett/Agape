@@ -8,6 +8,9 @@ class ClinInputControlParameters {
     cursorPosition?: number;
 }
 
+/**
+ * Control to accept user input
+ */
 export class CliInputControl extends CliElement {
 
     value: string = ""
@@ -20,7 +23,6 @@ export class CliInputControl extends CliElement {
 
     protected message: string
     
-
     protected controlCoordinates: { col: number, row: number } = { col: 0, row: 0 }
 
     protected absoluteCursorCoordinates: { col: number, row: number } = { col: 0, row: 0 }
@@ -39,14 +41,16 @@ export class CliInputControl extends CliElement {
         }
     }
 
+    /**
+     * Draw element
+     */
     async drawElement() {
 
         const labelText = this.label !== undefined && this.label !== null
             ? `${this.label} ` 
             : ''
 
-        // gray labels
-        const formattedLabel = "\x1b[90m" + labelText + "\x1b[0m"
+        const formattedLabel = "\x1b[90m" + labelText + "\x1b[0m" // gray labels
 
         if ( this.message  ) {
             process.stdout.write(formattedLabel + this.message )
@@ -63,36 +67,9 @@ export class CliInputControl extends CliElement {
     }
 
     /**
-     * Adds a new line after the text input so that subsequent elements start
-     * on a new line.
+     * Await user input
+     * @returns 
      */
-    finish() {
-        console.log("")
-    }
-
-    async determineInputCoordinates( predicate: string ) {
-        const cursorCoordinates = await getCursorPosition()
-        const row = cursorCoordinates.row
-        const col = predicate.length 
-        return { row, col }
-    }
-
-    async determineAbsoluteCursorCoordinates( controlCoordinates: CursorPosition, controlCursorPosition: number ) {
-        const col = controlCoordinates.col + controlCursorPosition
-        return { row: controlCoordinates.row, col }
-    }
-
-
-    async drawCursor( position: CursorPosition ) {
-        setCursorPosition( position )
-    }
-
-
-    async clearMessage() {
-        this.message = "";
-    }
-
-
     async awaitUserInput() {
 
         const key = await keypress()
@@ -138,7 +115,34 @@ export class CliInputControl extends CliElement {
         }
     }
 
+    /**
+     * Adds a new line after the text input so that subsequent elements start
+     * on a new line.
+     */
+    finish() {
+        console.log("")
+    }
 
+    private async determineInputCoordinates( predicate: string ) {
+        const cursorCoordinates = await getCursorPosition()
+        const row = cursorCoordinates.row
+        const col = predicate.length 
+        return { row, col }
+    }
+
+    private async determineAbsoluteCursorCoordinates( controlCoordinates: CursorPosition, controlCursorPosition: number ) {
+        const col = controlCoordinates.col + controlCursorPosition
+        return { row: controlCoordinates.row, col }
+    }
+
+    protected async drawCursor( position: CursorPosition ) {
+        setCursorPosition( position )
+    }
+
+
+    protected async clearMessage() {
+        this.message = "";
+    }
 
     protected inputKeypress( key: KeypressEvent, position: number ) {
         const symbol = key.sequence;
@@ -154,8 +158,6 @@ export class CliInputControl extends CliElement {
             const after  = this.value.substring(position)
             this.value = `${before}${symbol}${after}`
         }
-
-        // console.log(`Inserted character at ${position}`)
         
         this.cursorPosition++
     }

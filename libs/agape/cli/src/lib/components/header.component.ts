@@ -1,4 +1,9 @@
 
+
+
+/**
+ * Display a header
+ */
 export class CliHeaderComponent {
     constructor( public text: string ) { }
     

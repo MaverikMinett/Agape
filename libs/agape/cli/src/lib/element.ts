@@ -2,6 +2,9 @@
 import readline from 'readline';
 import { getCursorPosition } from '@agape/terminal';
 
+/**
+ * Element base class
+ */
 export class CliElement {
 
     stdin  = process.stdin
@@ -30,19 +33,6 @@ export class CliElement {
 
         return response
     }
-
-    // async draw( ) {
-    //     if ( this.rendered ) await this.clearRenderedElement()
-        
-    //     await this.drawElement()
-
-    //     this.rendered = true
-
-    //     /* don't provide finish, and don't force the user to have it */
-    //     /* just call it if it's there */
-    //     const $this: any = this
-    //     if ( $this.finish ) await $this.finish()
-    // }
 
     protected async render() {
 

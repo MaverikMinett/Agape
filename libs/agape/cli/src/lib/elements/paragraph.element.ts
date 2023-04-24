@@ -9,6 +9,9 @@ export interface CliParagraphParams {
     maxWidth?: number;
 }
 
+/**
+ * Print a block of text formatted to the width of the terminal window
+ */
 export class CliParagraphElement extends CliElement {
 
     text: string = ""

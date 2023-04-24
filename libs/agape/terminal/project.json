@@ -12,7 +12,7 @@
         "tsConfig": "libs/agape/terminal/tsconfig.lib.json",
         "packageJson": "libs/agape/terminal/package.json",
         "main": "libs/agape/terminal/src/index.ts",
-        "assets": ["libs/agape/terminal/*.md"]
+        "assets": ["libs/agape/terminal/README.md"]
       }
     },
     "lint": {
