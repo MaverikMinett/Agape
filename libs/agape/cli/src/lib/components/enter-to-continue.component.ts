@@ -1,6 +1,10 @@
 
 import { keypress } from '@agape/terminal'
 
+
+/**
+ * Enter to continue component
+ */
 export class EnterToContinueComponent {
 
     async run() {

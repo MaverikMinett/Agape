@@ -21,17 +21,17 @@ export interface CliComponent {
 
 export class Cli {
 
-    applicationHeader: CliHeaderComponent
-
-    applicationBanner: CliBannerComponent
-
-    applicationMessages: CliMessagesComponent = new CliMessagesComponent()
-
     components: any[] = []
 
     messages: CliMessage[] = []
 
-    private bannerFormatter: CliBannerFormatFunction
+    protected applicationHeader: CliHeaderComponent
+
+    protected applicationBanner: CliBannerComponent
+
+    protected applicationMessages: CliMessagesComponent = new CliMessagesComponent()
+
+    protected bannerFormatter: CliBannerFormatFunction
 
     header( text: string ) {
         const component = new CliHeaderComponent(text)
@@ -53,24 +53,13 @@ export class Cli {
         this.bannerFormatter = formatter
     }
 
-    /**
-     * Accepts a component class to instantiate and add to the cli document
-     * @param component Component constructor function
-     * @returns 
-     */
-    // component<T extends { new(...args: any[]): any; }>( component: T, ...args: any[] ): this {
-    //     const instance = new component(...args)
-    //     this.components.push(instance)
-    //     return this
-    // }
-
     component<T>( instance: T ) {
         this.components.push(instance)
     }
 
-    display( )
     display( text: string ): this
-    display( ...text: any[] ): this {
+    display( ...text: string[] ): this
+    display( ...text: string[] ): this {
         const component = new CliDisplayComponent( ...text )
         this.components.push(component)
         return this

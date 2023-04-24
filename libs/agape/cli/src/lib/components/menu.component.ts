@@ -1,6 +1,10 @@
 import { CliMenuControl, CliMenuParams } from '../controls/menu.control';
 import { Menu } from '@agape/menu';
 
+
+/**
+ * Menu component
+ */
 export class CliMenuComponent {
 
     constructor( 
@@ -11,6 +15,9 @@ export class CliMenuComponent {
 
     }
 
+    /**
+     * Run the menu component
+     */
     async run() {
         const stash = {};
         const control = new CliMenuControl(this.menu, this.params)

@@ -10,13 +10,12 @@ export interface CliMenuItem {
     label: string;
 }
 
+/**
+ * Menu input control
+ */
 export class CliMenuControl extends CliElement {
 
     indicator: string = "❯"
-
-    // selectedIndex: number = 0
-
-    // selectedItem: CliMenuItem
 
     menuItemFormatter = (item) => {
         const text =  "  " + item.label
@@ -33,7 +32,6 @@ export class CliMenuControl extends CliElement {
         return text
     }
 
-    // constructor( public items: CliMenuItem[] = [], params?: CliMenuParams  ) {
     constructor( public menu: Menu, params?: CliMenuParams ) {
         super()
         Object.assign(this, params)
@@ -41,10 +39,9 @@ export class CliMenuControl extends CliElement {
         this.nLines = menu.items.length
     }
 
-    // async before() {
-    //     hideCursor()
-    // }
-
+    /**
+     * Draw element
+     */
     async drawElement() {
         await hideCursor()
         let index = 0;
@@ -60,6 +57,10 @@ export class CliMenuControl extends CliElement {
         await showCursor()
     }
 
+    /**
+     * Process user input
+     * @returns 
+     */
     async awaitUserInput() {
         const menu = this.menu;
 
@@ -77,9 +78,6 @@ export class CliMenuControl extends CliElement {
         return undefined
     }
     
-    async finish() {
-        await showCursor()
-    }
 }
 
 

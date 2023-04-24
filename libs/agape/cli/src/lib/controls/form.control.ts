@@ -3,13 +3,19 @@ import { CliElement } from "../element";
 import { CliInputControl } from "./input.control";
 
 
-
+/**
+ * Render a form object as a series of input controls
+ */
 export class CliFormControl extends CliElement {
 
     constructor( public form: FormGroup ) {
         super()
     }
 
+    /**
+     * Run the form
+     * @retuns Form value
+     */
     async run() {
         for ( let field of this.form.fields ) {
             const control = new CliInputControl( field.label )

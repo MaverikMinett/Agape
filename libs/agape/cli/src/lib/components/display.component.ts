@@ -1,5 +1,7 @@
 
-
+/**
+ * Display some text
+ */
 export class CliDisplayComponent {
 
     text: string[]
