@@ -9,7 +9,6 @@
     "start:command-line": "nx serve command-line",
     "start:zedserver": "nx serve zedserver",
     "start:server": "nx serve server",
-
     "start:tserver": "nx serve tserver",
     "start:nestserver": "nx serve nest-server",
     "test": "nx test lib-api lib-server lib-express server eserver tserver",
@@ -85,6 +84,7 @@
     "@angular/cli": "~15.1.0",
     "@angular/compiler-cli": "~15.1.0",
     "@angular/language-service": "~15.1.0",
+    "@nestjs/testing": "^9.4.0",
     "@nrwl/angular": "^15.6.3",
     "@nrwl/cypress": "15.6.3",
     "@nrwl/esbuild": "15.6.3",
