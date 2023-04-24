@@ -1,7 +1,7 @@
 import { Router as ExpressRouter } from "express"
 import { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 
-import { Api } from "./api"
+import { Api, AotApi } from "./api"
 import { Controller } from "./decorators"
 
 import { ActionDescriptor } from "./descriptors"
@@ -37,7 +37,7 @@ export function routeTo( api: Api, controller: Class, actionDescriptor: ActionDe
 
 export function bootstrap( router: ExpressRouter, module: Class ) {
 
-    const api = new Api()
+    const api = new AotApi()
     api.registerModule(module)
 
     for ( const controller of api.controllers ) {

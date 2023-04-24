@@ -12,6 +12,7 @@
     "start:tserver": "nx serve tserver",
     "start:nestserver": "nx serve nest-server",
     "start:express-no-db": "nx serve express-no-db",
+    "benchmark": "nx serve benchmark",
     "test": "nx test lib-api lib-server lib-express server eserver tserver",
     "test:server": "nx test server",
     "test:eserver": "nx test eserver",
