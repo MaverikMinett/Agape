@@ -24,6 +24,11 @@
     "publish:exception": "cd dist/libs/agape/exception && npm publish --access public",
     "release:exception": "npm run build:exception && npm run publish:exception",
 
+    "test:forms": "nx test agape-forms",
+    "build:forms": "nx build agape-forms",
+    "publish:forms": "cd dist/libs/agape/forms && npm publish --access public",
+    "release:forms": "npm run build:forms && npm run publish:forms",
+
     "test:menu": "nx test agape-menu",
     "build:menu": "nx build agape-menu",
     "publish:menu": "cd dist/libs/agape/menu && npm publish --access public",
