@@ -1,5 +1,5 @@
-import { FormBuilder } from "./formbuilder"
-import { FormGroup } from "./forms"
+import { FormBuilder } from "./form-builder"
+import { FormGroup } from "./form-group"
 
 describe('FormBuilder', () => {
 

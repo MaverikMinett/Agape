@@ -1,4 +1,6 @@
-import { FormGroup, FormField } from './forms';
+import { FormField } from './form-field';
+import { FormGroup } from './form-group';
+
 
 describe('FormGroup', () => {
 

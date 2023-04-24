@@ -1,4 +1,4 @@
-import { FormField } from './forms';
+import { FormField } from './form-field';
 
 describe('FormField', () => {
 

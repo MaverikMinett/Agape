@@ -1,4 +1,4 @@
-import { FormGroup } from "./forms"
+import { FormGroup } from "./form-group"
 
 
 export class FormBuilder {
