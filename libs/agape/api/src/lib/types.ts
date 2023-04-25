@@ -19,4 +19,4 @@ export type ControllerParams = Partial<Omit<ControllerDescriptor,'actions'|'serv
 
 
 // // // TODO: Replace all of the above with this?
-// // export type DescriptionFunction<T,U> = ( progenitor: T, item: U ) => string
+export type AssetDescriptionFunction<T,U> = ( progenitor: T, item: U ) => string

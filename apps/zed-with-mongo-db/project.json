@@ -1,0 +1,52 @@
+{
+  "name": "zed-with-mongo-db",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/zed-with-mongo-db/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/zed-with-mongo-db",
+        "format": ["cjs"],
+        "main": "apps/zed-with-mongo-db/src/main.ts",
+        "tsConfig": "apps/zed-with-mongo-db/tsconfig.app.json",
+        "assets": ["apps/zed-with-mongo-db/src/assets"]
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "zed-with-mongo-db:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "zed-with-mongo-db:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/zed-with-mongo-db/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/zed-with-mongo-db/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}
