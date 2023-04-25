@@ -34,7 +34,7 @@ export function routeTo( api: Api, controllerInstance: InstanceType<Class>, acti
 
 }
 
-export function bootstrap( router: ExpressRouter, module: Class ) {
+export function bootstrapExpress( router: ExpressRouter, module: Class ) {
 
     const newApi = new Api(module)
 
