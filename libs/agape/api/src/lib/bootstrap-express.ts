@@ -17,6 +17,7 @@ export function routeTo( api: Api, controllerInstance: InstanceType<Class>, acti
         apiRequest.params = req.params
         apiRequest.body   = req.body
         apiRequest.query  = req.query
+        apiRequest.headers  = req.headers
 
         const apiResponse = new ApiResponse()
 

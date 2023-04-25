@@ -47,6 +47,7 @@ export class Api {
                 else if ( name === 'query' || name === 'queryParams' ) params.push(apiRequest.params)
                 else if ( name === 'request' || name === 'req') params.push(apiRequest)
                 else if ( name === 'response' || name === 'res' ) params.push(apiResponse)
+                else if ( name === 'headers' ) params.push(apiRequest.headers)
                 else throw new Error(`Invalid paramter name '${name}'`)
             }
         }
