@@ -1,17 +1,24 @@
 import { Class } from "@agape/types";
-import { Injector } from "../injector";
-import { ActionDescriptor } from "../descriptors";
-import { ApiRequest } from "../api-request";
-import { ApiResponse } from "../api-response";
+import { Injector } from "./injector";
+import { ActionDescriptor } from "./descriptors";
+import { ApiRequest } from "./api-request";
+import { ApiResponse } from "./api-response";
 import { Exception } from "@agape/exception";
-import { Controller } from "../decorators";
+import { Controller, Module } from "./decorators";
 
 
 
-export abstract class Api {
+export class Api {
     injector: Injector = new Injector()
 
-    abstract getController<T extends Class>( controller: T ): InstanceType<T>
+    constructor( public module: Class ) {
+       const descriptor = Module.descriptor(module)
+       if ( ! descriptor ) throw new Error(`${module.name} is not an api Module`) 
+    }
+
+    getController<T extends Class>( controller: T ): InstanceType<T> {
+        return this.instantiateController( controller )
+    }
 
     protected instantiateController<T extends Class>( controller: T ): InstanceType<T> {
         const descriptor = Controller.descriptor(controller)

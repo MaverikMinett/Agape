@@ -1,14 +1,14 @@
 import { Router as ExpressRouter } from "express"
 import { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 
-import { Api } from './api/abstract.api'
+import { Api } from './api'
 import { Controller, Module } from "./decorators"
 
 import { ActionDescriptor } from "./descriptors"
 import { Class } from "@agape/types"
 import { ApiRequest } from "./api-request"
 import { ApiResponse } from "./api-response"
-import { NewApi } from "./api/new.api"
+
 
 export function routeTo( api: Api, controllerInstance: InstanceType<Class>, actionDescriptor: ActionDescriptor ) {
 
@@ -35,7 +35,7 @@ export function routeTo( api: Api, controllerInstance: InstanceType<Class>, acti
 
 export function bootstrap( router: ExpressRouter, module: Class ) {
 
-    const newApi = new NewApi(module)
+    const newApi = new Api(module)
 
     let moduleDescriptor = Module.descriptor(module)
 
