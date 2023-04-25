@@ -4,7 +4,7 @@ import {  } from '../../descriptors/module.descriptor'
 import { Get } from '../controller/get'
 import { Controller } from './controller.decorator'
 import { Module } from './module.decorator'
-import { Service } from './service'
+import { Service } from './service.decorator'
 
 describe('Module', () => {
 

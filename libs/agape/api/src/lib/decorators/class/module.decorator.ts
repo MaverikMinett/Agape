@@ -1,6 +1,6 @@
 import { Class } from '@agape/types';
 import { ModuleDescriptor } from '../../descriptors/module.descriptor';
-import { Service } from './service'
+import { Service } from './service.decorator'
 import { Controller } from './controller.decorator';
 
 function parseModuleParams(...args: Array<ModuleParams|string>) {
