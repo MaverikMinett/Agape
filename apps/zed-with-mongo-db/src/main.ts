@@ -1,7 +1,7 @@
 import cors from 'cors';
 import express, { Application, Router } from 'express';
 import { log, proxy } from '@lib/express';
-
+import { connect } from './db';
 import router from './app/app.routes'
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3006;
@@ -36,6 +36,19 @@ app.use('*', (req, res) => {
   res.send('404 Page not found')
 })
 
-app.listen(port, () => {
-  console.log(`Express (with libs) started at http://localhost:${port}`);
-});
+
+async function main() {
+
+    await connect()
+  
+    console.log("Connected to database at mongodb://localhost:27017")
+    
+    app.listen(port, () => {
+      console.log(`Express (with libs) started at http://localhost:${port}`);
+    });
+    
+  }
+  
+  
+  main()
+  
