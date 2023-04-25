@@ -58,4 +58,52 @@ export class EventService {
         return event
     }
 
+    async update( id: string, event: IEvent ) {
+        let _id: ObjectId
+        try {
+            _id = new ObjectId(id)
+        }
+        catch {
+            throw new Error("Record not found")
+        }
+        // const _event = documentFrom(event)
+    
+        const result = await db()
+            .collection('events')
+            .updateOne(
+                { _id },
+                {
+                    $set: event
+                }
+            )
+    
+        if ( result.matchedCount === 0 ) {
+            throw new Error(`Could not update event with id $id, record not found`)
+        }
+        if ( result.acknowledged === false ) {
+            // throw new unkown error
+        }
+    }
+
+    async delete( id: string, event: IEvent ) {
+        let _id: ObjectId
+        try {
+            _id = new ObjectId(id)
+        }
+        catch {
+            throw new Error("Record not found")
+        }
+    
+        const result = await db()
+            .collection('events')
+            .deleteOne({ _id })
+    
+        if ( result.deletedCount === 0 ) {
+            throw new Error(`Could not delete event with id $id, record not found`)
+        }    
+        if ( result.acknowledged === false ) {
+            // throw new unkown error
+        }
+    }
+
 }

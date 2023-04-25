@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from "@agape/api";
+import { Controller, Delete, Get, Post, Put } from "@agape/api";
 import { EventService } from "./event.service";
 import { IEvent } from "../../interfaces/IEvents";
 
@@ -23,7 +23,18 @@ export class EventsController {
 
     @Get(':id')
     retrieve(params: {id: string}, body: any ) {
-        console.log("Params", params, body)
+        const { id } = params
+        return this.service.retrieve(id)
+    }
+
+    @Put(':id')
+    update(params: {id: string}, body: any ) {
+        const { id } = params
+        return this.service.update(id, body)
+    }
+
+    @Delete(':id')
+    delete(params: {id: string}, body: any ) {
         const { id } = params
         return this.service.retrieve(id)
     }
