@@ -74,25 +74,31 @@ class FooController {
 
 One method decorator for each HTTP request.
 
-`Get`
+`@Get(path)`
 
-`Post`
+`@Post(path)`
 
-`Put`
+`@Put(path)`
 
-`Patch`
+`@Patch(path)`
 
-`Delete`
+`@Delete(path)`
 
-And for the HTTP status
+`@Status(code)`
 
-`Status`
+Set a custom success status code. Default is `200 OK`.
 
-And for the possible responses
+```
+@Get('teapot')
+@Status(418)
+teapot() {
+    ...
+}
+```
 
-`Respond`
+`@Respond(model)`
 
-For the possible responses. Accepts
+
 
 ##### Example
 

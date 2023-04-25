@@ -55,6 +55,8 @@ export class Api {
 
         try {
             const content = await method.call(controllerInstance, ...params)
+            const statusCode = actionDescriptor.ʘstatus
+            apiResponse.status(statusCode)
             apiResponse.send(content)
         }
         catch ( error ) {
