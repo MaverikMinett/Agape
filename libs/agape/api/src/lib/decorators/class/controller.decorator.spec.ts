@@ -1,7 +1,7 @@
 
 import { ControllerDescriptor, StubDescriptor } from '../../descriptors'
 import { Get } from '../controller/get'
-import { Controller } from './controller'
+import { Controller } from './controller.decorator'
 import { Service } from './service'
 
 describe('Controller', () => {

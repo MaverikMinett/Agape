@@ -1,7 +1,7 @@
 import { ControllerDescriptor } from '../../descriptors/controller';
 import { StubDescriptor } from '../../descriptors';
 import { ControllerParams } from '../../types';
-import { Service } from '../../decorators'
+import { Service } from '..'
 
 function parseControllerParams(...args: Array<ControllerParams|string>) {
     /* parse the parameters */

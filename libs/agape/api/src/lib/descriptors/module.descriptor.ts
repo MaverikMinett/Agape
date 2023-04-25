@@ -9,6 +9,8 @@ export class ModuleDescriptor extends AspectDescriptor {
 
     modules: Class[] = []
 
+    provides: Class[] = []
+
     path?: string
 
     getControllers() {

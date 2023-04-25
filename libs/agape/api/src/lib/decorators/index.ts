@@ -1,6 +1,6 @@
 
 export * from './class/service'
-export * from './class/controller'
+export * from './class/controller.decorator'
 export * from './class/module.decorator'
 
 // export * from './controller/action'
