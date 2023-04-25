@@ -19,4 +19,11 @@ export class EventsController {
         return this.service.create( body )
     }
 
+    @Get(':id')
+    retrieve(params: {id: string}, body: any ) {
+        console.log("Params", params, body)
+        const { id } = params
+        return this.service.retrieve(id)
+    }
+
 }

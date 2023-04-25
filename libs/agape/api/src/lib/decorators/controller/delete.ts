@@ -9,7 +9,7 @@ export function Delete( path?: string, params?: any ) {
 
         /* fake dependency injection */
         /* let methodParameters = Reflect.getMetadata('controller:action:params', descriptor) */
-        let methodParameters = { 'body': 'any', 'params': 'any', 'query': 'any', 'headers': 'any' }
+        let methodParameters = { 'params': 'any', 'body': 'any', 'query': 'any', 'headers': 'any' }
         stub.action(name).inject(methodParameters)
 
         return target

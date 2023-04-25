@@ -49,7 +49,7 @@ export async function retrieveEvent( id: string ) {
             }
         )
     if ( ! event ) {
-        throw new Error(`Could not find event with id $id, record not found`)
+        throw new Error(`Could not find event with id $${id}, record not found`)
     }
     return event
 }
