@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@agape/api": ["libs/agape/api/src/index.ts"],
       "@agape/cli": ["libs/agape/cli/src/index.ts"],
       "@agape/demo": ["libs/agape/demo/src/index.ts"],
       "@agape/exception": ["libs/agape/exception/src/index.ts"],
@@ -24,8 +25,7 @@
       "@agape/types": ["libs/agape/types/src/index.ts"],
       "@lib/api": ["libs/lib-api/src/index.ts"],
       "@lib/express": ["libs/lib-express/src/index.ts"],
-      "@lib/server": ["libs/lib-server/src/index.ts"],
-      "@lib/types": ["libs/lib-types/src/index.ts"]
+      "@lib/server": ["libs/lib-server/src/index.ts"]
     },
     "outDir": "dist",
     "esModuleInterop": true
