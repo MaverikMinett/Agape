@@ -2,7 +2,7 @@ import { events } from './events.model'
 import { v4 } from 'uuid';
 
 import { Exception } from '@agape/exception';
-import { Service } from '@lib/api';
+import { Service } from '@agape/api';
 
 @Service()
 export class EventService {

@@ -1,4 +1,4 @@
-import { Module } from "@lib/api";
+import { Module } from "@agape/api";
 import { FooModule } from "./foo/foo.module";
 import { EventsModule } from "./events/events.module";
 

@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { bootstrap } from '@lib/api';
+import { bootstrap } from '@agape/api';
 import { ApiModule } from './api/api.module';
 
 

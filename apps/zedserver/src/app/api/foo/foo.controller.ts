@@ -1,4 +1,4 @@
-import { Controller, Get, ApiRequest, ApiResponse } from "@lib/api";
+import { Controller, Get, ApiRequest, ApiResponse } from "@agape/api";
 
 
 

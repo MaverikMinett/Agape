@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Post, Put, ApiRequest, ApiResponse } from "@lib/api";
+import { Controller, Delete, Get, Post, Put } from "@agape/api";
 import { EventService } from "./event.service";
 
 @Controller()

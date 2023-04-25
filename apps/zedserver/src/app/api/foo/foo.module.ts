@@ -1,4 +1,4 @@
-import { Module } from "@lib/api";
+import { Module } from "@agape/api";
 import { FooController } from "./foo.controller";
 
 
