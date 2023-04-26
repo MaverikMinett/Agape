@@ -1,11 +1,49 @@
-# agape-model
+# @agape/model
 
-This library was generated with [Nx](https://nx.dev).
+Descriptive data models
 
-## Building
+## Synopsis
 
-Run `nx build agape-model` to build the library.
+```ts
 
-## Running unit tests
+@Model class FooModel {
 
-Run `nx test agape-model` to execute the unit tests via [Jest](https://jestjs.io).
+    @Field foo: string
+    
+    @Field bar: number
+
+    @Field baz: string[]
+    
+}
+
+
+```
+
+## Description
+
+Annotate class based object models
+
+
+## Class Decorators
+
+### `Model`
+
+
+## Property Decorators
+
+### `Field`
+
+
+## Author
+
+Maverik Minett  maverik.minett@gmail.com
+
+
+## Copyright
+
+© 2020-2022 Maverik Minett
+
+
+## License
+
+MIT
