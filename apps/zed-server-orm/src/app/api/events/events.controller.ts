@@ -1,6 +1,7 @@
 import { Controller, Delete, Get, Post, Put } from "@agape/api";
 import { EventService } from "./event.service";
 import { IEvent } from "../../interfaces/IEvents";
+import { Exception } from "@agape/exception";
 
 
 
@@ -24,7 +25,10 @@ export class EventsController {
     @Get(':id')
     retrieve(params: {id: string}, body: any ) {
         const { id } = params
-        return this.service.retrieve(id)
+        const item = this.service.retrieve(id)
+        if ( ! item ) {
+            throw new Exception(404)
+        }
     }
 
     @Put(':id')
