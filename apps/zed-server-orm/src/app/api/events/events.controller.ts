@@ -29,6 +29,7 @@ export class EventsController {
         if ( ! item ) {
             throw new Exception(404)
         }
+        return item
     }
 
     @Put(':id')
