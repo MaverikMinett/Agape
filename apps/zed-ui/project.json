@@ -41,7 +41,8 @@
     "serve": {
       "executor": "@nrwl/webpack:dev-server",
       "options": {
-        "buildTarget": "zed-ui:build"
+        "buildTarget": "zed-ui:build",
+        "port": 4203
       },
       "configurations": {
         "production": {
