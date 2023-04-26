@@ -1,5 +1,5 @@
 export type Class = { new(...args: any[]): any; };
-export type Dictionary = { [key:string]: any };
+export type Dictionary<T = any> = { [key:string]: T };
 export type Function = (...args: any[]) => any;
 export type Interface<T> = Pick<T, keyof T>;
 

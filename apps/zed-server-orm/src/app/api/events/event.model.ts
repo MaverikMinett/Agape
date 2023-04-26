@@ -1,13 +1,13 @@
 
-import { Model } from '@agape/model'
+import { Model, Field } from '@agape/model'
 
 
 
 @Model export class Event {
 
-    id?: string
+    @Field({ primary: true }) id?: string
 
-    name: string
+    @Field name: string
 
     constructor( params: Partial<Pick<Event, keyof Event>>) {
         Object.assign( this, params )

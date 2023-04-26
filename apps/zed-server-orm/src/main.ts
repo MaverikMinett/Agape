@@ -5,7 +5,8 @@ import { connect } from './db';
 import router from './app/app.routes'
 import { connectOrm } from './orm';
 
-import { example } from './examples/mongo-example';
+// import { example } from './examples/mongo-example';
+// example()
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3004;
 const verbose = true;
@@ -54,7 +55,7 @@ async function main() {
     
   }
   
-  example()
+ 
   main()
 
   

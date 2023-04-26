@@ -126,6 +126,8 @@ export class FieldDescriptor {
 
     example?: string|number|Date|Dictionary
 
+    primary?: boolean;
+
     constructor()
     constructor( name:string, type?:string, widget?:string ) 
     constructor( params: FieldDescriptorParams )
@@ -168,6 +170,10 @@ export class FieldDescriptor {
 
     get length(): number {
         return Object.keys(this.ʘ).length
+    }
+
+    all() {
+        return Object.values(this.ʘ)
     }
 
     /**

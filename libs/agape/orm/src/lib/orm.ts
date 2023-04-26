@@ -6,6 +6,7 @@ import { ListQuery } from './mongo/queries/list.query';
 import { DeleteQuery } from './mongo/queries/delete.query';
 import { UpdateQuery } from './mongo/queries/update.query';
 import { pluralize, camelize } from '@agape/string'
+import { InsertQuery } from './mongo/queries/insert.query';
 
 export interface ModelLocatorParams {
     databaseName?: string;
@@ -71,25 +72,28 @@ export class Orm {
         // this.models.set(model, database)
     }
 
-    async insert( model: Class, item: any ) {
+    insert<T extends Class>( model: T, item: Pick<InstanceType<T>, keyof InstanceType<T>> ) {
 
         console.log(`Inserting instance of ${model.name}`, item)
 
         const collection = this.models.get(model).collection
 
-        // TODO: validate the item
+        // // TODO: validate the item
 
-        // TODO: serialize the item
+        // // TODO: serialize the item
 
-        try {
-            const response = await collection.insertOne( item )
-            item.id = response.insertedId.toString()
-            return item.id
-        }
-        catch (error) {
-            console.log("Error inserting record into Foo", error)
-        }
-        console.log(`Success`)
+        return new InsertQuery<T>(model, collection, item)
+
+
+        // try {
+        //     const response = await collection.insertOne( item )
+        //     item.id = response.insertedId.toString()
+        //     return item.id
+        // }
+        // catch (error) {
+        //     console.log("Error inserting record into Foo", error)
+        // }
+        // console.log(`Success`)
     }
 
     retrieve<T extends Class>( model: T, id: string ) {

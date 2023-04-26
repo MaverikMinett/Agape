@@ -11,35 +11,13 @@ export class EventService {
 
 
     async list() {
-
         const query = orm.list(Event)
         const events = await query.exec()
         return events
-
-        // return events
-        // const events = await db()
-        // .collection('events')
-        // .find(
-        //     {},
-        //     { 
-        //         projection: {
-        //             _id: 0,
-        //             id: {$toString: "$_id" },
-        //             name: 1,
-        //         }
-        //     }
-        // )
-        // .toArray()
-
-        // return events
     }
 
     async create( event: Omit<IEvent, 'id'> ) {
-
-        await orm.insert(Event, event)
-
-        // const result = await db().collection('events').insertOne( event )
-        // return { id: result.insertedId.toString() }
+        return orm.insert(Event, event).exec()
     }
 
     async retrieve( id: string ) {

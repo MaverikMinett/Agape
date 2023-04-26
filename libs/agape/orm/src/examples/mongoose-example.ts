@@ -58,7 +58,7 @@ async function main() {
     const foo = new Foo({ name: 'Test', age: 42 })
     let insertedId: string
     try {
-        await orm.insert(Foo, foo)
+        await orm.insert(Foo, foo).exec()
         insertedId = foo.id;
     }
     catch (error) {
