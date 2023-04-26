@@ -29,25 +29,8 @@ export class EventService {
     }
 
     async delete( id: string ) {
+        console.log("EVENT SERVICE DELETE")
         return orm.delete(Event, id).exec()
-        // let _id: ObjectId
-        // try {
-        //     _id = new ObjectId(id)
-        // }
-        // catch {
-        //     throw new Error("Record not found")
-        // }
-    
-        // const result = await db()
-        //     .collection('events')
-        //     .deleteOne({ _id })
-    
-        // if ( result.deletedCount === 0 ) {
-        //     throw new Error(`Could not delete event with id $id, record not found`)
-        // }    
-        // if ( result.acknowledged === false ) {
-        //     // throw new unkown error
-        // }
     }
 
 }
