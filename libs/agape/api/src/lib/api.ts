@@ -67,6 +67,7 @@ export class Api {
             else {
                 apiResponse.status(400, "Bad Request")
                 apiResponse.send( error.message )
+                console.error( error )
             }
         }
         

@@ -5,7 +5,7 @@ import { RetrieveQuery } from './mongo/queries/retrieve.query';
 import { ListQuery } from './mongo/queries/list.query';
 import { DeleteQuery } from './mongo/queries/delete.query';
 import { UpdateQuery } from './mongo/queries/update.query';
-
+import { pluralize, camelize } from '@agape/string'
 
 export interface ModelLocatorParams {
     databaseName?: string;
@@ -41,11 +41,15 @@ export class Orm {
 
     registerModel( model: Class, params: ModelLocatorParams={} ) {
 
+        console.log(`Registering model ${model.name}`)
+
         // TODO: Throw an error if the class passed in is a View and not a plain Model
         // Only Models can be registered here
 
         const databaseName = params?.databaseName ?? 'default';
-        const collectionName = params?.collectionName ?? model.name;
+        const collectionName = params?.collectionName ?? camelize(pluralize(model.name));
+
+        console.log("Collection", collectionName)
 
         const database = this.databases.get(databaseName)
         if ( ! database )
@@ -96,7 +100,7 @@ export class Orm {
         return new RetrieveQuery<T>(model, collection, id)
     }
 
-    update<T extends Class>(model: T, id: string, item: Pick<T, keyof T> ) {
+    update<T extends Class>(model: T, id: string, item: Pick<InstanceType<T>, keyof InstanceType<T>> ) {
         console.log(`Updating instance of ${model.name}`, id, item)
 
         const collection = this.models.get(model).collection
@@ -105,9 +109,19 @@ export class Orm {
     }
 
     list<T extends Class>( model: T ) {
-        const collection = this.models.get(model).collection
+        const locator = this.models.get(model)
 
-        return new ListQuery<T>(model, collection)
+        if ( ! locator ) {
+            throw new Error(`${model.name} has not been registered with the orm`)
+        }
+
+        console.log(locator)
+
+        const collection = locator.collection
+
+        const query = new ListQuery<T>(model, collection)
+
+        return query
     }
 
     // lookup<T extends Class>( model: T, filter: any ) {

@@ -17,7 +17,7 @@ export class ModelDescriptor {
 
     description: string;
 
-    // symbol: string;            // the class name
+    symbol: string;            // the class name
 
     token: string;
 

@@ -1,7 +1,7 @@
 import { Db } from 'mongodb'
 import { MongoConnection } from '../connections/mongo.connection';
 import { Database } from './database';
-import { Class } from '../../../../object/src';
+import { Class } from '@agape/types';
 
 
 export class MongoDatabase extends Database {
@@ -17,7 +17,7 @@ export class MongoDatabase extends Database {
         this.connection = connection
         this.databaseName = databaseName
 
-        this.db = this.connection.client.db()
+        this.db = this.connection.client.db(this.databaseName)
     }
 
     collection( model: Class ) {

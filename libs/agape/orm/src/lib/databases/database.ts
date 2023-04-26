@@ -1,4 +1,4 @@
-import { Class } from '../../../../object/src';
+import { Class } from '@agape/types';
 import { Collection } from 'mongodb';
 
 export abstract class Database {
