@@ -1,9 +1,13 @@
 
+import { Document } from './document';
+import { IsArray, IsDate, IsMap, IsPrimitive, IsSet, OmitMethods } from '@agape/types';
 
 type FieldType = 'integer'|'decimal'|'number'|'string'|'text'|'date'|'time';
 type WidgetType = 'input'|'date'|'number'|'textarea'|'time';
 
-import { IsArray, IsDate, IsDocument, IsMap, IsPrimitive, IsSet, OmitMethods } from '../../../object/src';
+
+
+export type IsDocument<T> = T extends Document ? true : false
 
 export type Flatten<T> = IsPrimitive<T> extends true ? T
     : IsArray<T> extends true ? FlattenArray<T>
