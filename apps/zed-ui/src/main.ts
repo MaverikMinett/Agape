@@ -2,8 +2,8 @@
 
 import 'reflect-metadata';
 
-// import { FooComponent } from './app/foo/foo.component';
+import { FooComponent } from './app/foo.component';
 import { bootstrapComponent } from './lib/index';
 
 const appRoot: HTMLElement = document.getElementById('app-root');
-bootstrapComponent(appRoot);
+bootstrapComponent(appRoot, FooComponent);
