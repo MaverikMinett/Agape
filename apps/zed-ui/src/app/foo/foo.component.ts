@@ -1,5 +1,5 @@
-import { Component } from '../../lib/core/component';
-import { On } from '../../lib/core/decorators'
+import { Component } from '../../lib/ui/component';
+import { On } from '../../lib/ui/decorators'
 // import template from './foo.template.html'; 
 
 const template = `
