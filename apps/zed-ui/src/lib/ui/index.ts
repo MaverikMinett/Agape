@@ -1,1 +1,0 @@
-export { bootstrapComponent } from './util';
