@@ -1,0 +1,78 @@
+{
+  "name": "zed-web-components",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/zed-web-components/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/zed-web-components",
+        "compiler": "babel",
+        "main": "apps/zed-web-components/src/main.ts",
+        "tsConfig": "apps/zed-web-components/tsconfig.app.json",
+        "webpackConfig": "apps/zed-web-components/webpack.config.js",
+        "assets": [
+          "apps/zed-web-components/src/favicon.ico",
+          "apps/zed-web-components/src/assets"
+        ],
+        "index": "apps/zed-web-components/src/index.html",
+        "baseHref": "/",
+        "styles": ["apps/zed-web-components/src/styles.css"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/zed-web-components/src/environments/environment.ts",
+              "with": "apps/zed-web-components/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/webpack:dev-server",
+      "options": {
+        "buildTarget": "zed-web-components:build",
+        "port": 4202
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "zed-web-components:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/zed-web-components/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/zed-web-components/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  }
+}
