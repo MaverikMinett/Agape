@@ -1,0 +1,74 @@
+{
+  "name": "zed-ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/zed-ui/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/zed-ui",
+        "compiler": "babel",
+        "main": "apps/zed-ui/src/main.ts",
+        "tsConfig": "apps/zed-ui/tsconfig.app.json",
+        "webpackConfig": "apps/zed-ui/webpack.config.js",
+        "assets": ["apps/zed-ui/src/favicon.ico", "apps/zed-ui/src/assets"],
+        "index": "apps/zed-ui/src/index.html",
+        "baseHref": "/",
+        "styles": ["apps/zed-ui/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/zed-ui/src/environments/environment.ts",
+              "with": "apps/zed-ui/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/webpack:dev-server",
+      "options": {
+        "buildTarget": "zed-ui:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "zed-ui:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/zed-ui/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/zed-ui/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  }
+}
