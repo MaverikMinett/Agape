@@ -56,3 +56,17 @@ export function Model( ...args:any[] ):any {
 Model.descriptor = function ( model:Class ) {
     return Reflect.getMetadata( "model:descriptor", model ) as ModelDescriptor
 }
+
+
+// Model.descriptor = function ( target:Class|object, create:boolean=false ) {
+//     if ( typeof target === "function" ) target = target.prototype
+
+//     let descriptor: ModelDescriptor = Reflect.getMetadata( "model:descriptor", target )
+
+//     if ( ! descriptor && create === true ) {
+//         descriptor = new ModelDescriptor( )
+//         Reflect.defineMetadata("model:descriptor", descriptor, target)
+//     }
+
+//     return descriptor
+// }
