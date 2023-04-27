@@ -1,1 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+html, body { 
+    margin: 0px; 
+}
+#app-root {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+app-foo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.counter {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#add-button {
+    padding: 8px;
+    margin: 8px;
+}
