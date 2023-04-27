@@ -3,7 +3,7 @@ import { Component } from "../lib/decorators";
 
 
 @Component( {
-    'template': 'Hey There {{ count }} Dracula',
+    'template': '<div>Hey There {{ count }} Dracula</div>',
     'selector': 'app-foo',
 })
 export class FooComponent {

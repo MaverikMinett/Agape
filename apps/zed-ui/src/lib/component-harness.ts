@@ -75,6 +75,12 @@ export class ComponentHarness<T extends Class> {
                         }
                     }
                 }
+                else if ( node.type === 'Tag' ) {
+                    console.log(node)
+                    const domNode = document.createElement(node.name)
+                    openElement.appendChild(domNode)
+                    stack.push(domNode)
+                }
             }
         })
 
