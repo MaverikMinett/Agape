@@ -18,11 +18,11 @@ Component.descriptor = function ( target: any, create=false ) {
 
     if ( typeof target === "function" ) target = target.prototype
 
-    console.log( target )
+    // console.log( target )
 
     let descriptor = Reflect.getMetadata('ui:component:descriptor', target)
 
-    console.log( descriptor )
+    // console.log( descriptor )
 
     if ( ! descriptor && create === true ) {
         descriptor = new ComponentDescriptor( )
