@@ -1,0 +1,78 @@
+{
+  "name": "zed-ui-routing",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/zed-ui-routing/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/zed-ui-routing",
+        "compiler": "babel",
+        "main": "apps/zed-ui-routing/src/main.ts",
+        "tsConfig": "apps/zed-ui-routing/tsconfig.app.json",
+        "webpackConfig": "apps/zed-ui-routing/webpack.config.js",
+        "assets": [
+          "apps/zed-ui-routing/src/favicon.ico",
+          "apps/zed-ui-routing/src/assets"
+        ],
+        "index": "apps/zed-ui-routing/src/index.html",
+        "baseHref": "/",
+        "styles": ["apps/zed-ui-routing/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/zed-ui-routing/src/environments/environment.ts",
+              "with": "apps/zed-ui-routing/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/webpack:dev-server",
+      "options": {
+        "buildTarget": "zed-ui-routing:build",
+        "port": 4204
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "zed-ui-routing:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/zed-ui-routing/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/zed-ui-routing/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  }
+}
