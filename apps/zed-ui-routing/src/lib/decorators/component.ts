@@ -1,4 +1,4 @@
-import { ComponentDescriptor } from "./descriptors"
+import { ComponentDescriptor } from "../descriptors/component"
 
 
 
@@ -20,7 +20,7 @@ Component.descriptor = function ( target: any, create=false ) {
 
     // console.log( target )
 
-    let descriptor = Reflect.getMetadata('ui:component:descriptor', target)
+    let descriptor: ComponentDescriptor = Reflect.getMetadata('ui:component:descriptor', target)
 
     // console.log( descriptor )
 

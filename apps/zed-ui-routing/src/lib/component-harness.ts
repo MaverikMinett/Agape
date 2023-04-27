@@ -1,6 +1,6 @@
 import { Class } from "@agape/types";
-import { Component } from "./decorators";
-import { ComponentDescriptor } from "./descriptors";
+import { Component } from "./decorators/component";
+import { ComponentDescriptor } from "./descriptors/component";
 
 import { parse, walk, SyntaxKind } from 'html5parser';
 

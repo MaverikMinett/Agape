@@ -1,22 +1,40 @@
 import { Class } from "@agape/types";
 import { ComponentHarness } from "./component-harness";
+import { Module } from "./decorators/module";
 
 
 export class App {
 
 
-    constructor( private element: HTMLElement, private component: Class  ) {
+    
+
+    constructor( public element: HTMLElement, public module?: Class  ) {
+        /* validate the module */
+        if ( module ) {
+            const descriptor = Module.descriptor(module)
+            if ( ! descriptor ) {
+                 throw new Error(`${module.name} is not a UI module`)
+            }
+            this.bootstrapModule( module )
+        }
 
     }
 
-    draw() {
+    bootstrapModule( module: Class ) {
+        const descriptor = Module.descriptor(module)
+        const component = descriptor.components[0]
+        this.bootstrapComponent(component)
+    }
 
-        const harness = new ComponentHarness(this.component)
+    bootstrapComponent( component: Class ) {
+        const harness = new ComponentHarness(component)
 
         this.element.appendChild( harness.dom )
 
         harness.updateDomWithExpressionValues()
     }
+
+
 
 
 }
