@@ -79,19 +79,36 @@ export class ComponentHarness<T extends Class> {
                 }
                 else if ( node.type === 'Tag' ) {
                     
-                    const domNode = document.createElement(node.name)
+                    const element = document.createElement(node.name)
 
                     for ( let attribute of node.attributes ) {
-                        const name = attribute.name.value
-                        const value = attribute.value.value
-                        if ( ! name.startsWith('*') && ! name.startsWith('[') && ! name.startsWith['('] ) {
-                            domNode.setAttribute(name, value)
+                        let name = attribute.name.value
+                        let value = attribute.value.value
+                        /* event binding attribute */
+                        if ( name.startsWith("(") ) {
+                            const isEventBinding = true;
+                            if ( name.endsWith(")") !== true ) {
+                                throw new SyntaxError(`Missing trailing parenthesis in ${name} near element<${node.open.value}>`)
+                            }
+                            name = name.substring(1,name.length - 1)
+                            let method = value.substring(0,value.length - 2) // ()
+
+                            if (name === 'click') {
+                                element.addEventListener('click', mouseEvent => {
+                                    this.instance[method].call(this.instance, mouseEvent) 
+                                    this.updateDomWithExpressionValues()
+                                } )
+                            }
+                        }
+
+                        if ( (! name.startsWith('*')) && (! name.startsWith('[')) && (! name.startsWith('(')) ) {
+                            element.setAttribute(name, value)
                         }
                         
                     }
 
-                    openElement.appendChild(domNode)
-                    stack.push(domNode)
+                    openElement.appendChild(element)
+                    stack.push(element)
                 }
             },
             leave: (node) => {
@@ -102,6 +119,14 @@ export class ComponentHarness<T extends Class> {
         } )
 
         return { dom, expressions }
+    }
+
+    updateDomWithExpressionValues() {
+        for ( let expression of this.expressions ) {
+            const { node, statement } = expression
+            const value = this.instance[statement]
+            node.textContent = value
+        }
     }
 
     findVariablesInText( text: string ) {
@@ -163,13 +188,7 @@ export class ComponentHarness<T extends Class> {
     }
 
 
-    updateDomWithExpressionValues() {
-        for ( let expression of this.expressions ) {
-            const { node, statement } = expression
-            const value = this.instance[statement]
-            node.textContent = value
-        }
-    }
+
 
 }
 
