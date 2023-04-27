@@ -17,3 +17,5 @@ export type IsMap<T> = T extends Map<infer K, infer V> ? true : false
 export type IsSet<T> = T extends Set<infer X> ? true : false
 
 export type OmitMethods<T> = Pick< T, { [K in keyof T]: IsFunction<T[K]> extends true ? never : K }[keyof T] >
+
+export type ParametersFor<T> = Partial<Pick<T, keyof OmitMethods<T>>>
