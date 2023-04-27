@@ -52,6 +52,8 @@ export class ComponentHarness<T extends Class> {
 
         walk( ast, {
             enter: (node) => {
+
+                console.log("Enter", node)
                 
                 const openElement = stack.at(-1)
 
@@ -60,7 +62,7 @@ export class ComponentHarness<T extends Class> {
                     // openElement.appendChild(domNode)
 
                     const blocks = this.findVariablesInText(node.value)
-                    console.log("Found", blocks)
+                    // console.log("Found", blocks)
                     for ( const block of blocks ) {
                         if ( block.type === "Text" ) {
                             const domNode = document.createTextNode(block.value);
@@ -76,25 +78,48 @@ export class ComponentHarness<T extends Class> {
                     }
                 }
                 else if ( node.type === 'Tag' ) {
-                    console.log(node)
+                    
                     const domNode = document.createElement(node.name)
+
+                    for ( let attribute of node.attributes ) {
+                        const name = attribute.name.value
+                        const value = attribute.value.value
+                        if ( ! name.startsWith('*') && ! name.startsWith('[') && ! name.startsWith['('] ) {
+                            domNode.setAttribute(name, value)
+                        }
+                        
+                    }
+
                     openElement.appendChild(domNode)
                     stack.push(domNode)
                 }
+            },
+            leave: (node) => {
+                console.log("Leave", node)
+                if ( node.type === 'Tag' ) stack.pop()
             }
-        })
+
+        } )
 
         return { dom, expressions }
     }
 
     findVariablesInText( text: string ) {
 
-        console.log("Find variables in text")
-
-        const pos = { start: 0, end: 0, value: "" }
         const blocks = []
+        while ( text ) {
+            const response = this.findVariableInText(text)
+            blocks.push(...response.blocks)
+            text = response.text
+        }
+        
+        return blocks
+    }
 
+    findVariableInText( text: string ) {
         let index = text.indexOf("{")
+
+        const blocks = []
 
         if ( text.charAt(index + 1) == "{" ) {
 
@@ -123,13 +148,18 @@ export class ComponentHarness<T extends Class> {
             const expressionBlock = { value: expression.trim(), type: "Expression" }
             blocks.push(expressionBlock)
 
-            let remaningText = text.substring(index + 1 + 1)
-            const remainingTextBlock = { value: remaningText, type: "Text" }
-            blocks.push(remainingTextBlock)
+            text = text.substring(index + 1 + 1)
+            // const remainingTextBlock = { value: remaningText, type: "Text" }
+            // blocks.push(remainingTextBlock)
         }
 
-        return blocks;
+        if ( blocks.length === 0 ) {
+            const block = { value: text, type: "Text" }
+            blocks.push(block)
+            text = null
+        }
 
+        return { blocks, text };
     }
 
 
