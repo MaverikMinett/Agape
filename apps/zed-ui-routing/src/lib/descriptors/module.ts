@@ -1,4 +1,4 @@
-import { Class } from "@agape/types"
+import { Class, Dictionary } from "@agape/types"
 import { RouteDefinition } from "../modules/router/route-definition.interface";
 import { ComponentDescriptor } from "./component";
 
@@ -9,23 +9,42 @@ export interface ModuleImportDescriptor {
     routes?: RouteDefinition[]
 }
 
-export class ModuleDescriptor {
-    // modules: Class[]
+export interface ComponentContext {
+    module: Class,
+    component: Class
+}
 
-    // components?: Class[]
-    
+export class ModuleDescriptor {
     declares?:  Class[]
 
     provides?: Class[]
 
     imports?: Array<Class|ModuleImportDescriptor>
 
+    exports?: Class[]
+
     routes?: RouteDefinition[]
+
+    selectors: Dictionary<ComponentContext> =  { }
 
     bootstrap?: Class
 
-    constructor( params?: Partial<Pick<ModuleDescriptor, keyof ModuleDescriptor>> ) {
+    constructor( public moduleClass: Class, params?: Partial<Pick<ModuleDescriptor, keyof ModuleDescriptor>> ) {
         if ( params ) Object.assign(this, params)
+    }
+
+    finalize() {
+        if ( this.declares ) {
+            for ( let declaration of this.declares ) {
+                const component = declaration
+                const componentDescriptor: ComponentDescriptor = Reflect.getMetadata('ui:component:descriptor', component.prototype )
+                const selector = componentDescriptor.selector
+                this.selectors[selector] = {
+                    module: this.moduleClass,
+                    component: component
+                }
+            }
+        }
 
         if ( this.imports ) {
             this.importModules( this.imports )
@@ -42,50 +61,66 @@ export class ModuleDescriptor {
 
         const moduleClass = module instanceof Function ? module : module.module
 
-        let descriptor: ModuleDescriptor = Reflect.getMetadata('ui:module:descriptor', moduleClass)
+        console.log(`Importing module ${moduleClass.name} into ${this.moduleClass.name}` )
+
+        let moduleDescriptor: ModuleDescriptor = Reflect.getMetadata('ui:module:descriptor', moduleClass.prototype)
+
+        if ( moduleDescriptor.exports ) {
+            for ( let exported of moduleDescriptor.exports ) {
+                const componentDescriptor: ComponentDescriptor = Reflect.getMetadata('ui:component:descriptor', exported.prototype)
+                if ( componentDescriptor ) {
+                    const importingComponent = exported
+                    const selector = componentDescriptor.selector
+                    if ( selector ) {
+                        if ( selector in this.selectors ) {
+                            const existing  = this.selectors[selector]
+                            throw new Error(`Cannot import component ${importingComponent.name} into ${this.moduleClass.name} from `
+                            + ` from ${moduleClass.name}, selector '${selector}' in use by ${existing.component.name}`)
+                        }
+                        else {
+                            this.selectors[selector] = { module: this.moduleClass, component: importingComponent }
+                        }
+                    }
+                }
+                else {
+                    const moduleDescriptor: ModuleDescriptor = Reflect.getMetadata('ui:module:descriptor', exported.prototype)
+                    if ( moduleDescriptor ) {
+                        // TODO: this.importModule(exported)
+                    }
+                }
 
 
+            }
+        }
+
+        // for ( let exported )
+
+        // for ( let selector of Object.keys(descriptor.selectors) ) {
+        //     if ( selector in this.selectors ) {
+        //         const duplicate = descriptor.selectors[selector]
+        //         const existing  = this.selectors[selector]
+        //         throw new Error(`Cannot import component ${duplicate.component.name} into ${this.moduleClass.name} from `
+        //         + ` from ${duplicate.module.name}, selector '${selector}' in use by ${existing.component.name}`)
+        //     }
+        //     else {
+        //         this.selectors[selector] = { ...descriptor.selectors[selector] }
+        //     }
+        // }
     }
 
     hasSelector( selector: string ) {
-        for ( let component of this.declares ) {
-            console.log(`Checking componet ${component.name}`)
-            const descriptor: ComponentDescriptor = Reflect.getMetadata('ui:component:descriptor', component.prototype)
-            console.log(descriptor)
-            if ( descriptor?.selector === selector )  return true
-        }
-        for ( let importDeclaration of this.imports ) {
-            const module = importDeclaration instanceof Function ? importDeclaration : importDeclaration.module
-            console.log(`Checking child module ${module.name}`)
-            if ( module ) {
-                const moduleDescriptor: ModuleDescriptor = Reflect.getMetadata('ui:module:descriptor', module.prototype) 
-                for ( let component of moduleDescriptor.declares ) {
-                    console.log(`Checkong componet ${component.name}`)
-                    const descriptor: ComponentDescriptor = Reflect.getMetadata('ui:component:descriptor', component.prototype)
-                    console.log(descriptor)
-                    if ( descriptor?.selector === selector )  return true
-                }
-            }
-        }
-        return false
+        return selector in this.selectors
     }
 
     getComponentForSelector( selector: string ) {
-        for ( let component of this.declares ) {
-            const descriptor: ComponentDescriptor = Reflect.getMetadata('ui:component:descriptor', component.prototype)
-            if ( descriptor?.selector === selector )  return component
+
+        console.log(this.selectors)
+
+        const componentContext = this.selectors[selector]
+        if ( ! componentContext ) {
+            throw new Error(`Internal Error: Could not find a component for selector ${selector}`)
         }
-        for ( let importDeclaration of this.imports ) {
-            const module = importDeclaration instanceof Function ? importDeclaration : importDeclaration.module
-            console.log(`Checking child module ${module.name}`)
-            if ( module ) {
-                const moduleDescriptor: ModuleDescriptor = Reflect.getMetadata('ui:module:descriptor', module.prototype) 
-                for ( let component of moduleDescriptor.declares ) {
-                    const descriptor: ComponentDescriptor = Reflect.getMetadata('ui:component:descriptor', component.prototype)
-                    if ( descriptor?.selector === selector )  return component
-                }
-            }
-        }
-        throw new Error(`Internal Error: Could not find a component for selector ${selector}`)
+        return componentContext
+
     }
 }

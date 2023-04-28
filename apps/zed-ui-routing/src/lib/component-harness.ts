@@ -5,6 +5,7 @@ import { ComponentDescriptor } from "./descriptors/component";
 import { parse, walk, SyntaxKind } from 'html5parser';
 import { ApplicationContext } from "./application-context.interface";
 import { html5tags } from "./html5-tags";
+import { ComponentContext } from "./descriptors/module";
 
 
 export interface TextNodeDescriptor {
@@ -89,8 +90,9 @@ export class ComponentHarness<T extends Class> {
                     console.log("Go module descriptor", moduleDescriptor)
                     if ( moduleDescriptor.hasSelector(node.name) ) {
                         console.log("Has selector", node.name)
-                        const component = moduleDescriptor.getComponentForSelector(node.name)
-                        element = this.mountComponent(this.module, component)
+                        const componentContext: ComponentContext = moduleDescriptor.getComponentForSelector(node.name)
+                        const {component, module} = componentContext 
+                        element = this.mountComponent(module, component)
                     }
                     else if ( html5tags[node.name] ) {
                         element = document.createElement(node.name)

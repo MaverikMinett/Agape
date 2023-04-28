@@ -80,18 +80,26 @@ export function Module( params?: ModuleParams ) {
         /* assign any parameters on the descriptor from the decorator params */
         if ( params ) Object.assign(descriptor, params)
 
+        descriptor.finalize()
+
         return target
     }
 }
 
 Module.descriptor = function ( target: any, create=false ) {
 
-    if ( typeof target === "function" ) target = target.prototype
+    let targetClass = target 
+    if ( typeof target === "function" ) {
+        target = target.prototype
+    }
+    else {
+        targetClass = target.constructor
+    }
 
     let descriptor: ModuleDescriptor = Reflect.getMetadata('ui:module:descriptor', target)
 
     if ( ! descriptor && create === true ) {
-        descriptor = new ModuleDescriptor( )
+        descriptor = new ModuleDescriptor( targetClass )
         Reflect.defineMetadata("ui:module:descriptor", descriptor, target)
     }
 
