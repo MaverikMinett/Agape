@@ -4,6 +4,7 @@ import { ComponentDescriptor } from "./descriptors/component";
 
 import { parse, walk, SyntaxKind } from 'html5parser';
 import { ApplicationContext } from "./application-context.interface";
+import { html5tags } from "./html5-tags";
 
 
 export interface TextNodeDescriptor {
@@ -91,8 +92,11 @@ export class ComponentHarness<T extends Class> {
                         const component = moduleDescriptor.getComponentForSelector(node.name)
                         element = this.mountComponent(this.module, component)
                     }
-                    else {
+                    else if ( html5tags[node.name] ) {
                         element = document.createElement(node.name)
+                    }
+                    else {
+                       throw new Error(`Unknown selector ${node.name}, do you need to declare ${node.name} in a module`)
                     }
 
                     for ( let attribute of node.attributes ) {

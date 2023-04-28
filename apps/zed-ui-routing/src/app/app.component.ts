@@ -5,7 +5,7 @@ import { Component } from "../lib/decorators/component";
 @Component( {
     'template': `
 
-    Foo:
+    App Component Works
 
     <app-foo></app-foo>
     `,

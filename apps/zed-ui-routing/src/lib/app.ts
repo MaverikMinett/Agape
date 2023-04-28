@@ -59,7 +59,7 @@ export class App implements ApplicationContext {
     }
 
     addRoutesToRouter( module: Class, routes: RouteDefinition[] ) {
-        this.router.addRoutes(module, routes)
+        if ( routes ) this.router.addRoutes(module, routes)
     }
 
 

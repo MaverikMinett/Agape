@@ -1,4 +1,4 @@
-import { Component } from "../lib/decorators/component";
+import { Component } from "../../lib/decorators/component";
 
 
 
