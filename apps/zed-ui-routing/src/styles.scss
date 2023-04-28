@@ -26,3 +26,7 @@ app-foo {
     padding: 8px;
     margin: 8px;
 }
+
+a[routerlink] {
+    cursor: pointer;
+}

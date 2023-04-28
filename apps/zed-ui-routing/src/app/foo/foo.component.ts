@@ -8,6 +8,10 @@ import { Component } from "../../lib/decorators/component";
     <button id="add-button" (click)="increaseCounter()" class="bg-blue-500 text-white">
         Plick Me
     </button>
+    <hr/>
+    <div style="padding: 8px">
+        <a routerLink="/events">Go to events Page</a>
+    </div>
     `,
     'selector': 'app-foo',
 })

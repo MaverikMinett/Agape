@@ -3,6 +3,7 @@ import { Component } from "./decorators/component";
 import { ComponentDescriptor } from "./descriptors/component";
 
 import { parse, walk, SyntaxKind } from 'html5parser';
+import { ApplicationContext } from "./application-context.interface";
 
 
 export interface TextNodeDescriptor {
@@ -24,7 +25,7 @@ export class ComponentHarness<T extends Class> {
 
     expressions: Expression[]
     
-    constructor(public component: T) {
+    constructor( private app: ApplicationContext, public component: T) {
 
         this.descriptor = Component.descriptor(this.component)
 
@@ -104,7 +105,20 @@ export class ComponentHarness<T extends Class> {
                         if ( (! name.startsWith('*')) && (! name.startsWith('[')) && (! name.startsWith('(')) ) {
                             element.setAttribute(name, value)
                         }
-                        
+                    }
+
+                    if ( node.name === 'a' ) {
+                        const routerLink = node.attributes.find( a => a.name.value === 'routerLink' || a.name.value === '[routerLink]' )
+                        if ( routerLink ) {
+                            const href = routerLink.value.value
+                            element.setAttribute('href', href)
+
+                            element.addEventListener('click', (event) => {
+                                event.preventDefault()           // dont allow browser to navigate
+                                this.app.router.navigate(href)   // use the application router instead
+                            })
+                        }
+
                     }
 
                     openElement.appendChild(element)
