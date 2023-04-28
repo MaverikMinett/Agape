@@ -85,7 +85,7 @@ export class ModuleDescriptor {
                 else {
                     const moduleDescriptor: ModuleDescriptor = Reflect.getMetadata('ui:module:descriptor', exported.prototype)
                     if ( moduleDescriptor ) {
-                        // TODO: this.importModule(exported)
+                        this.importModule(exported)
                     }
                 }
 

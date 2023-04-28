@@ -10,7 +10,7 @@ import { FooComponent } from "./foo.component";
 @Module({
     imports: [ BarModule ],
     declares: [ FooComponent ],
-    exports: [ FooComponent ]
+    exports: [ FooComponent, BarModule ]
 })
 export class FooModule {
 

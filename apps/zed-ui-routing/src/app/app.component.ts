@@ -8,6 +8,8 @@ import { Component } from "../lib/decorators/component";
     App Component Works
 
     <app-foo></app-foo>
+
+    <app-bar></app-bar>
     `,
     'selector': 'app-component',
 })
