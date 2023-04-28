@@ -1,5 +1,6 @@
 import { Class } from "@agape/types"
-import { RouteDefinition } from "../modules/route-definition.interface";
+import { RouteDefinition } from "../modules/router/route-definition.interface";
+import { ComponentDescriptor } from "./component";
 
 
 
@@ -9,13 +10,15 @@ export interface ModuleImportDescriptor {
 }
 
 export class ModuleDescriptor {
-    modules: Class[]
+    // modules: Class[]
 
-    components: Class[]
+    // components?: Class[]
     
-    provides: Class[]
+    declares?:  Class[]
 
-    imports?: Class[]|{ }
+    provides?: Class[]
+
+    imports?: Array<Class|ModuleImportDescriptor>
 
     routes?: RouteDefinition[]
 
@@ -23,5 +26,42 @@ export class ModuleDescriptor {
 
     constructor( params?: Partial<Pick<ModuleDescriptor, keyof ModuleDescriptor>> ) {
         if ( params ) Object.assign(this, params)
+
+        if ( this.imports ) {
+            this.importModules( this.imports )
+        }
+    }
+
+    private importModules( imports: Array<Class|ModuleImportDescriptor> ) {
+        for ( let module of imports ) {
+            this.importModule(module)
+        }
+    }
+
+    private importModule( module: Class|ModuleImportDescriptor ) {
+
+        const moduleClass = module instanceof Function ? module : module.module
+
+        let descriptor: ModuleDescriptor = Reflect.getMetadata('ui:module:descriptor', moduleClass)
+
+
+    }
+
+    hasSelector( selector: string ) {
+        for ( let component of this.declares ) {
+            console.log(`Checkong componet ${component.name}`)
+            const descriptor: ComponentDescriptor = Reflect.getMetadata('ui:component:descriptor', component.prototype)
+            console.log(descriptor)
+            if ( descriptor?.selector === selector )  return true
+        }
+        return false
+    }
+
+    getComponentForSelector( selector: string ) {
+        for ( let component of this.declares ) {
+            const descriptor: ComponentDescriptor = Reflect.getMetadata('ui:component:descriptor', component.prototype)
+            if ( descriptor?.selector === selector )  return component
+        }
+        throw new Error(`Internal Error: Could not find a component for selector ${selector}`)
     }
 }

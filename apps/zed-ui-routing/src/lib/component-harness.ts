@@ -25,7 +25,7 @@ export class ComponentHarness<T extends Class> {
 
     expressions: Expression[]
     
-    constructor( private app: ApplicationContext, public component: T) {
+    constructor( private app: ApplicationContext, public module: Class, public component: T) {
 
         this.descriptor = Component.descriptor(this.component)
 
@@ -54,7 +54,7 @@ export class ComponentHarness<T extends Class> {
         walk( ast, {
             enter: (node) => {
 
-                console.log("Enter", node)
+                // console.log("Enter", node)
                 
                 const openElement = stack.at(-1)
 
@@ -80,7 +80,20 @@ export class ComponentHarness<T extends Class> {
                 }
                 else if ( node.type === 'Tag' ) {
                     
-                    const element = document.createElement(node.name)
+                    let element: HTMLElement
+
+                    console.log(`Processing ${node.name}`)
+
+                    const moduleDescriptor = Reflect.getMetadata('ui:module:descriptor', this.module.prototype)
+                    console.log("Go module descriptor", moduleDescriptor)
+                    if ( moduleDescriptor.hasSelector(node.name) ) {
+                        console.log("Has selector", node.name)
+                        const component = moduleDescriptor.getComponentForSelector(node.name)
+                        element = this.mountComponent(this.module, component)
+                    }
+                    else {
+                        element = document.createElement(node.name)
+                    }
 
                     for ( let attribute of node.attributes ) {
                         let name = attribute.name.value
@@ -126,13 +139,18 @@ export class ComponentHarness<T extends Class> {
                 }
             },
             leave: (node) => {
-                console.log("Leave", node)
+                // console.log("Leave", node)
                 if ( node.type === 'Tag' ) stack.pop()
             }
 
         } )
 
         return { dom, expressions }
+    }
+
+    mountComponent( module:Class, component:Class ) {
+        const harness = new ComponentHarness( this.app, module, component)
+        return harness.dom
     }
 
     updateDomWithExpressionValues() {

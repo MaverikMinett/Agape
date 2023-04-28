@@ -8,7 +8,7 @@ import 'reflect-metadata';
 // import { FooModule } from './app/foo/foo.module';
 import { AppModule } from './app/app.module'
 import { bootstrapModule } from './lib/bootstrap-module';
-import { RouterModule } from './lib/modules/router.module';
+
 
 
 

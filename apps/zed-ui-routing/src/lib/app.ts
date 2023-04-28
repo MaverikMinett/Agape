@@ -2,8 +2,8 @@ import { Class } from "@agape/types";
 import { ComponentHarness } from "./component-harness";
 import { Module } from "./decorators/module";
 import { ApplicationContext } from "./application-context.interface";
-import { Router } from "./router";
-import { RouteDefinition } from "./modules/route-definition.interface";
+import { Router } from "./modules/router/router";
+import { RouteDefinition } from "./modules/router/route-definition.interface";
 
 
 export class App implements ApplicationContext {
@@ -30,16 +30,16 @@ export class App implements ApplicationContext {
     bootstrapModule( module: Class ) {
         const descriptor = Module.descriptor(module)
         console.log("Application Routes",descriptor.routes )
-        this.addRoutesToRouter( descriptor.routes )
+        this.addRoutesToRouter( module, descriptor.routes )
         const component = descriptor.bootstrap
         if ( ! component ) {
             throw new Error(`Cannot boostrap module ${module.name}, does not specify a component to bootstrap.`)
         }
-        this.bootstrapComponent(component)
+        this.bootstrapComponent(module, component)
     }
 
-    bootstrapComponent( component: Class ) {
-        const harness = new ComponentHarness(this, component)
+    bootstrapComponent( module: Class, component: Class ) {
+        const harness = new ComponentHarness(this, module, component)
 
         this.element.appendChild( harness.dom )
 
@@ -49,19 +49,17 @@ export class App implements ApplicationContext {
     changeComponentBecauseOfRouter( component ) {
         console.log("Changing Route")
         
-        const harness = new ComponentHarness(this, component)
+        // const harness = new ComponentHarness(this, component)
         
-        this.element.innerHTML = ""
+        // this.element.innerHTML = ""
 
-        this.element.appendChild( harness.dom )
+        // this.element.appendChild( harness.dom )
 
-        harness.updateDomWithExpressionValues()
-    
-
+        // harness.updateDomWithExpressionValues()
     }
 
-    addRoutesToRouter( routes: RouteDefinition[] ) {
-        this.router.addRoutes(routes)
+    addRoutesToRouter( module: Class, routes: RouteDefinition[] ) {
+        this.router.addRoutes(module, routes)
     }
 
 

@@ -5,11 +5,11 @@ import { Component } from "../lib/decorators/component";
 @Component( {
     'template': `
 
-    <div style="padding: 16px">
-        <a routerLink="/foo">Foo Component</a>
-    </div>
+    Foo:
+
+    <app-foo></app-foo>
     `,
-    'selector': 'app-foo',
+    'selector': 'app-component',
 })
 export class AppComponent {
     

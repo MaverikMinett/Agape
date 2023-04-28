@@ -5,10 +5,10 @@ import { AppComponent } from "../../app/app.component"
 
 
 export interface ModuleParams {
-    components?: Class[]
-    modules?: Class[]
+    declares?: Class[]
     provides?: Class[]
     imports?: Array<Class|ModuleImportDescriptor>
+    exports?: Class[]
     bootstrap?: Class
 }
 
@@ -18,17 +18,17 @@ export function Module( params?: ModuleParams ) {
         const descriptor = Module.descriptor(target, true )
 
         /* perform some validation */
-        if ( params?.modules ) {
-            /* validate that constructor params are injectable services */
-            for ( let module of params.modules ) {
-                const moduleDescriptor = Module.descriptor(module)
-                /* throw an error if not a module */
-                if ( ! moduleDescriptor ) 
-                    throw new Error(`Invalid argument to 'modules', ${module.name} is not a Module`)
-            }
-        }
+        // if ( params?.modules ) {
+        //     /* validate that constructor params are injectable services */
+        //     for ( let module of params.modules ) {
+        //         const moduleDescriptor = Module.descriptor(module)
+        //         /* throw an error if not a module */
+        //         if ( ! moduleDescriptor ) 
+        //             throw new Error(`Invalid argument to 'modules', ${module.name} is not a Module`)
+        //     }
+        // }
         if ( params?.imports ) {
-            /* validate that constructor params are injectable services */
+            /* validate that import params are modules */
             for ( let importDescriptor of params.imports ) {
 
                 console.log("Importing module", importDescriptor )
@@ -46,15 +46,25 @@ export function Module( params?: ModuleParams ) {
             }
         }
         /* perform some validation */
-        if ( params?.components ) {
-            /* validate that constructor params are injectable services */
-            for ( let component of params.components ) {
+        if ( params?.declares ) {
+            /* validate declare params are components  */
+            for ( let component of params.declares ) {
                 const controllerDescriptor = Component.descriptor(component)
                 /* throw an error if not a component */
                 if ( ! controllerDescriptor ) 
-                    throw new Error(`Invalid argument to 'components', ${component.name} is not a Component`)
+                    throw new Error(`Invalid argument to 'declares', ${component.name} is not a Component`)
             }
         }
+        /* perform some validation */
+        // if ( params?.components ) {
+        //     /* validate that constructor params are injectable services */
+        //     for ( let component of params.components ) {
+        //         const controllerDescriptor = Component.descriptor(component)
+        //         /* throw an error if not a component */
+        //         if ( ! controllerDescriptor ) 
+        //             throw new Error(`Invalid argument to 'components', ${component.name} is not a Component`)
+        //     }
+        // }
         /* perform some validation */
         if ( params?.bootstrap ) {
             /* validate that constructor params are injectable services */

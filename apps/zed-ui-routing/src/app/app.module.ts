@@ -1,7 +1,8 @@
 import { Module } from "../lib/decorators/module";
-import { RouterModule } from "../lib/modules/router.module";
+import { RouterModule } from "../lib/modules/router/router.module";
 import { AppComponent } from "./app.component";
-import { FooComponent } from "./foo/foo.component";
+import { BarComponent } from "./bar.component";
+import { FooComponent } from "./foo.component";
 
 
 const routes = [
@@ -9,7 +10,7 @@ const routes = [
 ]
 
 @Module({
-    components: [ AppComponent ],
+    declares: [ AppComponent, FooComponent, BarComponent ],
     bootstrap: AppComponent,
     imports: [ 
         RouterModule.forRoot(routes)

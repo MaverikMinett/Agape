@@ -1,7 +1,10 @@
-import { ApplicationContext } from "./application-context.interface";
-import { RouteDefinition } from "./modules/route-definition.interface";
+import { Class } from "@agape/types";
+import { ApplicationContext } from "../../application-context.interface";
+import { RouteDefinition } from "./route-definition.interface";
 
+export interface RouteDeclaration {
 
+}
 
 export class Router {
 
@@ -25,7 +28,7 @@ export class Router {
         return route
     }
 
-    addRoutes( routes: RouteDefinition[] ) {
+    addRoutes( module: Class, routes: RouteDefinition[] ) {
         this.routes.push(...routes)
     }
 

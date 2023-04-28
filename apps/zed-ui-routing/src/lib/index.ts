@@ -1,1 +1,1 @@
-export * from './bootstrap-component'
+export * from './bootstrap-module'
