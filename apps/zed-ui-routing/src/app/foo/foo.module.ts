@@ -1,14 +1,16 @@
 import { Module } from "../../lib/decorators/module";
+import { BarModule } from "./bar/bar.module";
 
 
-import { BarComponent } from "./bar.component";
+
 import { FooComponent } from "./foo.component";
 
 
 
 @Module({
-    declares: [ FooComponent, BarComponent ],
-    exports: [ FooComponent, BarComponent ]
+    imports: [ BarModule ],
+    declares: [ FooComponent ],
+    exports: [ FooComponent ]
 })
 export class FooModule {
 

@@ -78,7 +78,7 @@ export class ModuleDescriptor {
                             + ` from ${moduleClass.name}, selector '${selector}' in use by ${existing.component.name}`)
                         }
                         else {
-                            this.selectors[selector] = { module: this.moduleClass, component: importingComponent }
+                            this.selectors[selector] = { module: moduleClass, component: importingComponent }
                         }
                     }
                 }

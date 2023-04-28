@@ -87,7 +87,7 @@ export class ComponentHarness<T extends Class> {
                     console.log(`Processing ${node.name}`)
 
                     const moduleDescriptor = Reflect.getMetadata('ui:module:descriptor', this.module.prototype)
-                    console.log("Go module descriptor", moduleDescriptor)
+                    console.log("Got module descriptor", moduleDescriptor)
                     if ( moduleDescriptor.hasSelector(node.name) ) {
                         console.log("Has selector", node.name)
                         const componentContext: ComponentContext = moduleDescriptor.getComponentForSelector(node.name)
