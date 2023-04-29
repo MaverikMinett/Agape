@@ -10,6 +10,8 @@ import { Component } from "../lib/decorators/component";
     <app-foo></app-foo>
 
     <app-bar></app-bar>
+
+    <router-outlet></router-outlet>
     `,
     'selector': 'app-component',
 })
