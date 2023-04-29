@@ -13,6 +13,10 @@ export class Injector {
 
     providers = new Map<Class, ServiceProvider>
 
+    constructor( public parent?: Injector ) {
+
+    }
+
     provide<T extends Class>( token: T ): void
     provide<T extends Class>( token: T, value: any ): void
     provide<T extends Class>( token: T, value?: any ): void {

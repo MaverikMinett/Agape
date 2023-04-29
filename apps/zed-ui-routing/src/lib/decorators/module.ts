@@ -1,7 +1,8 @@
 import { Class } from "@agape/types"
-import { ModuleDescriptor, ModuleImportDescriptor } from "../descriptors/module"
+import { ModuleDescriptor } from "../descriptors/module"
 import { Component } from "./component"
 import { AppComponent } from "../../app/app.component"
+import { ModuleImportDescriptor } from "../interfaces/module-import-descriptor"
 
 
 export interface ModuleParams {
@@ -80,7 +81,7 @@ export function Module( params?: ModuleParams ) {
         /* assign any parameters on the descriptor from the decorator params */
         if ( params ) Object.assign(descriptor, params)
 
-        descriptor.finalize()
+        // descriptor.finalize()
 
         return target
     }

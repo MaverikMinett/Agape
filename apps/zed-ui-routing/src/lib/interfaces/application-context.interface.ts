@@ -1,5 +1,5 @@
 import { Class } from "@agape/types";
-import { Router } from "./modules/router/router";
+import { Router } from "../modules/router/router";
 
 
 export interface ApplicationContext {

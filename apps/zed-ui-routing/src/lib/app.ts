@@ -1,22 +1,21 @@
-import { Class } from "@agape/types";
+import { Class, Dictionary } from "@agape/types";
 import { ComponentHarness } from "./component-harness";
 import { Module } from "./decorators/module";
-import { ApplicationContext } from "./application-context.interface";
+import { ApplicationContext } from "./interfaces/application-context.interface";
 import { Router } from "./modules/router/router";
 import { RouteDefinition } from "./modules/router/route-definition.interface";
 import { Injector } from "./injector";
+import { ModuleContext } from "./interfaces/module-context.interface";
+import { ComponentContext, ModuleDescriptor } from "./descriptors/module";
+import { Component } from "./decorators/component";
+import { ModuleContainer } from "./module-container";
 
-
-class ModuleContext {
-    module: Class;
-    injector: Injector;
-}
 
 export class App implements ApplicationContext {
 
     // router: Router = new Router( this )
 
-    // injector = new Injector()
+    injector = new Injector()
 
     constructor( public element: HTMLElement, public module?: Class  ) {
         /* validate the module */
@@ -41,15 +40,18 @@ export class App implements ApplicationContext {
         // descriptor.injector = injector
         // console.log("Application Routes",descriptor.routes )
         // this.addRoutesToRouter( module, descriptor.routes )
+
         const component = descriptor.bootstrap
+        // const moduleContext: ModuleContext = { module, injector: this.injector }
+        const moduleContainer = new ModuleContainer( module )
         if ( ! component ) {
             throw new Error(`Cannot boostrap module ${module.name}, does not specify a component to bootstrap.`)
         }
-        this.bootstrapComponent(module, component)
+        this.bootstrapComponent(moduleContainer, component)
     }
 
-    bootstrapComponent( module: Class, component: Class ) {
-        const harness = new ComponentHarness(this, module, component)
+    bootstrapComponent( moduleContainer: ModuleContainer<any>, component: Class ) {
+        const harness = new ComponentHarness(this, moduleContainer, component)
 
         this.element.appendChild( harness.dom )
 

@@ -7,11 +7,12 @@ import { Component } from "../lib/decorators/component";
 
     App Component Works
 
+    <app-boo></app-boo>
+
     <app-foo></app-foo>
 
     <app-bar></app-bar>
 
-    <router-outlet></router-outlet>
     `,
     'selector': 'app-component',
 })
