@@ -5,10 +5,9 @@ import { ApplicationContext } from "./interfaces/application-context.interface";
 import { Router } from "./modules/router/router";
 import { RouteDefinition } from "./modules/router/route-definition.interface";
 import { Injector } from "./injector";
-import { ModuleContext } from "./interfaces/module-context.interface";
 import { ComponentContext, ModuleDescriptor } from "./descriptors/module";
 import { Component } from "./decorators/component";
-import { ModuleContainer } from "./module-container";
+import { ModuleContext } from "./module-container";
 
 
 export class App implements ApplicationContext {
@@ -43,15 +42,15 @@ export class App implements ApplicationContext {
 
         const component = descriptor.bootstrap
         // const moduleContext: ModuleContext = { module, injector: this.injector }
-        const moduleContainer = new ModuleContainer( module )
+        const moduleContext = new ModuleContext( module )
         if ( ! component ) {
             throw new Error(`Cannot boostrap module ${module.name}, does not specify a component to bootstrap.`)
         }
-        this.bootstrapComponent(moduleContainer, component)
+        this.bootstrapComponent(moduleContext, component)
     }
 
-    bootstrapComponent( moduleContainer: ModuleContainer<any>, component: Class ) {
-        const harness = new ComponentHarness(this, moduleContainer, component)
+    bootstrapComponent( moduleContext: ModuleContext<any>, component: Class ) {
+        const harness = new ComponentHarness(this, moduleContext, component)
 
         this.element.appendChild( harness.dom )
 

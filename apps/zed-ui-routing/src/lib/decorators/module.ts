@@ -19,15 +19,6 @@ export function Module( params?: ModuleParams ) {
         const descriptor = Module.descriptor(target, true )
 
         /* perform some validation */
-        // if ( params?.modules ) {
-        //     /* validate that constructor params are injectable services */
-        //     for ( let module of params.modules ) {
-        //         const moduleDescriptor = Module.descriptor(module)
-        //         /* throw an error if not a module */
-        //         if ( ! moduleDescriptor ) 
-        //             throw new Error(`Invalid argument to 'modules', ${module.name} is not a Module`)
-        //     }
-        // }
         if ( params?.imports ) {
             /* validate that import params are modules */
             for ( let importDescriptor of params.imports ) {
@@ -56,16 +47,7 @@ export function Module( params?: ModuleParams ) {
                     throw new Error(`Invalid argument to 'declares', ${component.name} is not a Component`)
             }
         }
-        /* perform some validation */
-        // if ( params?.components ) {
-        //     /* validate that constructor params are injectable services */
-        //     for ( let component of params.components ) {
-        //         const controllerDescriptor = Component.descriptor(component)
-        //         /* throw an error if not a component */
-        //         if ( ! controllerDescriptor ) 
-        //             throw new Error(`Invalid argument to 'components', ${component.name} is not a Component`)
-        //     }
-        // }
+
         /* perform some validation */
         if ( params?.bootstrap ) {
             /* validate that constructor params are injectable services */
@@ -77,11 +59,8 @@ export function Module( params?: ModuleParams ) {
                 throw new Error(`Invalid argument to 'bootstrap', ${component.name} is not a Component`)
         }
 
-
         /* assign any parameters on the descriptor from the decorator params */
         if ( params ) Object.assign(descriptor, params)
-
-        // descriptor.finalize()
 
         return target
     }

@@ -6,13 +6,12 @@ import { ModuleImportDescriptor } from "./interfaces/module-import-descriptor";
 
 
 export interface ModuleComponentContext {
-    moduleContainer?: ModuleContainer<any>,
-    module?: Class,
+    moduleContext?: ModuleContext<any>,
     component: Class
 }
 
 
-export class ModuleContainer<T extends Class> {
+export class ModuleContext<T extends Class> {
 
     moduleInstance: InstanceType<T>;
 
@@ -20,7 +19,7 @@ export class ModuleContainer<T extends Class> {
 
     selectors: Dictionary<ModuleComponentContext> =  { }
 
-    constructor( public moduleClass: T, public parent?: ModuleContainer<any> ) {
+    constructor( public moduleClass: T, public parent?: ModuleContext<any> ) {
         const parentModuleInstance = parent?.moduleInstance
         const instance = new moduleClass( parentModuleInstance )
         this.moduleInstance = instance
@@ -41,7 +40,7 @@ export class ModuleContainer<T extends Class> {
             const component = declaration
             const componentDescriptor  = Component.descriptor(component)
             const selector = componentDescriptor.selector
-            this.selectors[selector] = { moduleContainer: this, component }
+            this.selectors[selector] = { moduleContext: this, component }
         }
     }
 
@@ -56,7 +55,7 @@ export class ModuleContainer<T extends Class> {
 
         let moduleDescriptor = Module.descriptor( module )
 
-        let moduleContainer = new ModuleContainer(moduleClass, this)
+        let moduleContext = new ModuleContext(moduleClass, this)
 
         if ( moduleDescriptor.exports ) {
             for ( let exported of moduleDescriptor.exports ) {
@@ -74,7 +73,7 @@ export class ModuleContainer<T extends Class> {
                             throw new Error(`Cannot import component ${importingComponent.name} into ${this.moduleClass.name} from `
                             + ` from ${moduleClass.name}, selector '${selector}' in use by ${existing.component.name}`)
                         }
-                        this.selectors[selector] = { moduleContainer, component: importingComponent }
+                        this.selectors[selector] = { moduleContext, component: importingComponent }
                     }
                 }
 
