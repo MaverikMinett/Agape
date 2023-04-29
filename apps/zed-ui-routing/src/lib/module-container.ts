@@ -3,6 +3,9 @@ import { Injector } from "./injector";
 import { Module } from "./decorators/module";
 import { Component } from "./decorators/component";
 import { ModuleImportDescriptor } from "./interfaces/module-import-descriptor";
+import { Router } from "./modules/router/router";
+import { RouteDefinition } from "./modules/router/route-definition.interface";
+import { Service } from "./decorators/service";
 
 
 export interface ModuleComponentContext {
@@ -19,20 +22,62 @@ export class ModuleContext<T extends Class> {
 
     selectors: Dictionary<ModuleComponentContext> =  { }
 
+
     constructor( public moduleClass: T, public parent?: ModuleContext<any> ) {
+        console.log(`Building module context for ${this.moduleClass}` )
         const parentModuleInstance = parent?.moduleInstance
         const instance = new moduleClass( parentModuleInstance )
         this.moduleInstance = instance
 
         const parentInjector = parent?.injector
         const injector = new Injector( parentInjector )
-        this.injector = this.injector
+        this.injector = injector
+
+        // TODO: THIS SHOULDN'T BE HERE, NEED TO FIND ISSUE WITH INJECTORS
+        // PROVIDING TWO COPIES OF THE ROUTER
+        // if ( ! parentInjector ) {
+        //     this.injector.provide(Router)
+        // }
 
         const descriptor = Module.descriptor(this.moduleClass)
 
         if ( descriptor.declares ) this.processDeclarations( descriptor.declares )
 
+        if ( descriptor.provides ) this.processProvides( descriptor.provides )
+
         if ( descriptor.imports ) this.processImports( descriptor.imports )
+
+
+
+        // if ( descriptor.routes ) this.processRoutes( descriptor.routes )
+    }
+
+
+
+    // processRoutes( routes: RouteDefinition[] ) {
+    //     const router = this.injector.get(Router)
+    //     console.log("PROCESSING ROUTES")
+
+    // }
+
+
+
+    processProvides( provides: Class[] ) {
+        for ( let provision of provides ) {
+            // TODO: Allow {useClass: }, {use: Value} format of provider, for
+            // now it is only expecting a class
+            
+            const token = provision
+            const serviceDescriptor = Service.descriptor(token)
+
+            if ( serviceDescriptor.providedIn === 'root' ) {
+                this.injector.root().provide( token )
+            }
+            else {
+                this.injector.provide( token )
+            }
+            
+        }
     }
 
     processDeclarations( declares: Class[] ) {
@@ -50,10 +95,13 @@ export class ModuleContext<T extends Class> {
         }
     }
 
-    importModule( module: Class|ModuleImportDescriptor ) {
-        const moduleClass = module instanceof Function ? module : module.module
+    importModule( importDeclaration: Class|ModuleImportDescriptor ) {
 
-        let moduleDescriptor = Module.descriptor( module )
+        // console.log("Importing module", module )
+
+        const moduleClass = importDeclaration instanceof Function ? importDeclaration : importDeclaration.module
+
+        let moduleDescriptor = Module.descriptor( moduleClass )
 
         let moduleContext = new ModuleContext(moduleClass, this)
 
@@ -85,6 +133,22 @@ export class ModuleContext<T extends Class> {
                 }
 
             }
+        }
+
+
+
+        // TODO: OR SHOULD IT BE HOISTED HERE
+        // if ( ! (importDeclaration instanceof Function) && importDeclaration.provides ) {
+        //     for ( let token of importDeclaration.provides ) {
+        //         this.injector.provide(token)
+        //     }
+
+        // }
+
+        if ( ! (importDeclaration instanceof Function) && importDeclaration.routes ) {
+            
+            const router = this.injector.get(Router)
+            router.addRoutes(this, importDeclaration.routes)
         }
     }
 

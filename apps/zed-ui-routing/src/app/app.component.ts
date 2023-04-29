@@ -7,8 +7,13 @@ import { Component } from "../lib/decorators/component";
 
     App Component Works
 
-    <router-outlet></router-outlet>
-
+    <div>
+        <a [routerLink]="/boo">To Boo</a>
+    </div>
+    
+    <div>
+        <router-outlet></router-outlet>
+    </div>
     `,
     'selector': 'app-component',
 })

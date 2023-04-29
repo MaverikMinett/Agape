@@ -27,22 +27,14 @@ export class App implements ApplicationContext {
             this.bootstrapModule( module )
         }
 
-        /* subscribe to all a routerlink anchors */
-        document.addEventListener('click', (event) => {
-            console.log(event.target)
-        })
-
     }
 
     bootstrapModule( module: Class ) {
         const descriptor = Module.descriptor(module)
         const injector = new Injector()
-        // descriptor.injector = injector
-        // console.log("Application Routes",descriptor.routes )
-        // this.addRoutesToRouter( module, descriptor.routes )
 
         const component = descriptor.bootstrap
-        // const moduleContext: ModuleContext = { module, injector: this.injector }
+
         const moduleContext = new ModuleContext( module )
         if ( ! component ) {
             throw new Error(`Cannot boostrap module ${module.name}, does not specify a component to bootstrap.`)
@@ -51,28 +43,12 @@ export class App implements ApplicationContext {
     }
 
     bootstrapComponent( moduleContext: ModuleContext<any>, component: Class ) {
-        const harness = new ComponentHarness(this, moduleContext, component)
+        const harness = new ComponentHarness(moduleContext, component)
 
         this.element.appendChild( harness.dom )
 
         harness.updateDomWithExpressionValues()
     }
-
-    changeComponentBecauseOfRouter( component ) {
-        console.log("Changing Route")
-        
-        // const harness = new ComponentHarness(this, component)
-        
-        // this.element.innerHTML = ""
-
-        // this.element.appendChild( harness.dom )
-
-        // harness.updateDomWithExpressionValues()
-    }
-
-    // addRoutesToRouter( module: Class, routes: RouteDefinition[] ) {
-    //     if ( routes ) this.router.addRoutes(module, routes)
-    // }
 
 
 

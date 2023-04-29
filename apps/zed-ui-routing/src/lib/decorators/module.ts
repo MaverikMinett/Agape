@@ -23,8 +23,6 @@ export function Module( params?: ModuleParams ) {
             /* validate that import params are modules */
             for ( let importDescriptor of params.imports ) {
 
-                console.log("Importing module", importDescriptor )
-
                 const module = importDescriptor instanceof Function ? importDescriptor : importDescriptor.module
                 const moduleDescriptor = Module.descriptor(module)
                 /* throw an error if not a module */

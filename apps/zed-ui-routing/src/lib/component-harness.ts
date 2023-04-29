@@ -11,6 +11,7 @@ import { ModuleDescriptor } from "./descriptors/module";
 import { ModuleContext } from "./module-container";
 import { Injector } from "./injector";
 import { ElementRef } from "./element-ref";
+import { Router } from "./modules/router/router";
 
 
 export interface TextNodeDescriptor {
@@ -34,7 +35,7 @@ export class ComponentHarness<T extends Class> {
 
     injector: Injector
     
-    constructor( private app: ApplicationContext, public moduleContext: ModuleContext<any>, public component: T) {
+    constructor(  public moduleContext: ModuleContext<any>, public component: T) {
 
         this.descriptor = Component.descriptor(this.component)
 
@@ -47,6 +48,8 @@ export class ComponentHarness<T extends Class> {
         this.injector = new Injector(moduleContext.injector)
 
         this.injector.provide(ElementRef, el)
+
+        console.log("USING INJECTOR", this.injector)
 
         const constructorParams = this.descriptor.injected 
             ? this.descriptor.injected.map( token => this.injector.get(token) )
@@ -101,7 +104,7 @@ export class ComponentHarness<T extends Class> {
                     
                     let element: HTMLElement
 
-                    console.log(`Processing ${node.name}`)
+                    // console.log(`Processing ${node.name}`)
 
                     /* get the module descriptor */
                     const moduleDescriptor: ModuleDescriptor = Reflect.getMetadata(
@@ -158,6 +161,9 @@ export class ComponentHarness<T extends Class> {
 
                             element.addEventListener('click', (event) => {
                                 event.preventDefault()           // dont allow browser to navigate
+                                const router = this.moduleContext.injector.get(Router)
+                                router.navigate(href)
+
                                 // HERE: this.app.router.navigate(href)   // use the application router instead
                             })
                         }
@@ -179,7 +185,7 @@ export class ComponentHarness<T extends Class> {
     }
 
     mountComponent( moduleContext:ModuleContext<any>, component:Class ) {
-        const harness = new ComponentHarness( this.app, moduleContext, component)
+        const harness = new ComponentHarness( moduleContext, component)
         return harness.dom
     }
 

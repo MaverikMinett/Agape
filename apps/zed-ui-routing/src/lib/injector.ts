@@ -6,11 +6,15 @@ export interface ServiceProvider {
     useValue?: any;
 }
 
+let n = 1
+
 export class Injector {
 
     instances = new Map<Class, object>
 
     providers = new Map<Class, ServiceProvider>
+
+    n = n++
 
     constructor( public parent?: Injector ) {
 
@@ -22,9 +26,6 @@ export class Injector {
         if ( ! value ) value = { useClass: token }
         else value = { useValue: value }
         this.providers.set(token, value)
-
-        console.log(`Providing ${token.name}`)
-        console.log(this.providers.get(token))
     }
 
     get<T extends Class>( token: T ): InstanceType<T> {
@@ -48,8 +49,14 @@ export class Injector {
             }
         }
 
-        return this.parent.get(token)
+        return this.parent ? this.parent.get(token) : undefined
     }
 
-
+    root() {
+        let current: Injector = this
+        while ( current.parent ) {
+            current = current.parent
+        }
+        return current
+    }
 }
