@@ -9,6 +9,8 @@ import { html5tags } from "./html5-tags";
 
 import { ModuleDescriptor } from "./descriptors/module";
 import { ModuleContext } from "./module-container";
+import { Injector } from "./injector";
+import { ElementRef } from "./element-ref";
 
 
 export interface TextNodeDescriptor {
@@ -29,18 +31,32 @@ export class ComponentHarness<T extends Class> {
     dom: HTMLElement
 
     expressions: Expression[]
+
+    injector: Injector
     
     constructor( private app: ApplicationContext, public moduleContext: ModuleContext<any>, public component: T) {
 
         this.descriptor = Component.descriptor(this.component)
 
-        this.instance = new component()
+        const nativeElement = document.createElement(this.descriptor.selector)
+
+        this.dom = nativeElement
+
+        const el = new ElementRef( nativeElement )
+
+        this.injector = new Injector(moduleContext.injector)
+
+        this.injector.provide(ElementRef, el)
+
+        const constructorParams = this.descriptor.injected 
+            ? this.descriptor.injected.map( token => this.injector.get(token) )
+            : []
+
+        this.instance = new component( ...constructorParams )
 
         this.htmlTemplate = this.descriptor.template
 
-        const { dom, expressions } = this.parseTemplate(this.htmlTemplate)
-
-        this.dom = dom
+        const { expressions } = this.parseTemplate(this.htmlTemplate)
 
         this.expressions = expressions
     }
@@ -48,11 +64,9 @@ export class ComponentHarness<T extends Class> {
 
     parseTemplate( htmlTemplate: string ) {
 
-        const dom = document.createElement(this.descriptor.selector)
-
         const ast = parse(htmlTemplate)
 
-        const stack = [ dom ]
+        const stack = [ this.dom ]
 
         const expressions = [ ]
 
@@ -94,19 +108,13 @@ export class ComponentHarness<T extends Class> {
                         'ui:module:descriptor', 
                         this.moduleContext.moduleClass.prototype)
                     
-                    console.log("Got module descriptor", moduleDescriptor)
+                    // console.log("Got module descriptor", moduleDescriptor)
 
                     if ( this.moduleContext.hasSelector(node.name) ) {
-                        console.log("Has selector", node.name)
+                        // console.log("Has selector", node.name)
 
                         const componentModuleContext = this.moduleContext.getComponentForSelector(node.name)
                         const {component, moduleContext} = componentModuleContext 
-                        // TODO: FIX THIS HERE
-
-                        // const componentContext: ComponentContext = moduleDescriptor.getComponentForSelector(node.name)
-                        // const {component, moduleContext} = componentContext 
-
-                        // console.log()
 
                         element = this.mountComponent(moduleContext, component)
                     }
@@ -167,7 +175,7 @@ export class ComponentHarness<T extends Class> {
 
         } )
 
-        return { dom, expressions }
+        return { expressions }
     }
 
     mountComponent( moduleContext:ModuleContext<any>, component:Class ) {

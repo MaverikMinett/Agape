@@ -12,6 +12,16 @@ export function Component( params: ComponentParams ) {
         const descriptor = Component.descriptor(target, true )
 
         if ( params ) Object.assign(descriptor, params)
+
+        const injected = Reflect.getMetadata('design:paramtypes', target)
+
+        descriptor.injected = injected
+
+        // if ( injected ) {
+        //     for ( let injectionToken of injected ) {
+
+        //     }
+        // }
         
         return target
     }

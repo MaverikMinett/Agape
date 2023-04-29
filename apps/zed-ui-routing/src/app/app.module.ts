@@ -12,7 +12,7 @@ import { FooModule } from "./foo/foo.module";
     bootstrap: AppComponent,
     imports: [ 
         FooModule,
-        // RouterModule
+        RouterModule
     ]
 })
 export class AppModule {

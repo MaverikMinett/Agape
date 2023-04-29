@@ -10,6 +10,7 @@ import { Component } from "./decorators/component";
 import { ModuleContext } from "./module-container";
 
 
+
 export class App implements ApplicationContext {
 
     // router: Router = new Router( this )

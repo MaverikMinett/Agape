@@ -1,4 +1,6 @@
 import { Component } from "../../decorators/component";
+import { ElementRef } from "../../element-ref";
+import { Router } from "./router";
 
 
 @Component({
@@ -6,5 +8,16 @@ import { Component } from "../../decorators/component";
     'template': "Router outlet works."
 })
 export class RouterOutletComponent {
+
+
+    constructor( private el: ElementRef ) {
+
+        // this.el.nativeElement.innerHTML = "Working double time"
+
+    }
+
+    onInit() {
+
+    }
 
 }

@@ -94,7 +94,7 @@ export class ModuleContext<T extends Class> {
 
     getComponentForSelector( selector: string ) {
 
-        console.log(this.selectors)
+        // console.log(this.selectors)
 
         const componentContext = this.selectors[selector]
         if ( ! componentContext ) {
