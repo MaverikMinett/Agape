@@ -33,12 +33,6 @@ export class Router {
 
     navigateSubject = new Subject<ModuleComponentContext>()
 
-    // initialize() {
-    //     const currentLocation = window.location.pathname 
-    //     this.navigate(currentLocation)
-    //     console.log(currentLocation)
-    // }
-
     navigate( to: string, pushState=true ) {
         const currentLocation = window.location.pathname
 
