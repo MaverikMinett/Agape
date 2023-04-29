@@ -25,7 +25,7 @@ export class Router {
                 /* navigate if user presses back/forward */
                 window.addEventListener("popstate", (event) => {
                     const currentLocation = window.location.pathname 
-                    this.navigate(currentLocation, false)
+                    this.changeLocation(currentLocation)
                 })
             }
         )
@@ -40,10 +40,15 @@ export class Router {
     // }
 
     navigate( to: string, pushState=true ) {
-        console.log(`Navigating to` + to )
+        const currentLocation = window.location.pathname
+
         if ( pushState ) history.pushState(null, null, to);
 
-        const route = this.findMatchingRoute( this.routes, to )
+        this.changeLocation( to )
+    }
+
+    changeLocation( url: string ) {
+        const route = this.findMatchingRoute( this.routes, url )
 
         if ( route ) {
             const moduleComponentContext: ModuleComponentContext = {
@@ -56,8 +61,6 @@ export class Router {
         else {
             this.navigateSubject.next(undefined)
         }
-
-        // TODO: What to do if user navigates to page that doesn't exist
     }
 
     onNavigateToComponent() {
