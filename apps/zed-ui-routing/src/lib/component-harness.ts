@@ -3,7 +3,6 @@ import { Component } from "./decorators/component";
 import { ComponentDescriptor } from "./descriptors/component";
 
 import { parse, walk, SyntaxKind } from 'html5parser';
-import { ApplicationContext } from "./interfaces/application-context.interface";
 import { html5tags } from "./html5-tags";
 
 
@@ -15,8 +14,6 @@ import { Router } from "./modules/router/router";
 
 
 export interface TextNodeDescriptor {
-    // start?: number
-    // end: number
     value: string
     type: 'Text'|'Expression'
 }
@@ -48,8 +45,6 @@ export class ComponentHarness<T extends Class> {
         this.injector = new Injector(moduleContext.injector)
 
         this.injector.provide(ElementRef, el)
-
-        console.log("USING INJECTOR", this.injector)
 
         const constructorParams = this.descriptor.injected 
             ? this.descriptor.injected.map( token => this.injector.get(token) )

@@ -6,15 +6,11 @@ export interface ServiceProvider {
     useValue?: any;
 }
 
-let n = 1
-
 export class Injector {
 
     instances = new Map<Class, object>
 
     providers = new Map<Class, ServiceProvider>
-
-    n = n++
 
     constructor( public parent?: Injector ) {
 
@@ -43,7 +39,16 @@ export class Injector {
             }
             if ( provider.useClass ) {
                 const useClass = provider.useClass
-                const instance = new useClass()
+                let injectionArgs = []
+                
+                const serviceDescriptor = Service.descriptor(useClass)
+                const dependencies = serviceDescriptor?.injected
+                                
+                if ( dependencies ) {
+                    injectionArgs = dependencies.map( d => this.get(d) )
+                }
+                
+                const instance = new useClass( ...injectionArgs )
                 this.instances.set( token, instance )
                 return instance
             }

@@ -23,14 +23,14 @@ export class ModuleContext<T extends Class> {
     selectors: Dictionary<ModuleComponentContext> =  { }
 
 
-    constructor( public moduleClass: T, public parent?: ModuleContext<any> ) {
-        console.log(`Building module context for ${this.moduleClass}` )
+    constructor( public moduleClass: T, public parent?: ModuleContext<any>, injector?: Injector ) {
+        // console.log(`Building module context for ${this.moduleClass}` )
         const parentModuleInstance = parent?.moduleInstance
         const instance = new moduleClass( parentModuleInstance )
         this.moduleInstance = instance
 
         const parentInjector = parent?.injector
-        const injector = new Injector( parentInjector )
+        if ( ! injector ) injector = new Injector( parentInjector )
         this.injector = injector
 
         // TODO: THIS SHOULDN'T BE HERE, NEED TO FIND ISSUE WITH INJECTORS

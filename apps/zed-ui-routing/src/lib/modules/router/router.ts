@@ -1,14 +1,10 @@
-import { Class } from "@agape/types";
-// import { ApplicationContext } from "../../application-context.interface";
 import { RouteDefinition } from "./route-definition.interface";
 import { Service } from "../../decorators/service";
 import { ModuleContext } from "../../module-container";
 import { Subject } from 'rxjs'
 import { ModuleComponentContext } from '../../module-container'
+import { ApplicationContext } from "../../application-context";
 
-// export interface RouteDeclaration {
-
-// }
 
 export interface ContextualizedRouteDefinition {
     routeDefinition: RouteDefinition
@@ -20,11 +16,22 @@ export class Router {
 
     routes: ContextualizedRouteDefinition[] = []
 
-    constructor (  ) {
-        console.log("CONSTRUCTING ROUTER")
+    constructor ( applicationContext: ApplicationContext ) {
+        applicationContext.ready().subscribe( 
+            () => {
+                const currentLocation = window.location.pathname 
+                this.navigate(currentLocation)
+            }
+        )
     }
 
     navigateSubject = new Subject<ModuleComponentContext>()
+
+    // initialize() {
+    //     const currentLocation = window.location.pathname 
+    //     this.navigate(currentLocation)
+    //     console.log(currentLocation)
+    // }
 
     navigate( to: string ) {
         console.log(`Navigating to` + to )
@@ -46,8 +53,8 @@ export class Router {
     }
 
     findMatchingRoute( routes: ContextualizedRouteDefinition[], path: string ) {
-        path = path.substring(1)
-        const route = routes.find( r => r.routeDefinition.path )
+        path = path.substring(1) // TODO: Handle paths that aren't prefixed with /
+        const route = routes.find( r => r.routeDefinition.path === path )
         return route
     }
 

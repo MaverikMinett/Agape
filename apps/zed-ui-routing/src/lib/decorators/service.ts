@@ -13,6 +13,10 @@ export function Service( params?: ServiceParams ) {
 
         if ( params ) Object.assign(descriptor, params)
         
+        const injected = Reflect.getMetadata('design:paramtypes', target)
+
+        descriptor.injected = injected
+
         return target
     }
 }
