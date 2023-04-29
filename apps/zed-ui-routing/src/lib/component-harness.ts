@@ -134,7 +134,7 @@ export class ComponentHarness<T extends Class> {
 
                             element.addEventListener('click', (event) => {
                                 event.preventDefault()           // dont allow browser to navigate
-                                this.app.router.navigate(href)   // use the application router instead
+                                // HERE: this.app.router.navigate(href)   // use the application router instead
                             })
                         }
 

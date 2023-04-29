@@ -1,4 +1,4 @@
-// import { ParametersFor } from "@agape/types";
+
 
 
 export class ComponentDescriptor {

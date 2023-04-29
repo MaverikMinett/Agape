@@ -3,7 +3,7 @@ import { Router } from "./modules/router/router";
 
 
 export interface ApplicationContext {
-    router: Router
+    // router: Router
 
-    changeComponentBecauseOfRouter :( component: Class ) => void
+    // changeComponentBecauseOfRouter :( component: Class ) => void
 }

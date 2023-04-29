@@ -4,11 +4,19 @@ import { Module } from "./decorators/module";
 import { ApplicationContext } from "./application-context.interface";
 import { Router } from "./modules/router/router";
 import { RouteDefinition } from "./modules/router/route-definition.interface";
+import { Injector } from "./injector";
 
+
+class ModuleContext {
+    module: Class;
+    injector: Injector;
+}
 
 export class App implements ApplicationContext {
 
-    router: Router = new Router( this )
+    // router: Router = new Router( this )
+
+    // injector = new Injector()
 
     constructor( public element: HTMLElement, public module?: Class  ) {
         /* validate the module */
@@ -29,8 +37,10 @@ export class App implements ApplicationContext {
 
     bootstrapModule( module: Class ) {
         const descriptor = Module.descriptor(module)
-        console.log("Application Routes",descriptor.routes )
-        this.addRoutesToRouter( module, descriptor.routes )
+        const injector = new Injector()
+        // descriptor.injector = injector
+        // console.log("Application Routes",descriptor.routes )
+        // this.addRoutesToRouter( module, descriptor.routes )
         const component = descriptor.bootstrap
         if ( ! component ) {
             throw new Error(`Cannot boostrap module ${module.name}, does not specify a component to bootstrap.`)
@@ -58,9 +68,9 @@ export class App implements ApplicationContext {
         // harness.updateDomWithExpressionValues()
     }
 
-    addRoutesToRouter( module: Class, routes: RouteDefinition[] ) {
-        if ( routes ) this.router.addRoutes(module, routes)
-    }
+    // addRoutesToRouter( module: Class, routes: RouteDefinition[] ) {
+    //     if ( routes ) this.router.addRoutes(module, routes)
+    // }
 
 
 

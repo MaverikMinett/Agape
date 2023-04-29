@@ -1,16 +1,18 @@
 import { Class } from "@agape/types";
-import { ApplicationContext } from "../../application-context.interface";
+// import { ApplicationContext } from "../../application-context.interface";
 import { RouteDefinition } from "./route-definition.interface";
+import { Service } from "../../decorators/service";
 
-export interface RouteDeclaration {
+// export interface RouteDeclaration {
 
-}
+// }
 
+@Service({providedIn: 'root'})
 export class Router {
 
     routes: RouteDefinition[] = []
 
-    constructor ( private app: ApplicationContext ) {
+    constructor (  ) {
 
     }
 
@@ -19,7 +21,7 @@ export class Router {
         history.pushState(null, null, to);
         const route = this.findMatchingRoute( this.routes, to )
         console.log("Found matching route", route )
-        this.app.changeComponentBecauseOfRouter(route.component)
+        // this.app.changeComponentBecauseOfRouter(route.component)
     }
 
     findMatchingRoute( routes: RouteDefinition[], path: string ) {

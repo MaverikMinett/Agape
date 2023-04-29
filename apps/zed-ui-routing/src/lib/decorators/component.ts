@@ -1,10 +1,13 @@
 import { ComponentDescriptor } from "../descriptors/component"
 
 
+export interface ComponentParams {
+    selector: string;
+    template?: string;
+}
 
-export function Component( params: any ) {
+export function Component( params: ComponentParams ) {
     return function ( target: any ) {
-
 
         const descriptor = Component.descriptor(target, true )
 
