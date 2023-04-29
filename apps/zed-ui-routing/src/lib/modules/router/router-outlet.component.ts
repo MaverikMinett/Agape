@@ -14,12 +14,16 @@ export class RouterOutletComponent {
     constructor( private router: Router, private el: ElementRef ) {
 
         this.router.onNavigateToComponent().subscribe( (context) => {
-            console.log("DISPLAY COMPONENT FOR ", context )
 
-            const harness = new ComponentHarness( context.moduleContext, context.component )
+            if ( context ) {
+                const harness = new ComponentHarness( context.moduleContext, context.component )
+                el.nativeElement.innerHTML = ''
+                el.nativeElement.appendChild( harness.dom )
+            }
+            else {
+                el.nativeElement.innerHTML = ''
+            }
 
-            el.nativeElement.innerHTML = ''
-            el.nativeElement.appendChild( harness.dom )
         })
 
         
