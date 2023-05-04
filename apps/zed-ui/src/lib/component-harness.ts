@@ -6,8 +6,6 @@ import { parse, walk, SyntaxKind } from 'html5parser';
 
 
 export interface TextNodeDescriptor {
-    // start?: number
-    // end: number
     value: string
     type: 'Text'|'Expression'
 }
@@ -58,11 +56,9 @@ export class ComponentHarness<T extends Class> {
                 const openElement = stack.at(-1)
 
                 if ( node.type === 'Text' ) {
-                    // const domNode = document.createTextNode(node.value);
-                    // openElement.appendChild(domNode)
 
                     const blocks = this.findVariablesInText(node.value)
-                    // console.log("Found", blocks)
+
                     for ( const block of blocks ) {
                         if ( block.type === "Text" ) {
                             const domNode = document.createTextNode(block.value);
@@ -174,8 +170,6 @@ export class ComponentHarness<T extends Class> {
             blocks.push(expressionBlock)
 
             text = text.substring(index + 1 + 1)
-            // const remainingTextBlock = { value: remaningText, type: "Text" }
-            // blocks.push(remainingTextBlock)
         }
 
         if ( blocks.length === 0 ) {
@@ -193,8 +187,6 @@ export class ComponentHarness<T extends Class> {
 }
 
 export class Expression {
-
-
 
     constructor( public node: Text, public statement: string ) {
 

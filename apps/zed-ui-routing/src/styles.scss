@@ -33,3 +33,12 @@ app-foo {
 a[routerlink] {
     cursor: pointer;
 }
+
+a:hover {
+    color: #4f82d1;
+}
+
+a.back {
+    color: white;
+}
+
