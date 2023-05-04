@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"npm:start:server\" \"npm:start:zedserver\" \"npm:start:zedservermongo\"  \"npm:start:zedserverorm\" \"npm:start:nestserver\" \"npm:start:express-no-db\" \"npm:start:tserver\" \"npm:start:command-line\" \"npm:start:clientag\"  \"npm:start:clientng\" ",
+    "start": "concurrently \"npm:start:server\" \"npm:start:zedserver\" \"npm:start:zedservermongo\"  \"npm:start:zedserverorm\" \"npm:start:nestserver\" \"npm:start:express-no-db\" \"npm:start:tserver\" \"npm:start:command-line\" \"npm:start:clientag\"  \"npm:start:clientng\" \"npm:start:zeduicomponent\" \"npm:start:zeduirouting\"",
     "start:clientag": "nx serve clientag",
     "start:clientng": "nx serve clientng",
     "start:command-line": "nx serve command-line",
@@ -14,6 +14,8 @@
     "start:express-no-db": "nx serve express-no-db",
     "start:zedservermongo": "nx serve zed-server-mongo",
     "start:zedserverorm": "nx serve zed-server-orm",
+    "start:zeduicomponent": "nx serve zed-ui",
+    "start:zeduirouting": "nx serve zed-ui",
     "benchmark": "nx serve benchmark",
     "test": "nx test lib-api lib-server lib-express server eserver tserver",
     "test:server": "nx test server",
