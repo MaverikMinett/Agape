@@ -15,7 +15,7 @@
     "start:zedservermongo": "nx serve zed-server-mongo",
     "start:zedserverorm": "nx serve zed-server-orm",
     "start:zeduicomponent": "nx serve zed-ui",
-    "start:zeduirouting": "nx serve zed-ui",
+    "start:zeduirouting": "nx serve zed-ui-routing",
     "benchmark": "nx serve benchmark",
     "test": "nx test lib-api lib-server lib-express server eserver tserver",
     "test:server": "nx test server",
