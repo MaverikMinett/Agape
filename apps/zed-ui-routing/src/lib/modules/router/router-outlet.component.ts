@@ -14,7 +14,6 @@ export class RouterOutletComponent {
     constructor( private router: Router, private el: ElementRef ) {
 
         this.router.onNavigateToComponent().subscribe( (context) => {
-
             if ( context ) {
                 const harness = new ComponentHarness( context.moduleContext, context.component )
                 el.nativeElement.innerHTML = ''
@@ -25,13 +24,6 @@ export class RouterOutletComponent {
             }
 
         })
-
-        
-
-    }
-
-    onInit() {
-
     }
 
 }
