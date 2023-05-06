@@ -23,6 +23,7 @@
       "@agape/menu": ["libs/agape/menu/src/index.ts"],
       "@agape/model": ["libs/agape/model/src/index.ts"],
       "@agape/orm": ["libs/agape/orm/src/index.ts"],
+      "@agape/string": ["libs/agape/string/src/index.ts"],
       "@agape/terminal": ["libs/agape/terminal/src/index.ts"],
       "@agape/types": ["libs/agape/types/src/index.ts"],
       "@agape/ui": ["libs/agape/ui/src/index.ts"],
