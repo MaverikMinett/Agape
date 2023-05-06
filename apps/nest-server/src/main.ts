@@ -6,6 +6,7 @@ import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.enableCors();
   await app.listen(3003);
   console.log("Nest Server listening at http://localhost:3003/")
 
