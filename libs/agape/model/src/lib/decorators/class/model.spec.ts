@@ -1,5 +1,5 @@
 
-import { ModelDescriptor } from '../descriptors';
+import { ModelDescriptor } from '../../descriptors';
 import { Model } from './model'
 
 

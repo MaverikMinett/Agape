@@ -1,4 +1,4 @@
-import { FieldDescriptor, FieldDescriptorParams, ModelDescriptor } from "../descriptors";
+import { FieldDescriptor, FieldDescriptorParams, ModelDescriptor } from "../../descriptors";
 
 /**
  * Use the @Field decorator to annotate a property and designate it

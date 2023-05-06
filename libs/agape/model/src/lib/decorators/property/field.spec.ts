@@ -1,7 +1,7 @@
 
-import { ModelDescriptor } from '../descriptors';
+import { ModelDescriptor } from '../../descriptors';
 import { Field } from './field'
-import { Model } from './model'
+import { Model } from '../class/model'
 
 describe('Field', () => {
     it('should create a model descriptor', () => {

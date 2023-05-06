@@ -1,6 +1,6 @@
 
-import { ModelDescriptor, ViewDescriptor } from '../descriptors';
-import { Field } from './field'
+import { ModelDescriptor, ViewDescriptor } from '../../descriptors';
+import { Field } from '../property/field'
 import { Model } from './model'
 import { View } from './view'
 

@@ -1,5 +1,5 @@
 import { Class } from '@agape/object';
-import { ModelDescriptor, ModelDescriptorParams } from '../descriptors'
+import { ModelDescriptor, ModelDescriptorParams } from '../../descriptors'
 
 import 'reflect-metadata'
 
