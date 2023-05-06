@@ -1,1 +1,1 @@
-export * from './lib/agape-string';
+export * from './lib/string';
