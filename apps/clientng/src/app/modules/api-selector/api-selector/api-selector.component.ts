@@ -35,6 +35,7 @@ export class ApiSelectorComponent {
 
     onControlChange( event: any ) {
         this.apiSelector.select(this.selected)
+        location.reload()
     }
     
 

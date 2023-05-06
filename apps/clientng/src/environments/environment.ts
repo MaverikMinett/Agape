@@ -3,16 +3,32 @@
 export const env = {
     "apis": [
         { 
-            name: "Express Server on port 3002",
-            url: "http://localhost:3002/api"
+            name: "3004 - Agape API with Express and Agape ORM with Mongo DB",
+            url: "http://localhost:3004/api"
         },
         { 
-            name: "Express Server on port 3000",
+            name: "3006 - Agape API with Express and MongoDB",
+            url: "http://localhost:3006/api"
+        },
+        { 
+            name: "3000 - Agape API with Express and No Database",
             url: "http://localhost:3000/api"
         },
         { 
-            name: "Lib Server on port 3001",
+            name: "3003 - Nest.js Server, No Database",
+            url: "http://localhost:3003/api"
+        },
+        { 
+            name: "3002 - Express Server with Functional Programming and MongoDB",
             url: "http://localhost:3002/api"
+        },
+        { 
+            name: "3005 - Express Server with Functional Programming and No Database",
+            url: "http://localhost:3005/api"
+        },
+        { 
+            name: "3001 - Node.js Server",
+            url: "http://localhost:3001/api"
         },
     ]
     
