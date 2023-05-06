@@ -12,6 +12,7 @@ export class EventService {
     create( event: any ) {
         event.id = v4()
         events.push(event)
+        return { id: event.id }
     }
 
     retrieve( id: string ) {

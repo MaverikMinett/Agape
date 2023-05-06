@@ -14,7 +14,7 @@ export class EventsController {
 
     @Post()
     create( @Body() payload: IEvent ) {
-        this.service.create( payload )
+        return this.service.create( payload )
     }
 
     @Get(':id')

@@ -8,7 +8,8 @@ Object relational mapping for data models
 
 @Model class Foo {
 
-    @Field({ primary: true }) id?: string
+    @Field({ primary: true })
+    id?: string
 
     @Field foo: string
     
