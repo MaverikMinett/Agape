@@ -34,9 +34,9 @@ export class EventsController {
     }
 
     @Delete(':id')
-    delete(params: {id: string}, body: any ) {
+    delete(params: {id: string} ) {
         const { id } = params
-        return this.service.retrieve(id)
+        return this.service.delete(id)
     }
 
 }

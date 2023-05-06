@@ -85,7 +85,7 @@ export class EventService {
         }
     }
 
-    async delete( id: string, event: IEvent ) {
+    async delete( id: string ) {
         let _id: ObjectId
         try {
             _id = new ObjectId(id)

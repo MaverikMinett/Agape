@@ -40,7 +40,8 @@
     </div>
 
     <div class="footer-actions">
-        <a class="standalone" href="/events/view/{{event?.id}}">← Back to Event Page</a>  
+        <a *ngIf="id" class="standalone" href="/events/view/{{event?.id}}">← Back to Event Page</a>  
+        <a *ngIf="! id" class="standalone" href="/events">← Back to Events Index</a>
     </div>
       
 </div>

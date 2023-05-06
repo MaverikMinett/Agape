@@ -14,11 +14,12 @@ export class EventService {
     create( event: any ) {
         event.id = v4()
         events.push(event)
+        return { id: event.id }
     }
 
     retrieve( id: string ) {
         const event = events.find( e => e.id === id )
-        if ( ! event ) throw new Exception(404, "Could not find event with that ID")
+        if ( ! event ) throw new Exception(404, `Could not find event with ID ${id}`)
         return event
     }
 
@@ -27,7 +28,7 @@ export class EventService {
 
         const index = events.findIndex( e => e.id === id )
         
-        if ( ! index ) throw new Exception(404, "Could not find event with that ID")
+        if ( index === -1 ) throw new Exception(404, `Could not find event with ID ${id}`)
 
         events.splice(index,1,event)
     }
@@ -35,7 +36,7 @@ export class EventService {
     delete( id: string ) {
         const index = events.findIndex( e => e.id === id )
 
-        if ( ! index ) throw new Exception(404, "Could not find event with that ID.")
+        if ( index === -1 ) throw new Exception(404, `Could not find event with ID ${id}`)
         
         events.splice(index,1)
     }

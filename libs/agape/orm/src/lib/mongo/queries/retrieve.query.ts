@@ -37,7 +37,7 @@ export class RetrieveQuery<T extends Class> {
         const selection: Dictionary = { _id }
         
         /* mongo query */
-        const record = await this.collection.findOne( selection, projection )
+        const record = await this.collection.findOne( selection, { projection } )
 
         /* record not found */
         if ( ! record ) return undefined

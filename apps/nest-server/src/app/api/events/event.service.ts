@@ -25,7 +25,7 @@ export class EventService {
 
         const index = events.findIndex( e => e.id === id )
         
-        if ( ! index ) throw new Exception(404, "Could not find event with that ID")
+        if ( index === -1 ) throw new Exception(404, "Could not find event with that ID")
 
         events.splice(index,1,event)
     }
@@ -33,7 +33,7 @@ export class EventService {
     delete( id: string ) {
         const index = events.findIndex( e => e.id === id )
 
-        if ( ! index ) throw new Exception(404, "Could not find event with that ID.")
+        if ( index === -1 ) throw new Exception(404, "Could not find event with that ID.")
         
         events.splice(index,1)
     }
