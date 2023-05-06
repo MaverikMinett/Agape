@@ -41,7 +41,7 @@ Maverik Minett  maverik.minett@gmail.com
 
 ## Copyright
 
-© 2020-2022 Maverik Minett
+© 2022-2023 Maverik Minett
 
 
 ## License
