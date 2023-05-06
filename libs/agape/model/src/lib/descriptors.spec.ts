@@ -1,4 +1,4 @@
-import { Model } from "./decorators/model";
+
 import { FieldDescriptor, ModelDescriptor } from "./descriptors"
 
 

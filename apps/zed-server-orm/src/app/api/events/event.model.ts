@@ -1,11 +1,11 @@
 
-import { Model, Field } from '@agape/model'
+import { Model, Field, Primary } from '@agape/model'
 
 
 
 @Model export class Event {
 
-    @Field({ primary: true }) id?: string
+    @Primary id?: string
 
     @Field name: string
 

@@ -1,4 +1,5 @@
 import { FieldDescriptor, FieldDescriptorParams, ModelDescriptor } from "../../descriptors";
+import { Model } from "../class/model";
 
 /**
  * Use the @Field decorator to annotate a property and designate it
@@ -20,27 +21,11 @@ export function Field( ...args:any[] ):any {
         : [target, name, propertyDescriptor] = args
 
     function Field( target:any, name:string, propertyDescriptor:TypedPropertyDescriptor<Function> ) {
-        if ( propertyDescriptor ) throw new Error("Cannot use the Field decorator on a method")
+        if ( propertyDescriptor ) throw new Error("Cannot use the Primary decorator on a method")
 
-        // if a name was not given in the parameters, use the property name
-        params.name ??= name
+        let model = Model.descriptor(target, true)
 
-        // create a new FieldDescriptor
-        const field = new FieldDescriptor( params )
-
-        // get the ModelDescriptor
-        let model = Reflect.getMetadata( "model:descriptor", target );
-
-        // create a ModelDescriptor if one does not exist, this happens because
-        // @Field decorators are called on the class and property before @Model
-        // is called on the class
-        if ( ! model ) {
-            model = new ModelDescriptor( target )
-            Reflect.defineMetadata( "model:descriptor", model, target );
-        }
-
-        // add the field to the ModelDescriptor
-        model.add(field)
+        model.field(name).assign(params)
     }
 
     if ( target ) return Field(target, name, propertyDescriptor)

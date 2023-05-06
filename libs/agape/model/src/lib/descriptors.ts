@@ -44,7 +44,9 @@ export class ModelDescriptor {
 
     public field( name:string ):FieldDescriptor {
         if ( ! this.fields.has(name) ) {
-            throw new Error(`${this.name} does not have field ${name}`)
+            const descriptor = new FieldDescriptor(name)
+            this.fields.set(name, descriptor)
+            return descriptor
         }
 
         return this.fields.get(name)
@@ -140,8 +142,11 @@ export class FieldDescriptor {
             const [name, type, widget] = args;
             params = { name, type, widget }
         }
+        this.assign( params )
+    }
+
+    assign( params: FieldDescriptorParams ) {
         Object.assign(this, params)
-        this.autopopulate()
     }
 
     autopopulate() {

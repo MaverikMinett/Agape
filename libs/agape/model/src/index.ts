@@ -1,6 +1,7 @@
 export * from './lib/descriptors'
 export * from './lib/document'
 export * from './lib/decorators/property/field'
+export * from './lib/decorators/property/primary'
 export * from './lib/decorators/class/model'
 export * from './lib/decorators/class/view'
 export * from './lib/cursor'

@@ -119,8 +119,6 @@ export class Orm {
             throw new Error(`${model.name} has not been registered with the orm`)
         }
 
-        console.log(locator)
-
         const collection = locator.collection
 
         const query = new ListQuery<T>(model, collection)
