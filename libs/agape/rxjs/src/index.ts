@@ -1,1 +1,3 @@
-export * from './lib/agape-rxjs';
+export * from './lib/tie';
+
+
