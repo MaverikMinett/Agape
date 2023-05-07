@@ -22,6 +22,7 @@
       "@agape/forms": ["libs/agape/forms/src/index.ts"],
       "@agape/menu": ["libs/agape/menu/src/index.ts"],
       "@agape/model": ["libs/agape/model/src/index.ts"],
+      "@agape/object": ["libs/agape/object/src/index.ts"],
       "@agape/orm": ["libs/agape/orm/src/index.ts"],
       "@agape/string": ["libs/agape/string/src/index.ts"],
       "@agape/terminal": ["libs/agape/terminal/src/index.ts"],
