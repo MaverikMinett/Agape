@@ -1,11 +1,70 @@
-# agape-rxjs
+# @agape/rxjs
 
-This library was generated with [Nx](https://nx.dev).
+Companion library for rxjs
 
-## Building
+## Synopsis
 
-Run `nx build agape-rxjs` to build the library.
+```
+import { tie } from '@agape/rxjs';
+import { timer } from 'rxjs';
 
-## Running unit tests
+class Foo {
+    constructor( ) {
+        tie( this, 'destroy', 
+            timer(1000).subscribe( n => console.log(n) )
+        )
+    }
 
-Run `nx test agape-rxjs` to execute the unit tests via [Jest](https://jestjs.io).
+    destroy() {
+        console.log( "Destroying foo" )
+    }
+}
+
+const o = new Foo()
+setTimeout( () => o.destroy(), 10000)
+```
+
+
+## Description
+
+Provides the `tie` function which can be used to unsubscribe from rxjs 
+subscriptions when a specified method is called. 
+
+## Functions
+
+### `tie (target, methodName, ...subscriptions)`
+
+Tie subscriptions to a specified object and method call.
+
+####  Angular Example
+
+Prevent memory leaks by clearing the tied subscriptions when a component 
+is destroyed.
+
+```
+import { tie } from '@agape/rxjs';
+import { timer } from 'rxjs';
+
+@Component( ... )
+class FooComponent {
+    ngOnInit( ) {
+        tie( this, 'ngOnDestroy', 
+            timer(1000).subscribe( n => console.log(n) )
+        )
+    }
+}
+```
+
+## Author
+
+Maverik Minett  maverik.minett@gmail.com
+
+
+## Copyright
+
+© 2022 Maverik Minett
+
+
+## License
+
+MIT
