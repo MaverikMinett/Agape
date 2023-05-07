@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-import { ReplaySubject, interval, takeUntil } from 'rxjs';
+import { interval } from 'rxjs';
 import { include } from '@agape/object';
-import { CanTie } from '../traits/CanTie';
-
-import { meta } from '@agape/object'
+import { CanTie } from '@agape/ng-tie-subscriptions';
 
 export interface TimerWithTiedSubscriptionComponent extends CanTie { }
 

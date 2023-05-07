@@ -1,1 +1,1 @@
-export * from './lib/agape-ng-tie-subscriptions';
+export * from './lib/can-tie';
