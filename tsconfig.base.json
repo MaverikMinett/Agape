@@ -26,6 +26,7 @@
       "@agape/orm": ["libs/agape/orm/src/index.ts"],
       "@agape/rxjs": ["libs/agape/rxjs/src/index.ts"],
       "@agape/string": ["libs/agape/string/src/index.ts"],
+      "@agape/templateer": ["libs/agape/templateer/src/index.ts"],
       "@agape/terminal": ["libs/agape/terminal/src/index.ts"],
       "@agape/types": ["libs/agape/types/src/index.ts"],
       "@agape/ui": ["libs/agape/ui/src/index.ts"],
