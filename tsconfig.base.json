@@ -22,6 +22,9 @@
       "@agape/forms": ["libs/agape/forms/src/index.ts"],
       "@agape/menu": ["libs/agape/menu/src/index.ts"],
       "@agape/model": ["libs/agape/model/src/index.ts"],
+      "@agape/ng-tie-subscriptions": [
+        "libs/agape/ng-tie-subscriptions/src/index.ts"
+      ],
       "@agape/object": ["libs/agape/object/src/index.ts"],
       "@agape/orm": ["libs/agape/orm/src/index.ts"],
       "@agape/rxjs": ["libs/agape/rxjs/src/index.ts"],
