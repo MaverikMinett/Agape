@@ -49,7 +49,24 @@
     "test:terminal": "nx text agape-terminal",
     "build:terminal": "nx build agape-terminal",
     "publish:terminal": "cd dist/libs/agape/terminal && npm publish --access public",
-    "release:terminal": "npm run build:terminal && npm run publish:terminal"
+    "release:terminal": "npm run build:terminal && npm run publish:terminal",
+    "build:object": "npm run build:object:before && npm run build:object:cjs && npm run build:object:es2020 && npm run build:object:es2015 && npm run build:object:after",
+    "build:object:before": "rm -r -f dist/libs/agape/object",
+    "build:object:after": "cp libs/agape/object/README.md dist/libs/agape/object/README.md && cp libs/agape/object/package.json dist/libs/agape/object/package.json",
+    "build:object:cjs": "npm run build:object:cjs:build && npm run build:object:cjs:move && npm run build:object:cjs:clean",
+    "build:object:cjs:build": "nx buildcjs agape-object",
+    "build:object:cjs:move": "mv dist/libs/agape/object/cjs.in/src dist/libs/agape/object/cjs",
+    "build:object:cjs:clean": "rm -r dist/libs/agape/object/cjs.in",
+
+    "build:object:es2020": "npm run build:object:es2020:build && npm run build:object:es2020:move && npm run build:object:es2020:clean",
+    "build:object:es2020:build": "nx buildes2020 agape-object",
+    "build:object:es2020:move": "mv dist/libs/agape/object/es2020.in/src dist/libs/agape/object/es2020",
+    "build:object:es2020:clean": "rm -r dist/libs/agape/object/es2020.in",
+
+    "build:object:es2015": "npm run build:object:es2015:build && npm run build:object:es2015:move && npm run build:object:es2015:clean",
+    "build:object:es2015:build": "nx buildes2015 agape-object",
+    "build:object:es2015:move": "mv dist/libs/agape/object/es2015.in/src dist/libs/agape/object/es2015",
+    "build:object:es2015:clean": "rm -r dist/libs/agape/object/es2015.in"
   },
   "private": true,
   "dependencies": {

@@ -1,5 +1,32 @@
 {
   "name": "@agape/object",
-  "version": "0.0.1",
-  "type": "commonjs"
+  "version": "1.5.0",
+  "description": "Extensible objects",
+  "main": "./cjs/index.js",
+  "module": "./es2020/index.js",
+  "keywords": [
+    "agape",
+    "object",
+    "traits"
+  ],
+  "author": "Maverik Minett",
+  "license": "MIT",
+  "dependencies": {
+    "@agape/string": "^1.0.0",
+    "reflect-metadata": "^0.1.13"
+  },
+  "es2020": "./esm2020/index.js",
+  "es2015": "./esm2020/index.js",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "es2020": "./es2020/index.js",
+      "es2015": "./es2015/index.js",
+      "node": "./es2015/index.js",
+      "default": "./es2020/index.js",
+      "require": "./cjs/index.js"
+    }
+  }
 }
