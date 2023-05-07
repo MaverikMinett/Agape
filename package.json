@@ -66,7 +66,25 @@
     "build:object:es2015": "npm run build:object:es2015:build && npm run build:object:es2015:move && npm run build:object:es2015:clean",
     "build:object:es2015:build": "nx buildes2015 agape-object",
     "build:object:es2015:move": "mv dist/libs/agape/object/es2015.in/src dist/libs/agape/object/es2015",
-    "build:object:es2015:clean": "rm -r dist/libs/agape/object/es2015.in"
+    "build:object:es2015:clean": "rm -r dist/libs/agape/object/es2015.in",
+
+    "build:string": "npm run build:string:before && npm run build:string:cjs && npm run build:string:es2020 && npm run build:string:es2015 && npm run build:string:after",
+    "build:string:before": "rm -r -f dist/libs/agape/string",
+    "build:string:after": "cp libs/agape/string/README.md dist/libs/agape/string/README.md && cp libs/agape/string/package.json dist/libs/agape/string/package.json",
+    "build:string:cjs": "npm run build:string:cjs:build && npm run build:string:cjs:move && npm run build:string:cjs:clean",
+    "build:string:cjs:build": "nx buildcjs agape-string",
+    "build:string:cjs:move": "mv dist/libs/agape/string/cjs.in/src dist/libs/agape/string/cjs",
+    "build:string:cjs:clean": "rm -r dist/libs/agape/string/cjs.in",
+
+    "build:string:es2020": "npm run build:string:es2020:build && npm run build:string:es2020:move && npm run build:string:es2020:clean",
+    "build:string:es2020:build": "nx buildes2020 agape-string",
+    "build:string:es2020:move": "mv dist/libs/agape/string/es2020.in/src dist/libs/agape/string/es2020",
+    "build:string:es2020:clean": "rm -r dist/libs/agape/string/es2020.in",
+
+    "build:string:es2015": "npm run build:string:es2015:build && npm run build:string:es2015:move && npm run build:string:es2015:clean",
+    "build:string:es2015:build": "nx buildes2015 agape-string",
+    "build:string:es2015:move": "mv dist/libs/agape/string/es2015.in/src dist/libs/agape/string/es2015",
+    "build:string:es2015:clean": "rm -r dist/libs/agape/string/es2015.in"
   },
   "private": true,
   "dependencies": {

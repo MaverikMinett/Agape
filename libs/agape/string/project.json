@@ -14,6 +14,36 @@
         "assets": ["libs/agape/string/*.md"]
       }
     },
+    "buildcjs": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/agape/string/cjs.in",
+        "main": "libs/agape/string/src/index.ts",
+        "tsConfig": "libs/agape/string/tsconfig.cjs.json",
+        "assets": ["libs/agape/string/*.md"]
+      }
+    },
+    "buildes2020": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/agape/string/es2020.in",
+        "main": "libs/agape/string/src/index.ts",
+        "tsConfig": "libs/agape/string/tsconfig.es2020.json",
+        "assets": ["libs/agape/string/*.md"]
+      }
+    },
+    "buildes2015": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/agape/string/es2015.in",
+        "main": "libs/agape/string/src/index.ts",
+        "tsConfig": "libs/agape/string/tsconfig.es2015.json",
+        "assets": ["libs/agape/string/*.md"]
+      }
+    },
     "publish": {
       "executor": "nx:run-commands",
       "options": {
