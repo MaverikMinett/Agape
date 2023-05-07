@@ -1,0 +1,98 @@
+{
+  "name": "ng-tied-subscriptions",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "project-zed",
+  "sourceRoot": "apps/ng-tied-subscriptions/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/ng-tied-subscriptions",
+        "index": "apps/ng-tied-subscriptions/src/index.html",
+        "main": "apps/ng-tied-subscriptions/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/ng-tied-subscriptions/tsconfig.app.json",
+        "assets": [
+          "apps/ng-tied-subscriptions/src/favicon.ico",
+          "apps/ng-tied-subscriptions/src/assets"
+        ],
+        "styles": ["apps/ng-tied-subscriptions/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "port": 4203
+      },
+      "configurations": {
+        "production": {
+          "browserTarget": "ng-tied-subscriptions:build:production"
+        },
+        "development": {
+          "browserTarget": "ng-tied-subscriptions:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "ng-tied-subscriptions:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "apps/ng-tied-subscriptions/**/*.ts",
+          "apps/ng-tied-subscriptions/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/ng-tied-subscriptions/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  }
+}
