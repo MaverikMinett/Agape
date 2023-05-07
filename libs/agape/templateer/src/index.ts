@@ -1,1 +1,1 @@
-export * from './lib/agape-templateer';
+export * from './lib/templateer'

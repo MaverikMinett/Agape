@@ -1,0 +1,13 @@
+
+
+1.1.0 Feb 8, 2021
+- Methods are now asynchronous, added additonal syncrhonous methods with `Sync` suffix
+
+1.0.4  Feb 7, 2021
+- Allow setting default source directories on the prototype
+
+1.0.3  Feb 2, 2021
+- Fixed public api 
+
+1.0.2  Feb 2, 2021
+- Updates to README documentation
