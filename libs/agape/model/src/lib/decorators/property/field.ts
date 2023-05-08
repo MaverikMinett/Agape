@@ -23,9 +23,21 @@ export function Field( ...args:any[] ):any {
     function Field( target:any, name:string, propertyDescriptor:TypedPropertyDescriptor<Function> ) {
         if ( propertyDescriptor ) throw new Error("Cannot use the Primary decorator on a method")
 
-        let model = Model.descriptor(target, true)
+        const model = Model.descriptor(target, true)
 
-        model.field(name).assign(params)
+        const field = model.field(name)
+
+        field.assign(params)
+
+        console.log("FIELD", name)
+
+        const valueType = Reflect.getMetadata("design:type", target, name);
+
+        console.log("FIELD", valueType)
+
+        field.designType = valueType
+
+        console.log(field)
     }
 
     if ( target ) return Field(target, name, propertyDescriptor)

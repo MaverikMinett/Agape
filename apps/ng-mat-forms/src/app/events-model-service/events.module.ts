@@ -13,6 +13,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 
 import {MatNativeDateModule} from '@angular/material/core';
+import { ModelService } from "./model.service";
 
 
 
@@ -24,7 +25,8 @@ import {MatNativeDateModule} from '@angular/material/core';
         EventsListComponent
     ],
     providers: [
-        EventService
+        EventService,
+        ModelService,
     ],
     imports: [
         FormsModule,

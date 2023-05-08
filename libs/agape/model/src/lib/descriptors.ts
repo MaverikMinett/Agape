@@ -1,5 +1,5 @@
 import { camelize, pluralize, tokenize, verbalize } from "@agape/string";
-import { Dictionary } from '@agape/types';
+import { Class, Dictionary } from '@agape/types';
 
 export type FieldDescriptorParams = Partial<Pick<FieldDescriptor, keyof FieldDescriptor>>;
 export type ModelDescriptorParams = Partial<Pick<ModelDescriptor, keyof ModelDescriptor>>;
@@ -129,6 +129,8 @@ export class FieldDescriptor {
     example?: string|number|Date|Dictionary
 
     primary?: boolean;
+
+    designType: 'string'|'number'|'boolean'|'any'|Class
 
     constructor()
     constructor( name:string, type?:string, widget?:string ) 

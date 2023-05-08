@@ -16,7 +16,7 @@ export class EventsController {
         for ( let event of events ) {
             const _event: any = event
             _event.timeStart = event.timeStart?.toISOString()
-            _event.timeStart = event.timeEnd?.toISOString()
+            _event.timeEnd = event.timeEnd?.toISOString()
         }
         return events
     }
