@@ -282,18 +282,21 @@
             <div class="card-body">
                 <div class="service-icon-grid">
 
-                    <a class="service-link" href="http://localhost:4200/" target="_blank">
+                    <a class="service-link" href="http://localhost:4202/" target="_blank">
                         <div class="service-icon-label">
                             <div class="service-icon">
                                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <use href="#apple"></use>
+                                    <use href="#apple-crate"></use>
                                 </svg>
                             </div>
                             <div class="service-label">
-                                Angular<br/>Events<br/>APIs
+                                Events CRUD<br/>Angular<br/>Tailwind
                             </div>
                         </div>
                     </a>
+
+
+
 
                     <a class="service-link" href="http://localhost:4201/" target="_blank">
                         <div class="service-icon-label">
@@ -312,7 +315,7 @@
                         <div class="service-icon-label">
                             <div class="service-icon">
                                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <use href="#classic"></use>
+                                    <use href="#tablet-button"></use>
                                 </svg>
                             </div>
                             <div class="service-label">
@@ -325,11 +328,24 @@
                         <div class="service-icon-label">
                             <div class="service-icon">
                                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <use href="#classic"></use>
+                                    <use href="#browser"></use>
                                 </svg>
                             </div>
                             <div class="service-label">
                                 UI<br/>Routing<br/>POC
+                            </div>
+                        </div>
+                    </a>
+
+                    <a class="service-link" href="http://localhost:4200/" target="_blank">
+                        <div class="service-icon-label">
+                            <div class="service-icon">
+                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <use href="#apple"></use>
+                                </svg>
+                            </div>
+                            <div class="service-label">
+                                Angular<br/>Events CRUD
                             </div>
                         </div>
                     </a>
@@ -549,6 +565,31 @@
                 <table>
                     <tr>
                         <td width="*">
+                            <div class="app-title">Events UI in Angular with Tailwind CSS</div>
+                            <div class="app-desc">
+                                Interact with the various APIs through this user inteface which performs
+                                CRUD operations on the Event entity. The user can view and edit the event
+                                name using a UI created with Tailwind CSS. 
+                            </div>
+                            <div class="app-pills">
+                                <a 
+                                href="https://github.com/MaverikIO/project-zed/tree/main/apps/ng-events-tailwind"
+                                target="_blank">
+                                    <div class="pill" href="">
+                                        <div class="pill-icon">
+                                            <svg viewBox="0 0 48 48" fill="none">
+                                                <use href="#folder-open"></use>
+                                            </svg>
+                                        </div>
+                                        <div class="pill-content">apps/ng-events-tailwind</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </td>
+                        <td class="text-right"><a href="http://localhost:4202" target="_blank">http://localhost:4202</a></td>
+                    </tr>
+                    <tr>
+                        <td width="*">
                             <div class="app-title">Events UI in Angular, No Design System</div>
                             <div class="app-desc">
                                 Interact with the various APIs through this user inteface which performs
@@ -597,7 +638,7 @@
                             </div>
 
                         </td>
-                        <td class="text-right"><a href="http://localhost:4204" target="_blank">http://localhost:4203</a></td>
+                        <td class="text-right"><a href="http://localhost:4201" target="_blank">http://localhost:4201</a></td>
                     </tr>
                     <tr>
                         <td>
@@ -1270,6 +1311,21 @@
 
         <svg id="reel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
             <path d="M24 0H0V48H24 64V72v40h40H344h40V72 48h40 24V0H424 384 344 104 64 24zm80 72V48H344V72H104zM24 464H0v48H24 64h40H344h40 40 24V464H424 384V440 400H344 104 64v40 24H24zm320 0H104V440H344v24zM64 176H384V144H64v32zm0 64H432h16V208H432 64v32zm0 64H384V272H64v32zm0 64H384V336H64v32z" fill="currentColor"/>
+        </svg>
+
+        <!-- Crate Apple -->
+        <svg id="apple-crate" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path d="M219.3 27.3L196.7 4.7l-32 32L153.4 48 176 70.6l11.3-11.3 32-32zm192 0L388.7 4.7l-32 32L345.4 48 368 70.6l11.3-11.3 32-32zM160 98.3L96 80c-43.6 0-64 47.8-64 91.4c0 7 .4 13.9 1.2 20.6H65.5c-1-6.6-1.5-13.4-1.5-20.6c0-17.5 4.2-34.2 11-45.5c5.3-8.8 11-12.7 17.4-13.7l58.8 16.8 8.8 2.5 8.8-2.5 58.8-16.8c6.4 1 12.1 4.9 17.4 13.7c6.8 11.2 11 28 11 45.5c0 7.1-.5 14-1.5 20.6h32.3c.8-6.7 1.2-13.5 1.2-20.6c0-43.6-20.4-91.4-64-91.4L160 98.3zM478.8 192c.8-6.7 1.2-13.5 1.2-20.6c0-43.6-20.4-91.4-64-91.4L352 98.3 291.4 81c3 3.8 5.8 7.7 8.3 11.8c5.2 8.5 9.3 17.8 12.4 27.4l31.1 8.9 8.8 2.5 8.8-2.5 58.8-16.8c6.4 1 12.1 4.9 17.4 13.7c6.8 11.2 11 28 11 45.5c0 7.1-.5 14-1.5 20.6h32.3zM32 480V384H480v96H32zm0-224H480v96H32V256zM512 368V352 256 224H480 32 0v32 96 16 16 96 32H32 480h32V480 384 368zM80 320a16 16 0 1 0 0-32 16 16 0 1 0 0 32zm368-16a16 16 0 1 0 -32 0 16 16 0 1 0 32 0zM80 448a16 16 0 1 0 0-32 16 16 0 1 0 0 32zm368-16a16 16 0 1 0 -32 0 16 16 0 1 0 32 0z" fill="currentColor"/>
+        </svg>
+
+        <!-- Browser -->
+        <svg id="browser" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path d="M160 64v64H480V64H160zm-32 0H32v64h96V64zM32 160V448H480V160H144 32zM0 32H32 480h32V64 448v32H480 32 0V448 64 32z" fill="currentColor"/>
+        </svg>
+
+        <!-- Tablet Button -->
+        <svg id="tablet-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path d="M416 32V320H32V32H416zm0 320V480H32V352H416zM32 0H0V32 480v32H32 416h32V480 32 0H416 32zM248 416a24 24 0 1 0 -48 0 24 24 0 1 0 48 0z" fill="currentColor"/>
         </svg>
     </div>
 
