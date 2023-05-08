@@ -57,10 +57,10 @@ export class EventsItemViewPageComponent {
         this.service.delete(id).subscribe({
             next: () => {
                 this.router.navigate(['/events/list'])
-                this.requestLoading = false
+                this.deleteTransactionLoading = false
             },
             error: (error) => {
-                this.requestLoading = false
+                this.deleteTransactionLoading = false
                 console.error(error)
             }
         })
