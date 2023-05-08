@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
+import { AppIndexPageComponent } from './app-index-page.component';
 
 export const appRoutes: Route[] = [
-    { path: '', redirectTo: 'events', pathMatch: 'full'}
+    { path: '', component: AppIndexPageComponent}
 ];

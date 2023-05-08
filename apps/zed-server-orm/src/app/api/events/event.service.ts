@@ -29,7 +29,6 @@ export class EventService {
     }
 
     async delete( id: string ) {
-        console.log("EVENT SERVICE DELETE")
         return orm.delete(Event, id).exec()
     }
 

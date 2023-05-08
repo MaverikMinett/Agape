@@ -8,14 +8,21 @@ import { ApiSelectorModule } from './api-selector/api-selector.module';
 
 import env from '../environments/environment';
 import { EnvironmentModule } from './shared/environment/environment.module';
+import { EventsReactiveFormsModule } from './events-reactive-forms/events.module';
+import { EventsTemplateFormsModule } from './events-template-forms/events.module';
+import { AppIndexPageComponent } from './app-index-page.component';
+import { EventsModelServiceModule } from './events-model-service/events.module';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, AppIndexPageComponent],
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
     EnvironmentModule.forRoot(env),
-    EventsModule,
+    // EventsModule,
+    EventsReactiveFormsModule,
+    // EventsTemplateFormsModule,
+    EventsModelServiceModule,
     ApiSelectorModule,
   ],
   providers: [],

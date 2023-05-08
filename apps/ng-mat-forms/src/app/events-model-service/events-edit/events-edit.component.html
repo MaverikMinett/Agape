@@ -3,7 +3,7 @@
         <h2 *ngIf="!id" class="text-lg py-3 mb-3">New Event</h2>
         <h2 *ngIf="event?.id" class="text-lg py-3 mb-3">Edit Event</h2>
 
-        <form form="ngForm" *ngIf="event">
+        <form [formGroup]="eventsForm">
 
             <div class="grid gap-x-6 form-grid">
                 <mat-form-field class="col-span-2">
@@ -11,7 +11,7 @@
                     <input 
                     matInput 
                     name="name" 
-                    [(ngModel)]="event.name"
+                    formControlName="name"
                     required="true">
                 </mat-form-field>
 
@@ -20,7 +20,7 @@
                     <input 
                     matInput
                     name="timeStart__date" 
-                    [(ngModel)]="event.timeStart__date"
+                    formControlName="timeStart__date"
                     [matDatepicker]="picker1"
                     required="true"
                     >
@@ -34,7 +34,7 @@
                     matInput 
                     type="time"
                     name="timeStart__time" 
-                    [(ngModel)]="event.timeStart__time"
+                    formControlName="timeStart__time"
                     required="true">
                 </mat-form-field>
 
@@ -43,8 +43,8 @@
                     <mat-label>Date end</mat-label>
                     <input 
                     matInput
-                    name="timeEnd__date" 
-                    [(ngModel)]="event.timeEnd__date"
+                    name="timeEnd__date"  
+                    formControlName="timeEnd__date"
                     [matDatepicker]="picker2"
                     >
                     <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
@@ -56,36 +56,49 @@
                     <input 
                     matInput 
                     type="time"
-                    name="timeStart__end" 
-                    [(ngModel)]="event.timeEnd_time">
+                    name="timeEnd__time" 
+                    formControlName="timeStart__time">
                 </mat-form-field>
 
                 <mat-form-field class="col-span-2">
                     <mat-label>Location name</mat-label>
                     <input matInput name="locationName" 
-                    [(ngModel)]="event.locationName">
+                    formControlName="locationName">
                 </mat-form-field>
 
                 <mat-form-field class="col-span-2">
-                    <mat-label>Location Address</mat-label>
+                    <mat-label>Location address</mat-label>
                     <textarea matInput name="locationAddress" 
-                    [(ngModel)]="event.locationAddress"></textarea>
+                    formControlName="locationAddress"></textarea>
                 </mat-form-field>
 
-
+                <mat-form-field class="col-span-2">
+                    <mat-label>Contact phone</mat-label>
+                    <input 
+                    matInput 
+                    name="contactPhone" 
+                    formControlName="contactPhone">
+                </mat-form-field>
+                <mat-form-field class="col-span-2">
+                    <mat-label>Contact email</mat-label>
+                    <input 
+                    matInput 
+                    name="contactPhone" 
+                    formControlName="contactEmail">
+                </mat-form-field>
                 <mat-form-field class="col-span-2">
                     <mat-label>Description</mat-label>
                     <textarea matInput name="description" 
-                    [(ngModel)]="event.description"></textarea>
+                    formControlName="description"></textarea>
 
-                </mat-form-field>
+                </mat-form-field> 
             </div>
 
             <div class="py-4">
                 <button 
                 type="button" 
                 (click)="submit()"
-                [disbaled]="transactionLoading"
+                [disabled]="transactionLoading || ! eventsForm.valid"
                 class="rounded border-2 border-azule bg-slate-100 hover-bg-azule hover:text-white px-8 py-2 text-azule">
                     Submit
                 </button>
@@ -95,8 +108,8 @@
     </div>
 
     <div class="my-4 text-white">
-        <a routerLink="/events/{{event?.id}}">View Event</a> 
-        ・<a routerLink="/events">Events List</a>
+        <a routerLink="/events-model-service/{{event?.id}}">View Event</a> 
+        ・<a routerLink="/events-model-service">Events List</a>
     </div>
 </div>
 
