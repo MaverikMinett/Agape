@@ -36,6 +36,7 @@
       "@lib/api": ["libs/lib-api/src/index.ts"],
       "@lib/express": ["libs/lib-express/src/index.ts"],
       "@lib/server": ["libs/lib-server/src/index.ts"],
+      "@project-zed/lib-alchemy": ["libs/lib-alchemy/src/index.ts"],
       "lib-platform": ["libs/lib-platform/src/index.ts"]
     },
     "outDir": "dist",

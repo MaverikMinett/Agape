@@ -12,7 +12,7 @@ export class Serializer {
         return inflate( this.to, data )
     }
 
-    deflate( item:Object, params?:any ) {
+    deflate( item:Object, params?:any ): any {
         return deflate( item, params )
     }
 
