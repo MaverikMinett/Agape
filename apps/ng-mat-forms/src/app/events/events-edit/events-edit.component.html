@@ -47,23 +47,30 @@
 
                 <mat-form-field>
                     <label>Time end</label>
-                    <input matInput name="timeEnd__date">
+                    <input 
+                    matInput 
+                    type="time"
+                    name="timeStart__end" 
+                    [(ngModel)]="event.timeEnd_time">
                 </mat-form-field>
 
                 <mat-form-field class="col-span-2">
                     <label>Location name</label>
-                    <input matInput name="location_name">
+                    <input matInput name="locationName" 
+                    [(ngModel)]="event.locationName">
                 </mat-form-field>
 
                 <mat-form-field class="col-span-2">
                     <label>Location Address</label>
-                    <textarea matInput name="location_address"></textarea>
+                    <textarea matInput name="locationAddress" 
+                    [(ngModel)]="event.locationAddress"></textarea>
                 </mat-form-field>
 
 
                 <mat-form-field class="col-span-2">
                     <label>Description</label>
-                    <textarea matInput name="timeEnd__date"></textarea>
+                    <textarea matInput name="description" 
+                    [(ngModel)]="event.description"></textarea>
 
                 </mat-form-field>
             </div>
