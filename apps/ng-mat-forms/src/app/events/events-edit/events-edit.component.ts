@@ -3,10 +3,12 @@ import { IEvent } from "../ievent.interface";
 import { EventService } from "../event.service";
 import { ActivatedRoute, Router } from "@angular/router";
 
+import { FormBuilder, FormGroup } from "@angular/forms";
 
 @Component({
     selector: 'project-zed-events-edit',
     templateUrl: './events-edit.component.html',
+    styleUrls: ['./events-edit.component.scss']
 })
 export class EventsEditComponent {
 
@@ -14,6 +16,19 @@ export class EventsEditComponent {
     event: IEvent
 
     transactionLoading: boolean = false
+
+    fb = new FormBuilder()
+
+    form: FormGroup = this.fb.group({
+        name: [''],
+        timeStart__date: [undefined],
+        timeStart__time: [undefined],
+        timeEnd__date: [undefined],
+        timeEnd__time: [undefined],
+        locationName: [""],
+        locationAddress: [""],
+        description: [""],
+    })
 
     constructor(
          private service: EventService, 

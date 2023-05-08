@@ -1,22 +1,83 @@
 <div class="flex flex-col items-center">
     <div class="flex flex-col rounded overflow-hidden shadow-lg max-w-full w-2/3 bg-slate-100 p-4">
-        <h2 *ngIf="!id" class="text-lg pb">New Event</h2>
-        <h2 *ngIf="event?.id" class="text-lg pb">{{ event?.name }}</h2>
+        <h2 *ngIf="!id" class="text-lg py-3 mb-3">New Event</h2>
+        <h2 *ngIf="event?.id" class="text-lg py-3 mb-3">Edit Event</h2>
 
         <form form="ngForm" *ngIf="event">
-            <div>
-                <div><label class="text-sm text-gray-900">Event Name</label></div>
-                <div><input class="rounded border-dashed border-2 border-sky-500 bg-slate-100 p-2 w-full" type="text" name="name" [(ngModel)]="event.name"></div>
+
+            <div class="grid gap-x-6 form-grid">
+                <mat-form-field class="col-span-2">
+                    <label>Name</label>
+                    <input matInput name="name" [(ngModel)]="event.name">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <label>Date start</label>
+                    <input 
+                    matInput
+                    name="timeStart__date" 
+                    [(ngModel)]="event.timeStart__date"
+                    [matDatepicker]="picker1"
+                    >
+                    <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <label>Time start</label>
+                    <input 
+                    matInput 
+                    type="time"
+                    name="timeStart__time" 
+                    [(ngModel)]="event.timeStart__time">
+                </mat-form-field>
+
+
+                <mat-form-field>
+                    <label>Date end</label>
+                    <input 
+                    matInput
+                    name="timeEnd__date" 
+                    [(ngModel)]="event.timeEnd__date"
+                    [matDatepicker]="picker2"
+                    >
+                    <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <label>Time end</label>
+                    <input matInput name="timeEnd__date">
+                </mat-form-field>
+
+                <mat-form-field class="col-span-2">
+                    <label>Location name</label>
+                    <input matInput name="location_name">
+                </mat-form-field>
+
+                <mat-form-field class="col-span-2">
+                    <label>Location Address</label>
+                    <textarea matInput name="location_address"></textarea>
+                </mat-form-field>
+
+
+                <mat-form-field class="col-span-2">
+                    <label>Description</label>
+                    <textarea matInput name="timeEnd__date"></textarea>
+
+                </mat-form-field>
             </div>
+
             <div class="py-4">
                 <button 
                 type="button" 
                 (click)="submit()"
                 [disbaled]="transactionLoading"
-                class="rounded border-2 border-sky-500 bg-slate-100 hover:bg-sky-500 hover:text-white px-8 py-2 text-sky-500">
+                class="rounded border-2 border-azule bg-slate-100 hover-bg-azule hover:text-white px-8 py-2 text-azule">
                     Submit
                 </button>
             </div>
+
         </form>
     </div>
 
@@ -25,3 +86,5 @@
         ・<a routerLink="/events">Events List</a>
     </div>
 </div>
+
+
