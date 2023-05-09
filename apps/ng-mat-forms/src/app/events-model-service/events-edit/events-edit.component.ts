@@ -26,10 +26,8 @@ export class EventsEditComponent {
 
     eventsForm: FormGroup = this.fb.group({
         name: [''],
-        timeStart__date: [''],
-        timeStart__time: [''],
-        timeEnd__date: [''],
-        timeEnd__time: [''],
+        timeStart: [''],
+        timeEnd: [''],
         locationName: [""],
         locationAddress: [""],
         contactPhone: [""],
@@ -108,54 +106,11 @@ export class EventsEditComponent {
 
         const value: any = {...this.event}
 
-        if ( value.timeStart ) {
-            const startDate = new Date(event.timeStart)
-            const startTime = startDate.getHours().toString().padStart(2,'0') 
-                + ':' + startDate.getMinutes().toString().padStart(2,'0')
-            value.timeStart__date = startDate
-            value.timeStart__time = startTime    
-            delete value.timeStart
-        }
-
-
-        if ( value.timeEnd ) {
-            const endDate = new Date(event.timeEnd)
-            const endTime = endDate.getHours().toString().padStart(2,'0') 
-                + ':' + endDate.getMinutes().toString().padStart(2,'0')
-            value.timeEnd__date = endDate
-            value.timeEnd__time = endTime    
-            delete value.timeEnd
-        }
-
         this.eventsForm.patchValue(value)
     }
 
     getPayload() {
         const value = {...this.eventsForm.value}
-
-        const startDate = value.timeStart__date
-        const startTime = value.timeStart__time
-        const [ hours, minutes ] = startTime.split(':')
-        const startDateTime = new Date(startDate)
-        startDateTime.setHours(hours, minutes)
-
-        delete value.timeStart__date
-        delete value.timeStart__time
-
-        value.timeStart = startDateTime.toISOString()
-
-        const endDate = value.timeEnd__date ?? value.timeStart__date
-        const endTime = value.timeEnd__time
-        const endDateTime = endDate ? new Date(endDate) : undefined
-        if ( endTime ) {
-            const [ endHours, endMinutes ] = endTime.split(':')
-            endDateTime.setHours(hours, minutes)
-        }
-        
-        delete value.timeEnd__date
-        delete value.timeEnd__time
-
-        value.timeEnd = endDateTime ? endDateTime.toISOString() : undefined
 
         return value as Interface<Event>
     }

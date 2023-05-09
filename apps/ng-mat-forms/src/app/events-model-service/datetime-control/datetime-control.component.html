@@ -1,21 +1,26 @@
+<mat-form-field>
+    <mat-label>{{ dateLabel }}</mat-label>
+    <input 
+    matInput
+    name="date" 
+    [matDatepicker]="picker1"
+    [required]="required"
+    [(ngModel)]="innerDate"
+    (ngModelChange)="dateChanged($event)"
+    (blur)="onBlur()"
+    >
+    <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+</mat-form-field>
 
-    <mat-form-field>
-        <mat-label>{{ dateLabel }}</mat-label>
-        <input 
-        matInput
-        name="date" 
-        [matDatepicker]="picker1"
-        [required]="required"
-        >
-        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
-        <mat-datepicker #picker1></mat-datepicker>
-    </mat-form-field>
-
-    <mat-form-field>
-        <mat-label>{{ timeLabel }} </mat-label>
-        <input 
-        matInput 
-        type="time"
-        name="time" 
-        [required]="required">
-    </mat-form-field>
+<mat-form-field>
+    <mat-label>{{ timeLabel }} </mat-label>
+    <input 
+    matInput 
+    type="time"
+    name="time" 
+    [(ngModel)]="innerTime"
+    [required]="required"
+    (ngModelChange)="timeChanged($event)"
+    (blur)="onBlur()">
+</mat-form-field>

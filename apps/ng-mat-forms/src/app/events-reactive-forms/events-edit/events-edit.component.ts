@@ -156,7 +156,7 @@ export class EventsEditComponent {
         const endDateTime = endDate ? new Date(endDate) : undefined
         if ( endTime ) {
             const [ endHours, endMinutes ] = endTime.split(':')
-            endDateTime.setHours(hours, minutes)
+            endDateTime.setHours(endHours, endMinutes)
         }
         
         delete value.timeEnd__date

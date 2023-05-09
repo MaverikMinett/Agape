@@ -47,9 +47,9 @@ export class ModelService {
         const descriptor = Model.descriptor(model)
         const endpoint   = descriptor.plural
         return this.http.get<Interface<InstanceType<T>>>( `${this.apiUrl}/${endpoint}/${id}` )
-        // .pipe<InstanceType<T>>( 
-        //     map( item =>  alchemy.inflate(model, item)  )
-        //  )
+        .pipe<InstanceType<T>>( 
+            map( item =>  alchemy.inflate(model, item)  )
+         )
     }
 
     update<T extends Class>( model: T, id: string, item: InstanceType<T> ) {
