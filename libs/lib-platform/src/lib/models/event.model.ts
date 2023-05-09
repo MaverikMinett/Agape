@@ -23,7 +23,7 @@ import { Model, Field, Primary } from '@agape/model'
 
     @Field description: string
 
-    constructor( params: Partial<Pick<Event, keyof Event>>) {
+    constructor( params?: Partial<Pick<Event, keyof Event>>) {
         Object.assign( this, params )
     }
 

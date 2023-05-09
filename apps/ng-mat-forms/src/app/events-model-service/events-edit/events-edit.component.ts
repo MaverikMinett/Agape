@@ -4,6 +4,10 @@ import { EventService } from "../event.service";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { FormBuilder, FormGroup } from "@angular/forms";
+import { ModelService } from "../model.service";
+import { Event } from "lib-platform";
+import alchemy from "@project-zed/lib-alchemy";
+import { Interface } from "@agape/types";
 
 
 // function jsDateToUtcTimestamp( dateTime: Date ) {
@@ -26,7 +30,7 @@ export class EventsEditComponent {
 
     id: string
 
-    event: IEvent
+    event: Event
 
     transactionLoading: boolean = false
 
@@ -46,7 +50,7 @@ export class EventsEditComponent {
     })
 
     constructor(
-         private service: EventService, 
+         private service: ModelService, 
          private router: Router,
          private route: ActivatedRoute,
           ) {
@@ -56,7 +60,7 @@ export class EventsEditComponent {
     ngOnInit() {
         this.route.params.subscribe( params => {
             if ( ! params.id ) {
-                this.event = { name: "" }    
+                this.event = new Event()   
             } 
             else {
                 this.id = params.id
@@ -67,10 +71,10 @@ export class EventsEditComponent {
     }
 
     loadEvent( id: string ) {
-        this.service.retrieve( id ).subscribe({
+        this.service.retrieve(Event, id ).subscribe({
             next: event => {
                 this.event = event
-                this.eventsForm.patchValue(event)
+                this.patchForm(event)
             },
             error: console.error
         })
@@ -82,12 +86,12 @@ export class EventsEditComponent {
         if ( ! this.eventsForm.valid ) 
             throw new Error("Form is not valid")
 
-        const event: IEventDto = this.getPayload()
+        const formData: Interface<Event> = this.getPayload()
 
-        console.log("Create event", event )
+        const event = alchemy.inflate(Event, formData)
 
         if ( this.id ) {
-            this.service.update(this.id, event).subscribe({
+            this.service.update(Event, this.id, event).subscribe({
                 next: () => {
                     this.transactionLoading = false
                     this.router.navigate([`/events-model-service/${this.id}`])
@@ -99,7 +103,7 @@ export class EventsEditComponent {
             })
         }
         else {
-            this.service.create(event).subscribe({
+            this.service.create(Event, event).subscribe({
                 next: ( result ) => {
                     this.transactionLoading = false
                     this.router.navigate([`/events-model-service/${result.id}`])
@@ -112,8 +116,33 @@ export class EventsEditComponent {
         }
     }
 
-    patchForm( event: IEventDto ) {
-        this.eventsForm.patchValue(event)
+    patchForm( event: Event ) {
+
+        const value: any = {...this.event}
+
+        if ( value.timeStart ) {
+            const startDate = new Date(event.timeStart)
+            const startTime = startDate.getHours().toString().padStart(2,'0') 
+                + ':' + startDate.getMinutes().toString().padStart(2,'0')
+            value.timeStart__date = startDate
+            value.timeStart__time = startTime    
+            delete value.timeStart
+        }
+
+
+        if ( value.timeEnd ) {
+            const endDate = new Date(event.timeEnd)
+            const endTime = endDate.getHours().toString().padStart(2,'0') 
+                + ':' + endDate.getMinutes().toString().padStart(2,'0')
+            value.timeEnd__date = endDate
+            value.timeEnd__time = endTime    
+            delete value.timeEnd
+        }
+
+        console.log(value)
+
+
+        this.eventsForm.patchValue(value)
     }
 
     getPayload() {
@@ -143,6 +172,6 @@ export class EventsEditComponent {
 
         value.timeEnd = endDateTime ? endDateTime.toISOString() : undefined
 
-        return value as IEventDto
+        return value as Interface<Event>
     }
 }
