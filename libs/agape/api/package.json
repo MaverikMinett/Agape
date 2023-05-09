@@ -1,5 +1,23 @@
 {
   "name": "@agape/api",
-  "version": "0.0.1",
-  "type": "commonjs"
+  "version": "0.1.0",
+  "type": "commonjs",
+  "description": "Framework for building Rest APIs",
+  "author": {
+    "name": "Maverik Minett",
+    "email": "maverik.minett@gmail.com"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaverikIO/project-zed"
+  },
+  "keywords": [
+    "menu",
+    "model",
+    "abstraction"
+  ],
+  "license": "MIT"
 }

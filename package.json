@@ -93,7 +93,12 @@
     "test:ng-mat-datetime-control": "npx nx test agape-ng-mat-datetime-control",
     "build:ng-mat-datetime-control": "npx nx build agape-ng-mat-datetime-control",
     "publish:ng-mat-datetime-control": "cd dist/libs/agape/ng-mat-datetime-control && npm publish --access public",
-    "release:ng-mat-datetime-control": "npm run build:ng-mat-datetime-control && npm run publish:ng-mat-datetime-control"
+    "release:ng-mat-datetime-control": "npm run build:ng-mat-datetime-control && npm run publish:ng-mat-datetime-control",
+
+    "test:api": "npx nx test agape-api",
+    "build:api": "npx nx build agape-api",
+    "publish:api": "cd dist/libs/agape/api && npm publish --access public",
+    "release:api": "npm run build:api && npm run publish:api"
   },
   "private": true,
   "dependencies": {
