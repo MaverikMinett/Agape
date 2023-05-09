@@ -88,8 +88,12 @@
     "test:ng-tie-subscriptions": "npx nx test agape-ng-tie-subscriptions",
     "build:ng-tie-subscriptions": "npx nx build agape-ng-tie-subscriptions",
     "publish:ng-tie-subscriptions": "cd dist/libs/agape/ng-tie-subscriptions && npm publish --access public",
-    "release:ng-tie-subscriptions": "npm run build:ng-tie-subscriptions && npm run publish:ng-tie-subscriptions"
-    
+    "release:ng-tie-subscriptions": "npm run build:ng-tie-subscriptions && npm run publish:ng-tie-subscriptions",
+
+    "test:ng-mat-datetime-control": "npx nx test agape-ng-mat-datetime-control",
+    "build:ng-mat-datetime-control": "npx nx build agape-ng-mat-datetime-control",
+    "publish:ng-mat-datetime-control": "cd dist/libs/agape/ng-mat-datetime-control && npm publish --access public",
+    "release:ng-mat-datetime-control": "npm run build:ng-mat-datetime-control && npm run publish:ng-mat-datetime-control"
   },
   "private": true,
   "dependencies": {

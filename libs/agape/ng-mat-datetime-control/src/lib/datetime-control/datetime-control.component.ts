@@ -17,7 +17,7 @@ export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
     styleUrls: ['./datetime-control.component.scss'],
     providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR]
 })
-export class DatetimeControlComponent {
+export class DatetimeControlComponent implements ControlValueAccessor {
 
     @Input() required: false
 

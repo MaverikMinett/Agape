@@ -1,6 +1,6 @@
 {
-  "name": "@agape/ng-mat-datetime=control",
-  "version": "0.0.",
+  "name": "@agape/ng-mat-datetime-control",
+  "version": "1.0.0",
   "peerDependencies": {
     "@angular/common": "^15.2.0",
     "@angular/core": "^15.2.0"
@@ -8,5 +8,22 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "author": {
+    "name": "Maverik Minett",
+    "email": "maverik.minett@gmail.com"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaverikIO/project-zed"
+  },
+  "keywords": [
+    "menu",
+    "model",
+    "abstraction"
+  ],
+  "license": "MIT"
 }
