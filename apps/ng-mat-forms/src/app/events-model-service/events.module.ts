@@ -12,15 +12,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 
-import {MatNativeDateModule} from '@angular/material/core';
+import { MatNativeDateModule} from '@angular/material/core';
 import { ModelService } from "./model.service";
 
-
-import { DateTimeControlComponent } from "./datetime-control/datetime-control.component";
+import { AgMatDatetimeControlModule } from '@agape/ng-mat-datetime-control'
 
 @NgModule({
     declarations: [
-        DateTimeControlComponent,
         EventsEditComponent, 
         EventsItemComponent, 
         EventsListComponent,
@@ -39,7 +37,7 @@ import { DateTimeControlComponent } from "./datetime-control/datetime-control.co
         MatDatepickerModule,
         MatNativeDateModule,
         MatInputModule,
-        
+        AgMatDatetimeControlModule,
     ]
 })
 export class EventsModelServiceModule {

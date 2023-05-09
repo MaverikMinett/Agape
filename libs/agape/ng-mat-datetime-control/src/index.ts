@@ -1,1 +1,1 @@
-export * from './lib/agape-ng-mat-datetime-control.module';
+export * from './lib/datetime-control.module';

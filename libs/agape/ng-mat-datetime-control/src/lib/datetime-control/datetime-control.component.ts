@@ -7,17 +7,17 @@ const noop = () => {
 
 export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => DateTimeControlComponent),
+    useExisting: forwardRef(() => DatetimeControlComponent),
     multi: true
 };
 
 @Component({
-    selector: 'datetime-control',
+    selector: 'ag-mat-datetime-control',
     templateUrl: './datetime-control.component.html',
     styleUrls: ['./datetime-control.component.scss'],
     providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR]
 })
-export class DateTimeControlComponent {
+export class DatetimeControlComponent {
 
     @Input() required: false
 
