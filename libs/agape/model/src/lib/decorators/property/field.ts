@@ -29,15 +29,9 @@ export function Field( ...args:any[] ):any {
 
         field.assign(params)
 
-        console.log("FIELD", name)
-
         const valueType = Reflect.getMetadata("design:type", target, name);
 
-        console.log("FIELD", valueType)
-
         field.designType = valueType
-
-        console.log(field)
     }
 
     if ( target ) return Field(target, name, propertyDescriptor)

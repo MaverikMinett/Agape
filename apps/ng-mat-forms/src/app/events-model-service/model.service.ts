@@ -5,68 +5,10 @@ import { IEventDto } from './ievent.interface'
 import { ApiSelectorService } from "../api-selector/api-selector.service";
 import { Class, Interface } from "@agape/types";
 import { Model } from "@agape/model";
-import { Serializer } from "@agape/object";
 import { map } from 'rxjs';
 
-class Alchemy {
+import { alchemy } from '@project-zed/lib-alchemy'
 
-    serializers = new Map()
-
-    register<T extends Class>( type: T, serializer: Serializer ) {
-        this.serializers.set(type, serializer)
-    }
-
-    inflate<T extends Class>( model: T, flattened: Interface<T>  ) {
-        return this.inflateInstance( model, flattened )
-    }
-
-    inflateInstance<T extends Class>( model: T, flattened: Interface<T>  ) {
-
-        const descriptor = Model.descriptor(model)
-
-        const fields = descriptor.fields.all()
-
-        const inflated: any = { }
-
-        for ( let field of fields ) {
-
-            const designType = field.designType
-
-            const serializer = this.serializers.get(designType)
-
-            const value = flattened[field.name]
-
-            const inflatedValue = serializer ? serializer.inflate(value) : value
-
-            inflated[field.name] = inflatedValue
-        }
-
-        const instance = new model()
-
-        Object.assign(instance, inflated)
-
-        return instance
-    }
-
-    deflate<T extends Class>( model: T, instance: InstanceType<T> ) {
-
-    }
-
-}
-
-class DateSerializer extends Serializer {
-
-    inflate(isoString: string) {
-        return new Date(isoString)
-    }
-
-    deflate(date: Date) {
-        return date.toISOString()
-    }
-}
-
-const alchemy = new Alchemy();
-alchemy.register( Date, new DateSerializer() )
 
 @Injectable({ providedIn: 'root'})
 export class ModelService {
@@ -102,7 +44,10 @@ export class ModelService {
     retrieve<T extends Class>( model: T, id: string) {
         const descriptor = Model.descriptor(model)
         const endpoint   = descriptor.plural
-        return this.http.get( `${this.apiUrl}/${endpoint}/${id}` )
+        return this.http.get<Interface<InstanceType<T>>>( `${this.apiUrl}/${endpoint}/${id}` )
+        .pipe<InstanceType<T>>( 
+            map( item =>  alchemy.inflate(model, item)  )
+         )
     }
 
     update<T extends Class>( model: T, id: string, item: InstanceType<T> ) {

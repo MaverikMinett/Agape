@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
-import { IEvent, IEventDto } from "../ievent.interface";
-import { EventService } from "../event.service";
 import { ActivatedRoute, Router } from "@angular/router";
+import { ModelService } from "../model.service";
+import { Event } from "lib-platform";
 
 
 @Component({
@@ -10,12 +10,11 @@ import { ActivatedRoute, Router } from "@angular/router";
 })
 export class EventsItemComponent {
 
-    event: IEventDto
+    event: Event
 
     
-
     constructor( 
-        private service: EventService,
+        private service: ModelService,
         private route: ActivatedRoute ,
         private router: Router ) {
 
@@ -26,15 +25,17 @@ export class EventsItemComponent {
     }
 
     loadEvent( id: string ) {
-        this.service.retrieve( id ).subscribe({
-            next: event => this.event = event,
+        this.service.retrieve(Event, id ).subscribe({
+            next: event => {
+                this.event = event
+            } ,
             error: console.error
         })
     }
 
     deleteEvent( id: string ) {
 
-        this.service.delete(id).subscribe({
+        this.service.delete(Event, id).subscribe({
             next: () => {
                 this.router.navigate(['/events/list'])
             },
