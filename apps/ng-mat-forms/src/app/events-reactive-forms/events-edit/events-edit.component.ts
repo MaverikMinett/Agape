@@ -70,7 +70,7 @@ export class EventsEditComponent {
         this.service.retrieve( id ).subscribe({
             next: event => {
                 this.event = event
-                this.eventsForm.patchValue(event)
+                this.patchForm(event)
             },
             error: console.error
         })
@@ -113,7 +113,28 @@ export class EventsEditComponent {
     }
 
     patchForm( event: IEventDto ) {
-        this.eventsForm.patchValue(event)
+        const value: any = {...this.event}
+
+        if ( value.timeStart ) {
+            const startDate = new Date(event.timeStart)
+            const startTime = startDate.getHours().toString().padStart(2,'0') 
+                + ':' + startDate.getMinutes().toString().padStart(2,'0')
+            value.timeStart__date = startDate
+            value.timeStart__time = startTime    
+            delete value.timeStart
+        }
+
+
+        if ( value.timeEnd ) {
+            const endDate = new Date(event.timeEnd)
+            const endTime = endDate.getHours().toString().padStart(2,'0') 
+                + ':' + endDate.getMinutes().toString().padStart(2,'0')
+            value.timeEnd__date = endDate
+            value.timeEnd__time = endTime    
+            delete value.timeEnd
+        }
+
+        this.eventsForm.patchValue(value)
     }
 
     getPayload() {

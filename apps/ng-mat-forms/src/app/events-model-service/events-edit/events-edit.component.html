@@ -15,6 +15,14 @@
                     required="true">
                 </mat-form-field>
 
+                <datetime-control 
+                class="col-span-2"
+                dateLabel="Start date"
+                timeLabel="Start time"
+                >
+
+                </datetime-control>
+
                 <mat-form-field>
                     <mat-label>Date start</mat-label>
                     <input 
@@ -99,8 +107,8 @@
                 id="submit"
                 type="button" 
                 (click)="submit()"
-                [disabled]="transactionLoading || ! eventsForm.valid"
-                [class.disabled]="transactionLoading || ! eventsForm.valid"
+                [disabled]="transactionLoading || ! eventsForm.valid || ! eventsForm.dirty"
+                [class.disabled]="transactionLoading || ! eventsForm.valid || ! eventsForm.dirty"
                 class="rounded border-2 border-azule bg-slate-100 hover-bg-azule hover:text-white px-8 py-2 text-azule">
                     Submit
                 </button>

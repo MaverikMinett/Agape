@@ -16,12 +16,11 @@ import {MatNativeDateModule} from '@angular/material/core';
 
 
 
-
 @NgModule({
     declarations: [
         EventsEditComponent, 
         EventsItemComponent, 
-        EventsListComponent
+        EventsListComponent,
     ],
     providers: [
         EventService

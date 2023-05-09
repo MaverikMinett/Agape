@@ -16,13 +16,14 @@ import {MatNativeDateModule} from '@angular/material/core';
 import { ModelService } from "./model.service";
 
 
-
+import { DateTimeControlComponent } from "./datetime-control/datetime-control.component";
 
 @NgModule({
     declarations: [
+        DateTimeControlComponent,
         EventsEditComponent, 
         EventsItemComponent, 
-        EventsListComponent
+        EventsListComponent,
     ],
     providers: [
         EventService,
@@ -38,6 +39,7 @@ import { ModelService } from "./model.service";
         MatDatepickerModule,
         MatNativeDateModule,
         MatInputModule,
+        
     ]
 })
 export class EventsModelServiceModule {
