@@ -1,11 +1,69 @@
-# agape-ng-tie-subscriptions
+# @agape/ng-tied-subscriptions
 
-This library was generated with [Nx](https://nx.dev).
+Tie subscriptions to the component lifecycle
 
-## Building
+## Synopsis
 
-Run `nx build agape-ng-tie-subscriptions` to build the library.
+```ts
+export interface FooComponent extends CanTie { }
 
-## Running unit tests
+@Component(...)
+@include( CanTie )
+export class FooComponent {
 
-Run `nx test agape-ng-tie-subscriptions` to execute the unit tests via [Jest](https://jestjs.io).
+ngOnInit() {
+
+    this.tie(
+      this.service.get().subscribe( () => {
+        ...
+      })
+    )
+
+  }
+}
+```
+
+## Description
+
+Unsubscribe when a component is destroyed to prevent memory leaks
+
+## Traits
+
+`CanTie`
+
+### Methods
+
+`tie( ...subscriptions )`
+
+Tie one more subscriptions to the component so that they are unsubscribed
+when the component is destroyed
+
+```
+    this.tie(
+      this.service.method1().subscribe( () => {
+        ...
+      }),
+        this.service.method2().subscribe( () => {
+        ...
+      }),
+    )
+```
+
+## Installation
+
+```
+npm install @agape/ng-tied-subscriptions @agape/object @agape/types @agape/string
+```
+
+## Author
+
+Maverik Minett  maverik.minett@gmail.com
+
+## Copyright
+
+© 2023 Maverik Minett
+
+
+## License
+
+MIT

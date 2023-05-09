@@ -1,0 +1,37 @@
+<div class="flex flex-col items-center">
+    <div class="flex flex-col rounded overflow-hidden shadow-lg max-w-full w-2/3 bg-slate-100 p-4">
+        <h2 class="text-lg py-3 mb-3">Date Control with Reactive Form</h2>
+
+        <form [formGroup]="form">
+
+
+            <ag-mat-datetime-control
+                dateLabel="Start date"
+                timeLabel="Start time"
+                formControlName="timeStart"
+                >
+            </ag-mat-datetime-control>
+
+            <ag-mat-datetime-control
+            dateLabel="End date"
+            timeLabel="End time"
+            formControlName="timeEnd"
+            >
+            </ag-mat-datetime-control>
+            <div class="py-4">
+                <button 
+                type="button" 
+                (click)="submit()"
+                class="rounded border-2 border-azule bg-slate-100 hover-bg-azule hover:text-white px-8 py-2 text-azule">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="my-4 text-white">
+        <a routerLink="/">Home</a>
+    </div>
+</div>
+
+

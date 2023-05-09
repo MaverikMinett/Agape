@@ -16,13 +16,13 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toContain(
-      'Welcome ng-mat-datetime'
+      'Welcome ng-events-tailwind'
     );
   });
 
-  it(`should have as title 'ng-mat-datetime'`, () => {
+  it(`should have as title 'ng-events-tailwind'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('ng-mat-datetime');
+    expect(app.title).toEqual('ng-events-tailwind');
   });
 });

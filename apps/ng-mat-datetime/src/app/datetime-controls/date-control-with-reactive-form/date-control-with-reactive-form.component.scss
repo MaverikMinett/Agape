@@ -1,0 +1,14 @@
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#submit.disabled {
+    border-color: #b2b4b4;
+    color: #b2b4b4;
+
+    &:hover {
+        background-color: transparent;
+    }
+}

@@ -1,0 +1,35 @@
+<div class="flex flex-col items-center">
+    <div class="rounded overflow-hidden shadow-lg max-w-full w-2/3 bg-slate-100 p-4">
+        <h2 class="text-lg py-3 ">Date Control with Template Form</h2>
+        <form form="ngForm">
+
+            <ag-mat-datetime-control
+                dateLabel="Start date"
+                timeLabel="Start time"
+                name="timeStart"
+                [(ngModel)]="foo.timeStart"
+                >
+            </ag-mat-datetime-control>
+
+            <ag-mat-datetime-control
+                dateLabel="End date"
+                timeLabel="End time"
+                name="timeEnd"
+                [(ngModel)]="foo.timeEnd"
+                >
+            </ag-mat-datetime-control>
+            <div class="py-4">
+                <button 
+                type="button" 
+                (click)="submit()"
+                class="rounded border-2 border-azule bg-slate-100 hover-bg-azule hover:text-white px-8 py-2 text-azule">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="my-4">
+        <a routerLink="/" class="text-white">Home</a>
+    </div>
+</div>

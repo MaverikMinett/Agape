@@ -1,5 +1,22 @@
 {
   "name": "@agape/ng-tie-subscriptions",
-  "version": "0.0.1",
-  "type": "commonjs"
+  "version": "1.0.0",
+  "description": "Tie subscriptions to the component lifecycle",
+  "author": {
+    "name": "Maverik Minett",
+    "email": "maverik.minett@gmail.com"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaverikIO/project-zed"
+  },
+  "keywords": [
+    "menu",
+    "model",
+    "abstraction"
+  ],
+  "license": "MIT"
 }

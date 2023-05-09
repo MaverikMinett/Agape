@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"npm:start:server\" \"npm:start:zedserver\" \"npm:start:zedservermongo\"  \"npm:start:zedserverorm\" \"npm:start:nestserver\" \"npm:start:express-no-db\" \"npm:start:tserver\" \"npm:start:command-line\" \"npm:start:clientng\" \"npm:start:zeduicomponent\" \"npm:start:zeduirouting\" \"npm:start:ngtiedsubscriptions\" \"npm:start:ngeventstailwind\" \"npm:start:ngmatforms\"",
+    "start": "concurrently \"npm:start:server\" \"npm:start:zedserver\" \"npm:start:zedservermongo\"  \"npm:start:zedserverorm\" \"npm:start:nestserver\" \"npm:start:express-no-db\" \"npm:start:tserver\" \"npm:start:command-line\" \"npm:start:clientng\" \"npm:start:zeduicomponent\" \"npm:start:zeduirouting\" \"npm:start:ngtiedsubscriptions\" \"npm:start:ngeventstailwind\" \"npm:start:ngmatforms\" \"npm:start:nestserverorm\"",
     "start:clientag": "nx serve clientag",
     "start:clientng": "nx serve clientng",
     "start:command-line": "nx serve command-line",
@@ -19,6 +19,7 @@
     "start:ngtiedsubscriptions": "nx serve ng-tied-subscriptions",
     "start:ngeventstailwind": "nx serve ng-events-tailwind",
     "start:ngmatforms": "nx serve ng-mat-forms",
+    "start:nestserverorm": "nx serve nest-server-orm",
     "benchmark": "nx serve benchmark",
     "test": "nx test lib-api lib-server lib-express server eserver tserver",
     "test:server": "nx test server",
@@ -82,7 +83,13 @@
     "build:string:es2015": "npm run build:string:es2015:build && npm run build:string:es2015:move && npm run build:string:es2015:clean",
     "build:string:es2015:build": "nx buildes2015 agape-string",
     "build:string:es2015:move": "mv dist/libs/agape/string/es2015.in/src dist/libs/agape/string/es2015",
-    "build:string:es2015:clean": "rm -r dist/libs/agape/string/es2015.in"
+    "build:string:es2015:clean": "rm -r dist/libs/agape/string/es2015.in",
+
+    "test:ng-tie-subscriptions": "npx nx test agape-ng-tie-subscriptions",
+    "build:ng-tie-subscriptions": "npx nx build agape-ng-tie-subscriptions",
+    "publish:ng-tie-subscriptions": "cd dist/libs/agape/ng-tie-subscriptions && npm publish --access public",
+    "release:ng-tie-subscriptions": "npm run build:ng-tie-subscriptions && npm run publish:ng-tie-subscriptions"
+    
   },
   "private": true,
   "dependencies": {

@@ -51,6 +51,9 @@
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "port": 4206
+      },
       "configurations": {
         "production": {
           "browserTarget": "ng-mat-datetime:build:production"
