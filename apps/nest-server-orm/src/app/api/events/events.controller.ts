@@ -15,12 +15,10 @@ export class EventsController {
     @Get()
     async list() {
         const events = await this.service.list()
-        for ( let event of events ) {
-            const _event: any = event
-            _event.timeStart = event.timeStart?.toISOString()
-            _event.timeEnd = event.timeEnd?.toISOString()
-        }
-        return events
+
+        const deflated = alchemy.deflate(Event, events)
+
+        return deflated
     }
 
     @Post()
@@ -43,12 +41,10 @@ export class EventsController {
 
     @Put(':id')
     update( @Param('id') id: string, @Body() payload: Interface<Event>) {
-        const timeStart = new Date(payload.timeStart)
-        const timeEnd = payload.timeEnd ? new Date(payload.timeEnd) : undefined
-        const _payload:any = payload
-        payload.timeStart = timeStart
-        payload.timeEnd = timeEnd
-        this.service.update(id, payload)
+
+        const event = alchemy.inflate(Event, payload)
+
+        this.service.update(id, event)
     }
 
     @Delete(':id')
