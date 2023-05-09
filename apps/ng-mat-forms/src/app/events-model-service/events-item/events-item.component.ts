@@ -27,6 +27,8 @@ export class EventsItemComponent {
     loadEvent( id: string ) {
         this.service.retrieve(Event, id ).subscribe({
             next: event => {
+
+                console.log("RETRIEVE event", event)
                 this.event = event
             } ,
             error: console.error

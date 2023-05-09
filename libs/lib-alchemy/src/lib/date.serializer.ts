@@ -7,6 +7,6 @@ export class DateSerializer extends Serializer {
     }
 
     deflate(date: Date) {
-        return date.toISOString()
+        return date ? date.toISOString() : date
     }
 }

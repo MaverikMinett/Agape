@@ -5,6 +5,8 @@ import { Event } from './event.model'
 import { Interface } from '@agape/types';
 import { time } from 'console';
 
+import { alchemy } from '@project-zed/lib-alchemy'
+
 @Controller('api/events')
 export class EventsController {
   constructor(private readonly service: EventService) {}
@@ -23,21 +25,20 @@ export class EventsController {
 
     @Post()
     create( @Body() payload: Interface<Event> ) {
-        const timeStart = new Date(payload.timeStart)
-        const timeEnd = payload.timeEnd ? new Date(payload.timeEnd) : undefined
-        const _payload:any = payload
-        payload.timeStart = timeStart
-        payload.timeEnd = timeEnd
-        return this.service.create( _payload )
+
+        const event = alchemy.inflate(Event, payload)
+
+        return this.service.create( event )
     }
 
     @Get(':id')
     async retrieve( @Param('id') id: string ) {
+
         const event = await this.service.retrieve(id)
-        const _event: any = event
-        _event.timeStart = event.timeStart?.toISOString()
-        _event.timeEnd = event.timeEnd ? event.timeEnd.toISOString() : undefined
-        return event
+
+        const dto = alchemy.deflate(Event, event)
+
+        return dto
     }
 
     @Put(':id')
