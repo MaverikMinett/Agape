@@ -25,6 +25,9 @@
       "@agape/ng-mat-datetime-control": [
         "libs/agape/ng-mat-datetime-control/src/index.ts"
       ],
+      "@agape/ng-mat-datetime=control": [
+        "libs/agape/ng-mat-datetime-control/src/index.ts"
+      ],
       "@agape/ng-tie-subscriptions": [
         "libs/agape/ng-tie-subscriptions/src/index.ts"
       ],

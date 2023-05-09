@@ -2,31 +2,25 @@
   "name": "agape-ng-mat-datetime-control",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/agape/ng-mat-datetime-control/src",
+  "prefix": "project-zed",
+  "tags": [],
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "executor": "@nrwl/angular:package",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
-        "outputPath": "dist/libs/agape/ng-mat-datetime-control",
-        "main": "libs/agape/ng-mat-datetime-control/src/index.ts",
-        "tsConfig": "libs/agape/ng-mat-datetime-control/tsconfig.lib.json",
-        "assets": ["libs/agape/ng-mat-datetime-control/*.md"]
-      }
-    },
-    "publish": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node tools/scripts/publish.mjs agape-ng-mat-datetime-control {args.ver} {args.tag}"
+        "project": "libs/agape/ng-mat-datetime-control/ng-package.json"
       },
-      "dependsOn": ["build"]
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["libs/agape/ng-mat-datetime-control/**/*.ts"]
-      }
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/agape/ng-mat-datetime-control/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/agape/ng-mat-datetime-control/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
     },
     "test": {
       "executor": "@nrwl/jest:jest",
@@ -41,7 +35,16 @@
           "codeCoverage": true
         }
       }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/agape/ng-mat-datetime-control/**/*.ts",
+          "libs/agape/ng-mat-datetime-control/**/*.html"
+        ]
+      }
     }
-  },
-  "tags": []
+  }
 }

@@ -1,5 +1,12 @@
 {
-  "name": "@agape/ng-mat-datetime-control",
+  "name": "@agape/ng-mat-datetime=control",
   "version": "0.0.1",
-  "type": "commonjs"
+  "peerDependencies": {
+    "@angular/common": "^15.2.0",
+    "@angular/core": "^15.2.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
 }
