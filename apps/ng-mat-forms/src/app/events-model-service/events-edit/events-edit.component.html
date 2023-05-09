@@ -96,9 +96,11 @@
 
             <div class="py-4">
                 <button 
+                id="submit"
                 type="button" 
                 (click)="submit()"
                 [disabled]="transactionLoading || ! eventsForm.valid"
+                [class.disabled]="transactionLoading || ! eventsForm.valid"
                 class="rounded border-2 border-azule bg-slate-100 hover-bg-azule hover:text-white px-8 py-2 text-azule">
                     Submit
                 </button>
