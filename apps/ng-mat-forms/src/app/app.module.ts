@@ -10,7 +10,7 @@ import { EnvironmentModule } from './shared/environment/environment.module';
 import { EventsReactiveFormsModule } from './events-reactive-forms/events.module';
 
 import { AppIndexPageComponent } from './app-index-page.component';
-import { EventsModelServiceModule } from './events-model-service/events.module';
+import { EventsModelServiceModule } from './events-module/events-model-service/events.module';
 import { EventsTemplateFormsModule } from './events-template-forms/events.module';
 
 @NgModule({

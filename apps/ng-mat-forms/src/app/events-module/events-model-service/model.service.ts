@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http'
-import { IEventDto } from './ievent.interface'
 
-import { ApiSelectorService } from "../api-selector/api-selector.service";
+import { ApiSelectorService } from "../../api-selector/api-selector.service";
 import { Class, Interface } from "@agape/types";
 import { Model } from "@agape/model";
 import { map } from 'rxjs';
@@ -61,7 +60,7 @@ export class ModelService {
     delete<T extends Class>( model: T, id: string) {
         const descriptor = Model.descriptor(model)
         const endpoint   = descriptor.plural
-        return this.http.delete<IEventDto>( `${this.apiUrl}/${endpoint}/${id}` )
+        return this.http.delete( `${this.apiUrl}/${endpoint}/${id}` )
     }
 
 }
