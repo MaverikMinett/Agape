@@ -43,9 +43,7 @@ import { Component } from "@angular/core";
                 </ul>
             </div>
 
-            <div class="my-4">
-                <a routerLink="/events/create" class="text-white">New Event</a>
-            </div>
+
         </div>
 
     `,
