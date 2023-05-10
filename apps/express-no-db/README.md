@@ -1,12 +1,12 @@
-# Express Server with Functional Programming and MongoDB
+# Express Server with Functional Programming and No Database
 
-Server application using Express connected to a MonoDB database
+Server application using Express
 
 ## Description
 
 Application is broken out into Routes, Controllers, Services, and Repo (data) layers.
 
-http://localhost:3002
+http://localhost:3005
 
 
 ## Author
