@@ -1,13 +1,47 @@
 <div class="flex flex-col items-center">
     <div class="rounded overflow-hidden shadow-lg max-w-full w-2/3 bg-slate-100 p-4">
-        <h2 class="text-lg py-3 mb-3">{{ event?.name }}</h2>
-        <div>
+        <h2 class="text-lg py-3 ">{{ event?.name }}</h2>
+        <div class="mb-3">
             <a routerLink="edit" class="text-azule">Edit event</a>
              ・ <a href="#" (click)="deleteEvent(event.id)" class="text-azule">Delete event</a>
+        </div>
+        <div>
+            <div class="py-3">
+                <div class="text-sm text-gray-700">Name</div>
+                <div>{{event?.name}}</div>
+            </div>
+            <div class="py-3">
+                <div class="text-sm text-gray-700">Start time</div>
+                <div>{{event?.timeStart | date: 'medium' }} </div>
+            </div>
+            <div class="py-3">
+                <div class="text-sm text-gray-700">End time</div>
+                <div>{{event?.timeEnd | date: 'medium'  }}&nbsp;</div>
+            </div>
+            <div class="py-3">
+                <div class="text-sm text-gray-700">Location name</div>
+                <div>{{event?.locationName}}&nbsp;</div>
+            </div>
+            <div class="py-3">
+                <div class="text-sm text-gray-700">Location address</div>
+                <div>{{event?.locationAddress}}&nbsp;</div>
+            </div>
+            <div class="py-3">
+                <div class="text-sm text-gray-700">Contact phone</div>
+                <div>{{event?.contactPhone}}&nbsp;</div>
+            </div>
+            <div class="py-3">
+                <div class="text-sm text-gray-700">Contact email</div>
+                <div>{{event?.contactEmail}}&nbsp;</div>
+            </div>
+            <div class="py-3">
+                <div class="text-sm text-gray-700">Description</div>
+                <div>{{event?.description}}&nbsp;</div>
+            </div>
         </div>
     </div>
 
     <div class="my-4">
-        <a routerLink="/events-tempalte-forms" class="text-white">Events List</a>
+        <a routerLink="/events-model-service" class="text-white">Events List</a>
     </div>
 </div>

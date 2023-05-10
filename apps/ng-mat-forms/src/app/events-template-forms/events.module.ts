@@ -12,19 +12,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 
-import {MatNativeDateModule} from '@angular/material/core';
+import { MatNativeDateModule} from '@angular/material/core';
+import { ModelService } from "./model.service";
 
-
-
+import { AgMatDatetimeControlModule } from '@agape/ng-mat-datetime-control'
 
 @NgModule({
     declarations: [
         EventsEditComponent, 
         EventsItemComponent, 
-        EventsListComponent
+        EventsListComponent,
     ],
     providers: [
-        EventService
+        EventService,
+        ModelService,
     ],
     imports: [
         FormsModule,
@@ -36,6 +37,7 @@ import {MatNativeDateModule} from '@angular/material/core';
         MatDatepickerModule,
         MatNativeDateModule,
         MatInputModule,
+        AgMatDatetimeControlModule,
     ]
 })
 export class EventsTemplateFormsModule {

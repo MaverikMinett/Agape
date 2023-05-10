@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
-import { IEvent } from "../ievent.interface";
-import { EventService } from "../event.service";
 import { ActivatedRoute, Router } from "@angular/router";
 
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { ModelService } from "../model.service";
+import { Event } from "lib-platform";
+
 
 @Component({
     selector: 'project-zed-events-edit',
@@ -13,14 +13,13 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 export class EventsEditComponent {
 
     id: string
-    event: IEvent
+
+    event: Event
 
     transactionLoading: boolean = false
 
-    fb = new FormBuilder()
-
     constructor(
-         private service: EventService, 
+         private service: ModelService, 
          private router: Router,
          private route: ActivatedRoute,
           ) {
@@ -30,7 +29,7 @@ export class EventsEditComponent {
     ngOnInit() {
         this.route.params.subscribe( params => {
             if ( ! params.id ) {
-                this.event = { name: "" }    
+                this.event = new Event()   
             } 
             else {
                 this.id = params.id
@@ -41,8 +40,10 @@ export class EventsEditComponent {
     }
 
     loadEvent( id: string ) {
-        this.service.retrieve( id ).subscribe({
-            next: event => this.event = event,
+        this.service.retrieve(Event, id ).subscribe({
+            next: event => {
+                this.event = event
+            },
             error: console.error
         })
     }
@@ -50,11 +51,11 @@ export class EventsEditComponent {
     submit() {
         this.transactionLoading = false
 
-        if ( this.event.id ) {
-            this.service.update(this.id, this.event).subscribe({
+        if ( this.id ) {
+            this.service.update(Event, this.id, this.event).subscribe({
                 next: () => {
                     this.transactionLoading = false
-                    this.router.navigate([`/events/${this.id}`])
+                    this.router.navigate([`/events-model-service/${this.id}`])
                 },
                 error: (error) => {
                     this.transactionLoading = false
@@ -63,10 +64,10 @@ export class EventsEditComponent {
             })
         }
         else {
-            this.service.create(this.event).subscribe({
+            this.service.create(Event, this.event).subscribe({
                 next: ( result ) => {
                     this.transactionLoading = false
-                    this.router.navigate([`/events/${result.id}`])
+                    this.router.navigate([`/events-model-service/${result.id}`])
                 },
                 error: (error) => {
                     this.transactionLoading = false
@@ -74,6 +75,6 @@ export class EventsEditComponent {
                 }
             })
         }
-
     }
+
 }

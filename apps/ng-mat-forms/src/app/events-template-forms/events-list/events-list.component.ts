@@ -1,7 +1,9 @@
 import { Component } from "@angular/core";
 import { IEvent } from "../ievent.interface";
 import { EventService } from "../event.service";
+import { ModelService } from "../model.service";
 
+import { Event } from 'lib-platform'
 
 @Component({
     selector: 'project-zed-events-list',
@@ -9,15 +11,18 @@ import { EventService } from "../event.service";
 })
 export class EventsListComponent {
 
-    events: IEvent[] = []
+    events: Event[] = []
 
-    constructor( private service: EventService ) {
+    constructor( private service: ModelService ) {
 
     }
 
     ngOnInit() {
-        this.service.list().subscribe({ 
-            next: events => this.events = events,
+        this.service.list(Event).subscribe({ 
+            next: events => {
+                console.log("EVENTS", events)
+                this.events = events
+            },
             error: console.error
         })
     }

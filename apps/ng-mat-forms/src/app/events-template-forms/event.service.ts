@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http'
-import { IEvent } from './ievent.interface'
+import { IEventDto } from './ievent.interface'
 
 import { Observable, of } from 'rxjs';
 import { ApiSelectorService } from "../api-selector/api-selector.service";
@@ -19,24 +19,24 @@ export class EventService {
             )
     }
 
-    list(): Observable<IEvent[]> {
-        return this.http.get<IEvent[]>( `${this.apiUrl}/events` )
+    list(): Observable<IEventDto[]> {
+        return this.http.get<IEventDto[]>( `${this.apiUrl}/events` )
     }
 
-    create(item: IEvent) {
+    create(item: IEventDto) {
         return this.http.post<{id: string}>( `${this.apiUrl}/events`, item )
     }
 
-    retrieve(id: string): Observable<IEvent> {
-        return this.http.get<IEvent>( `${this.apiUrl}/events/${id}` )
+    retrieve(id: string): Observable<IEventDto> {
+        return this.http.get<IEventDto>( `${this.apiUrl}/events/${id}` )
     }
 
-    update(id: string, item: IEvent) {
+    update(id: string, item: IEventDto) {
         return this.http.put( `${this.apiUrl}/events/${id}`, item )
     }
 
     delete(id: string) {
-        return this.http.delete<IEvent>( `${this.apiUrl}/events/${id}` )
+        return this.http.delete<IEventDto>( `${this.apiUrl}/events/${id}` )
     }
 
 }

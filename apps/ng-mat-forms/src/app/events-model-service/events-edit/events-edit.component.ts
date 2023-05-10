@@ -26,8 +26,8 @@ export class EventsEditComponent {
 
     eventsForm: FormGroup = this.fb.group({
         name: [''],
-        timeStart: [''],
-        timeEnd: [''],
+        timeStart: [undefined],
+        timeEnd: [undefined],
         locationName: [""],
         locationAddress: [""],
         contactPhone: [""],
@@ -60,7 +60,7 @@ export class EventsEditComponent {
         this.service.retrieve(Event, id ).subscribe({
             next: event => {
                 this.event = event
-                this.patchForm(event)
+                this.eventsForm.patchValue(event)
             },
             error: console.error
         })
@@ -72,7 +72,7 @@ export class EventsEditComponent {
         if ( ! this.eventsForm.valid ) 
             throw new Error("Form is not valid")
 
-        const formData: Interface<Event> = this.getPayload()
+        const formData = {...this.eventsForm.value } as Interface<Event>
 
         const event = alchemy.inflate(Event, formData)
 
@@ -102,16 +102,6 @@ export class EventsEditComponent {
         }
     }
 
-    patchForm( event: Event ) {
 
-        const value: any = {...this.event}
 
-        this.eventsForm.patchValue(value)
-    }
-
-    getPayload() {
-        const value = {...this.eventsForm.value}
-
-        return value as Interface<Event>
-    }
 }
