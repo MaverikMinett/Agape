@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { IEventDto } from './ievent.interface'
 
 import { Observable, of } from 'rxjs';
-import { ApiSelectorService } from "../api-selector/api-selector.service";
+import { ApiSelectorService } from "../../api-selector/api-selector.service";
 
 @Injectable({ providedIn: 'root'})
 export class EventService {

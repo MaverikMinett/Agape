@@ -41,8 +41,6 @@ export class ModelService {
     }
 
     retrieve<T extends Class>( model: T, id: string) {
-
-        
         const descriptor = Model.descriptor(model)
         const endpoint   = descriptor.plural
         return this.http.get<Interface<InstanceType<T>>>( `${this.apiUrl}/${endpoint}/${id}` )

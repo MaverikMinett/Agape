@@ -7,11 +7,11 @@ import { ApiSelectorModule } from './api-selector/api-selector.module';
 
 import env from '../environments/environment';
 import { EnvironmentModule } from './shared/environment/environment.module';
-import { EventsReactiveFormsModule } from './events-reactive-forms/events.module';
+import { EventsReactiveFormsModule } from './events-module/events-reactive-forms/events.module';
 
 import { AppIndexPageComponent } from './app-index-page.component';
 import { EventsModelServiceModule } from './events-module/events-model-service/events.module';
-import { EventsTemplateFormsModule } from './events-template-forms/events.module';
+import { EventsTemplateFormsModule } from './events-module/events-template-forms/events.module';
 
 @NgModule({
   declarations: [AppComponent, AppIndexPageComponent],
