@@ -1,6 +1,4 @@
 import { Component } from "@angular/core";
-import { IEvent } from "../ievent.interface";
-import { EventService } from "../event.service";
 import { ModelService } from "../model.service";
 
 import { Event } from 'lib-platform'

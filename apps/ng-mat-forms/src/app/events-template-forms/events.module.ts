@@ -6,7 +6,7 @@ import { EventsEditComponent } from "./events-edit/events-edit.component";
 import { EventsItemComponent } from "./events-item/events-item.component";
 import { EventsListComponent } from "./events-list/events-list.component";
 import { eventsRoutes } from "./events.routes";
-import { EventService } from "./event.service";
+
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -24,7 +24,6 @@ import { AgMatDatetimeControlModule } from '@agape/ng-mat-datetime-control'
         EventsListComponent,
     ],
     providers: [
-        EventService,
         ModelService,
     ],
     imports: [
