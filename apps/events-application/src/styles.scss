@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+/* Material Theming */
+
+@import '@angular/material/theming';
+@include mat-core();
+
+$md-azule: (
+    50 : #eaf0f9,
+    100 : #cadaf1,
+    200 : #a7c1e8,
+    300 : #84a8df,
+    400 : #6995d8,
+    500 : #4f82d1,
+    600 : #487acc,
+    700 : #3f6fc6,
+    800 : #3665c0,
+    900 : #2652b5,
+    A100 : #f2f6ff,
+    A200 : #bfd1ff,
+    A400 : #8cadff,
+    A700 : #739bff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+
+/* For use in src/lib/core/theming/_palette.scss */
+$md-passion: (
+    50 : #f8e7ed,
+    100 : #efc4d2,
+    200 : #e49db4,
+    300 : #d97596,
+    400 : #d05880,
+    500 : #c83a69,
+    600 : #c23461,
+    700 : #bb2c56,
+    800 : #b4254c,
+    900 : #a7183b,
+    A100 : #ffdce3,
+    A200 : #ffa9bb,
+    A400 : #ff7693,
+    A700 : #ff5d7f,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+/* For use in src/lib/core/theming/_palette.scss */
+$md-alert: (
+    50 : #fbe1e0,
+    100 : #f4b3b3,
+    200 : #ed8080,
+    300 : #e64d4d,
+    400 : #e02726,
+    500 : #db0100,
+    600 : #d70100,
+    700 : #d20100,
+    800 : #cd0100,
+    900 : #c40000,
+    A100 : #ffecec,
+    A200 : #ffb9b9,
+    A400 : #ff8686,
+    A700 : #ff6d6d,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+
+
+
+$candy-app-primary: mat-palette($md-azule);
+$candy-app-accent:  mat-palette($md-passion, A200, A100, A400);
+$candy-app-warn:    mat-palette($md-alert);
+$candy-app-theme:   mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
+@include angular-material-theme($candy-app-theme);
+
+
+
+#app-container {
+    position:absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    overflow-y: scroll;
+    padding: 1.5rem;
+}
+
+.text-azule {
+    color: #4f82d1;
+}
+.border-azule {
+    --tw-border-opacity: 1;
+    border-color: rgb(79 130 209 / var(--tw-border-opacity));
+}
+*:hover.hover-bg-azule {
+    --tw-bg-opacity: 1;
+    background-color: rgb(79 130 209 / var(--tw-bg-opacity));
+}
+
+.w-840 {
+    width: 840px;
+}
+
+.w-640 {
+    width: 640px;
+}
