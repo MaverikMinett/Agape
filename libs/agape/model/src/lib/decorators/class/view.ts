@@ -19,6 +19,9 @@ export function View( progenitor: Class, fieldSelection?: any ):any {
 
     function View( target:any ) {
 
+        console.log(`Register View ${target.name} on Model ${progenitor.name}`)
+        console.log(`All Fields`, fieldSelection)
+
         // the descriptor of the root model for the view
         let modelDescriptor = Reflect.getMetadata( "model:descriptor", progenitor );
         if ( ! modelDescriptor ) {
@@ -28,11 +31,21 @@ export function View( progenitor: Class, fieldSelection?: any ):any {
         // this descriptor is set by any @Field decorators prior to execution of @View decorator
         let protoDescriptor = Reflect.getMetadata( "model:descriptor", target.prototype );
 
-        let viewDescriptor  = new ViewDescriptor( modelDescriptor )
+        let viewDescriptor  = new ViewDescriptor( progenitor )
         viewDescriptor.symbol = target.name
 
+        function addFieldFromProgentior(name:string) {
+            const modelFieldDescriptor = modelDescriptor.fields.get(name)
+            if ( ! modelFieldDescriptor ) {
+                throw new Error(`${name} does not exist on ${progenitor.name}`)
+            }
+            const fieldDescriptor = new FieldDescriptor(name)
+            Object.assign(fieldDescriptor,modelFieldDescriptor) 
+            viewDescriptor.add(fieldDescriptor)
+        }
+
         if ( allFields ) {
-            // console.log(`Adding all fields from ${progenitor.name} to ${target.name}`)
+            console.log(`Adding all fields from ${progenitor.name} to ${target.name}`)
             for ( let name of modelDescriptor.fields.names ) {
                 const fieldDescriptor = new FieldDescriptor(name)
                 const modelFieldDescriptor = modelDescriptor.fields.get(name)
@@ -43,15 +56,22 @@ export function View( progenitor: Class, fieldSelection?: any ):any {
         // field name is array
         else if ( Array.isArray(fieldNames) ) {
             for ( const name of fieldNames ) {
-                const modelFieldDescriptor = modelDescriptor.fields.get(name)
-                if ( ! modelFieldDescriptor ) {
-                    throw new Error(`${name} does not exist on ${progenitor.name}`)
-                }
-                const fieldDescriptor = new FieldDescriptor(name)
-                Object.assign(fieldDescriptor,modelFieldDescriptor) 
-                viewDescriptor.add(fieldDescriptor)
+                addFieldFromProgentior(name)
             }
         }
+
+        // PICK
+        else if ( fieldSelection.pick ) {
+            for ( const name of fieldSelection.pick ) {
+                addFieldFromProgentior(name)
+            }
+        }
+
+        // EXCEPT
+
+        // PARTIAL
+
+        // ALL
 
         // copy in any fields from the model descriptor defined on the prototype
         if ( protoDescriptor ) {
@@ -72,13 +92,7 @@ export function View( progenitor: Class, fieldSelection?: any ):any {
             }
         }
 
-        // PICK
 
-        // EXCEPT
-
-        // PARTIAL
-
-        // ALL
 
         Reflect.defineMetadata("model:descriptor", viewDescriptor, target )
     }

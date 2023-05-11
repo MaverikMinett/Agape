@@ -53,8 +53,7 @@ export function Model( ...args:any[] ):any {
 }
 
 
-Model.descriptor = function ( target:Class|object, create:boolean=false ) {
-    if ( typeof target === "function" ) target = target.prototype
+Model.descriptor = function ( target:Class, create:boolean=false ) {
 
     let descriptor: ModelDescriptor = Reflect.getMetadata( "model:descriptor", target )
 

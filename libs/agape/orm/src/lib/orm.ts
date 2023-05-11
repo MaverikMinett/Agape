@@ -7,6 +7,7 @@ import { DeleteQuery } from './mongo/queries/delete.query';
 import { UpdateQuery } from './mongo/queries/update.query';
 import { pluralize, camelize } from '@agape/string'
 import { InsertQuery } from './mongo/queries/insert.query';
+import { Model, ViewDescriptor } from '@agape/model';
 
 export interface ModelLocatorParams {
     databaseName?: string;
@@ -74,9 +75,9 @@ export class Orm {
 
     insert<T extends Class>( model: T, item: Pick<InstanceType<T>, keyof InstanceType<T>> ) {
 
-        console.log(`Inserting instance of ${model.name}`, item)
+        const locator = this.getLocator(model)
 
-        const collection = this.models.get(model).collection
+        const collection = locator.collection
 
         // // TODO: validate the item
 
@@ -97,27 +98,23 @@ export class Orm {
     }
 
     retrieve<T extends Class>( model: T, id: string ) {
-        console.log(`Retrieving instance of ${model.name}`, id)
+        const locator = this.getLocator(model)
 
-        const collection = this.models.get(model).collection
+        const collection = locator.collection
 
         return new RetrieveQuery<T>(model, collection, id)
     }
 
     update<T extends Class>(model: T, id: string, item: Pick<InstanceType<T>, keyof InstanceType<T>> ) {
-        console.log(`Updating instance of ${model.name}`, id, item)
+        const locator = this.getLocator(model)
 
-        const collection = this.models.get(model).collection
+        const collection = locator.collection
 
         return new UpdateQuery(model, collection, id, item)
     }
 
     list<T extends Class>( model: T ) {
-        const locator = this.models.get(model)
-
-        if ( ! locator ) {
-            throw new Error(`${model.name} has not been registered with the orm`)
-        }
+        const locator = this.getLocator(model)
 
         const collection = locator.collection
 
@@ -133,9 +130,31 @@ export class Orm {
     // }
 
     delete<T extends Class>(model: T, id: string ) {
-        const collection = this.models.get(model).collection
+        const locator = this.getLocator(model)
+
+        const collection = locator.collection
 
         return new DeleteQuery<T>(model, collection, id)
+    }
+
+
+    getLocator<T extends Class>(view: T) {
+        const descriptor = Model.descriptor(view)
+
+        const model: Class = descriptor instanceof ViewDescriptor
+            ? descriptor.model 
+            : view
+
+        const locator = this.models.get(model)
+
+        if ( ! locator ) {
+            throw new Error(
+                `Cannot find model locator for ${view.name}, ` 
+                + `${model.name} has not been registered with the orm`
+            )
+        }
+
+        return locator
     }
 
 

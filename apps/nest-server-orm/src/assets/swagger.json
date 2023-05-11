@@ -1,0 +1,405 @@
+{
+    "title": "Project Zed",
+    "summary": "Backend/frontend",
+    "description": "Mongo, Express, Angular, Node",
+    "termsOfService": "https://example.com/terms/",
+    "contact": {
+        "name": "API Support",
+        "url": "https://www.example.com/support",
+        "email": "maverik@maverik.io"
+    },
+    "license": {
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.1",
+    "openapi": "3.0.0",
+    "servers": [
+        {
+        "url": "./",
+        "description": "Events API"
+        }
+    ],
+    "schemes": [
+      "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "tags": [
+        {
+            "name": "Ping",
+            "description": "Sanity"
+        },
+        {
+            "name": "Events",
+            "description": "Events module"
+        }
+    ],
+    "paths": {
+        "/ping": {
+            "get": {
+                "summary": "Pong",
+                "tags": ["Ping"],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "pong"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/foo": {
+            "get": {
+                "summary": "Foo",
+                "tags": ["Ping"],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "bar"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/events": {
+            "get": {
+                "summary": "List all events",
+                "tags": ["Events"],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Event"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create new event",
+                "tags": ["Events"],
+                "requestBody": {
+                    "description": "New event",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Event"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{id}": {
+            "get": {
+                "summary": "Retrieve an event",
+                "tags": ["Events"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": "true"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Event"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update an event",
+                "requestBody": {
+                    "description": "Event",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Event"
+                            }
+                        }
+                    }
+                },
+                "tags": ["Events"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": "true"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete an event",
+                "tags": ["Events"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": "true"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "summary": "List all users",
+                "tags": ["Users"],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserDetailView"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create new user",
+                "tags": ["Users"],
+                "requestBody": {
+                    "description": "New user",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserDetailView"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "summary": "Retrieve a user",
+                "tags": ["Users"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": "true"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDetailView"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update a user",
+                "requestBody": {
+                    "description": "User",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserDetailView"
+                            }
+                        }
+                    }
+                },
+                "tags": ["Users"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": "true"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete an user",
+                "tags": ["Users"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": "true"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Event": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "An Interesting Event"
+                    },
+                    "timeStart": {
+                        "type": "string",
+                        "example": "2023-05-11T09:00:00.000Z"
+                    },
+                    "timeEnd": {
+                        "type": "string",
+                        "example": "2023-05-11T17:00:00.000Z"
+                    },
+                    "locationName": {
+                        "type": "string",
+                        "example": "Some fancy place"
+                    },
+                    "locationAddress": {
+                        "type": "string",
+                        "example": "123 Spring St,\nAnytown, USA 12345"
+                    },
+                    "contactPhone": {
+                        "type": "string",
+                        "example": "(555) 555 - 5555"
+                    },
+                    "contactEmail": {
+                        "type": "string",
+                        "example": "first.last@geemail.com"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": ""
+                    }
+                }
+            },
+            "UserDetailView": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John"
+                    },
+                    "username": {
+                        "type": "string",
+                        "example": "An Interesting Event"
+                    }
+                }
+            }
+        },
+        "parameters": {
+            "id": {
+                "name": "id",
+                "in": "path",
+                "description": "Item ID",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

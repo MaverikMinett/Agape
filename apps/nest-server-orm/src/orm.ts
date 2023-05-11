@@ -8,6 +8,7 @@ const DATABASE_NAME = 'zed'
 
 
 import { Event } from './app/api/events/event.model';
+import { User } from './app/api/users/user.model';
 
 export async function connectOrm() {
     const connection = new MongoConnection(DATABASE_URL);
@@ -24,6 +25,7 @@ export async function connectOrm() {
     const database = new MongoDatabase(connection, DATABASE_NAME)
     orm.registerDatabase('default', database)
     orm.registerModel(Event)
+    orm.registerModel(User)
 }
 
 

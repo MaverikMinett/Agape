@@ -78,13 +78,15 @@ export class ViewDescriptor extends ModelDescriptor {
 
     title?: string;
 
-    model?: ModelDescriptor;
+    model?: Class;
 
-    constructor ( model?: ModelDescriptor )
+    viewName: string;
+
+    constructor ( model?: Class )
     constructor ( name?:string, params?:Partial<Pick<ModelDescriptor, keyof ModelDescriptor>> )
     constructor ( params?:Partial<Pick<ModelDescriptor, keyof ModelDescriptor>> )
     constructor ( ...args:any[] ) {
-        if ( args.length === 1 && args[0] instanceof ModelDescriptor ) {
+        if ( args.length === 1 ) {
             const model = args.shift()
             super( )
             this.model = model;

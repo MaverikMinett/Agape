@@ -13,6 +13,8 @@ export class ListQuery<T extends Class> {
 
         const descriptor = Model.descriptor(this.model)
 
+        console.log("VIEW", descriptor)
+
         const projection: Dictionary = { _id: 0 }
 
         const primaryField = descriptor.fields.all().find( f => f.primary )

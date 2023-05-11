@@ -1,9 +1,8 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { EventService } from './event.service';
-// import { IEvent } from './interfaces';
 import { Event } from './event.model'
 import { Interface } from '@agape/types';
-import { time } from 'console';
+
 
 import { alchemy } from '@project-zed/lib-alchemy'
 

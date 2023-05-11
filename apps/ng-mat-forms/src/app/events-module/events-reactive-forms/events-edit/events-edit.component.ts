@@ -6,15 +6,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder, FormGroup } from "@angular/forms";
 
 
-// function jsDateToUtcTimestamp( dateTime: Date ) {
-//     if ( ! dateTime ) return undefined
-//     const offset = dateTime.getTimezoneOffset()
-//     const utcDate = new Date( dateTime.getTime() - (offset*60*10000) )
-//     // const [date] = utcDate.toISOString()
-//     console.log( dateTime.toISOString() )
-//     console.log( utcDate.toDateString() )
-//     return utcDate.toISOString()
-// }
 
 
 @Component({
