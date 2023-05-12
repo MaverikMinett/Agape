@@ -1,27 +1,26 @@
 import { Component } from "@angular/core";
 import { ModelService } from "../../../../shared/model.service";
 
-import { Organization } from 'lib-platform'
+import { User } from 'lib-platform'
 
 
 @Component({
-    selector: 'admin-organizations-index-page',
-    templateUrl: './organizations-index-page.component.html'
+    selector: 'admin-users-index-page',
+    templateUrl: './users-index-page.component.html'
 })
-export class OrganizationsIndexPageComponent {
+export class UsersIndexPageComponent {
     
-    items: Organization[]
+    items: User[]
 
 
-    displayedColumns: string[] = [ 'code', 'name' ];
+    displayedColumns: string[] = [ 'name' ];
  
     constructor( public service: ModelService) {
 
     }
 
     ngOnInit() {
-
-        this.service.list(Organization).subscribe({ 
+        this.service.list(User).subscribe({ 
             next: items  => {
                 this.items = items
                 console.log( this.items )

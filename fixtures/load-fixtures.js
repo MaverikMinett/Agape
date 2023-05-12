@@ -1,6 +1,8 @@
 db = connect( 'mongodb://localhost/zed' );
 
 db.events.drop()
+db.users.drop()
+db.organizations.drop()
 
 const events = [
     { 
@@ -73,8 +75,8 @@ db.users.insertMany(users)
 
 const organizations = [
     { code: 'ACME'   , name: 'Acme Event Management' },
-    { name: 'BLUTHE' , name: 'Bluthe Events' },
-    { name: 'CHARITY', name: 'Charity Event Company' }
+    { code: 'BLUTHE' , name: 'Bluthe Events' },
+    { code: 'CHARITY', name: 'Charity Event Company' }
 ]
 
 db.organizations.insertMany(organizations)

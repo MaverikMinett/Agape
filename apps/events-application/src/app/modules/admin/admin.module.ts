@@ -9,6 +9,7 @@ import { adminRoutes } from "./admin.routes";
 
 import { MatTableModule } from '@angular/material/table'
 import { OrganizationsModule } from "./modules/organizations/organizations.module";
+import { UsersModule } from "./modules/users/users.module";
 
 
 
@@ -24,6 +25,7 @@ import { OrganizationsModule } from "./modules/organizations/organizations.modul
         CommonModule,
         EventsModule,
         OrganizationsModule,
+        UsersModule,
         RouterModule.forChild(adminRoutes),
     ]
 })

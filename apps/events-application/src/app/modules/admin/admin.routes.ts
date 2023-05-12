@@ -3,6 +3,7 @@ import { AdminDashboardComponent } from "./components/admin-dashboard/admin-dash
 import { AdminIndexPageComponent } from "./components/admin-index-page/admin-index-page.component";
 import { eventsRoutes } from "./modules/events/events.routes";
 import { organizationsRoutes } from "./modules/organizations/organizations.routes";
+import { usersRoutes } from "./modules/users/users.routes";
 
 export const adminRoutes: Route[] = [
     { 
@@ -14,7 +15,8 @@ export const adminRoutes: Route[] = [
                 component: AdminIndexPageComponent,
             },
             ...eventsRoutes,
-            ...organizationsRoutes
+            ...organizationsRoutes,
+            ...usersRoutes,
         ]
     }
 ]
