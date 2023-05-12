@@ -151,3 +151,19 @@ $candy-app-theme:   mat-light-theme($candy-app-primary, $candy-app-accent, $cand
 .w-640 {
     width: 640px;
 }
+
+.router-outlet-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    * + * {
+        flex: 1;
+    }
+}
+
+
+
+.mat-mdc-table.bg-slate-100 {
+    background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}

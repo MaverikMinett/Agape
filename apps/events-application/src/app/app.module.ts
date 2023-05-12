@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Route, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
-import { AdminModule } from './admin/admin.module';
-import { AppHomeComponent } from './app-home/app-home.component';
+import { AdminModule } from './modules/admin/admin.module';
+import { AppHomeComponent } from './components/app-home/app-home.component';
+import { HttpClientModule } from '@angular/common/http';
 
 export const appRoutes: Route[] = [
 
@@ -20,6 +21,7 @@ export const appRoutes: Route[] = [
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
+    HttpClientModule,
     AdminModule,
   ],
   providers: [],

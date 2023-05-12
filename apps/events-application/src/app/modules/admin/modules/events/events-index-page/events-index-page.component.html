@@ -1,0 +1,57 @@
+
+
+
+<div class="bg-slate-100 rounded max-w-full p-6">
+
+
+    <table mat-table [dataSource]="events" class="bg-slate-100 text-xs">
+      
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+        <!-- Date Column -->
+        <ng-container matColumnDef="timeStart__date">
+            <th mat-header-cell *matHeaderCellDef> Date </th>
+            <td mat-cell *matCellDef="let element"> {{ element.timeStart | date: 'mediumDate' }} </td>
+          </ng-container>
+      
+        <!-- Time Start -->
+        <ng-container matColumnDef="timeStart__time">
+          <th mat-header-cell *matHeaderCellDef> Time </th>
+          <td mat-cell *matCellDef="let element"> {{element.timeStart | date: ' h:mm a'}} </td>
+        </ng-container>
+      
+        <!-- Time End -->
+        <ng-container matColumnDef="timeEnd__time">
+          <th mat-header-cell *matHeaderCellDef> End </th>
+          <td mat-cell *matCellDef="let element">  {{element.timeStart | date: ' h:mm a'}}  </td>
+        </ng-container>
+
+        <!-- Location -->
+        <ng-container matColumnDef="locationName">
+            <th mat-header-cell *matHeaderCellDef> Location </th>
+            <td mat-cell *matCellDef="let element">  {{ element.locationName }}  </td>
+        </ng-container>
+
+        <!-- Location -->
+        <ng-container matColumnDef="contactPhone">
+            <th mat-header-cell *matHeaderCellDef> Phone </th>
+            <td mat-cell *matCellDef="let element">  {{ element.contactPhone }}  </td>
+        </ng-container>
+
+        <ng-container matColumnDef="contactEmail">
+            <th mat-header-cell *matHeaderCellDef> Email </th>
+            <td mat-cell *matCellDef="let element">  {{ element.contactEmail }}  </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+</div>
+
+
+
+  
