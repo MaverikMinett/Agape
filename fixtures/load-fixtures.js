@@ -69,3 +69,13 @@ const users = [
 ]
 
 db.users.insertMany(users)
+
+
+const organizations = [
+    { code: 'ACME'   , name: 'Acme Event Management' },
+    { name: 'BLUTHE' , name: 'Bluthe Events' },
+    { name: 'CHARITY', name: 'Charity Event Company' }
+]
+
+db.organizations.insertMany(organizations)
+

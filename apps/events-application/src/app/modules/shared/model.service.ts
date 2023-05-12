@@ -22,7 +22,10 @@ export class ModelService {
     // list<T extends Class>( model: T ): Observable<Array<InstanceType<T>>> {
     list<T extends Class>( model: T ) {
         const descriptor = Model.descriptor(model)
-        const endpoint   = descriptor.plural
+
+        console.log(descriptor)
+
+        const endpoint   = descriptor.tokens
         return this.http.get<Array<Interface<InstanceType<T>>>>( `${this.apiUrl}/${endpoint}` )
             .pipe<Array<InstanceType<T>>>( 
                 map( items => items.map( item => alchemy.inflate(model, item) ) )
@@ -31,14 +34,14 @@ export class ModelService {
 
     create<T extends Class>( model: T, item: InstanceType<T> ) {
         const descriptor = Model.descriptor(model)
-        const endpoint   = descriptor.plural
+        const endpoint   = descriptor.tokens
         const observable = this.http.post<{id: string}>( `${this.apiUrl}/${endpoint}`, item )
         return observable
     }
 
     retrieve<T extends Class>( model: T, id: string) {
         const descriptor = Model.descriptor(model)
-        const endpoint   = descriptor.plural
+        const endpoint   = descriptor.tokens
         return this.http.get<Interface<InstanceType<T>>>( `${this.apiUrl}/${endpoint}/${id}` )
         .pipe<InstanceType<T>>( 
             map( item =>  alchemy.inflate(model, item)  )
@@ -47,13 +50,13 @@ export class ModelService {
 
     update<T extends Class>( model: T, id: string, item: InstanceType<T> ) {
         const descriptor = Model.descriptor(model)
-        const endpoint   = descriptor.plural
+        const endpoint   = descriptor.tokens
         return this.http.put( `${this.apiUrl}/${endpoint}/${id}`, item )
     }
 
     delete<T extends Class>( model: T, id: string) {
         const descriptor = Model.descriptor(model)
-        const endpoint   = descriptor.plural
+        const endpoint   = descriptor.tokens
         return this.http.delete( `${this.apiUrl}/${endpoint}/${id}` )
     }
 

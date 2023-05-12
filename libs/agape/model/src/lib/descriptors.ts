@@ -25,6 +25,10 @@ export class ModelDescriptor {
 
     fields: FieldDescriptorSet = new FieldDescriptorSet()
 
+    readable: boolean 
+
+    writable: boolean
+
     constructor ( name?:string, params?:Partial<Pick<ModelDescriptor, keyof ModelDescriptor>> )
     constructor ( params?:Partial<Pick<ModelDescriptor, keyof ModelDescriptor>> )
     constructor ( ...args:any[] ) {

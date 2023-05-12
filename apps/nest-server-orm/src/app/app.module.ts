@@ -7,6 +7,7 @@ import { EventsModule } from './api/events/events.module'
 import { PingModule } from './api/ping/ping.module';
 import { SwaggerModule } from './api/swagger/swagger.module';
 import { UsersModule } from './api/users/users.module';
+import { OrganizationsModule } from './api/organizations/organizations.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UsersModule } from './api/users/users.module';
     
     EventsModule, 
     UsersModule,
+    OrganizationsModule,
 
     SwaggerModule,  // must be last
   ],

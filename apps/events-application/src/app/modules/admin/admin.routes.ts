@@ -2,6 +2,7 @@ import { Route } from "@angular/router";
 import { AdminDashboardComponent } from "./components/admin-dashboard/admin-dashboard.component";
 import { AdminIndexPageComponent } from "./components/admin-index-page/admin-index-page.component";
 import { eventsRoutes } from "./modules/events/events.routes";
+import { organizationsRoutes } from "./modules/organizations/organizations.routes";
 
 export const adminRoutes: Route[] = [
     { 
@@ -12,7 +13,8 @@ export const adminRoutes: Route[] = [
                 path: '',
                 component: AdminIndexPageComponent,
             },
-            ...eventsRoutes
+            ...eventsRoutes,
+            ...organizationsRoutes
         ]
     }
 ]

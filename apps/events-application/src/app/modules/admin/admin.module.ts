@@ -8,6 +8,7 @@ import { EventsModule } from "./modules/events/events.module";
 import { adminRoutes } from "./admin.routes";
 
 import { MatTableModule } from '@angular/material/table'
+import { OrganizationsModule } from "./modules/organizations/organizations.module";
 
 
 
@@ -22,6 +23,7 @@ import { MatTableModule } from '@angular/material/table'
     imports: [
         CommonModule,
         EventsModule,
+        OrganizationsModule,
         RouterModule.forChild(adminRoutes),
     ]
 })
