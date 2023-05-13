@@ -1,0 +1,91 @@
+
+<div class="bg-slate-100 rounded max-w-full p-6">
+
+    <h2 class="text-lg mb-3">New User</h2>
+
+    <span class="dialog-close p-3" >
+        <!-- <svg viewBox="0 0 48 48">
+            <use href="#xmark-icon"></use>
+        </svg> -->
+    </span>
+
+    <div class="p-3 dialog-close" (click)="close()">
+        <svg viewBox="0 0 48 48">
+            <use href="#xmark-icon"></use>
+        </svg>
+    </div>
+
+    <form [formGroup]="form" class="flex flex-col">
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input 
+        matInput 
+        name="name" 
+        formControlName="name"
+        required="true">
+    </mat-form-field>
+  
+    <ag-mat-datetime-control 
+   
+    dateLabel="Start date"
+    timeLabel="Start time"
+    formControlName="timeStart"> 
+  
+    </ag-mat-datetime-control>
+  
+    <ag-mat-datetime-control 
+   
+    dateLabel="End date"
+    timeLabel="End time"
+    formControlName="timeEnd"> 
+  
+    </ag-mat-datetime-control>
+  
+  
+    <mat-form-field>
+        <mat-label>Location name</mat-label>
+        <input matInput name="locationName" 
+        formControlName="locationName">
+    </mat-form-field>
+  
+    <mat-form-field>
+        <mat-label>Location address</mat-label>
+        <textarea matInput name="locationAddress" 
+        formControlName="locationAddress"></textarea>
+    </mat-form-field>
+  
+    <mat-form-field>
+        <mat-label>Contact phone</mat-label>
+        <input 
+        matInput 
+        name="contactPhone" 
+        formControlName="contactPhone">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Contact email</mat-label>
+        <input 
+        matInput 
+        name="contactPhone" 
+        formControlName="contactEmail">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Description</mat-label>
+        <textarea matInput name="description" 
+        formControlName="description"></textarea>
+  
+    </mat-form-field>
+    </form>
+  
+
+    <div class="py-4">
+        <button 
+        type="button" 
+        (click)="submit()"
+        [disabled]="transactionLoading || ! form.valid || ! form.dirty"
+        [class.disabled]="transactionLoading || ! form.valid || ! form.dirty"
+        class="btn submit rounded border-2 border-azule bg-slate-100 hover-bg-azule hover:text-white px-8 py-2 text-azule">
+            Submit
+        </button>
+    </div>
+
+</div>
