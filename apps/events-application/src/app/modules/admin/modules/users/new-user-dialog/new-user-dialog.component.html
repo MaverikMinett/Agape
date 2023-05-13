@@ -1,0 +1,52 @@
+
+<div class="bg-slate-100 rounded max-w-full p-6">
+
+    <h2 class="text-lg mb-3">New User</h2>
+
+    <span class="dialog-close p-3" >
+        <!-- <svg viewBox="0 0 48 48">
+            <use href="#xmark-icon"></use>
+        </svg> -->
+    </span>
+
+    <div class="p-3 dialog-close" (click)="close()">
+        <svg viewBox="0 0 48 48">
+            <use href="#xmark-icon"></use>
+        </svg>
+    </div>
+
+    <form [formGroup]="form" class="grid grid-cols-1">
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input matInput formControlName="password">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let option of choices.UserStatusChoices" [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+
+    <div class="py-4">
+        <button 
+        type="button" 
+        (click)="submit()"
+        [disabled]="transactionLoading || ! form.valid || ! form.dirty"
+        [class.disabled]="transactionLoading || ! form.valid || ! form.dirty"
+        class="btn submit rounded border-2 border-azule bg-slate-100 hover-bg-azule hover:text-white px-8 py-2 text-azule">
+            Submit
+        </button>
+    </div>
+
+</div>

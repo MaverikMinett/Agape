@@ -8,12 +8,14 @@ import { RouterModule } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 
 import { EditUserPageComponent } from "./edit-user-page/edit-user-page.component";
+import { NewUserDialog } from "./new-user-dialog/new-user-dialog.component";
 
 
 @NgModule({
     declarations: [
         UsersIndexPageComponent,
         EditUserPageComponent,
+        NewUserDialog,
     ],
     imports: [
         CommonModule,
