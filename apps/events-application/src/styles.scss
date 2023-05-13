@@ -157,7 +157,7 @@ $candy-app-theme:   mat-light-theme($candy-app-primary, $candy-app-accent, $cand
     flex-direction: column;
     flex: 1;
 
-    * + * {
+    > * + * {
         flex: 1;
     }
 }

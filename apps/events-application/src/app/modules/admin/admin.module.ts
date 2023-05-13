@@ -10,6 +10,7 @@ import { adminRoutes } from "./admin.routes";
 
 import { OrganizationsModule } from "./modules/organizations/organizations.module";
 import { UsersModule } from "./modules/users/users.module";
+import { MatInputModule } from "@angular/material/input";
 
 @NgModule({
     declarations: [ 
@@ -24,6 +25,8 @@ import { UsersModule } from "./modules/users/users.module";
         OrganizationsModule,
         UsersModule,
         RouterModule.forChild(adminRoutes),
+
+        MatInputModule,
     ]
 })
 export class AdminModule { }

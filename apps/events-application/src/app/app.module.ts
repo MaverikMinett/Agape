@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { AdminModule } from './modules/admin/admin.module';
 import { AppHomeComponent } from './components/app-home/app-home.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MatInputModule } from '@angular/material/input';
 
 export const appRoutes: Route[] = [
 
@@ -23,6 +24,7 @@ export const appRoutes: Route[] = [
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
     HttpClientModule,
     AdminModule,
+    MatInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,6 +1,15 @@
 import { Model, Field, Primary } from '@agape/model'
 
 
+export enum UserStatus {
+    Enabled = 'enabled',
+    Disabled = 'disabled'
+}
+
+export const UserStatusChoices = [
+    { value: 'enabled', label: 'Enabled' },
+    { value: 'disabled', label: 'Disabled' }
+]
 
 @Model export class User {
 
@@ -11,6 +20,8 @@ import { Model, Field, Primary } from '@agape/model'
     @Field username: string
 
     @Field({ readable: false })
-     password: string
+    password: string
 
+    @Field({ })
+    status: UserStatus = UserStatus.Enabled
 }

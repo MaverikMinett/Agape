@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input'
 import { MatDatepickerModule } from '@angular/material/datepicker'
+import { MatNativeDateModule} from '@angular/material/core';
 import { DatetimeControlComponent } from './datetime-control/datetime-control.component';
 
 @NgModule({
@@ -14,6 +15,7 @@ import { DatetimeControlComponent } from './datetime-control/datetime-control.co
     CommonModule, 
     FormsModule, 
     MatDatepickerModule,
+    MatNativeDateModule,
     MatInputModule
   ],
   exports: [

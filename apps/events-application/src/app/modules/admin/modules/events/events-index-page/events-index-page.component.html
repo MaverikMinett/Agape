@@ -9,42 +9,44 @@
         <!-- Name Column -->
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          <td mat-cell *matCellDef="let item"> 
+            <a routerLink="{{item.id}}">{{item.name}}</a> 
+          </td>
         </ng-container>
 
         <!-- Date Column -->
         <ng-container matColumnDef="timeStart__date">
             <th mat-header-cell *matHeaderCellDef> Date </th>
-            <td mat-cell *matCellDef="let element"> {{ element.timeStart | date: 'mediumDate' }} </td>
+            <td mat-cell *matCellDef="let item"> {{ item.timeStart | date: 'mediumDate' }} </td>
           </ng-container>
       
         <!-- Time Start -->
         <ng-container matColumnDef="timeStart__time">
           <th mat-header-cell *matHeaderCellDef> Time </th>
-          <td mat-cell *matCellDef="let element"> {{element.timeStart | date: ' h:mm a'}} </td>
+          <td mat-cell *matCellDef="let item"> {{item.timeStart | date: ' h:mm a'}} </td>
         </ng-container>
       
         <!-- Time End -->
         <ng-container matColumnDef="timeEnd__time">
           <th mat-header-cell *matHeaderCellDef> End </th>
-          <td mat-cell *matCellDef="let element">  {{element.timeEnd | date: ' h:mm a'}}  </td>
+          <td mat-cell *matCellDef="let item">  {{item.timeEnd | date: ' h:mm a'}}  </td>
         </ng-container>
 
         <!-- Location -->
         <ng-container matColumnDef="locationName">
             <th mat-header-cell *matHeaderCellDef> Location </th>
-            <td mat-cell *matCellDef="let element">  {{ element.locationName }}  </td>
+            <td mat-cell *matCellDef="let item">  {{ item.locationName }}  </td>
         </ng-container>
 
         <!-- Location -->
         <ng-container matColumnDef="contactPhone">
             <th mat-header-cell *matHeaderCellDef> Phone </th>
-            <td mat-cell *matCellDef="let element">  {{ element.contactPhone }}  </td>
+            <td mat-cell *matCellDef="let item">  {{ item.contactPhone }}  </td>
         </ng-container>
 
         <ng-container matColumnDef="contactEmail">
             <th mat-header-cell *matHeaderCellDef> Email </th>
-            <td mat-cell *matCellDef="let element">  {{ element.contactEmail }}  </td>
+            <td mat-cell *matCellDef="let item">  {{ item.contactEmail }}  </td>
         </ng-container>
       
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
