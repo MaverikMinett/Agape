@@ -1,0 +1,35 @@
+
+
+
+<div class="bg-slate-100 rounded max-w-full p-6">
+
+  <h2 class="text-lg mb-3">Edit Organization</h2>
+
+  <form [formGroup]="form" class="grid grid-cols-1">
+    <mat-form-field>
+      <mat-label>Code</mat-label>
+      <input matInput formControlName="code">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+  </form>
+
+  <div class="py-4">
+    <button 
+    type="button" 
+    (click)="submit()"
+    [disabled]="transactionLoading || ! form.valid || ! form.dirty"
+    [class.disabled]="transactionLoading || ! form.valid || ! form.dirty"
+    class="btn submit rounded border-2 border-azule bg-slate-100 hover-bg-azule hover:text-white px-8 py-2 text-azule">
+        Submit
+    </button>
+</div>
+
+</div>
+
+
+
+  

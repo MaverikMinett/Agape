@@ -162,8 +162,22 @@ $candy-app-theme:   mat-light-theme($candy-app-primary, $candy-app-accent, $cand
     }
 }
 
+a {
+    color: #4f82d1;
+}
+
 
 
 .mat-mdc-table.bg-slate-100 {
     background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
+
+.btn.disabled {
+    border-color: #b2b4b4;
+    color: #b2b4b4;
+
+    &:hover {
+        color: #b2b4b4;
+        background-color: transparent;
+    }
 }
