@@ -7,17 +7,20 @@
     <table mat-table [dataSource]="items" class="bg-slate-100 text-xs">
       
 
-        <!-- Code Column -->
-        <ng-container matColumnDef="code">
-          <th mat-header-cell *matHeaderCellDef> Code </th>
-          <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+        <!-- Name Column -->
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef> Username </th>
+          <td mat-cell *matCellDef="let item"> 
+            <a routerLink="{{item.id}}">{{item.username}}</a>
+          </td>
         </ng-container>
-
 
         <!-- Name Column -->
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          <td mat-cell *matCellDef="let item"> 
+            <a routerLink="{{item.id}}">{{item.name}}</a>
+          </td>
         </ng-container>
 
       

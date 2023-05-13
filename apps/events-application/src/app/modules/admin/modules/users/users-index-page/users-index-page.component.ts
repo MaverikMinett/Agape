@@ -13,7 +13,7 @@ export class UsersIndexPageComponent {
     items: User[]
 
 
-    displayedColumns: string[] = [ 'name' ];
+    displayedColumns: string[] = [ 'username', 'name' ];
  
     constructor( public service: ModelService) {
 
