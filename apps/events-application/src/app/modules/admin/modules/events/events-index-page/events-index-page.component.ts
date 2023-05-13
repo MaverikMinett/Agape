@@ -3,19 +3,18 @@ import { include } from "@agape/object";
 
 import { Event } from 'lib-platform'
 import { AComponent } from "../../../../shared/acomponent";
-import { ModelService } from "../../../../shared/model.service";
 import { HasDialog } from "../../../../shared/traits/has-dialog";
 import { NewEventDialog } from "../new-event-dialog/new-event-dialog.component";
+import { HasModelService } from "../../../../shared/traits/has-model-service";
 
-export interface EventsIndexPageComponent extends HasDialog { }
-
-
+export interface EventsIndexPageComponent 
+    extends HasDialog, HasModelService { }
 
 @Component({
     selector: 'admin-events-index-page',
     templateUrl: './events-index-page.component.html'
 })
-@include( HasDialog )
+@include( HasDialog, HasModelService )
 export class EventsIndexPageComponent extends AComponent {
     
     events: Event[]
@@ -24,7 +23,6 @@ export class EventsIndexPageComponent extends AComponent {
         'name', 'timeStart__date', 'timeStart__time', 'timeEnd__time',
         'locationName', 'contactPhone', 'contactEmail' ];
 
-    public service = this.injector.get(ModelService)
 
     ngOnInit() {
         this.loadItems()

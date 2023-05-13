@@ -3,26 +3,25 @@ import { ModelService } from "../../../../shared/model.service";
 
 import { User } from 'lib-platform'
 import { NewUserDialog } from "../new-user-dialog/new-user-dialog.component";
-import { Class } from "@agape/types";
-import { MatDialog } from "@angular/material/dialog";
+import { HasDialog } from "../../../../shared/traits/has-dialog";
+import { Traits } from "../../../../shared/traits";
+import { AComponent } from "../../../../shared/acomponent";
+import { HasModelService } from "../../../../shared/traits/has-model-service";
 
+export interface UsersIndexPageComponent 
+    extends HasDialog, HasModelService { }
 
 @Component({
     selector: 'admin-users-index-page',
     templateUrl: './users-index-page.component.html'
 })
-export class UsersIndexPageComponent {
+@Traits( HasDialog, HasModelService )
+export class UsersIndexPageComponent extends AComponent {
     
     items: User[]
 
     displayedColumns: string[] = [ 'username', 'name' ];
  
-    constructor( 
-        public service: ModelService,
-        public dialog: MatDialog ) {
-
-    }
-
     ngOnInit() {
         this.loadItems()
     }
@@ -47,13 +46,7 @@ export class UsersIndexPageComponent {
         })
     }
 
-    openDialog( dialog: Class ) {
-        const ref = this.dialog.open(dialog, {
-            panelClass: 'reactive'
-        })
-        
-        return ref
-    }
+
 
 
 }

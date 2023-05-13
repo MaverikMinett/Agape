@@ -7,7 +7,7 @@ export class HasDialog {
 
     injector: Injector
 
-    protected dialog: MatDialog
+    dialog: MatDialog
 
     @stack build() {
         this.dialog = this.injector.get(MatDialog)

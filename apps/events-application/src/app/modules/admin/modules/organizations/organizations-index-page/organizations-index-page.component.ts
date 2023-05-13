@@ -1,29 +1,24 @@
 import { Component } from "@angular/core";
-import { ModelService } from "../../../../shared/model.service";
-
 import { Organization } from 'lib-platform'
-import { MatDialog } from "@angular/material/dialog";
 import { NewOrganizationDialog } from "../new-organization-dialog/new-organization-dialog.component";
-import { Class } from "@agape/types";
+import { AComponent } from "../../../../shared/acomponent";
+import { Traits } from "../../../../shared/traits";
+import { HasDialog } from "../../../../shared/traits/has-dialog";
+import { HasModelService } from "../../../../shared/traits/has-model-service";
 
+export interface OrganizationsIndexPageComponent 
+extends HasDialog, HasModelService { }
 
 @Component({
     selector: 'admin-organizations-index-page',
     templateUrl: './organizations-index-page.component.html'
 })
-export class OrganizationsIndexPageComponent {
+@Traits( HasDialog, HasModelService )
+export class OrganizationsIndexPageComponent extends AComponent {
     
     items: Organization[]
 
-
     displayedColumns: string[] = [ 'code', 'name' ];
- 
-    constructor( 
-        public service: ModelService,
-        public dialog: MatDialog
-        ) {
-
-    }
 
     ngOnInit() {
         this.loadItems()
@@ -37,14 +32,6 @@ export class OrganizationsIndexPageComponent {
             },
             error: console.error
         })
-    }
-
-    openDialog( dialog: Class ) {
-        const ref = this.dialog.open(dialog, {
-            panelClass: 'reactive'
-        })
-        
-        return ref
     }
 
     newOrganization() {
