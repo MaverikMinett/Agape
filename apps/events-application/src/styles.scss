@@ -112,6 +112,41 @@ $md-alert: (
 );
 
 
+/* For use in src/lib/core/theming/_palette.scss */
+$md-slate: (
+    50 : #f6f6f6,
+    100 : #e8e9e9,
+    200 : #d9dada,
+    300 : #c9cbcb,
+    400 : #bebfbf,
+    500 : #b2b4b4,
+    600 : #abadad,
+    700 : #a2a4a4,
+    800 : #999c9c,
+    900 : #8a8c8c,
+    A100 : #ffffff,
+    A200 : #f0fdfd,
+    A400 : #bcffff,
+    A700 : #a2ffff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #000000,
+        900 : #000000,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+
 
 
 $candy-app-primary: mat-palette($md-azule);
@@ -120,6 +155,7 @@ $candy-app-warn:    mat-palette($md-alert);
 $candy-app-theme:   mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
 @include angular-material-theme($candy-app-theme);
 
+@import './styles/dialogs';
 
 
 #app-container {
@@ -165,6 +201,9 @@ $candy-app-theme:   mat-light-theme($candy-app-primary, $candy-app-accent, $cand
 a {
     color: #4f82d1;
 }
+a.btn {
+    cursor: pointer;
+}
 
 
 
@@ -173,11 +212,28 @@ a {
 }
 
 .btn.disabled {
-    border-color: #b2b4b4;
-    color: #b2b4b4;
+    border-color: #c9cbcb;
+    color: #c9cbcb;
 
     &:hover {
-        color: #b2b4b4;
+        color: #c9cbcb;
         background-color: transparent;
     }
+}
+
+.dialog-close {
+    position: absolute;
+    cursor: pointer;
+    right: 0px;
+    top: 0px;
+    color: #999C9C;
+
+    &:hover {
+        color: #8A8C8C;
+    }
+    svg {
+        width: 1rem;
+        height: 1rem;
+    }
+    // height: 24px;
 }
