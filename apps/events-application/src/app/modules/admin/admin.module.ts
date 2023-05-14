@@ -11,6 +11,7 @@ import { adminRoutes } from "./admin.routes";
 import { OrganizationsModule } from "./modules/organizations/organizations.module";
 import { UsersModule } from "./modules/users/users.module";
 import { MatInputModule } from "@angular/material/input";
+import { AuthModule } from "./modules/auth";
 
 @NgModule({
     declarations: [ 
@@ -21,6 +22,7 @@ import { MatInputModule } from "@angular/material/input";
     imports: [
         CommonModule,
         BrowserAnimationsModule,
+        AuthModule,
         EventsModule,
         OrganizationsModule,
         UsersModule,

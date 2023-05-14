@@ -1,0 +1,26 @@
+
+
+<div class="bg-slate-100 rounded w-72 p-6 flex flex-col">
+    <form [formGroup]="form" class="grid grid-cols-1">
+        <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="username">
+        </mat-form-field>
+    </form>
+
+    <div class="flex-1">
+        <button 
+        type="button" 
+        (click)="submit()"
+        [disabled]="transactionLoading || ! form.valid || ! form.dirty"
+        [class.disabled]="transactionLoading || ! form.valid || ! form.dirty"
+        class="btn submit rounded border-2 border-azule bg-slate-100 hover-bg-azule hover:text-white px-8 py-2 text-azule">
+            Submit
+        </button>
+    </div>
+
+</div>

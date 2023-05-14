@@ -4,6 +4,7 @@ import { AdminIndexPageComponent } from "./components/admin-index-page/admin-ind
 import { eventsRoutes } from "./modules/events/events.routes";
 import { organizationsRoutes } from "./modules/organizations/organizations.routes";
 import { usersRoutes } from "./modules/users/users.routes";
+import { authRoutes } from "./modules/auth/auth.routes";
 
 export const adminRoutes: Route[] = [
     { 
@@ -14,6 +15,7 @@ export const adminRoutes: Route[] = [
                 path: '',
                 component: AdminIndexPageComponent,
             },
+            // ...authRoutes,
             ...eventsRoutes,
             ...organizationsRoutes,
             ...usersRoutes,
