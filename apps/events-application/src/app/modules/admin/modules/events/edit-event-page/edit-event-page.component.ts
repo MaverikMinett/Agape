@@ -10,16 +10,18 @@ import { AComponent } from "../../../../shared/acomponent";
 import { Traits } from "../../../../shared/traits";
 import { HasModelService } from "../../../../shared/traits/has-model-service";
 import { HasConfirmationService } from "../../../../shared/modules/confirmation/has-confirmation.trait";
+import { HasSnackbar } from "../../../../shared/traits/has-snackbar";
 
 export interface EditEventPageComponent extends 
     HasModelService,
-    HasConfirmationService { }
+    HasConfirmationService,
+    HasSnackbar { }
 
 @Component({
     selector: 'admin-edit-event-page',
     templateUrl: './edit-event-page.component.html'
 })
-@Traits( HasModelService, HasConfirmationService )
+@Traits( HasModelService, HasConfirmationService, HasSnackbar )
 export class EditEventPageComponent extends AComponent {
     
     id: string
@@ -40,7 +42,6 @@ export class EditEventPageComponent extends AComponent {
 
     private route: ActivatedRoute = this.injector.get(ActivatedRoute)
     private router: Router = this.injector.get(Router)
-    private snackbar: MatSnackBar = this.injector.get(MatSnackBar)
 
 
     ngOnInit() {
@@ -72,7 +73,7 @@ export class EditEventPageComponent extends AComponent {
                 next: () => {
                     this.transactionLoading = false
                     this.router.navigate([`/admin/events`])
-                    this.openSnackBar("Saved")
+                    this.snackbarMessage("Saved")
                 },
                 error: (error) => {
                     this.transactionLoading = false
@@ -95,13 +96,32 @@ export class EditEventPageComponent extends AComponent {
     }
 
     deleteEvent() {
-        this.confirmationService.confirm(
+        const ref = this.confirmationService.confirm(
             `Are you sure you want to delete event ${this.item.name}?`, 
             { 
                 okText: "Yes, delete",
                 okStyle: 'primary-destructive',
             }
         )
+
+
+        
+        ref.afterClosed().subscribe( (confirmed: boolean) => {
+            if ( confirmed ) {
+                this.transactionLoading = true
+                this.service.delete(Event, this.id).subscribe({
+                    next: () => {
+                        this.transactionLoading = false
+                        this.snackbarMessage("Deleted event")
+                        this.router.navigate([`/admin/events`])
+                    },
+                    error: (error) => {
+                        this.transactionLoading = false
+                        console.error(error)
+                    } 
+                })
+            }
+        })
     }
 
     openSnackBar(message: string) {

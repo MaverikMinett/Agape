@@ -23,7 +23,11 @@ export class EventsController {
     @Post()
     create( @Body() payload: Interface<Event> ) {
 
+        console.log("Create Event Payload", payload )
+
         const event = alchemy.inflate(Event, payload)
+
+        console.log("Create Event event", event )
 
         return this.service.create( event )
     }

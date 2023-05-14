@@ -27,6 +27,7 @@ export class ConfirmationService extends AService {
         const ref = this.openDialog(ConfirmationDialog, 
             { message, okButtonText, okButtonStyle, cancelButtonText}
             )
+        return ref
     }
 
     confirmDelete( message: string, params?: ConfirmParams ) {
@@ -37,6 +38,7 @@ export class ConfirmationService extends AService {
         const ref = this.openDialog(ConfirmationDialog, 
             { message, okButtonText, okButtonStyle, cancelButtonText}
             )
+        return ref
     }
 
 }

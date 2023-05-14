@@ -41,8 +41,9 @@ export class NewEventDialog extends ADialog {
 
         this.service.create(Event, event).subscribe({
             next: ( result ) => {
+                event.id = result.id
                 this.transactionLoading = false
-                this.notify('create')
+                this.notify('create',event)
             },
             error: (error) => {
                 this.transactionLoading = false

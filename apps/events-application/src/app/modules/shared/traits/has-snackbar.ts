@@ -13,7 +13,7 @@ export class HasSnackbar {
         this.snackbar = this.injector.get(MatSnackBar)
     }
 
-    snackbarMessage(message: string, duration: 1500 ) {
+    snackbarMessage(message: string, duration:number=1500 ) {
         this.snackbar.open(message, undefined, { duration: duration })
     }
 

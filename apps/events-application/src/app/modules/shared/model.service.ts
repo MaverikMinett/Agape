@@ -33,9 +33,12 @@ export class ModelService {
     }
 
     create<T extends Class>( model: T, item: InstanceType<T> ) {
+        console.log("Create", item)
         const descriptor = Model.descriptor(model)
         const endpoint   = descriptor.tokens
-        const observable = this.http.post<{id: string}>( `${this.apiUrl}/${endpoint}`, item )
+        const payload    = alchemy.deflate(model, item)
+        console.log("Payload", payload)
+        const observable = this.http.post<{id: string}>( `${this.apiUrl}/${endpoint}`, payload )
         return observable
     }
 

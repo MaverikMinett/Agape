@@ -24,7 +24,7 @@ export class HasDialog {
 
         const ref = this.dialog.open(dialog, options)
 
-        console.log(options)
+        console.log(ref, options)
         
 
         return ref
