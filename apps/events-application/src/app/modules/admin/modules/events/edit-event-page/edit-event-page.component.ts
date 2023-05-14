@@ -95,7 +95,7 @@ export class EditEventPageComponent extends AComponent {
         }
     }
 
-    deleteEvent() {
+    delete() {
         const ref = this.confirmationService.confirm(
             `Are you sure you want to delete event ${this.item.name}?`, 
             { 

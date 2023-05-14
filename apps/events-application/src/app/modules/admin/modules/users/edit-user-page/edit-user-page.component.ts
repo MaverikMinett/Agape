@@ -5,14 +5,24 @@ import { User, UserStatus, UserStatusChoices } from 'lib-platform'
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Interface } from "@agape/types";
-import { MatSnackBar } from "@angular/material/snack-bar";
 
+import { HasModelService } from "../../../../shared/traits/has-model-service";
+import { HasConfirmationService } from "../../../../shared/modules/confirmation";
+import { HasSnackbar } from "../../../../shared/traits/has-snackbar";
+import { Traits } from "../../../../shared/traits";
+import { AComponent } from "../../../../shared/acomponent";
+
+export interface EditUserPageComponent extends 
+    HasModelService,
+    HasConfirmationService,
+    HasSnackbar { }
 
 @Component({
     selector: 'admin-edit-user-page',
     templateUrl: './edit-user-page.component.html'
 })
-export class EditUserPageComponent {
+@Traits( HasModelService, HasConfirmationService, HasSnackbar )
+export class EditUserPageComponent extends AComponent {
     
     id: string
     item: User
@@ -30,14 +40,8 @@ export class EditUserPageComponent {
 
     choices = { UserStatusChoices }
  
-    constructor( 
-        private route: ActivatedRoute,
-        private router: Router,
-        private service: ModelService,
-        private snackbar: MatSnackBar
-        ) {
-
-    }
+    private route: ActivatedRoute = this.injector.get(ActivatedRoute)
+    private router: Router = this.injector.get(Router)
 
     ngOnInit() {
 
@@ -69,7 +73,7 @@ export class EditUserPageComponent {
                 next: () => {
                     this.transactionLoading = false
                     this.router.navigate([`/admin/users`])
-                    this.openSnackBar("Saved")
+                    this.snackbarMessage("Saved")
                 },
                 error: (error) => {
                     this.transactionLoading = false
@@ -91,8 +95,35 @@ export class EditUserPageComponent {
         }
     }
 
-    openSnackBar(message: string) {
-        this.snackbar.open(message, undefined, { duration: 1500 })
+    delete() {
+        const ref = this.confirmationService.confirm(
+            `Are you sure you want to delete user ${this.item.name}?`, 
+            { 
+                okText: "Yes, delete",
+                okStyle: 'primary-destructive',
+            }
+        )
+
+
+        
+        ref.afterClosed().subscribe( (confirmed: boolean) => {
+            if ( confirmed ) {
+                this.transactionLoading = true
+                this.service.delete(User, this.id).subscribe({
+                    next: () => {
+                        this.transactionLoading = false
+                        this.snackbarMessage("Deleted user")
+                        this.router.navigate([`/admin/users`])
+                    },
+                    error: (error) => {
+                        this.transactionLoading = false
+                        console.error(error)
+                    } 
+                })
+            }
+        })
     }
+
+
 
 }
