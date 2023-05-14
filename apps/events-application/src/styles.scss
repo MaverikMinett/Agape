@@ -113,7 +113,7 @@ $md-alert: (
 
 
 /* For use in src/lib/core/theming/_palette.scss */
-$md-slate: (
+$md-shingle: (
     50 : #f6f6f6,
     100 : #e8e9e9,
     200 : #d9dada,
@@ -171,14 +171,40 @@ $candy-app-theme:   mat-light-theme($candy-app-primary, $candy-app-accent, $cand
 .text-azule {
     color: #4f82d1;
 }
+.text-alert {
+    color: #db0100;
+}
+.text-shingle-800 {
+    color: #999c9c;
+}
+
+
 .border-azule {
     --tw-border-opacity: 1;
     border-color: rgb(79 130 209 / var(--tw-border-opacity));
+}
+.border-alert {
+    --tw-border-opacity: 1;
+    border-color: rgb(219 1 0 / var(--tw-border-opacity));
+}
+
+*:hover.hover-text-alert {
+    color: #db0100;
+}
+*:hover.hover-border-alert {
+    --tw-border-opacity: 1;
+    border-color: rgb(219 1 0 / var(--tw-border-opacity));
 }
 *:hover.hover-bg-azule {
     --tw-bg-opacity: 1;
     background-color: rgb(79 130 209 / var(--tw-bg-opacity));
 }
+*:hover.hover-bg-alert {
+    --tw-bg-opacity: 1;
+    background-color: rgb(219 1 0 / var(--tw-bg-opacity));
+}
+
+
 
 .w-840 {
     width: 840px;

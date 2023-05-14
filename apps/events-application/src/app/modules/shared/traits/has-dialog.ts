@@ -13,11 +13,21 @@ export class HasDialog {
         this.dialog = this.injector.get(MatDialog)
     }
 
-    openDialog( dialog: Class ) {
-        const ref = this.dialog.open(dialog, {
-            panelClass: 'reactive'
-        })
+    public openDialog( dialog: Class, data:any={}, options:any={} ) {
+		
+		'panelClass' in options 
+			? options['panelClass'] = 'reactive ' + options['panelClass']
+			: options['panelClass'] = 'reactive'
+
+
+		options['data'] = data
+
+        const ref = this.dialog.open(dialog, options)
+
+        console.log(options)
         
+
         return ref
-    }
+	}
+
 }

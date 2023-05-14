@@ -6,13 +6,21 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Interface } from "@agape/types";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { AComponent } from "../../../../shared/acomponent";
+import { Traits } from "../../../../shared/traits";
+import { HasModelService } from "../../../../shared/traits/has-model-service";
+import { HasConfirmationService } from "../../../../shared/modules/confirmation/has-confirmation.trait";
 
+export interface EditEventPageComponent extends 
+    HasModelService,
+    HasConfirmationService { }
 
 @Component({
     selector: 'admin-edit-event-page',
     templateUrl: './edit-event-page.component.html'
 })
-export class EditEventPageComponent {
+@Traits( HasModelService, HasConfirmationService )
+export class EditEventPageComponent extends AComponent {
     
     id: string
     item: Event
@@ -29,15 +37,11 @@ export class EditEventPageComponent {
     })
 
     transactionLoading: boolean = false
- 
-    constructor( 
-        private route: ActivatedRoute,
-        private router: Router,
-        private service: ModelService,
-        private snackbar: MatSnackBar
-        ) {
 
-    }
+    private route: ActivatedRoute = this.injector.get(ActivatedRoute)
+    private router: Router = this.injector.get(Router)
+    private snackbar: MatSnackBar = this.injector.get(MatSnackBar)
+
 
     ngOnInit() {
         this.route.params.subscribe( 
@@ -88,6 +92,16 @@ export class EditEventPageComponent {
                 }
             })
         }
+    }
+
+    deleteEvent() {
+        this.confirmationService.confirm(
+            `Are you sure you want to delete event ${this.item.name}?`, 
+            { 
+                okText: "Yes, delete",
+                okStyle: 'primary-destructive',
+            }
+        )
     }
 
     openSnackBar(message: string) {

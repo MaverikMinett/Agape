@@ -8,6 +8,7 @@ import { MatInputModule } from "@angular/material/input";
 import { RouterModule } from "@angular/router";
 import { AgMatDatetimeControlModule } from "@agape/ng-mat-datetime-control";
 import { NewEventDialog } from "./new-event-dialog/new-event-dialog.component";
+import { ConfirmationModule } from "../../../shared/modules/confirmation";
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { NewEventDialog } from "./new-event-dialog/new-event-dialog.component";
         RouterModule,
         MatInputModule,
         MatTableModule,
+        ConfirmationModule,
     ],
     exports: [
         EventsIndexPageComponent,
