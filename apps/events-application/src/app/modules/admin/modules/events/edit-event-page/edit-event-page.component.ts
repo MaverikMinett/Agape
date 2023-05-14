@@ -124,8 +124,5 @@ export class EditEventPageComponent extends AComponent {
         })
     }
 
-    openSnackBar(message: string) {
-        this.snackbar.open(message, undefined, { duration: 1500 })
-    }
 
 }

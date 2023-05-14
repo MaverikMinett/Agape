@@ -6,13 +6,23 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Interface } from "@agape/types";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { Traits } from "../../../../shared/traits";
+import { HasModelService } from "../../../../shared/traits/has-model-service";
+import { HasConfirmationService } from "../../../../shared/modules/confirmation";
+import { HasSnackbar } from "../../../../shared/traits/has-snackbar";
+import { AComponent } from "../../../../shared/acomponent";
 
+export interface EditOrganizationPageComponent extends 
+    HasModelService,
+    HasConfirmationService,
+    HasSnackbar { }
 
 @Component({
     selector: 'admin-edit-organization-page',
     templateUrl: './edit-organization-page.component.html'
 })
-export class EditOrganizationPageComponent {
+@Traits( HasModelService, HasConfirmationService, HasSnackbar )
+export class EditOrganizationPageComponent extends AComponent {
     
     id: string
     item: Organization
@@ -24,14 +34,8 @@ export class EditOrganizationPageComponent {
 
     transactionLoading: boolean = false
  
-    constructor( 
-        private route: ActivatedRoute,
-        private router: Router,
-        private service: ModelService,
-        private snackbar: MatSnackBar
-        ) {
-
-    }
+    private route: ActivatedRoute = this.injector.get(ActivatedRoute)
+    private router: Router = this.injector.get(Router)
 
     ngOnInit() {
         this.route.params.subscribe( 
@@ -62,7 +66,7 @@ export class EditOrganizationPageComponent {
                 next: () => {
                     this.transactionLoading = false
                     this.router.navigate([`/admin/organizations`])
-                    this.openSnackBar("Saved")
+                    this.snackbarMessage("Saved")
                 },
                 error: (error) => {
                     this.transactionLoading = false
@@ -84,8 +88,32 @@ export class EditOrganizationPageComponent {
         }
     }
 
-    openSnackBar(message: string) {
-        this.snackbar.open(message, undefined, { duration: 1500 })
-    }
+    delete() {
+        const ref = this.confirmationService.confirm(
+            `Are you sure you want to delete organization ${this.item.name}?`, 
+            { 
+                okText: "Yes, delete",
+                okStyle: 'primary-destructive',
+            }
+        )
 
+
+        
+        ref.afterClosed().subscribe( (confirmed: boolean) => {
+            if ( confirmed ) {
+                this.transactionLoading = true
+                this.service.delete(Organization, this.id).subscribe({
+                    next: () => {
+                        this.transactionLoading = false
+                        this.snackbarMessage("Deleted organization")
+                        this.router.navigate([`/admin/organizations`])
+                    },
+                    error: (error) => {
+                        this.transactionLoading = false
+                        console.error(error)
+                    } 
+                })
+            }
+        })
+    }
 }
