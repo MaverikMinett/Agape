@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { orm } from '@agape/orm';
 
 import { Interface } from '@agape/types';
-import { User, UserDetailView } from './user.model'
+import { User, UserDetailView } from 'lib-platform'
 
 @Injectable()
 export class UserService {

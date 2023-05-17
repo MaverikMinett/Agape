@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User, UserDetailView } from './user.model'
+import { User, UserDetailView } from 'lib-platform'
 import { Interface } from '@agape/types';
 
 
