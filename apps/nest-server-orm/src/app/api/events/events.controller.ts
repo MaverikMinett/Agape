@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException } from '@nestjs/common';
 import { EventService } from './event.service';
 import { Event } from 'lib-platform'
 import { Interface } from '@agape/types';
@@ -23,11 +23,7 @@ export class EventsController {
     @Post()
     create( @Body() payload: Interface<Event> ) {
 
-        console.log("Create Event Payload", payload )
-
         const event = alchemy.inflate(Event, payload)
-
-        console.log("Create Event event", event )
 
         return this.service.create( event )
     }
@@ -36,6 +32,10 @@ export class EventsController {
     async retrieve( @Param('id') id: string ) {
 
         const event = await this.service.retrieve(id)
+
+        if ( ! event ) {
+            throw new NotFoundException()
+        }
 
         const dto = alchemy.deflate(Event, event)
 
