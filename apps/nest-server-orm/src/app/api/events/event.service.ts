@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { orm } from '@agape/orm';
 
 import { Interface } from '@agape/types';
-import { Event } from './event.model'
+import { Event } from 'lib-platform'
 
 @Injectable()
 export class EventService {

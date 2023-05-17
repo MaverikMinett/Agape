@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { EventService } from './event.service';
-import { Event } from './event.model'
+import { Event } from 'lib-platform'
 import { Interface } from '@agape/types';
 
 
