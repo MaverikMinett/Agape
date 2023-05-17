@@ -25,7 +25,11 @@ const JWT_EXPIRATION_LENGTH = process.env['JWT_EXPIRATION_LENGTH']
     OrganizationsModule,
 
     AuthModule,
-
+    JwtModule.register({
+      global: true,
+      secret: JWT_SECRET,
+      signOptions: { expiresIn: JWT_EXPIRATION_LENGTH + 's' },
+    }),
 
     SwaggerModule,  // must be last
   ],
