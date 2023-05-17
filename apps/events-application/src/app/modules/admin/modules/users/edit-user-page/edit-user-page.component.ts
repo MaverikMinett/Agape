@@ -30,7 +30,7 @@ export class EditUserPageComponent extends AComponent {
     form = new FormBuilder().group({
         name: ['', Validators.required],
         username: ['', Validators.required],
-        password: ['', Validators.required],
+        password: [''],
         status: ['', Validators.required]
     })
 

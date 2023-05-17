@@ -1,10 +1,7 @@
 import { Service } from "@agape/api";
-import { db } from '../../../db'
-import { IEvent } from "../../interfaces/IEvents";
-import { ObjectId } from "mongodb";
 import { orm } from '@agape/orm';
 
-import { Event } from './event.model'
+import { Event } from 'lib-platform'
 
 @Service()
 export class EventService {
@@ -16,7 +13,7 @@ export class EventService {
         return events
     }
 
-    async create( event: Omit<IEvent, 'id'> ) {
+    async create( event: Event ) {
         return orm.insert(Event, event).exec()
     }
 
@@ -24,7 +21,7 @@ export class EventService {
         return orm.retrieve(Event, id).exec()
     }
 
-    async update( id: string, event: IEvent ) {
+    async update( id: string, event: Event ) {
         return orm.update(Event, id, event).exec()
     }
 
