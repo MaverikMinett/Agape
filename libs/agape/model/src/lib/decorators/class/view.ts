@@ -3,9 +3,12 @@ import { FieldDescriptor, ViewDescriptor } from '../../descriptors'
 
 import 'reflect-metadata'
 
+export type FieldSelection<T extends Class> = 
+    { pick: Array<keyof InstanceType<T>> }
+    | { omit: Array<keyof InstanceType<T>> }
 
 export function View<T extends Class>( progenitor: T, fieldNames?: Array<keyof InstanceType<T>> ):any
-export function View<T extends Class>( progenitor: T, fieldSelection?:{ pick: Array<keyof InstanceType<T>> } ):any
+export function View<T extends Class>( progenitor: T, fieldSelection?:FieldSelection<T> ):any
 export function View( progenitor: Class, fieldSelection?: any ):any {
 
     let allFields: boolean = false;
@@ -67,7 +70,14 @@ export function View( progenitor: Class, fieldSelection?: any ):any {
             }
         }
 
-        // EXCEPT
+        // OMIT
+        else if ( fieldSelection.omit ) {
+            for ( let name of modelDescriptor.fields.names ) {
+                if ( ! fieldSelection.omit.includes(name) ) {
+                    addFieldFromProgentior(name)
+                }
+            }
+        }
 
         // PARTIAL
 
