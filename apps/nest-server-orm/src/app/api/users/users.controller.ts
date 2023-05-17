@@ -17,6 +17,8 @@ export class UsersController {
 
         const deflated = alchemy.deflate(UserDetailView, items)
 
+        deflated.forEach( item => delete item.password )
+
         return deflated
     }
 
@@ -35,6 +37,8 @@ export class UsersController {
 
         const dto = alchemy.deflate(User, item)
 
+        delete dto.password;
+       
         return dto
     }
 
