@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { orm } from '@agape/orm';
 
 import { Interface } from '@agape/types';
-import { User, UserDetailView } from 'lib-platform'
+
+
+import bcrypt from 'bcryptjs';
+import { User, UserDetailView , UserUpdatePasswordView, UserUpdateView } from 'lib-platform';
 
 @Injectable()
 export class UserService {
@@ -11,6 +14,7 @@ export class UserService {
     }
 
     create( user: Interface<User> ) {
+        user.password = this.encryptPassword(user.password)
         return orm.insert(User, user).exec()
     }
 
@@ -19,10 +23,28 @@ export class UserService {
     }
 
     update( id: string, user: Interface<User> ) {
-        return orm.update(User, id, user).exec()
+        const password = user.password;
+        delete user.password;
+       
+        const userUpdateView: UserUpdateView = user
+
+        orm.update(UserUpdateView, id, user).exec()
+
+        if ( password !== undefined) {
+          user.password = this.encryptPassword(password)
+          orm.update(UserUpdatePasswordView, id, user).exec()
+        }
     }
 
     delete( id: string ) {
         return orm.delete(User, id).exec()
+    }
+
+
+    private encryptPassword( password: string ) {
+        const salt = bcrypt.genSaltSync(10)
+        const salted = bcrypt.hashSync(password, salt);
+        console.log(salted)
+        return salted
     }
 }
