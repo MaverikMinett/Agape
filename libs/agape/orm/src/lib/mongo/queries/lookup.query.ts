@@ -1,25 +1,46 @@
-import { Collection } from 'mongodb';
-import { Class } from '@agape/types';
+import { Collection, ObjectId } from 'mongodb';
+import { Class, Dictionary, Interface } from '@agape/types';
 import { inflate } from '@agape/object';
+import { Model } from '@agape/model';
 
 export class LookupQuery<T extends Class> {
 
-    constructor( public model: T, public collection: Collection, public filter: any ) {
+    constructor( public model: T, public collection: Collection, public filter: Dictionary ) {
 
     }
 
-    async exec( ): Promise<Array<Pick<InstanceType<T>, keyof InstanceType<T>>>> {
-        const records = await this.collection.find({  }).toArray()
-        for ( let record of records ) {
-            record.id = record._id.toString()
-            delete record._id
+    async exec( ): Promise<Interface<InstanceType<T>>> {
+
+        const descriptor = Model.descriptor(this.model)
+
+        /* projection */
+        const projection: Dictionary = { _id: 0 }
+
+        const primaryField = descriptor.fields.all().find( f => f.primary )
+        if ( primaryField ) {
+            projection[primaryField.name] = { $toString: "$_id" }
         }
 
-        return records as any[]
+        const otherFields = descriptor.fields.all().filter( f => ! f.primary )
+        for ( let field of otherFields ) {
+            projection[field.name] = 1
+        }
+
+        /* selection */
+        const selection: Dictionary = this.filter
+        
+        /* mongo query */
+        const record = await this.collection.findOne( selection, { projection } )
+
+        /* record not found */
+        if ( ! record ) return undefined
+
+        /* record */
+        return record as any
     }
 
     async inflate( ): Promise<Array<InstanceType<T>>> {
         const record = await this.exec()
-        return inflate<T>( [this.model], record )
+        return inflate<T>( this.model, record )
     }
 }

@@ -1,4 +1,4 @@
-import { Class } from '@agape/types'
+import { Class, Dictionary } from '@agape/types'
 import { Collection } from 'mongodb';
 import { MongoDatabase } from './databases/mongo.database';
 import { RetrieveQuery } from './mongo/queries/retrieve.query';
@@ -8,6 +8,7 @@ import { UpdateQuery } from './mongo/queries/update.query';
 import { pluralize, camelize } from '@agape/string'
 import { InsertQuery } from './mongo/queries/insert.query';
 import { Model, ViewDescriptor } from '@agape/model';
+import { LookupQuery } from './mongo/queries/lookup.query';
 
 export interface ModelLocatorParams {
     databaseName?: string;
@@ -103,6 +104,14 @@ export class Orm {
         const collection = locator.collection
 
         return new RetrieveQuery<T>(model, collection, id)
+    }
+
+    lookup<T extends Class>( model: T, filter: Dictionary ) {
+        const locator = this.getLocator(model)
+
+        const collection = locator.collection
+
+        return new LookupQuery<T>(model, collection, filter)
     }
 
     update<T extends Class>(model: T, id: string, item: Pick<InstanceType<T>, keyof InstanceType<T>> ) {
