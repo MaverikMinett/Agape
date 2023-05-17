@@ -1,4 +1,4 @@
-export * from './lib/models/event.model';
-export * from './lib/models/organization.model';
-export * from './lib/models/user.model';
+export * from './lib/documents/event.model';
+export * from './lib/documents/organization.model';
+export * from './lib/documents/user.model';
 
