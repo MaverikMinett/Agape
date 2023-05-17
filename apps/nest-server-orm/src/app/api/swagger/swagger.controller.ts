@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express'
 import fs from 'fs';
 
@@ -22,6 +22,10 @@ export class SwaggerController {
         let match = request.url.match(/^\/api\/?$/) || request.url.match(/^\/api\/(?<path>.*)$/)
         if ( match ) {
             const path = match.groups?.path ?? 'index.html'
+
+            if ( ! fs.existsSync(`./apps/_swagger/${path}`) ) {
+                throw new NotFoundException()
+            }
 
             let content = fs.readFileSync(`./apps/_swagger/${path}`)
             response.write( content )
