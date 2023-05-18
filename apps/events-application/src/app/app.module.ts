@@ -7,6 +7,11 @@ import { AppHomeComponent } from './components/app-home/app-home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatInputModule } from '@angular/material/input';
 
+import { JwtModule } from "@auth0/angular-jwt";
+export function tokenGetter() {
+  return localStorage.getItem("token");
+}
+
 export const appRoutes: Route[] = [
 
   { path: '', component: AppHomeComponent }
@@ -20,11 +25,25 @@ export const appRoutes: Route[] = [
     AppHomeComponent,
   ],
   imports: [
+    /* Angular */
     BrowserModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
     HttpClientModule,
-    AdminModule,
+    
+    /* JWT */
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["localhost:3007"]
+      },
+    }),
+
+    /* Material */
     MatInputModule,
+
+    /* Application */
+    AdminModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -4,18 +4,18 @@ import { AdminIndexPageComponent } from "./components/admin-index-page/admin-ind
 import { eventsRoutes } from "./modules/events/events.routes";
 import { organizationsRoutes } from "./modules/organizations/organizations.routes";
 import { usersRoutes } from "./modules/users/users.routes";
-import { authRoutes } from "./modules/auth/auth.routes";
+import { AuthorizedGuard } from "./modules/auth/auth.guard";
 
 export const adminRoutes: Route[] = [
     { 
         path: 'admin', 
         component: AdminDashboardComponent,
+        canActivate: [ AuthorizedGuard ],
         children: [
             { 
                 path: '',
                 component: AdminIndexPageComponent,
             },
-            // ...authRoutes,
             ...eventsRoutes,
             ...organizationsRoutes,
             ...usersRoutes,

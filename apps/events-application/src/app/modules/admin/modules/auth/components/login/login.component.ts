@@ -2,16 +2,22 @@ import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Traits } from "apps/events-application/src/app/modules/shared/traits";
 import { HasAuthService } from "../../traits/has-auth-service.trait";
-import { AComponent } from "apps/events-application/src/app/modules/shared/acomponent";
 import { ICredentials } from "../../interfaces/credentials.interface";
+import { AComponent } from "apps/events-application/src/app/modules/shared/acomponent";
+import { HasActivatedRoute } from "apps/events-application/src/app/modules/shared/traits/has-activated-route";
+import { HasRouter } from "apps/events-application/src/app/modules/shared/traits/has-router";
 
-export interface LoginComponent extends HasAuthService { }
+export interface LoginComponent extends 
+    HasAuthService,
+    HasActivatedRoute,
+    HasRouter
+    { }
 
 @Component({
     selector: 'admin-login',
     templateUrl: './login.component.html'
 })
-@Traits( HasAuthService )
+@Traits( HasAuthService, HasActivatedRoute, HasRouter )
 export class LoginComponent extends AComponent {
 
     transactionLoading: boolean = false
@@ -25,7 +31,7 @@ export class LoginComponent extends AComponent {
         const credentials: ICredentials = this.form.value
 
         this.auth.login(credentials).subscribe( () => {
-            
+            this.router.navigate(['/admin'])
         })
     }
 
