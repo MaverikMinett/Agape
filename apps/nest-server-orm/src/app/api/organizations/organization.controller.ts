@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { OrganizationService } from './organization.service';
 
 import { Interface } from '@agape/types';
 import { Organization } from 'lib-platform'
 
 import { alchemy } from '@project-zed/lib-alchemy'
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('api/organizations')
 export class OrganizationController {
@@ -12,6 +13,7 @@ export class OrganizationController {
 
 
     @Get()
+    @UseGuards(AuthGuard)
     async list() {
         const items = await this.service.list()
 
@@ -21,6 +23,7 @@ export class OrganizationController {
     }
 
     @Post()
+    @UseGuards(AuthGuard)
     create( @Body() payload: Interface<Organization> ) {
 
         const item = alchemy.inflate(Organization, payload)
@@ -29,6 +32,7 @@ export class OrganizationController {
     }
 
     @Get(':id')
+    @UseGuards(AuthGuard)
     async retrieve( @Param('id') id: string ) {
 
         const item = await this.service.retrieve(id)
@@ -39,6 +43,7 @@ export class OrganizationController {
     }
 
     @Put(':id')
+    @UseGuards(AuthGuard)
     update( @Param('id') id: string, @Body() payload: Interface<Organization>) {
 
         const item = alchemy.inflate(Organization, payload)
@@ -47,6 +52,7 @@ export class OrganizationController {
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard)
     delete( @Param('id') id: string ) {
         this.service.delete(id)
     }

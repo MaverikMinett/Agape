@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, UseGuards } from '@nestjs/common';
 import { EventService } from './event.service';
 import { Event } from 'lib-platform'
 import { Interface } from '@agape/types';
 
 
 import { alchemy } from '@project-zed/lib-alchemy'
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('api/events')
 export class EventsController {
@@ -12,6 +13,7 @@ export class EventsController {
 
 
     @Get()
+    @UseGuards(AuthGuard)
     async list() {
         const events = await this.service.list()
 
@@ -21,6 +23,7 @@ export class EventsController {
     }
 
     @Post()
+    @UseGuards(AuthGuard)
     create( @Body() payload: Interface<Event> ) {
 
         const event = alchemy.inflate(Event, payload)
@@ -29,6 +32,7 @@ export class EventsController {
     }
 
     @Get(':id')
+    @UseGuards(AuthGuard)
     async retrieve( @Param('id') id: string ) {
 
         const event = await this.service.retrieve(id)
@@ -43,6 +47,7 @@ export class EventsController {
     }
 
     @Put(':id')
+    @UseGuards(AuthGuard)
     update( @Param('id') id: string, @Body() payload: Interface<Event>) {
 
         const event = alchemy.inflate(Event, payload)
@@ -51,6 +56,7 @@ export class EventsController {
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard)
     delete( @Param('id') id: string ) {
         this.service.delete(id)
     }
