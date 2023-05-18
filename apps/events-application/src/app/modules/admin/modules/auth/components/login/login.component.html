@@ -1,26 +1,35 @@
 
+<div class="flex flex-col items-center mt-6">
 
-<div class="bg-slate-100 rounded w-72 p-6 flex flex-col">
-    <form [formGroup]="form" class="grid grid-cols-1">
-        <mat-form-field>
-            <mat-label>Username</mat-label>
-            <input matInput formControlName="username">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Password</mat-label>
-            <input matInput type="password" formControlName="password">
-        </mat-form-field>
-    </form>
 
-    <div class="flex-1">
-        <button 
-        type="button" 
-        (click)="submit()"
-        [disabled]="transactionLoading || ! form.valid || ! form.dirty"
-        [class.disabled]="transactionLoading || ! form.valid || ! form.dirty"
-        class="btn submit rounded border-2 border-azule bg-slate-100 hover-bg-azule hover:text-white px-8 py-2 text-azule">
-            Submit
-        </button>
+    <div class="bg-slate-100 rounded w-72 p-6 mb-6 flex flex-col ">
+        <form [formGroup]="form" class="grid grid-cols-1">
+            <mat-form-field>
+                <mat-label>Username</mat-label>
+                <input matInput formControlName="username">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input matInput type="password" formControlName="password">
+            </mat-form-field>
+        </form>
+
+        <div class="flex-1">
+            <button 
+            type="button" 
+            (click)="submit()"
+            [disabled]="transactionLoading || ! form.valid "
+            [class.disabled]="transactionLoading || ! form.valid "
+            class="btn submit rounded border-2 border-azule bg-slate-100 hover-bg-azule hover:text-white px-8 py-2 text-azule">
+                Submit
+            </button>
+        </div>
+
+    </div>
+
+    <div class="bg-slate-100 rounded p-6">
+        Username: admin<br/>
+        Password: password
     </div>
 
 </div>
