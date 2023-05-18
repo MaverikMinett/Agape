@@ -65,10 +65,33 @@ const events = [
 db.events.insertMany(events)
 
 const users = [
-    { name: 'Foo', username: 'foo', password: 'password' },
-    { name: 'Bar', username: 'bar', password: 'password' },
-    { name: 'Baz', username: 'baz', password: 'password' }
+    { 
+      name: 'Foo', 
+      username: 'foo', 
+      password: "$2a$10$43e6LvDD.gRFj80cq6T96OQRkdhtQq4BCrix50ktGf4y4B9Dz6qeu",
+      "status": "enabled"
+    },
+    { 
+      name: 'Bar', 
+      username: 'bar', 
+      password: "$2a$10$43e6LvDD.gRFj80cq6T96OQRkdhtQq4BCrix50ktGf4y4B9Dz6qeu" ,
+      "status": "enabled"
+    },
+    { 
+      name: 'Baz', 
+      username: 'baz', 
+      password: "$2a$10$43e6LvDD.gRFj80cq6T96OQRkdhtQq4BCrix50ktGf4y4B9Dz6qeu" ,
+      "status": "enabled"
+    },
+    {
+      "name": "admin",
+      "username": "admin",
+      "password": "$2a$10$43e6LvDD.gRFj80cq6T96OQRkdhtQq4BCrix50ktGf4y4B9Dz6qeu",
+      "status": "enabled"
+    }
 ]
+
+
 
 db.users.insertMany(users)
 
@@ -80,4 +103,3 @@ const organizations = [
 ]
 
 db.organizations.insertMany(organizations)
-
