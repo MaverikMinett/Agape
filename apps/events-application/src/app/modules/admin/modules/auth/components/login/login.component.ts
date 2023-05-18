@@ -27,11 +27,19 @@ export class LoginComponent extends AComponent {
         password: ['', Validators.required]
     })
 
+    nextUrl: string = '/admin'
+
+    ngOnInit() {
+        this.route.params.subscribe( params => {
+            if ( params.next ) this.nextUrl = params.next
+        })
+    }
+
     submit() {
         const credentials: ICredentials = this.form.value
 
         this.auth.login(credentials).subscribe( () => {
-            this.router.navigate(['/admin'])
+            this.router.navigate([this.nextUrl])
         })
     }
 
