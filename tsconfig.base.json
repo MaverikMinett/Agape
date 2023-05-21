@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@agape/alchemy": ["libs/agape/alchemy/src/index.ts"],
       "@agape/api": ["libs/agape/api/src/index.ts"],
       "@agape/cli": ["libs/agape/cli/src/index.ts"],
       "@agape/demo": ["libs/agape/demo/src/index.ts"],
