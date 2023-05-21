@@ -99,7 +99,12 @@
     "test:api": "npx nx test agape-api",
     "build:api": "npx nx build agape-api",
     "publish:api": "cd dist/libs/agape/api && npm publish --access public",
-    "release:api": "npm run build:api && npm run publish:api"
+    "release:api": "npm run build:api && npm run publish:api",
+
+    "test:model": "npx nx test agape-model",
+    "build:model": "npx nx build agape-model",
+    "publish:model": "cd dist/libs/agape/model && npm publish --access public",
+    "release:model": "npm run build:model && npm run publish:model"
   },
   "private": true,
   "dependencies": {

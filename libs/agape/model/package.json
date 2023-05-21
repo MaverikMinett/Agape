@@ -1,6 +1,23 @@
 {
   "name": "@agape/model",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "type": "commonjs",
-  "description": "Annotated object models"
+  "description": "Annotated object models",
+  "author": {
+    "name": "Maverik Minett",
+    "email": "maverik.minett@gmail.com"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaverikIO/project-zed"
+  },
+  "keywords": [
+    "model",
+    "abstraction"
+  ],
+  "license": "MIT"
 }
+
