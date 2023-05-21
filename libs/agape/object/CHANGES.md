@@ -1,6 +1,7 @@
 
-x.x.x
-- add Interface, Typed, TypedInterface type
+2.0.0
+- move types into @agape/types package
+- added dispatchers, ephemeral and shadow decorators
 
 1.4.1 Jun 11, 2022
 - changed Δapply to Δinclude

@@ -71,6 +71,8 @@
     "build:object:es2015:build": "nx buildes2015 agape-object",
     "build:object:es2015:move": "mv dist/libs/agape/object/es2015.in/src dist/libs/agape/object/es2015",
     "build:object:es2015:clean": "rm -r dist/libs/agape/object/es2015.in",
+    "publish:object": "cd dist/libs/agape/object && npm publish --access public",
+    "release:object": "npm run build:object && npm run publish:object",
     "build:string": "npm run build:string:before && npm run build:string:cjs && npm run build:string:es2020 && npm run build:string:es2015 && npm run build:string:after",
     "build:string:before": "rm -r -f dist/libs/agape/string",
     "build:string:after": "cp libs/agape/string/README.md dist/libs/agape/string/README.md && cp libs/agape/string/package.json dist/libs/agape/string/package.json",
