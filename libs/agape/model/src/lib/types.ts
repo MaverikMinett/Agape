@@ -5,7 +5,10 @@ import { IsArray, IsDate, IsMap, IsPrimitive, IsSet, OmitMethods } from '@agape/
 type FieldType = 'integer'|'decimal'|'number'|'string'|'text'|'date'|'time';
 type WidgetType = 'input'|'date'|'number'|'textarea'|'time';
 
-
+export interface Choice  {
+    value: string|number|boolean;
+    label: string;
+}
 
 export type IsDocument<T> = T extends Document ? true : false
 
