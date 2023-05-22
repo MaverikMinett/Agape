@@ -1,0 +1,1 @@
+export type Transmuted<T> = Record<keyof T, any>;

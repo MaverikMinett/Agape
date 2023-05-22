@@ -104,7 +104,12 @@
     "test:model": "npx nx test agape-model",
     "build:model": "npx nx build agape-model",
     "publish:model": "cd dist/libs/agape/model && npm publish --access public",
-    "release:model": "npm run build:model && npm run publish:model"
+    "release:model": "npm run build:model && npm run publish:model",
+
+    "test:alchemy": "npx nx test agape-alchemy",
+    "build:alchemy": "npx nx build agape-alchemy",
+    "publish:alchemy": "cd dist/libs/agape/alchemy && npm publish --access public",
+    "release:alchemy": "npm run build:alchemy && npm run publish:alchemy"
   },
   "private": true,
   "dependencies": {
