@@ -4,7 +4,7 @@ import { OrganizationService } from './organization.service';
 import { Interface } from '@agape/types';
 import { Organization } from 'lib-platform'
 
-import { alchemy } from '@project-zed/lib-alchemy'
+import { alchemy } from '@agape/alchemy'
 import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('api/organizations')

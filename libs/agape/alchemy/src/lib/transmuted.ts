@@ -1,1 +1,3 @@
-export type Transmuted<T> = Record<keyof T, any>;
+export type Transmuted<T> = {
+    [K in keyof T]: any;
+  }

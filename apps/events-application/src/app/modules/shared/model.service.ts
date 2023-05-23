@@ -5,7 +5,7 @@ import { Class, Interface } from "@agape/types";
 import { Model } from "@agape/model";
 import { map } from 'rxjs';
 
-import { alchemy } from '@project-zed/lib-alchemy'
+import { alchemy } from '@agape/alchemy'
 
 
 @Injectable({ providedIn: 'root'})

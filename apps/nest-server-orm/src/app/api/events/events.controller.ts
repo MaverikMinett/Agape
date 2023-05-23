@@ -4,7 +4,7 @@ import { Event } from 'lib-platform'
 import { Interface } from '@agape/types';
 
 
-import { alchemy } from '@project-zed/lib-alchemy'
+import { alchemy } from '@agape/alchemy'
 import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('api/events')

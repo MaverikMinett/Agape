@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { Interface } from '@agape/types';
 import { Credentials } from 'lib-platform';
 
-import { alchemy } from '@project-zed/lib-alchemy'
+import { alchemy } from '@agape/alchemy'
 
 @Controller('api/auth')
 export class AuthController {

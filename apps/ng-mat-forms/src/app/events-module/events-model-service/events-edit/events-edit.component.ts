@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ModelService } from "../model.service";
 import { Event } from "lib-platform";
-import alchemy from "@project-zed/lib-alchemy";
+import alchemy from "@agape/alchemy";
 import { Interface } from "@agape/types";
 
 

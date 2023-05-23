@@ -13,11 +13,11 @@ export class Alchemy {
 
 
     inflate<T extends Class>( model: T, flattened: Transmuted<InstanceType<T>>  ): InstanceType<T>
-    inflate<T extends Class>( model: T, flattened: Array<Transmuted<InstanceType<T>>> ) : Array<InstanceType<T>>
-    inflate<T extends Class>( model: T, flattened: Transmuted<InstanceType<T>>|Array<Transmuted<InstanceType<T>>>  ) {
-        return flattened instanceof Array 
-            ? this.inflateArray( model, flattened )
-            : this.inflateInstance( model, flattened )
+    inflate<T extends Class>( model: [T], flattened: Array<Transmuted<InstanceType<T>>> ) : Array<InstanceType<T>>
+    inflate<T extends Class>( model: T|[T], flattened: Transmuted<InstanceType<T>>|Array<Transmuted<InstanceType<T>>>  ) {
+        return model instanceof Array 
+            ? this.inflateArray( model[0], flattened as Array<Transmuted<InstanceType<T>>> )
+            : this.inflateInstance( model, flattened as Transmuted<InstanceType<T>> )
     }
 
 
@@ -61,11 +61,11 @@ export class Alchemy {
     }
 
     deflate<T extends Class>( model: T, instance: InstanceType<T> )
-    deflate<T extends Class>( model: T, instances: Array<InstanceType<T>> )
-    deflate<T extends Class>( model: T, instance: InstanceType<T>|Array<InstanceType<T>> ) {
-        return instance instanceof Array 
-            ? this.deflateArray(model, instance)
-            : this.deflateInstance(model, instance)
+    deflate<T extends Class>( model: [T], instances: Array<InstanceType<T>> )
+    deflate<T extends Class>( model: T|[T], instance: InstanceType<T>|Array<InstanceType<T>> ) {
+        return model instanceof Array 
+            ? this.deflateArray(model[0], instance)
+            : this.deflateInstance(model, instance as InstanceType<T> )
     }
 
     
