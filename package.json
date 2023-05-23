@@ -88,6 +88,9 @@
     "build:string:es2015:build": "nx buildes2015 agape-string",
     "build:string:es2015:move": "mv dist/libs/agape/string/es2015.in/src dist/libs/agape/string/es2015",
     "build:string:es2015:clean": "rm -r dist/libs/agape/string/es2015.in",
+    "publish:string": "cd dist/libs/agape/string && npm publish --access public",
+    "release:string": "npm run build:string && npm run publish:string",
+
     "test:ng-tie-subscriptions": "npx nx test agape-ng-tie-subscriptions",
     "build:ng-tie-subscriptions": "npx nx build agape-ng-tie-subscriptions",
     "publish:ng-tie-subscriptions": "cd dist/libs/agape/ng-tie-subscriptions && npm publish --access public",
