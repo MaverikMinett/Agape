@@ -1,7 +1,7 @@
 {
   "name": "@agape/types",
-  "version": "0.1.0",
-  "type": "module",
+  "version": "1.0.0",
+  "type": "commonjs",
   "author": {
     "name": "Maverik Minett",
     "email": "maverik.minett@gmail.com"
