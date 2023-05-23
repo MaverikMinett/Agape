@@ -22,9 +22,6 @@ export function View( progenitor: Class, fieldSelection?: any ):any {
 
     function View( target:any ) {
 
-        console.log(`Register View ${target.name} on Model ${progenitor.name}`)
-        console.log(`All Fields`, fieldSelection)
-
         // the descriptor of the root model for the view
         let modelDescriptor = Reflect.getMetadata( "model:descriptor", progenitor );
         if ( ! modelDescriptor ) {
@@ -48,7 +45,6 @@ export function View( progenitor: Class, fieldSelection?: any ):any {
         }
 
         if ( allFields ) {
-            console.log(`Adding all fields from ${progenitor.name} to ${target.name}`)
             for ( let name of modelDescriptor.fields.names ) {
                 const fieldDescriptor = new FieldDescriptor(name)
                 const modelFieldDescriptor = modelDescriptor.fields.get(name)

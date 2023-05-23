@@ -67,4 +67,22 @@ describe('Field', () => {
         expect(e.fields.has('cuz')).toBe(true)
     })
 
+    it('should have choices', () => {
+
+        const FOO_BAZ_CHOICES = [
+            { value: 'biz', label: 'Biz' }
+        ]
+
+        @Model class Foo {
+            @Field bar: string;
+
+            @Field({ choices: FOO_BAZ_CHOICES })
+            baz: string;
+        }
+
+        const d: ModelDescriptor = Reflect.getMetadata( "model:descriptor", Foo );
+        expect( d.field('baz').choices ).toEqual( FOO_BAZ_CHOICES )
+
+    })
+
 })

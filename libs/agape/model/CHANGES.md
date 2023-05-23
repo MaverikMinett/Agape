@@ -1,5 +1,8 @@
 
 
+0.3.1 May 22 2023
+- add Choices field decorator
+
 0.3.0 May 22 2023
 - add choices to field descriptor
 

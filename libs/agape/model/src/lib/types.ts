@@ -6,7 +6,7 @@ type FieldType = 'integer'|'decimal'|'number'|'string'|'text'|'date'|'time';
 type WidgetType = 'input'|'date'|'number'|'textarea'|'time';
 
 export interface Choice  {
-    value: string|number|boolean;
+    value: undefined|string|number|boolean;
     label: string;
 }
 
