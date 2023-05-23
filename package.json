@@ -117,7 +117,12 @@
     "test:orm": "npx nx test agape-orm",
     "build:orm": "npx nx build agape-orm",
     "publish:orm": "cd dist/libs/agape/orm && npm publish --access public",
-    "release:orm": "npm run build:orm && npm run publish:orm"
+    "release:orm": "npm run build:orm && npm run publish:orm",
+
+    "test:express": "npx nx test agape-express",
+    "build:express": "npx nx build agape-express",
+    "publish:express": "cd dist/libs/agape/express && npm publish --access public",
+    "release:express": "npm run build:express && npm run publish:express"
   },
   "private": true,
   "dependencies": {

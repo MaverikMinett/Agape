@@ -1,11 +1,39 @@
-# agape-express
+# Agape Express
 
-This library was generated with [Nx](https://nx.dev).
+Utilities for express applications
 
-## Building
+## Synopsis
 
-Run `nx build agape-express` to build the library.
+```
+const app: Application = express();
 
-## Running unit tests
+/* logging */
+app.use( log )
 
-Run `nx test agape-express` to execute the unit tests via [Jest](https://jestjs.io).
+/* proxy */
+app.use(['/ng', '/ng/*'], proxy('http://localhost:4200') )
+```
+
+## Middleware
+
+`log`
+
+Log incoming http requests
+
+`proxy( url )`
+
+Proxy a route another server
+
+## Author
+
+Maverik Minett  maverik.minett@gmail.com
+
+
+## Copyright
+
+© 2023 Maverik Minett
+
+
+## License
+
+MIT
