@@ -17,7 +17,7 @@ export class OrganizationController {
     async list() {
         const items = await this.service.list()
 
-        const deflated = alchemy.deflate(Organization, items)
+        const deflated = alchemy.deflate([Organization], items)
 
         return deflated
     }
