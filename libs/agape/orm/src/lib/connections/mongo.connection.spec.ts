@@ -3,7 +3,7 @@ import { MongoConnection } from './mongo.connection';
 
 describe('MongoConnection', () => {
 
-    let c = MongoConnection
+    let c 
 
     beforeEach( () => {
         c = undefined

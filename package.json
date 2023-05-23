@@ -109,7 +109,12 @@
     "test:alchemy": "npx nx test agape-alchemy",
     "build:alchemy": "npx nx build agape-alchemy",
     "publish:alchemy": "cd dist/libs/agape/alchemy && npm publish --access public",
-    "release:alchemy": "npm run build:alchemy && npm run publish:alchemy"
+    "release:alchemy": "npm run build:alchemy && npm run publish:alchemy",
+
+    "test:orm": "npx nx test agape-orm",
+    "build:orm": "npx nx build agape-orm",
+    "publish:orm": "cd dist/libs/agape/orm && npm publish --access public",
+    "release:orm": "npm run build:orm && npm run publish:orm"
   },
   "private": true,
   "dependencies": {
