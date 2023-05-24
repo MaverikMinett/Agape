@@ -31,7 +31,11 @@ Annotate class based object models
 
 ## Property Decorators
 
-### `Field`
+`Field`
+
+`Primary`
+
+`Required`
 
 
 ## Author

@@ -122,7 +122,12 @@
     "test:express": "npx nx test agape-express",
     "build:express": "npx nx build agape-express",
     "publish:express": "cd dist/libs/agape/express && npm publish --access public",
-    "release:express": "npm run build:express && npm run publish:express"
+    "release:express": "npm run build:express && npm run publish:express",
+
+    "test:types": "npx nx test agape-types",
+    "build:types": "npx nx build agape-types",
+    "publish:types": "cd dist/libs/agape/types && npm publish --access public",
+    "release:types": "npm run build:types && npm run publish:types"
   },
   "private": true,
   "dependencies": {
