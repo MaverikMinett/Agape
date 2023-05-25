@@ -17,7 +17,7 @@ export class UsersController {
     async list() {
         const items = await this.service.list()
 
-        const deflated = alchemy.deflate(UserDetailView, items)
+        const deflated = alchemy.deflate([UserDetailView], items)
 
         deflated.forEach( item => delete item.password )
 
