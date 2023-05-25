@@ -37,6 +37,7 @@ Annotate class based object models
 
 `Required`
 
+`Choices( choices )`
 
 ## Author
 
