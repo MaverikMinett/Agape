@@ -13,17 +13,17 @@ export class EventsController {
 
 
     @Get()
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)  // ng-mat-forms frontend application does not use authentication
     async list() {
         const events = await this.service.list()
 
-        const deflated = alchemy.deflate(Event, events)
+        const deflated = alchemy.deflate([Event], events)
 
         return deflated
     }
 
     @Post()
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     create( @Body() payload: Interface<Event> ) {
 
         const event = alchemy.inflate(Event, payload)
@@ -32,7 +32,7 @@ export class EventsController {
     }
 
     @Get(':id')
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     async retrieve( @Param('id') id: string ) {
 
         const event = await this.service.retrieve(id)
@@ -47,7 +47,7 @@ export class EventsController {
     }
 
     @Put(':id')
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     update( @Param('id') id: string, @Body() payload: Interface<Event>) {
 
         const event = alchemy.inflate(Event, payload)
@@ -56,7 +56,7 @@ export class EventsController {
     }
 
     @Delete(':id')
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     delete( @Param('id') id: string ) {
         this.service.delete(id)
     }
