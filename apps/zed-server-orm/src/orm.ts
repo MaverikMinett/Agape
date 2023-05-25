@@ -7,7 +7,7 @@ const DATABASE_NAME = 'zed'
 
 
 import { Foo } from './app/api/foo/foo.model'
-import { Event } from './app/api/events/event.model';
+import { Event } from 'lib-platform'
 
 export async function connectOrm() {
     const connection = new MongoConnection(DATABASE_URL);
