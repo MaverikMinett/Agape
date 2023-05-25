@@ -28,7 +28,6 @@ async function eventsListView(params: any, input: { message: string } ) {
     /* menu */
     const menu = new Menu()
     .item('back', () => navigateToView(eventsIndex), { indicator: "❰" } )
-    .item('Create event', () => navigateToView(eventsEditView) )
 
     for ( let event of events ) {
         menu.item(event.name, () => navigateToView(eventsItemView, {id: event.id}) )
@@ -72,9 +71,13 @@ async function eventsItemView( params?: { id: string }, input?: any ) {
  * @param params View parameters
  * @param params.item The event to display
  */
-async function eventsEditView( params?: { item: Event } ) {
-    let { item } = params ?? {}
-    item ?? ( item = { name: '' } )
+async function eventsEditView( params?: { id: string } ) {
+
+    const id  = params?.id
+
+    let item  = id 
+        ? events.find( e => e.id === id ) 
+        :  { name: '' }
 
     /* form */
     const form = fb.string('name').string('description').setValue(item)
