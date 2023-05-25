@@ -19,7 +19,7 @@ export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
 })
 export class DatetimeControlComponent implements ControlValueAccessor {
 
-    @Input() required: false
+    @Input() required: boolean = false
 
     @Input() dateLabel: string
 

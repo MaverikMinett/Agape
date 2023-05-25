@@ -127,7 +127,12 @@
     "test:types": "npx nx test agape-types",
     "build:types": "npx nx build agape-types",
     "publish:types": "cd dist/libs/agape/types && npm publish --access public",
-    "release:types": "npm run build:types && npm run publish:types"
+    "release:types": "npm run build:types && npm run publish:types",
+
+    "test:datetime-control": "npx nx test agape-ng-mat-datetime-control",
+    "build:datetime-control": "npx nx build agape-ng-mat-datetime-control",
+    "publish:datetime-control": "cd dist/libs/agape/ng-mat-datetime-control && npm publish --access public",
+    "release:datetime-control": "npm run build:datetime-control && npm run publish:datetime-control"
   },
   "private": true,
   "dependencies": {
