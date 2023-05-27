@@ -1,9 +1,10 @@
 import { Controller, Delete, Get, Post, Put } from "@agape/api";
 import { EventService } from "./event.service";
-import { IEvent } from "../../interfaces/IEvents";
+// import { IEvent } from "../../interfaces/IEvents";
 import { Exception } from "@agape/exception";
 
-
+import { Event } from 'lib-platform'
+import { Interface } from "@agape/types";
 
 @Controller('events')
 export class EventsController {
@@ -18,7 +19,7 @@ export class EventsController {
     }
 
     @Post()
-    async create( params: any, body: IEvent ) {
+    async create( params: any, body: Interface<Event> ) {
         return this.service.create( body )
     }
 
