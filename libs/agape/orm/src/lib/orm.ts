@@ -31,6 +31,10 @@ export class Orm {
 
     models: Map<Class, ModelLocator> = new Map()
 
+    database( name: string ) {
+        return this.databases.get(name)
+    }
+
     registerDatabase( identifier: string, database: MongoDatabase ) {
         this.databases.set(identifier, database)
     }

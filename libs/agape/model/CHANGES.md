@@ -1,5 +1,8 @@
 
 
+0.5.0 May 27
+- add collection to model field descriptor
+
 0.3.1 May 22 2023
 - add Choices field decorator
 

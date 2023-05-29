@@ -24,6 +24,8 @@ export class ModelDescriptor {
 
     tokens: string;
 
+    collection?: string
+
     fields: FieldDescriptorSet = new FieldDescriptorSet()
 
     readable: boolean 
@@ -71,6 +73,7 @@ export class ModelDescriptor {
             this.plural ??= pluralize(this.label)
             this.token  ??= tokenize(this.name)
             this.tokens ??= pluralize(this.token)
+            this.collection ??= pluralize(this.name)
         }
     }
 
