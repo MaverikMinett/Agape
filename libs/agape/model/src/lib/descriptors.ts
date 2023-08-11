@@ -77,6 +77,11 @@ export class ModelDescriptor {
         }
     }
 
+    get primaryField() {
+        const field = this.fields.all().find( field => field.primary === true )
+        return field
+    }
+
 }
 
 /**
@@ -173,6 +178,14 @@ export class FieldDescriptor {
         }
     }
 
+    getValue( instance: any ): any {
+        return instance[this.name]
+    }
+
+    setValue( instance: any, value: any ) {
+        instance[this.name] = value
+    }
+
 }
 
 
@@ -194,6 +207,7 @@ export class FieldDescriptor {
     all() {
         return Object.values(this.ʘ)
     }
+
 
     /**
      * Merge descriptors from another set into this set

@@ -2,12 +2,14 @@ import { Class } from '@agape/object';
 import { ModelDescriptor, ModelDescriptorParams } from '../../descriptors'
 
 import 'reflect-metadata'
+import { camelize } from '@agape/string';
 
 
 /**
  * Use the @Model decorator to annotate a class and designate it as a
  * data model
  */
+export function Model( token: string, params?:Omit<ModelDescriptorParams,'symbol'|'fields'> ):any
 export function Model( params?:Omit<ModelDescriptorParams,'symbol'|'fields'> ):any
 export function Model( target:Class ):any
 export function Model( ...args:any[] ):any {
@@ -16,8 +18,22 @@ export function Model( ...args:any[] ):any {
     // arguments supplied to the @Model descriptor, this allows the
     // descriptor to be called as either @Model or @Model(params)
     let target:{ new(...args: any[] ): any; }
+    let token: string
     let params:ModelDescriptorParams
     if ( args.length ) {
+
+        if ( args[0] instanceof Function ) {
+            [target] = args
+        }
+        else if ( typeof args[0] === 'string' ) {
+            [token, params] = args
+            params ??= { }
+            params.token ??= token
+        }
+        else {
+            [params] = args
+        }
+
         args[0] instanceof Function 
             ? [target] = args
             : [params] = args
@@ -25,6 +41,9 @@ export function Model( ...args:any[] ):any {
 
     function Model( target:any ) {
         params ??= { }
+        if ( params.token && params.name === undefined ) {
+            params.name = camelize(params.token)
+        }
         params.name ??= target.name
         params.symbol ??= target.name
 
