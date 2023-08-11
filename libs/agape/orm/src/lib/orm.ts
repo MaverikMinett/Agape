@@ -9,6 +9,7 @@ import { pluralize, camelize } from '@agape/string'
 import { InsertQuery } from './mongo/queries/insert.query';
 import { Model, ViewDescriptor } from '@agape/model';
 import { LookupQuery } from './mongo/queries/lookup.query';
+import { Mode } from 'fs';
 
 export interface ModelLocatorParams {
     databaseName?: string;
@@ -158,7 +159,7 @@ export class Orm {
             ? descriptor.model 
             : view
 
-        const locator = this.models.get(model)
+        const locator: ModelLocator = this.models.get(model)
 
         if ( ! locator ) {
             throw new Error(
