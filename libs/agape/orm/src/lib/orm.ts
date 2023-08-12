@@ -6,7 +6,6 @@ import { Collection, ObjectId } from 'mongodb';
 
 import { MongoDatabase } from './databases/mongo.database';
 
-import { ListQuery } from './mongo/queries/list.query';
 import { DeleteQuery } from './mongo/queries/delete.query';
 import { UpdateQuery } from './mongo/queries/update.query';
 import { InsertQuery } from './mongo/queries/insert.query';
@@ -129,12 +128,12 @@ export class Orm {
         return new UpdateQuery(model, collection, id, item)
     }
 
-    list<T extends Class>( model: T ) {
+    list<T extends Class>( model: T, filter?: Dictionary ) {
         const locator = this.getLocator(model)
 
         const collection = locator.collection
 
-        const query = new ListQuery<T>(model, collection)
+        const query = new ListQuery<T>(model, collection, filter)
 
         return query
     }
@@ -176,7 +175,9 @@ export class Orm {
 
 }
 
-
+/**
+ * Retrieve query to lookup a single record by it's ID
+ */
 export class RetrieveQuery<T extends Class> {
 
     constructor( public orm: Orm, public model: T, public collection: Collection, public id: string ) {
@@ -238,5 +239,62 @@ export class RetrieveQuery<T extends Class> {
     async inflate( ): Promise<InstanceType<T>> {
         const record = await this.exec()
         return inflate<T>( this.model, record )
+    }
+}
+
+
+/**
+ * List query to retrieve a list of filtered records
+ */
+export class ListQuery<T extends Class> {
+
+    constructor( public model: T, public collection: Collection, public filter?: Dictionary ) {
+
+    }
+
+    async exec( ): Promise<Array<Pick<InstanceType<T>, keyof InstanceType<T>>>> {
+
+        const descriptor = Model.descriptor(this.model)
+
+        const projection: Dictionary = { _id: 0 }
+
+        const primaryField = descriptor.fields.all().find( f => f.primary )
+        if ( primaryField ) {
+            projection[primaryField.name] = { $toString: "$_id" }
+        }
+
+        const otherFields = descriptor.fields.all().filter( f => ! f.primary )
+        for ( let field of otherFields ) {
+            projection[field.name] = 1
+        }
+
+        const select = {}
+
+        if ( this.filter ) {
+            for ( let filterField of Object.keys(this.filter) ) {
+                if ( filterField.match(/__/) ) {
+                    const [ filterFieldName, operator ] = filterField.split('__')
+                    if ( operator === 'in' ) {
+                        select[filterFieldName] = { $in: this.filter[filterField] }
+                    }
+                }
+                else {
+                    select[filterField] = this.filter[filterField]
+                }
+            }
+        }
+
+        const records = await this.collection.find(
+            select,
+            { projection }
+        )
+        .toArray()
+
+        return records as any[]
+    }
+
+    async inflate( ): Promise<Array<InstanceType<T>>> {
+        const record = await this.exec()
+        return inflate<T>( [this.model], record )
     }
 }

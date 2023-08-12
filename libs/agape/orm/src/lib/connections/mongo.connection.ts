@@ -15,4 +15,8 @@ export class MongoConnection extends DatabaseConnection {
         await this.client.connect()
     }
 
+    async disconnect() {
+        await this.client.close()
+    }
+
 }
