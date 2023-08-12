@@ -9,7 +9,7 @@ import { pluralize, camelize } from '@agape/string'
 import { InsertQuery } from './mongo/queries/insert.query';
 import { Model, ViewDescriptor } from '@agape/model';
 import { LookupQuery } from './mongo/queries/lookup.query';
-import { Mode } from 'fs';
+
 
 export interface ModelLocatorParams {
     databaseName?: string;
@@ -49,7 +49,7 @@ export class Orm {
 
     registerModel( model: Class, params: ModelLocatorParams={} ) {
 
-        console.log(`Registering model ${model.name}`)
+        // console.log(`Registering model ${model.name}`)
 
         // TODO: Throw an error if the class passed in is a View and not a plain Model
         // Only Models can be registered here
@@ -57,7 +57,7 @@ export class Orm {
         const databaseName = params?.databaseName ?? 'default';
         const collectionName = params?.collectionName ?? camelize(pluralize(model.name));
 
-        console.log("Collection", collectionName)
+        // console.log("Collection", collectionName)
 
         const database = this.databases.get(databaseName)
         if ( ! database )
@@ -108,7 +108,7 @@ export class Orm {
 
         const collection = locator.collection
 
-        return new RetrieveQuery<T>(model, collection, id)
+        return new RetrieveQuery<T>(this, model, collection, id)
     }
 
     lookup<T extends Class>( model: T, filter: Dictionary ) {

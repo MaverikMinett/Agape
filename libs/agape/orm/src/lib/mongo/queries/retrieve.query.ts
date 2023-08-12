@@ -1,11 +1,11 @@
 import { Collection, ObjectId } from 'mongodb';
 import { Class, Dictionary } from '@agape/types';
 import { inflate } from '@agape/object';
-import { Model } from '@agape/model';
+import { Document, Model } from '@agape/model';
 
 export class RetrieveQuery<T extends Class> {
 
-    constructor( public model: T, public collection: Collection, public id: string ) {
+    constructor( public orm: any, public model: T, public collection: Collection, public id: string ) {
 
     }
 
@@ -42,8 +42,23 @@ export class RetrieveQuery<T extends Class> {
         /* record not found */
         if ( ! record ) return undefined
 
+        const item = {}
+        item[primaryField.name] = record[primaryField.name]
+
+        for ( let field of otherFields ) {
+            if ( field.designType instanceof Function && field.designType.prototype as any instanceof Document ) {
+                const objectId: ObjectId = record[field.name]
+                const idString = objectId.toString()
+                item[field.name] = await this.orm.retrieve(field.designType, idString).exec()
+                console.log(objectId, idString, item[field.name])
+            }
+            else {
+                item[field.name] = record[field.name]
+            }
+        }
+
         /* record */
-        return record as any
+        return item as any
     }
 
     async inflate( ): Promise<InstanceType<T>> {
