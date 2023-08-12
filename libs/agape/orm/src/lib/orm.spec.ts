@@ -1,7 +1,7 @@
 import { Document, Field, Model, Primary, View } from '@agape/model';
-import { MongoConnection } from '../lib/connections/mongo.connection';
-import { MongoDatabase } from '../lib/databases/mongo.database';
-import { Orm } from '../lib/orm'
+import { MongoConnection } from './connections/mongo.connection';
+import { MongoDatabase } from './databases/mongo.database';
+import { Orm } from './orm'
 
 const DATABASE_URL = 'mongodb://localhost:27017';
 const DATABASE_NAME = 'foo'
@@ -21,6 +21,7 @@ describe('Nested Views', () => {
         database = new MongoDatabase(connection, DATABASE_NAME)
 
         orm = new Orm()
+        orm.debug = true
         orm.registerDatabase('default', database)
     })
 
@@ -254,8 +255,8 @@ describe('Nested Views', () => {
     
             const foo1 = new Foo({ name: "Johnny", age: 42 })
             const foo2 = new Foo({ name: "James", age: 42 })
-            orm.insert(Foo, foo1).exec()
-            orm.insert(Foo, foo2).exec()
+            await orm.insert(Foo, foo1).exec()
+            await orm.insert(Foo, foo2).exec()
 
             const results = await orm.list(Foo, { name: foo1.name }).exec()
             expect(results.length).toBe(1)
@@ -278,8 +279,8 @@ describe('Nested Views', () => {
     
             const foo1 = new Foo({ name: "Johnny", age: 42 })
             const foo2 = new Foo({ name: "James", age: 42 })
-            orm.insert(Foo, foo1).exec()
-            orm.insert(Foo, foo2).exec()
+            await orm.insert(Foo, foo1).exec()
+            await orm.insert(Foo, foo2).exec()
 
             const results = await orm.list(Foo, { age: foo1.age }).exec()
             expect(results.length).toBe(2)
@@ -302,10 +303,58 @@ describe('Nested Views', () => {
     
             const foo1 = new Foo({ name: "Johnny", age: 42 })
             const foo2 = new Foo({ name: "James", age: 42 })
-            orm.insert(Foo, foo1).exec()
-            orm.insert(Foo, foo2).exec()
+            await orm.insert(Foo, foo1).exec()
+            await orm.insert(Foo, foo2).exec()
 
             const results = await orm.list(Foo, { name__in: [foo1.name, foo2.name] }).exec()
+            expect(results.length).toBe(2)
+        })
+
+        it('should filter the records by id', async () => {
+            @Model class Foo extends Document {
+    
+                @Primary id: string
+                @Field name: string
+                @Field age: number
+            
+                constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+    
+            orm.registerModel(Foo)
+    
+            const foo1 = new Foo({ name: "Johnny", age: 42 })
+            const foo2 = new Foo({ name: "James", age: 42 })
+            await orm.insert(Foo, foo1).exec()
+            await orm.insert(Foo, foo2).exec()
+
+            const results = await orm.list(Foo, { id: foo1.id }).exec()
+            expect(results.length).toBe(1)
+        })
+
+        it('should filter the records by multiple ids', async () => {
+            @Model class Foo extends Document {
+    
+                @Primary id: string
+                @Field name: string
+                @Field age: number
+            
+                constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+    
+            orm.registerModel(Foo)
+    
+            const foo1 = new Foo({ name: "Johnny", age: 42 })
+            const foo2 = new Foo({ name: "James", age: 42 })
+            await orm.insert(Foo, foo1).exec()
+            await orm.insert(Foo, foo2).exec()
+
+            const results = await orm.list(Foo, { id__in: [foo1.id, foo2.id] }).exec()
             expect(results.length).toBe(2)
         })
 

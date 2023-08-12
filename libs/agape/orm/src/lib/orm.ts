@@ -29,6 +29,9 @@ export class ModelLocator {
 
 export class Orm {
 
+
+    debug: boolean = false
+
     databases: Map<string, MongoDatabase> = new Map()
 
     models: Map<Class, ModelLocator> = new Map()
@@ -270,20 +273,54 @@ export class ListQuery<T extends Class> {
 
         const select = {}
 
+        if ( this.orm.debug ) {
+            console.log("FILTER", this.filter )
+        }
+
+        // create select criteria from filter
         if ( this.filter ) {
             for ( let filterField of Object.keys(this.filter) ) {
                 if ( filterField.match(/__/) ) {
                     const [ filterFieldName, operator ] = filterField.split('__')
+                    let selectFieldName: string
+                    let selectFieldValue: any[]
+                    if ( descriptor.fields.get(filterFieldName).primary ) {
+                        selectFieldName = '_id'
+                    }
+                    else {
+                        selectFieldName = filterFieldName
+                    }
                     if ( operator === 'in' ) {
-                        select[filterFieldName] = { $in: this.filter[filterField] }
+                        if ( descriptor.fields.get(filterFieldName).primary ) {
+                            selectFieldValue = this.filter[filterField].map( value => new ObjectId(value) )
+                        }
+                        else {
+                            selectFieldValue = this.filter[filterField]
+                        }
+                        select[selectFieldName] = { $in: selectFieldValue }
                     }
                 }
                 else {
-                    select[filterField] = this.filter[filterField]
+                    let selectFieldName: string
+                    let selectFieldValue: any
+                    if ( descriptor.fields.get(filterField).primary ) {
+                        selectFieldName = '_id'
+                        selectFieldValue = new ObjectId(this.filter[filterField])
+                    }
+                    else {
+                        selectFieldName = filterField
+                        selectFieldValue = this.filter[filterField]
+                    }
+                    select[selectFieldName] = selectFieldValue
                 }
             }
         }
 
+        if ( this.orm.debug ) {
+            console.log("SELECT", select )
+        }
+
+        // select records from database
         const records = await this.collection.find(
             select,
             { projection }
@@ -292,16 +329,20 @@ export class ListQuery<T extends Class> {
 
         const items = []
 
+        const foreignKeys:Dictionary<Set<string>> = {}
+
+        // create items from database records
         for ( let record of records ) {
             const item = {}
             item[primaryField.name] = record[primaryField.name]
 
             for ( let field of otherFields ) {
+
+                // handle foreign objects that need to be populated
                 if ( field.designType instanceof Function && field.designType.prototype as any instanceof Document ) {
                     const objectId: ObjectId = record[field.name]
-                    const idString = objectId.toString()
-                    item[field.name] = await this.orm.retrieve(field.designType, idString).exec()
-                    console.log(objectId, idString, item[field.name])
+                    foreignKeys[field.name] ??= new Set<string>()
+                    foreignKeys[field.name].add(objectId.toString())
                 }
                 else {
                     item[field.name] = record[field.name]
@@ -311,11 +352,35 @@ export class ListQuery<T extends Class> {
             items.push(item)
         }
 
+        const foreignObjects: Dictionary<Dictionary<object>> = {}
+        for ( let foreignKeyField of Object.keys(foreignKeys) ) {
+            const foriegnDescriptor = Model.descriptor(descriptor.fields.get(foreignKeyField).designType as Class)
+            const filterFieldName = foriegnDescriptor.primaryField.name + '__in'
+            const objectsList = await this.orm.list(
+                descriptor.fields.get(foreignKeyField).designType as Class, 
+                { [filterFieldName]: Array.from(foreignKeys[foreignKeyField]) }
+            ).exec()
+            const objectsDict: Dictionary<object> = { }
+            for ( let o of objectsList ) {
+                objectsDict[ foriegnDescriptor.primaryField.getValue(o) ] = o
+            }
+            foreignObjects[foreignKeyField] = objectsDict
+        }
+
+        for ( let i = 0; i < records.length; i++ ) {
+            const record = records[i]
+            for ( let foreignKeyField of Object.keys(foreignKeys) ) {
+                let foreignObjectId = record[foreignKeyField]
+                let foreignObjectIdString = foreignObjectId.toString()
+                items[i][foreignKeyField] = foreignObjects[foreignKeyField][foreignObjectIdString]
+            }
+        }
+
         return items as any[]
     }
 
     async inflate( ): Promise<Array<InstanceType<T>>> {
-        const record = await this.exec()
-        return inflate<T>( [this.model], record )
+        const records = await this.exec()
+        return inflate<T>( [this.model], records )
     }
 }
