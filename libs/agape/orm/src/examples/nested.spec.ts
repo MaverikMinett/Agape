@@ -308,6 +308,93 @@ describe('Nested Views', () => {
             const results = await orm.list(Foo, { name__in: [foo1.name, foo2.name] }).exec()
             expect(results.length).toBe(2)
         })
+
+        it('should retrieve the bar documents with the foo documents', async() => {
+            @Model class Bar extends Document {
+    
+                @Primary id: string
+                @Field name: string
+                @Field address: string
+            
+                constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+    
+            @Model class Foo extends Document {
+    
+                @Primary id: string
+                @Field name: string
+                @Field age: number
+                @Field bar: Bar
+            
+                constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+    
+            orm.registerModel(Foo)
+            orm.registerModel(Bar)
+    
+            const bar1 = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
+            const foo1 = new Foo({ name: "Johnny", age: 42, bar: bar1 })
+            await orm.insert(Bar, bar1).exec()
+            await orm.insert(Foo, foo1).exec()
+
+            const foo2 = new Foo({ name: "James", age: 42, bar: bar1 })
+            await orm.insert(Foo, foo2).exec()
+
+            const results = await orm.list(Foo).exec()
+            expect(results.length).toBe(2)
+            expect(results[0].bar).toBeTruthy()
+            expect(results[0].bar.id).toBe(bar1.id)
+            expect(results[1].bar).toBeTruthy()
+            expect(results[1].bar.id).toBe(bar1.id)
+        })
+
+        it('should retrieve the same bar document for each foo document', async() => {
+            @Model class Bar extends Document {
+    
+                @Primary id: string
+                @Field name: string
+                @Field address: string
+            
+                constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+    
+            @Model class Foo extends Document {
+    
+                @Primary id: string
+                @Field name: string
+                @Field age: number
+                @Field bar: Bar
+            
+                constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+    
+            orm.registerModel(Foo)
+            orm.registerModel(Bar)
+    
+            const bar1 = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
+            const foo1 = new Foo({ name: "Johnny", age: 42, bar: bar1 })
+            await orm.insert(Bar, bar1).exec()
+            await orm.insert(Foo, foo1).exec()
+
+            const foo2 = new Foo({ name: "James", age: 42, bar: bar1 })
+            await orm.insert(Foo, foo2).exec()
+
+            const results = await orm.list(Foo).exec()
+            expect(results.length).toBe(2)
+            expect(results[0].bar).toBe(results[1].bar)
+        })
     })
 
     

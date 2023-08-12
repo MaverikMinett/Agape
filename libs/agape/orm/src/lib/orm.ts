@@ -133,7 +133,7 @@ export class Orm {
 
         const collection = locator.collection
 
-        const query = new ListQuery<T>(model, collection, filter)
+        const query = new ListQuery<T>(this, model, collection, filter)
 
         return query
     }
@@ -248,7 +248,7 @@ export class RetrieveQuery<T extends Class> {
  */
 export class ListQuery<T extends Class> {
 
-    constructor( public model: T, public collection: Collection, public filter?: Dictionary ) {
+    constructor( public orm: Orm, public model: T, public collection: Collection, public filter?: Dictionary ) {
 
     }
 
@@ -290,7 +290,28 @@ export class ListQuery<T extends Class> {
         )
         .toArray()
 
-        return records as any[]
+        const items = []
+
+        for ( let record of records ) {
+            const item = {}
+            item[primaryField.name] = record[primaryField.name]
+
+            for ( let field of otherFields ) {
+                if ( field.designType instanceof Function && field.designType.prototype as any instanceof Document ) {
+                    const objectId: ObjectId = record[field.name]
+                    const idString = objectId.toString()
+                    item[field.name] = await this.orm.retrieve(field.designType, idString).exec()
+                    console.log(objectId, idString, item[field.name])
+                }
+                else {
+                    item[field.name] = record[field.name]
+                }
+            }
+
+            items.push(item)
+        }
+
+        return items as any[]
     }
 
     async inflate( ): Promise<Array<InstanceType<T>>> {
