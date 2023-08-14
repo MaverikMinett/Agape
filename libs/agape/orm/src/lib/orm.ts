@@ -10,7 +10,7 @@ import { DeleteQuery } from './mongo/queries/delete.query';
 import { UpdateQuery } from './mongo/queries/update.query';
 import { InsertQuery } from './mongo/queries/insert.query';
 import { LookupQuery } from './mongo/queries/lookup.query';
-import { Filter } from './types'
+import { FilterCriteria } from './types'
 
 export interface ModelLocatorParams {
     databaseName?: string;
@@ -131,7 +131,7 @@ export class Orm {
         return new UpdateQuery(model, collection, id, item)
     }
 
-    list<T extends Class>( model: T, filter?: Filter<InstanceType<T>> ) {
+    list<T extends Class>( model: T, filter?: FilterCriteria<InstanceType<T>> ) {
         const locator = this.getLocator(model)
 
         const collection = locator.collection
@@ -251,7 +251,7 @@ export class RetrieveQuery<T extends Class> {
  */
 export class ListQuery<T extends Class> {
 
-    constructor( public orm: Orm, public model: T, public collection: Collection, public filter?: Filter<T> ) {
+    constructor( public orm: Orm, public model: T, public collection: Collection, public filter?: FilterCriteria<T> ) {
 
     }
 
@@ -309,10 +309,16 @@ export class ListQuery<T extends Class> {
                         criteria[selectFieldName]['$in'] = selectFieldValue
                     }
                     else if ( operator === 'search' ) {
+                        if ( descriptor.fields.get(filterFieldName).primary ) {
+                            throw new Error('Cannot search on primary key')
+                        }
                         selectFieldValue = new RegExp(this.filter[filterField]) 
                         criteria[selectFieldName]['$regex'] = selectFieldValue
                     }
                     else if ( operator === 'searchi' ) {
+                        if ( descriptor.fields.get(filterFieldName).primary ) {
+                            throw new Error('Cannot search on primary key')
+                        }
                         selectFieldValue = new RegExp(this.filter[filterField], 'i') 
                         criteria[selectFieldName]['$regex'] = selectFieldValue
                     }

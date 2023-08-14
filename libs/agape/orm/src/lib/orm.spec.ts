@@ -434,6 +434,159 @@ describe('Nested Views', () => {
                     expect(results.length).toBe(2)
                 })
             })
+            describe('greater/less than', () => {
+                it('should filter strings greater than', async () => {
+                    @Model class Foo extends Document {
+            
+                        @Primary id: string
+                        @Field letter: string
+                    
+                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    orm.registerModel(Foo)
+
+                    const foo1 = new Foo({ letter: 'A' })
+                    const foo2 = new Foo({ letter: 'B' })
+                    const foo3 = new Foo({ letter: 'C' })
+
+                    await orm.insert(Foo, foo1).exec()
+                    await orm.insert(Foo, foo2).exec()
+                    await orm.insert(Foo, foo3).exec()
+            
+                    const results = await orm.list(Foo, { letter__gt: 'A' }).exec()
+                    expect(results.length).toBe(2)
+                })
+                it('should filter strings greater than or equal to', async () => {
+                    @Model class Foo extends Document {
+            
+                        @Primary id: string
+                        @Field letter: string
+                    
+                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    orm.registerModel(Foo)
+
+                    const foo1 = new Foo({ letter: 'A' })
+                    const foo2 = new Foo({ letter: 'B' })
+                    const foo3 = new Foo({ letter: 'C' })
+
+                    await orm.insert(Foo, foo1).exec()
+                    await orm.insert(Foo, foo2).exec()
+                    await orm.insert(Foo, foo3).exec()
+            
+                    const results = await orm.list(Foo, { letter__gte: 'A' }).exec()
+                    expect(results.length).toBe(3)
+                })
+                it('should filter strings less than', async () => {
+                    @Model class Foo extends Document {
+            
+                        @Primary id: string
+                        @Field letter: string
+                    
+                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    orm.registerModel(Foo)
+
+                    const foo1 = new Foo({ letter: 'A' })
+                    const foo2 = new Foo({ letter: 'B' })
+                    const foo3 = new Foo({ letter: 'C' })
+
+                    await orm.insert(Foo, foo1).exec()
+                    await orm.insert(Foo, foo2).exec()
+                    await orm.insert(Foo, foo3).exec()
+            
+                    const results = await orm.list(Foo, { letter__lt: 'C' }).exec()
+                    expect(results.length).toBe(2)
+                })
+                it('should filter strings less than or equal to', async () => {
+                    @Model class Foo extends Document {
+            
+                        @Primary id: string
+                        @Field letter: string
+                    
+                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    orm.registerModel(Foo)
+
+                    const foo1 = new Foo({ letter: 'A' })
+                    const foo2 = new Foo({ letter: 'B' })
+                    const foo3 = new Foo({ letter: 'C' })
+
+                    await orm.insert(Foo, foo1).exec()
+                    await orm.insert(Foo, foo2).exec()
+                    await orm.insert(Foo, foo3).exec()
+            
+                    const results = await orm.list(Foo, { letter__lte: 'C' }).exec()
+                    expect(results.length).toBe(3)
+                })
+                it('should filter strings between', async () => {
+                    @Model class Foo extends Document {
+            
+                        @Primary id: string
+                        @Field letter: string
+                    
+                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    orm.registerModel(Foo)
+
+                    const foo1 = new Foo({ letter: 'A' })
+                    const foo2 = new Foo({ letter: 'B' })
+                    const foo3 = new Foo({ letter: 'C' })
+
+                    await orm.insert(Foo, foo1).exec()
+                    await orm.insert(Foo, foo2).exec()
+                    await orm.insert(Foo, foo3).exec()
+            
+                    const results = await orm.list(Foo, { letter__gt: 'A', letter__lt: 'C' }).exec()
+                    expect(results.length).toBe(1)
+                })
+                it('should filter strings between or equal to', async () => {
+                    @Model class Foo extends Document {
+            
+                        @Primary id: string
+                        @Field letter: string
+                    
+                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    orm.registerModel(Foo)
+
+                    const foo1 = new Foo({ letter: 'A' })
+                    const foo2 = new Foo({ letter: 'B' })
+                    const foo3 = new Foo({ letter: 'C' })
+
+                    await orm.insert(Foo, foo1).exec()
+                    await orm.insert(Foo, foo2).exec()
+                    await orm.insert(Foo, foo3).exec()
+            
+                    const results = await orm.list(Foo, { letter__gte: 'A', letter__lte: 'C' }).exec()
+                    expect(results.length).toBe(3)
+                })
+            })
+           
         })
         describe('Primary Key', () => {
             describe('equality', () => {
@@ -484,6 +637,64 @@ describe('Nested Views', () => {
         
                     const results = await orm.list(Foo, { id__in: [foo1.id, foo2.id] }).exec()
                     expect(results.length).toBe(2)
+                })
+            })
+            describe('search',  () => {
+                it('should throw an error', async () => {
+                    @Model class Foo extends Document {
+            
+                        @Primary id: string
+                        @Field name: string
+                        @Field age: number
+                    
+                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    orm.registerModel(Foo)
+            
+                    const foo1 = new Foo({ name: "Johnny", age: 42 })
+                    const foo2 = new Foo({ name: "James", age: 42 })
+                    await orm.insert(Foo, foo1).exec()
+                    await orm.insert(Foo, foo2).exec()
+        
+                    const results = 
+                    await expect( async () => {
+                        await orm.list(Foo, { id__search: '' }).exec()
+                    })
+                    .rejects
+                    .toThrow('Cannot search on primary key');
+                })
+            })
+            describe('searchi', () => {
+                it('should throw an error', async () => {
+                    @Model class Foo extends Document {
+            
+                        @Primary id: string
+                        @Field name: string
+                        @Field age: number
+                    
+                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    orm.registerModel(Foo)
+            
+                    const foo1 = new Foo({ name: "Johnny", age: 42 })
+                    const foo2 = new Foo({ name: "James", age: 42 })
+                    await orm.insert(Foo, foo1).exec()
+                    await orm.insert(Foo, foo2).exec()
+        
+                    const results = 
+                    await expect( async () => {
+                        await orm.list(Foo, { id__searchi: '' }).exec()
+                    })
+                    .rejects
+                    .toThrow('Cannot search on primary key');
                 })
             })
         })
@@ -693,6 +904,7 @@ describe('Nested Views', () => {
                 })
             })
         })
+
     })
 
     
