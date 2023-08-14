@@ -1,3 +1,5 @@
+2.0.1
+- add classExtends utility method
 
 2.0.0
 - move types into @agape/types package

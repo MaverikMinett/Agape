@@ -245,18 +245,6 @@ properties on the original. This is useful for inspecting objects which utilize
 property decorators or inherit properties through the prototype chain. 
 
 
-
-## Types
-
-`Class`
-
-A type definition for a class symbol.
-
-`Dictionary`
-
-Represents an object literal which has strings for keys with any type of value.
-
-
 ## Caveats
 
 ### TypeScript Definitions
@@ -354,9 +342,6 @@ class MyTrait {
 ```
 
 
-
-
-
 ## Author
 
 Maverik Minett  maverik.minett@gmail.com
@@ -364,7 +349,7 @@ Maverik Minett  maverik.minett@gmail.com
 
 ## Copyright
 
-© 2020-2021 Maverik Minett
+© 2020-2023 Maverik Minett
 
 
 ## License
