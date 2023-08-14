@@ -9,8 +9,9 @@ import { MongoDatabase } from './databases/mongo.database';
 import { DeleteQuery } from './mongo/queries/delete.query';
 import { UpdateQuery } from './mongo/queries/update.query';
 import { InsertQuery } from './mongo/queries/insert.query';
-import { LookupQuery } from './mongo/queries/lookup.query';
+
 import { FilterCriteria } from './types'
+import { selectCriteriaFromFilterCriteria } from './util';
 
 export interface ModelLocatorParams {
     databaseName?: string;
@@ -120,7 +121,7 @@ export class Orm {
 
         const collection = locator.collection
 
-        return new LookupQuery<T>(model, collection, filter)
+        return new LookupQuery<T>(this, model, collection, filter)
     }
 
     update<T extends Class>(model: T, id: string, item: Pick<InstanceType<T>, keyof InstanceType<T>> ) {
@@ -228,7 +229,6 @@ export class RetrieveQuery<T extends Class> {
                 const objectId: ObjectId = record[field.name]
                 const idString = objectId.toString()
                 item[field.name] = await this.orm.retrieve(field.designType, idString).exec()
-                console.log(objectId, idString, item[field.name])
             }
             else {
                 item[field.name] = record[field.name]
@@ -271,95 +271,11 @@ export class ListQuery<T extends Class> {
             projection[field.name] = 1
         }
 
-        let select = {}
-
         if ( this.orm.debug ) {
             console.log("FILTER", this.filter )
         }
 
-        const criterias = []
-
-
-        // create select criteria from filter
-        if ( this.filter ) {
-            for ( let filterField of Object.keys(this.filter) ) {
-                if ( filterField.match(/__/) ) {
-                    const [ filterFieldName, operator ] = filterField.split('__')
-                    let selectFieldName: string
-                    let selectFieldValue: any
-                    if ( descriptor.fields.get(filterFieldName).primary ) {
-                        selectFieldName = '_id'
-                    }
-                    else {
-                        selectFieldName = filterFieldName
-                    }
-
-                    const criteria = {
-                        [selectFieldName]: { }
-                    }
-
-
-                    if ( operator === 'in' ) {
-                        if ( descriptor.fields.get(filterFieldName).primary ) {
-                            selectFieldValue = this.filter[filterField].map( value => new ObjectId(value) )
-                        }
-                        else {
-                            selectFieldValue = this.filter[filterField]
-                        }
-                        criteria[selectFieldName]['$in'] = selectFieldValue
-                    }
-                    else if ( operator === 'search' ) {
-                        if ( descriptor.fields.get(filterFieldName).primary ) {
-                            throw new Error('Cannot search on primary key')
-                        }
-                        selectFieldValue = new RegExp(this.filter[filterField]) 
-                        criteria[selectFieldName]['$regex'] = selectFieldValue
-                    }
-                    else if ( operator === 'searchi' ) {
-                        if ( descriptor.fields.get(filterFieldName).primary ) {
-                            throw new Error('Cannot search on primary key')
-                        }
-                        selectFieldValue = new RegExp(this.filter[filterField], 'i') 
-                        criteria[selectFieldName]['$regex'] = selectFieldValue
-                    }
-                    else if ( operator === 'gt' || operator === 'gte' || operator === 'lt' || operator === 'lte' ) {
-                        selectFieldValue = this.filter[filterField]
-                        const selectOperator = `$${operator}`
-                        criteria[selectFieldName][selectOperator] = selectFieldValue
-                    }
-                    else {
-                        throw new Error(`Invalid operator "${operator}" in filter field "${filterField}"`)
-                    }
-                    criterias.push( criteria )
-                }
-                else {
-                    let selectFieldName: string
-                    let selectFieldValue: any
-                    if ( descriptor.fields.get(filterField).primary ) {
-                        selectFieldName = '_id'
-                        selectFieldValue = new ObjectId(this.filter[filterField])
-                    }
-                    else {
-                        selectFieldName = filterField
-                        selectFieldValue = this.filter[filterField]
-                    }
-                    const criteria = {
-                        [selectFieldName]: { }
-                    }
-                    criteria[selectFieldName] = selectFieldValue
-
-                    criterias.push( criteria )
-                }
-
-            }
-
-            if ( criterias.length === 1 ) {
-                select = criterias[0]
-            }
-            else if ( criterias.length > 1 ) {
-                select['$and'] = criterias
-            }
-        }
+        const select = selectCriteriaFromFilterCriteria( descriptor, this.filter )
 
         if ( this.orm.debug ) {
             console.log("SELECT", select )
@@ -427,5 +343,47 @@ export class ListQuery<T extends Class> {
     async inflate( ): Promise<Array<InstanceType<T>>> {
         const records = await this.exec()
         return inflate<T>( [this.model], records )
+    }
+}
+
+export class LookupQuery<T extends Class> {
+
+    constructor( public orm: Orm, public model: T, public collection: Collection, public filter: Dictionary ) {
+
+    }
+
+    async exec( ): Promise<Pick<InstanceType<T>, keyof InstanceType<T>>> {
+
+        const descriptor = Model.descriptor(this.model)
+
+        /* projection */
+        const projection: Dictionary = { _id: 0 }
+
+        const primaryField = descriptor.fields.all().find( f => f.primary )
+        if ( primaryField ) {
+            projection[primaryField.name] = { $toString: "$_id" }
+        }
+
+        const otherFields = descriptor.fields.all().filter( f => ! f.primary )
+        for ( let field of otherFields ) {
+            projection[field.name] = 1
+        }
+
+        /* selection */
+        const selection: Dictionary = this.filter
+        
+        /* mongo query */
+        const record = await this.collection.findOne( selection, { projection } )
+
+        /* record not found */
+        if ( ! record ) return undefined
+
+        /* record */
+        return record as any
+    }
+
+    async inflate( ): Promise<Array<InstanceType<T>>> {
+        const record = await this.exec()
+        return inflate<T>( this.model, record )
     }
 }
