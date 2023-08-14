@@ -10,7 +10,7 @@ import { DeleteQuery } from './mongo/queries/delete.query';
 import { UpdateQuery } from './mongo/queries/update.query';
 import { InsertQuery } from './mongo/queries/insert.query';
 import { LookupQuery } from './mongo/queries/lookup.query';
-
+import { Filter } from './types'
 
 export interface ModelLocatorParams {
     databaseName?: string;
@@ -131,7 +131,7 @@ export class Orm {
         return new UpdateQuery(model, collection, id, item)
     }
 
-    list<T extends Class>( model: T, filter?: Dictionary ) {
+    list<T extends Class>( model: T, filter?: Filter<InstanceType<T>> ) {
         const locator = this.getLocator(model)
 
         const collection = locator.collection
@@ -251,7 +251,7 @@ export class RetrieveQuery<T extends Class> {
  */
 export class ListQuery<T extends Class> {
 
-    constructor( public orm: Orm, public model: T, public collection: Collection, public filter?: Dictionary ) {
+    constructor( public orm: Orm, public model: T, public collection: Collection, public filter?: Filter<T> ) {
 
     }
 
@@ -283,13 +283,16 @@ export class ListQuery<T extends Class> {
                 if ( filterField.match(/__/) ) {
                     const [ filterFieldName, operator ] = filterField.split('__')
                     let selectFieldName: string
-                    let selectFieldValue: any[]
+                    let selectFieldValue: any
                     if ( descriptor.fields.get(filterFieldName).primary ) {
                         selectFieldName = '_id'
                     }
                     else {
                         selectFieldName = filterFieldName
                     }
+
+                    select[selectFieldName] = {}
+                    
                     if ( operator === 'in' ) {
                         if ( descriptor.fields.get(filterFieldName).primary ) {
                             selectFieldValue = this.filter[filterField].map( value => new ObjectId(value) )
@@ -297,7 +300,18 @@ export class ListQuery<T extends Class> {
                         else {
                             selectFieldValue = this.filter[filterField]
                         }
-                        select[selectFieldName] = { $in: selectFieldValue }
+                        select[selectFieldName]['$in'] = selectFieldValue
+                    }
+                    else if ( operator === 'search' ) {
+                        selectFieldValue = new RegExp(this.filter[filterField]) 
+                        select[selectFieldName]['$regex'] = selectFieldValue
+                    }
+                    else if ( operator === 'searchi' ) {
+                        selectFieldValue = new RegExp(this.filter[filterField], 'i') 
+                        select[selectFieldName]['$regex'] = selectFieldValue
+                    }
+                    else {
+                        throw new Error(`Invalid operator "${operator}" in filter field "${filterField}"`)
                     }
                 }
                 else {
