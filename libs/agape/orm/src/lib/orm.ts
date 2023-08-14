@@ -271,11 +271,14 @@ export class ListQuery<T extends Class> {
             projection[field.name] = 1
         }
 
-        const select = {}
+        let select = {}
 
         if ( this.orm.debug ) {
             console.log("FILTER", this.filter )
         }
+
+        const criterias = []
+
 
         // create select criteria from filter
         if ( this.filter ) {
@@ -291,8 +294,11 @@ export class ListQuery<T extends Class> {
                         selectFieldName = filterFieldName
                     }
 
-                    select[selectFieldName] = {}
-                    
+                    const criteria = {
+                        [selectFieldName]: { }
+                    }
+
+
                     if ( operator === 'in' ) {
                         if ( descriptor.fields.get(filterFieldName).primary ) {
                             selectFieldValue = this.filter[filterField].map( value => new ObjectId(value) )
@@ -300,19 +306,25 @@ export class ListQuery<T extends Class> {
                         else {
                             selectFieldValue = this.filter[filterField]
                         }
-                        select[selectFieldName]['$in'] = selectFieldValue
+                        criteria[selectFieldName]['$in'] = selectFieldValue
                     }
                     else if ( operator === 'search' ) {
                         selectFieldValue = new RegExp(this.filter[filterField]) 
-                        select[selectFieldName]['$regex'] = selectFieldValue
+                        criteria[selectFieldName]['$regex'] = selectFieldValue
                     }
                     else if ( operator === 'searchi' ) {
                         selectFieldValue = new RegExp(this.filter[filterField], 'i') 
-                        select[selectFieldName]['$regex'] = selectFieldValue
+                        criteria[selectFieldName]['$regex'] = selectFieldValue
+                    }
+                    else if ( operator === 'gt' || operator === 'gte' || operator === 'lt' || operator === 'lte' ) {
+                        selectFieldValue = this.filter[filterField]
+                        const selectOperator = `$${operator}`
+                        criteria[selectFieldName][selectOperator] = selectFieldValue
                     }
                     else {
                         throw new Error(`Invalid operator "${operator}" in filter field "${filterField}"`)
                     }
+                    criterias.push( criteria )
                 }
                 else {
                     let selectFieldName: string
@@ -325,8 +337,21 @@ export class ListQuery<T extends Class> {
                         selectFieldName = filterField
                         selectFieldValue = this.filter[filterField]
                     }
-                    select[selectFieldName] = selectFieldValue
+                    const criteria = {
+                        [selectFieldName]: { }
+                    }
+                    criteria[selectFieldName] = selectFieldValue
+
+                    criterias.push( criteria )
                 }
+
+            }
+
+            if ( criterias.length === 1 ) {
+                select = criterias[0]
+            }
+            else if ( criterias.length > 1 ) {
+                select['$and'] = criterias
             }
         }
 
