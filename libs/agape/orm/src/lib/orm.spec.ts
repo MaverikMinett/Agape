@@ -7,7 +7,7 @@ const DATABASE_URL = 'mongodb://localhost:27017';
 const DATABASE_NAME = 'foo'
 
 
-describe('Nested Views', () => {
+describe('Orm', () => {
     
     
 
@@ -33,10 +33,13 @@ describe('Nested Views', () => {
         const bars = database.getCollection('bars')
         await bars.deleteMany({})
 
+        const users = database.getCollection('users')
+        await users.deleteMany({})
+
         await connection.disconnect()
     })
 
-    describe('describe InsertQuery', () => {
+    describe('InsertQuery', () => {
         it('should insert the foo', async() => {
             @Model class Foo {
     
@@ -202,7 +205,7 @@ describe('Nested Views', () => {
         
                 const bar = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
                 const foo = new Foo({ name: "Johnny", age: 42, bar: bar })
-                
+
                 await orm.insert(Bar, bar).exec()
                 await orm.insert(Foo, foo).exec()
         
@@ -211,6 +214,82 @@ describe('Nested Views', () => {
                 expect(retrievedFoo.bar.id).toBe(bar.id)
                 expect(retrievedFoo.bar.name).toBe(bar.name)
                 expect((retrievedFoo.bar as any).address).toBe(undefined)
+            })
+            it('should allow bar to be undefined', async () => {
+                @Model class Bar extends Document {
+        
+                    @Primary id: string
+                    @Field name: string
+                    @Field address: string
+                
+                    constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+        
+                @Model class Foo extends Document {
+        
+                    @Primary id: string
+                    @Field name: string
+                    @Field age: number
+                    @Field bar: Bar
+                
+                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+        
+                orm.registerModel(Foo)
+                orm.registerModel(Bar)
+        
+
+                const foo = new Foo({ name: "Johnny", age: 42 })
+                
+
+                await orm.insert(Foo, foo).exec()
+        
+                const retrievedFoo = await orm.retrieve(Foo, foo.id).exec()
+                expect(retrievedFoo.bar).toBe(null)
+            })
+            it('should allow bar to be null', async () => {
+                @Model class Bar extends Document {
+        
+                    @Primary id: string
+                    @Field name: string
+                    @Field address: string
+                
+                    constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+        
+                @Model class Foo extends Document {
+        
+                    @Primary id: string
+                    @Field name: string
+                    @Field age: number
+                    @Field bar: Bar
+                
+                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+        
+                orm.registerModel(Foo)
+                orm.registerModel(Bar)
+        
+
+                const foo = new Foo({ name: "Johnny", age: 42, bar: null })
+                
+
+                await orm.insert(Foo, foo).exec()
+        
+                const retrievedFoo = await orm.retrieve(Foo, foo.id).exec()
+                expect(retrievedFoo.bar).toBe(null)
             })
         })
         
@@ -326,6 +405,87 @@ describe('Nested Views', () => {
                 const results = await orm.list(Foo).exec()
                 expect(results.length).toBe(2)
                 expect(results[0].bar).toBe(results[1].bar)
+            })
+
+            it('should allow bar to be undefined', async () => {
+                @Model class Bar extends Document {
+        
+                    @Primary id: string
+                    @Field name: string
+                    @Field address: string
+                
+                    constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+        
+                @Model class Foo extends Document {
+        
+                    @Primary id: string
+                    @Field name: string
+                    @Field age: number
+                    @Field bar: Bar
+                
+                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+        
+                orm.registerModel(Foo)
+                orm.registerModel(Bar)
+        
+                const foo1 = new Foo({ name: "Johnny", age: 42 })
+
+                await orm.insert(Foo, foo1).exec()
+    
+                const foo2 = new Foo({ name: "James", age: 42 })
+                await orm.insert(Foo, foo2).exec()
+    
+                const results = await orm.list(Foo).exec()
+                expect(results.length).toBe(2)
+                expect(results[0].bar).toBe(null)
+            })
+            it('should allow bar to be null', async () => {
+                @Model class Bar extends Document {
+        
+                    @Primary id: string
+                    @Field name: string
+                    @Field address: string
+                
+                    constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+        
+                @Model class Foo extends Document {
+        
+                    @Primary id: string
+                    @Field name: string
+                    @Field age: number
+                    @Field bar: Bar
+                
+                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+        
+                orm.registerModel(Foo)
+                orm.registerModel(Bar)
+        
+                const foo1 = new Foo({ name: "Johnny", bar: null })
+
+                await orm.insert(Foo, foo1).exec()
+    
+                const foo2 = new Foo({ name: "James", bar: null })
+                await orm.insert(Foo, foo2).exec()
+    
+                const results = await orm.list(Foo).exec()
+                expect(results.length).toBe(2)
+                expect(results[0].bar).toBe(null)
             })
         })
         
@@ -1047,6 +1207,93 @@ describe('Nested Views', () => {
                     expect(results[0].bar.id).toBe(bar1.id)
                 })
             })
+        })
+    })
+
+    describe('LookupQuery', () => {
+        it('should find the user by username', async () => {
+            @Model class User extends Document {
+                @Primary id: string;
+                @Field username: string;
+
+                constructor( params?: Partial<Pick<User, keyof User>> ) {
+                    super()
+                    Object.assign(this, params)
+                }
+            }
+
+            orm.registerModel(User)
+
+            const user = new User({ username: "foo" })
+            await orm.insert(User, user).exec()
+            expect(user.id).toBeDefined()
+
+            const retrievedUser = await orm.lookup(User, { username: "foo" }).exec()
+            expect(retrievedUser).toBeDefined()
+        })
+        describe('nested documents', () => {
+            it('should have an undefined role', async () => {
+                @Model class Role extends Document {
+                    @Primary id: string;
+                    @Field name: string;
+    
+                    constructor( params?: Partial<Pick<Role, keyof Role>> ) {
+                        super()
+                        Object.assign(this, params)
+                    }
+                }
+                @Model class User extends Document {
+                    @Primary id: string;
+                    @Field username: string;
+                    @Field role: Role;
+    
+                    constructor( params?: Partial<Pick<User, keyof User>> ) {
+                        super()
+                        Object.assign(this, params)
+                    }
+                }
+    
+                orm.registerModel(User)
+                orm.registerModel(Role)
+    
+                const role = new Role({ name: 'registered' })
+                await orm.insert(Role, role).exec()
+                await orm.insert(User, new User({ username: "foo" })).exec()
+    
+                const user = await orm.lookup(User, { username: "foo" }).exec()
+                expect(user).toBeDefined()
+            })
+            it('should lookup the user', async () => {
+                @Model class Role extends Document {
+                    @Primary id: string;
+                    @Field name: string;
+    
+                    constructor( params?: Partial<Pick<Role, keyof Role>> ) {
+                        super()
+                        Object.assign(this, params)
+                    }
+                }
+                @Model class User extends Document {
+                    @Primary id: string;
+                    @Field username: string;
+                    @Field role: Role;
+    
+                    constructor( params?: Partial<Pick<User, keyof User>> ) {
+                        super()
+                        Object.assign(this, params)
+                    }
+                }
+    
+                orm.registerModel(User)
+                orm.registerModel(Role)
+    
+                const role = new Role({ name: 'registered' })
+                await orm.insert(Role, role).exec()
+                await orm.insert(User, new User({ username: "foo", role })).exec()
+    
+                const user = await orm.lookup(User, { username: "foo" }).exec()
+                expect(user.role).toBeDefined()
+            }) 
         })
     })
 

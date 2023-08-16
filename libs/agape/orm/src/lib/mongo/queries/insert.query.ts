@@ -20,11 +20,17 @@ export class InsertQuery<T extends Class> {
         for ( let field of fields ) {
             if ( field.designType instanceof Function && field.designType.prototype as any instanceof Document ) {
                 const designTypeModelDescriptor = Model.descriptor(field.designType)
-                const idString = designTypeModelDescriptor.primaryField.getValue( 
-                    descriptor.fields.get( field.name ).getValue(this.item)
-                )
-                const objectId = new ObjectId(idString)
-                _item[field.name] = objectId
+                const fieldValue = descriptor.fields.get( field.name ).getValue(this.item)
+                if ( fieldValue !== undefined && fieldValue !== null ) {
+                    const idString = designTypeModelDescriptor.primaryField.getValue( fieldValue )
+
+                    const objectId = new ObjectId(idString)
+                    _item[field.name] = objectId
+                }
+                else {
+                    _item[field.name] = this.item[field.name]
+                }
+                
             }
             else {
                 _item[field.name] = this.item[field.name]

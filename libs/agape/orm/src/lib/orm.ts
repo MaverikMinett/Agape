@@ -2,7 +2,7 @@ import { Document, Model, ViewDescriptor } from '@agape/model';
 import { inflate } from '@agape/object';
 import { pluralize, camelize } from '@agape/string'
 import { Class, Dictionary } from '@agape/types'
-import { Collection, ObjectId } from 'mongodb';
+import { Collection, Filter, ObjectId } from 'mongodb';
 
 import { MongoDatabase } from './databases/mongo.database';
 
@@ -116,7 +116,7 @@ export class Orm {
         return new RetrieveQuery<T>(this, model, collection, id)
     }
 
-    lookup<T extends Class>( model: T, filter: Dictionary ) {
+    lookup<T extends Class>( model: T, filter: FilterCriteria<InstanceType<T>> ) {
         const locator = this.getLocator(model)
 
         const collection = locator.collection
@@ -227,8 +227,13 @@ export class RetrieveQuery<T extends Class> {
         for ( let field of otherFields ) {
             if ( field.designType instanceof Function && field.designType.prototype as any instanceof Document ) {
                 const objectId: ObjectId = record[field.name]
-                const idString = objectId.toString()
-                item[field.name] = await this.orm.retrieve(field.designType, idString).exec()
+                if (objectId !== undefined && objectId !== null) {
+                    const idString = objectId.toString()
+                    item[field.name] = await this.orm.retrieve(field.designType, idString).exec()
+                }
+                else {
+                    item[field.name] = record[field.name]
+                }
             }
             else {
                 item[field.name] = record[field.name]
@@ -302,8 +307,14 @@ export class ListQuery<T extends Class> {
                 // handle foreign objects that need to be populated
                 if ( field.designType instanceof Function && field.designType.prototype as any instanceof Document ) {
                     const objectId: ObjectId = record[field.name]
-                    foreignKeys[field.name] ??= new Set<string>()
-                    foreignKeys[field.name].add(objectId.toString())
+                    if (objectId !== undefined && objectId !== null) {
+                        const idString = objectId.toString()
+                        foreignKeys[field.name] ??= new Set<string>()
+                        foreignKeys[field.name].add(idString)
+                    }
+                    else {
+                        item[field.name] = record[field.name]
+                    }
                 }
                 else {
                     item[field.name] = record[field.name]
@@ -348,7 +359,7 @@ export class ListQuery<T extends Class> {
 
 export class LookupQuery<T extends Class> {
 
-    constructor( public orm: Orm, public model: T, public collection: Collection, public filter: Dictionary ) {
+    constructor( public orm: Orm, public model: T, public collection: Collection, public filter: FilterCriteria<InstanceType<T>> ) {
 
     }
 
@@ -370,17 +381,48 @@ export class LookupQuery<T extends Class> {
         }
 
         /* selection */
-        const selection: Dictionary = this.filter
+        if ( this.orm.debug ) {
+            console.log("FILTER", this.filter )
+        }
+
+        const select = selectCriteriaFromFilterCriteria( descriptor, this.filter )
+
+        if ( this.orm.debug ) {
+            console.log("SELECT", select )
+        }
         
         /* mongo query */
-        const record = await this.collection.findOne( selection, { projection } )
+        const record = await this.collection.findOne( select, { projection } )
 
         /* record not found */
         if ( ! record ) return undefined
 
+        const item = {}
+        item[primaryField.name] = record[primaryField.name]
+
+        for ( let field of otherFields ) {
+            if ( field.designType instanceof Function && field.designType.prototype as any instanceof Document ) {
+                const objectId: ObjectId = record[field.name]
+                if (objectId !== undefined && objectId !== null) {
+                    const idString = objectId.toString()
+                    item[field.name] = await this.orm.retrieve(field.designType, idString).exec()
+                }
+                else {
+                    item[field.name] = record[field.name]
+                }
+            }
+            else {
+                item[field.name] = record[field.name]
+            }
+        }
+
+        /* record */
+        return item as any
         /* record */
         return record as any
     }
+
+    
 
     async inflate( ): Promise<Array<InstanceType<T>>> {
         const record = await this.exec()
