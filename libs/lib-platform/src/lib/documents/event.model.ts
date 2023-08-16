@@ -1,9 +1,9 @@
 
-import { Model, Field, Primary } from '@agape/model'
+import { Document, Model, Field, Primary } from '@agape/model'
 
 
 
-@Model export class Event {
+@Model export class Event extends Document {
 
     @Primary id?: string
 
@@ -24,6 +24,7 @@ import { Model, Field, Primary } from '@agape/model'
     @Field description: string
 
     constructor( params?: Partial<Pick<Event, keyof Event>>) {
+        super()
         Object.assign( this, params )
     }
 

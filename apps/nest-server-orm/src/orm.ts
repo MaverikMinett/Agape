@@ -23,9 +23,9 @@ export async function connectOrm() {
 
     const database = new MongoDatabase(connection, DATABASE_NAME)
     orm.registerDatabase('default', database)
-    orm.registerModel(Event)
-    orm.registerModel(User)
-    orm.registerModel(Organization)
+    orm.registerDocument(Event)
+    orm.registerDocument(User)
+    orm.registerDocument(Organization)
 }
 
 
