@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcryptjs';
 
 import { orm } from '@agape/orm';
-import { Interface } from '@agape/types';
+import { Deflated } from '@agape/types';
 import { Exception } from '@agape/exception';
 
 import { Credentials, User } from 'lib-platform';
@@ -16,7 +16,7 @@ export class AuthService {
 
     }
     
-    async login( credentials: Interface<Credentials> ) {
+    async login( credentials: Deflated<Credentials> ) {
         
         const user = await orm.lookup( User, { username: credentials.username } ).exec()
 

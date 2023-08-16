@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { orm } from '@agape/orm';
 
-import { Interface } from '@agape/types';
+import { Deflated, Interface } from '@agape/types';
 
 
 import bcrypt from 'bcryptjs';
@@ -13,7 +13,7 @@ export class UserService {
         return orm.list(UserDetailView).exec()
     }
 
-    create( user: Interface<User> ) {
+    create( user: Deflated<User> ) {
         user.password = this.encryptPassword(user.password)
         return orm.insert(User, user).exec()
     }

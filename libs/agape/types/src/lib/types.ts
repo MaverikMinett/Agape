@@ -2,6 +2,8 @@ export type Class = { new(...args: any[]): any; };
 export type Dictionary<T = any> = { [key:string]: T };
 export type Function = (...args: any[]) => any;
 export type Interface<T> = Pick<T, keyof T>;
+export type Deflated<T> = Omit<OmitMethods<Pick<T, keyof T>>, 'χ'>
+
 
 export type IsPrimitive<T> = T extends string
     | number

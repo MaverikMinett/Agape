@@ -5,5 +5,5 @@
  * and document identifiers when using the Flatten<T> utility type.
  */
 export class Document<T extends string|number|symbol=string|number> {
-    private readonly χ   // make the Document class typesafe
+    private readonly χ?   // make the Document class typesafe
 }
