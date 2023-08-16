@@ -2,7 +2,7 @@ import { Document, Model, ViewDescriptor } from '@agape/model';
 import { classExtends, inflate } from '@agape/object';
 import { pluralize, camelize } from '@agape/string'
 import { Class, Dictionary } from '@agape/types'
-import { Collection, Filter, ObjectId } from 'mongodb';
+import { Collection, ObjectId } from 'mongodb';
 
 import { MongoDatabase } from './databases/mongo.database';
 
