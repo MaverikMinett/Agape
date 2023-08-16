@@ -1,5 +1,5 @@
 import { Document, Model, ViewDescriptor } from '@agape/model';
-import { inflate } from '@agape/object';
+import { classExtends, inflate } from '@agape/object';
 import { pluralize, camelize } from '@agape/string'
 import { Class, Dictionary } from '@agape/types'
 import { Collection, Filter, ObjectId } from 'mongodb';
@@ -13,17 +13,17 @@ import { InsertQuery } from './mongo/queries/insert.query';
 import { FilterCriteria } from './types'
 import { selectCriteriaFromFilterCriteria } from './util';
 
-export interface ModelLocatorParams {
+export interface DocumentLocatorParams {
     databaseName?: string;
     collectionName?: string;
 }
 
-export class ModelLocator {
+export class DocumentLocator {
     databaseName: string;
     collectionName: string;
     collection: Collection;
 
-    constructor( params:Pick<ModelLocator, keyof ModelLocator> ) {
+    constructor( params:Pick<DocumentLocator, keyof DocumentLocator> ) {
         params && Object.assign(this, params)
     }
 }
@@ -35,7 +35,7 @@ export class Orm {
 
     databases: Map<string, MongoDatabase> = new Map()
 
-    models: Map<Class, ModelLocator> = new Map()
+    documents: Map<Class, DocumentLocator> = new Map()
 
     database( name: string ) {
         return this.databases.get(name)
@@ -52,36 +52,62 @@ export class Orm {
         // this.registerModel( entity, database )
     // }
 
-    registerModel( model: Class, params: ModelLocatorParams={} ) {
+    registerDocument( model: Class, params: DocumentLocatorParams={} ) {
 
-        // console.log(`Registering model ${model.name}`)
-
-        // TODO: Throw an error if the class passed in is a View and not a plain Model
-        // Only Models can be registered here
+        if ( ! classExtends(model, Document) ) {
+            throw new Error(`Model ${model.name} must inherit from Document`)
+        }
 
         const databaseName = params?.databaseName ?? 'default';
         const collectionName = params?.collectionName ?? camelize(pluralize(model.name));
 
-        // console.log("Collection", collectionName)
+        const existing = Array.from(this.documents.values()).find( locator => 
+            locator.databaseName === databaseName && locator.collectionName === collectionName 
+        )
+        if ( existing ) {
+            throw new Error(`A document is already mapped to collection ${collectionName} on database` +
+            `${databaseName}.`)
+        }
 
         const database = this.databases.get(databaseName)
+
         if ( ! database )
             throw new Error(`Error registering model ${model.name}, database with identifier ${databaseName} does not exit`)
-
-        // TODO: Don't allow two models to map to the same collection on the same database
-        // will need to keep some sort of registry which can be validated against here.
-        // dev should see an error that mapping two models to the same table/collection
-        // is not possible, and that a View should be used instead
 
         // Determine the collection
         const collection = database.getCollection(collectionName)
 
         // Create a locator object
-        const locator = new ModelLocator({ databaseName, collectionName, collection})
+        const locator = new DocumentLocator({ databaseName, collectionName, collection})
 
-        this.models.set(model, locator)
+        this.documents.set(model, locator)
+    }
 
-        // this.models.set(model, database)
+    /**
+     * Register a model with the orm
+     * @deprecated
+     * @param model 
+     * @param params 
+     */
+    registerModel( model: Class, params: DocumentLocatorParams={} ) {
+
+        console.log(`RegisterModel is deprecated, use register document instead`)
+
+        const databaseName = params?.databaseName ?? 'default';
+        const collectionName = params?.collectionName ?? camelize(pluralize(model.name));
+
+        const database = this.databases.get(databaseName)
+        if ( ! database )
+            throw new Error(`Error registering model ${model.name}, database with identifier ${databaseName} does not exit`)
+
+        // Determine the collection
+        const collection = database.getCollection(collectionName)
+
+        // Create a locator object
+        const locator = new DocumentLocator({ databaseName, collectionName, collection})
+
+        this.documents.set(model, locator)
+
     }
 
     insert<T extends Class>( model: T, item: Pick<InstanceType<T>, keyof InstanceType<T>> ) {
@@ -90,22 +116,7 @@ export class Orm {
 
         const collection = locator.collection
 
-        // // TODO: validate the item
-
-        // // TODO: serialize the item
-
         return new InsertQuery<T>(model, collection, item)
-
-
-        // try {
-        //     const response = await collection.insertOne( item )
-        //     item.id = response.insertedId.toString()
-        //     return item.id
-        // }
-        // catch (error) {
-        //     console.log("Error inserting record into Foo", error)
-        // }
-        // console.log(`Success`)
     }
 
     retrieve<T extends Class>( model: T, id: string ) {
@@ -142,12 +153,6 @@ export class Orm {
         return query
     }
 
-    // lookup<T extends Class>( model: T, filter: any ) {
-    //     const collection = this.models.get(model).collection
-    //
-    //     return new LookupQuery<T>(model, collection)
-    // }
-
     delete<T extends Class>(model: T, id: string ) {
         const locator = this.getLocator(model)
 
@@ -164,7 +169,7 @@ export class Orm {
             ? descriptor.model 
             : view
 
-        const locator: ModelLocator = this.models.get(model)
+        const locator: DocumentLocator = this.documents.get(model)
 
         if ( ! locator ) {
             throw new Error(

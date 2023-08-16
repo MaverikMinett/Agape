@@ -8,8 +8,6 @@ const DATABASE_NAME = 'foo'
 
 
 describe('Orm', () => {
-    
-    
 
     let orm = new Orm()
     let connection = new MongoConnection(DATABASE_URL);
@@ -25,7 +23,6 @@ describe('Orm', () => {
         orm.registerDatabase('default', database)
     })
 
-
     afterEach( async () => {
         const foos = database.getCollection('foos')
         await foos.deleteMany({})
@@ -39,22 +36,23 @@ describe('Orm', () => {
         await connection.disconnect()
     })
 
-    describe('InsertQuery', () => {
-        it('should insert the foo', async() => {
-            @Model class Foo {
-    
+    describe('registerDocument', () => {
+        it('should register a document', async () => {
+            @Model class Foo extends Document {
+        
                 @Primary id: string
                 @Field name: string
                 @Field age: number
             
                 constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
                     Object.assign( this, params )
                 }
             }
-    
+
             const foo = new Foo({ name: "Johnny", age: 42 })
-            orm.registerModel(Foo)
-    
+            orm.registerDocument(Foo)
+
             try {
                 const id = await orm.insert(Foo, foo).exec()
                 expect(id).toBeTruthy()
@@ -62,22 +60,45 @@ describe('Orm', () => {
             catch (error) {
                 console.log(error)
             }
-        })
-    
-        it('should set the id on the foo', async() => {
-            @Model class Foo {
+    })  
+    })
+
+    describe('InsertQuery', () => {
+        it('should insert the foo', async() => {
+            @Model class Foo extends Document {
     
                 @Primary id: string
                 @Field name: string
                 @Field age: number
             
                 constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
                     Object.assign( this, params )
                 }
             }
     
             const foo = new Foo({ name: "Johnny", age: 42 })
-            orm.registerModel(Foo)
+            orm.registerDocument(Foo)
+
+            const id = await orm.insert(Foo, foo).exec()
+            expect(id).toBeTruthy()
+        })
+    
+        it('should set the id on the foo', async() => {
+            @Model class Foo extends Document {
+    
+                @Primary id: string
+                @Field name: string
+                @Field age: number
+            
+                constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+    
+            const foo = new Foo({ name: "Johnny", age: 42 })
+            orm.registerDocument(Foo)
     
     
             const id = await orm.insert(Foo, foo).exec()
@@ -112,8 +133,8 @@ describe('Orm', () => {
                 }
             }
     
-            orm.registerModel(Foo)
-            orm.registerModel(Bar)
+            orm.registerDocument(Foo)
+            orm.registerDocument(Bar)
     
             const bar = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
             const foo = new Foo({ name: "Johnny", age: 42, bar: bar })
@@ -154,8 +175,8 @@ describe('Orm', () => {
                     }
                 }
         
-                orm.registerModel(Foo)
-                orm.registerModel(Bar)
+                orm.registerDocument(Foo)
+                orm.registerDocument(Bar)
         
                 const bar = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
                 const foo = new Foo({ name: "Johnny", age: 42, bar: bar })
@@ -200,8 +221,8 @@ describe('Orm', () => {
                     }
                 }
         
-                orm.registerModel(Foo)
-                orm.registerModel(Bar)
+                orm.registerDocument(Foo)
+                orm.registerDocument(Bar)
         
                 const bar = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
                 const foo = new Foo({ name: "Johnny", age: 42, bar: bar })
@@ -241,8 +262,8 @@ describe('Orm', () => {
                     }
                 }
         
-                orm.registerModel(Foo)
-                orm.registerModel(Bar)
+                orm.registerDocument(Foo)
+                orm.registerDocument(Bar)
         
 
                 const foo = new Foo({ name: "Johnny", age: 42 })
@@ -279,8 +300,8 @@ describe('Orm', () => {
                     }
                 }
         
-                orm.registerModel(Foo)
-                orm.registerModel(Bar)
+                orm.registerDocument(Foo)
+                orm.registerDocument(Bar)
         
 
                 const foo = new Foo({ name: "Johnny", age: 42, bar: null })
@@ -309,7 +330,7 @@ describe('Orm', () => {
                 }
             }
     
-            orm.registerModel(Foo)
+            orm.registerDocument(Foo)
     
             const foo1 = new Foo({ name: "Johnny", age: 42 })
             const foo2 = new Foo({ name: "James", age: 42 })
@@ -346,8 +367,8 @@ describe('Orm', () => {
                     }
                 }
         
-                orm.registerModel(Foo)
-                orm.registerModel(Bar)
+                orm.registerDocument(Foo)
+                orm.registerDocument(Bar)
         
                 const bar1 = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
                 const foo1 = new Foo({ name: "Johnny", age: 42, bar: bar1 })
@@ -391,8 +412,8 @@ describe('Orm', () => {
                     }
                 }
         
-                orm.registerModel(Foo)
-                orm.registerModel(Bar)
+                orm.registerDocument(Foo)
+                orm.registerDocument(Bar)
         
                 const bar1 = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
                 const foo1 = new Foo({ name: "Johnny", age: 42, bar: bar1 })
@@ -433,8 +454,8 @@ describe('Orm', () => {
                     }
                 }
         
-                orm.registerModel(Foo)
-                orm.registerModel(Bar)
+                orm.registerDocument(Foo)
+                orm.registerDocument(Bar)
         
                 const foo1 = new Foo({ name: "Johnny", age: 42 })
 
@@ -473,8 +494,8 @@ describe('Orm', () => {
                     }
                 }
         
-                orm.registerModel(Foo)
-                orm.registerModel(Bar)
+                orm.registerDocument(Foo)
+                orm.registerDocument(Bar)
         
                 const foo1 = new Foo({ name: "Johnny", bar: null })
 
@@ -488,723 +509,721 @@ describe('Orm', () => {
                 expect(results[0].bar).toBe(null)
             })
         })
-        
-    })
-
-    describe('Filter operators', () => {
-        describe('String', () => {
-            describe('equality', () => {
-                it('should filter the records on the name', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
+        describe('Filter operators', () => {
+            describe('String', () => {
+                describe('equality', () => {
+                    it('should filter the records on the name', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
                         }
-                    }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 42 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
             
-                    orm.registerModel(Foo)
-            
-                    const foo1 = new Foo({ name: "Johnny", age: 42 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-        
-                    const results = await orm.list(Foo, { name: foo1.name }).exec()
-                    expect(results.length).toBe(1)
-                })
-            })
-            describe('in', () => {
-                it('should filter the records on multiple names', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-            
-                    const foo1 = new Foo({ name: "Johnny", age: 42 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-        
-                    const results = await orm.list(Foo, { name__in: [foo1.name, foo2.name] }).exec()
-                    expect(results.length).toBe(2)
-                })
-            })
-            describe('search', () => {
-                it('should perform a case sensitive search', async() => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-
-                    const foo1 = new Foo({ name: "Johnny", age: 42})
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    const foo3 = new Foo({ name: "Mary", age: 56} )
-
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-            
-                    const results = await orm.list(Foo, { name__search: 'J' }).exec()
-                    expect(results.length).toBe(2)
-                })
-            })
-            describe('searchi', () => {
-                it('should perform a case insensitive search', async() => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-
-                    const foo1 = new Foo({ name: "Johnny", age: 42})
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    const foo3 = new Foo({ name: "Mary", age: 56} )
-
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-            
-                    const results = await orm.list(Foo, { name__searchi: 'j' }).exec()
-                    expect(results.length).toBe(2)
-                })
-            })
-            describe('greater/less than', () => {
-                it('should filter strings greater than', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field letter: string
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-
-                    const foo1 = new Foo({ letter: 'A' })
-                    const foo2 = new Foo({ letter: 'B' })
-                    const foo3 = new Foo({ letter: 'C' })
-
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-            
-                    const results = await orm.list(Foo, { letter__gt: 'A' }).exec()
-                    expect(results.length).toBe(2)
-                })
-                it('should filter strings greater than or equal to', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field letter: string
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-
-                    const foo1 = new Foo({ letter: 'A' })
-                    const foo2 = new Foo({ letter: 'B' })
-                    const foo3 = new Foo({ letter: 'C' })
-
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-            
-                    const results = await orm.list(Foo, { letter__gte: 'A' }).exec()
-                    expect(results.length).toBe(3)
-                })
-                it('should filter strings less than', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field letter: string
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-
-                    const foo1 = new Foo({ letter: 'A' })
-                    const foo2 = new Foo({ letter: 'B' })
-                    const foo3 = new Foo({ letter: 'C' })
-
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-            
-                    const results = await orm.list(Foo, { letter__lt: 'C' }).exec()
-                    expect(results.length).toBe(2)
-                })
-                it('should filter strings less than or equal to', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field letter: string
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-
-                    const foo1 = new Foo({ letter: 'A' })
-                    const foo2 = new Foo({ letter: 'B' })
-                    const foo3 = new Foo({ letter: 'C' })
-
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-            
-                    const results = await orm.list(Foo, { letter__lte: 'C' }).exec()
-                    expect(results.length).toBe(3)
-                })
-                it('should filter strings between', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field letter: string
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-
-                    const foo1 = new Foo({ letter: 'A' })
-                    const foo2 = new Foo({ letter: 'B' })
-                    const foo3 = new Foo({ letter: 'C' })
-
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-            
-                    const results = await orm.list(Foo, { letter__gt: 'A', letter__lt: 'C' }).exec()
-                    expect(results.length).toBe(1)
-                })
-                it('should filter strings between or equal to', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field letter: string
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-
-                    const foo1 = new Foo({ letter: 'A' })
-                    const foo2 = new Foo({ letter: 'B' })
-                    const foo3 = new Foo({ letter: 'C' })
-
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-            
-                    const results = await orm.list(Foo, { letter__gte: 'A', letter__lte: 'C' }).exec()
-                    expect(results.length).toBe(3)
-                })
-            })
-           
-        })
-        describe('Primary Key', () => {
-            describe('equality', () => {
-                it('should filter the records by id', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-            
-                    const foo1 = new Foo({ name: "Johnny", age: 42 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-        
-                    const results = await orm.list(Foo, { id: foo1.id }).exec()
-                    expect(results.length).toBe(1)
-                })
-            })
-            describe('in', () => {
-                it('should filter the records by multiple ids', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-            
-                    const foo1 = new Foo({ name: "Johnny", age: 42 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-        
-                    const results = await orm.list(Foo, { id__in: [foo1.id, foo2.id] }).exec()
-                    expect(results.length).toBe(2)
-                })
-            })
-            describe('search',  () => {
-                it('should throw an error', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-            
-                    const foo1 = new Foo({ name: "Johnny", age: 42 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-        
-                    const results = 
-                    await expect( async () => {
-                        await orm.list(Foo, { id__search: '' }).exec()
+                        const results = await orm.list(Foo, { name: foo1.name }).exec()
+                        expect(results.length).toBe(1)
                     })
-                    .rejects
-                    .toThrow('Cannot search on primary key');
                 })
-            })
-            describe('searchi', () => {
-                it('should throw an error', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
+                describe('in', () => {
+                    it('should filter the records on multiple names', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
                         }
-                    }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 42 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
             
-                    orm.registerModel(Foo)
-            
-                    const foo1 = new Foo({ name: "Johnny", age: 42 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-        
-                    const results = 
-                    await expect( async () => {
-                        await orm.list(Foo, { id__searchi: '' }).exec()
+                        const results = await orm.list(Foo, { name__in: [foo1.name, foo2.name] }).exec()
+                        expect(results.length).toBe(2)
                     })
-                    .rejects
-                    .toThrow('Cannot search on primary key');
+                })
+                describe('search', () => {
+                    it('should perform a case sensitive search', async() => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+    
+                        const foo1 = new Foo({ name: "Johnny", age: 42})
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Mary", age: 56} )
+    
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+                
+                        const results = await orm.list(Foo, { name__search: 'J' }).exec()
+                        expect(results.length).toBe(2)
+                    })
+                })
+                describe('searchi', () => {
+                    it('should perform a case insensitive search', async() => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+    
+                        const foo1 = new Foo({ name: "Johnny", age: 42})
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Mary", age: 56} )
+    
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+                
+                        const results = await orm.list(Foo, { name__searchi: 'j' }).exec()
+                        expect(results.length).toBe(2)
+                    })
+                })
+                describe('greater/less than', () => {
+                    it('should filter strings greater than', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field letter: string
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+    
+                        const foo1 = new Foo({ letter: 'A' })
+                        const foo2 = new Foo({ letter: 'B' })
+                        const foo3 = new Foo({ letter: 'C' })
+    
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+                
+                        const results = await orm.list(Foo, { letter__gt: 'A' }).exec()
+                        expect(results.length).toBe(2)
+                    })
+                    it('should filter strings greater than or equal to', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field letter: string
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+    
+                        const foo1 = new Foo({ letter: 'A' })
+                        const foo2 = new Foo({ letter: 'B' })
+                        const foo3 = new Foo({ letter: 'C' })
+    
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+                
+                        const results = await orm.list(Foo, { letter__gte: 'A' }).exec()
+                        expect(results.length).toBe(3)
+                    })
+                    it('should filter strings less than', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field letter: string
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+    
+                        const foo1 = new Foo({ letter: 'A' })
+                        const foo2 = new Foo({ letter: 'B' })
+                        const foo3 = new Foo({ letter: 'C' })
+    
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+                
+                        const results = await orm.list(Foo, { letter__lt: 'C' }).exec()
+                        expect(results.length).toBe(2)
+                    })
+                    it('should filter strings less than or equal to', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field letter: string
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+    
+                        const foo1 = new Foo({ letter: 'A' })
+                        const foo2 = new Foo({ letter: 'B' })
+                        const foo3 = new Foo({ letter: 'C' })
+    
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+                
+                        const results = await orm.list(Foo, { letter__lte: 'C' }).exec()
+                        expect(results.length).toBe(3)
+                    })
+                    it('should filter strings between', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field letter: string
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+    
+                        const foo1 = new Foo({ letter: 'A' })
+                        const foo2 = new Foo({ letter: 'B' })
+                        const foo3 = new Foo({ letter: 'C' })
+    
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+                
+                        const results = await orm.list(Foo, { letter__gt: 'A', letter__lt: 'C' }).exec()
+                        expect(results.length).toBe(1)
+                    })
+                    it('should filter strings between or equal to', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field letter: string
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+    
+                        const foo1 = new Foo({ letter: 'A' })
+                        const foo2 = new Foo({ letter: 'B' })
+                        const foo3 = new Foo({ letter: 'C' })
+    
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+                
+                        const results = await orm.list(Foo, { letter__gte: 'A', letter__lte: 'C' }).exec()
+                        expect(results.length).toBe(3)
+                    })
+                })
+               
+            })
+            describe('Primary Key', () => {
+                describe('equality', () => {
+                    it('should filter the records by id', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 42 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+            
+                        const results = await orm.list(Foo, { id: foo1.id }).exec()
+                        expect(results.length).toBe(1)
+                    })
+                })
+                describe('in', () => {
+                    it('should filter the records by multiple ids', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 42 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+            
+                        const results = await orm.list(Foo, { id__in: [foo1.id, foo2.id] }).exec()
+                        expect(results.length).toBe(2)
+                    })
+                })
+                describe('search',  () => {
+                    it('should throw an error', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 42 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+            
+                        const results = 
+                        await expect( async () => {
+                            await orm.list(Foo, { id__search: '' }).exec()
+                        })
+                        .rejects
+                        .toThrow('Cannot search on primary key');
+                    })
+                })
+                describe('searchi', () => {
+                    it('should throw an error', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 42 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+            
+                        const results = 
+                        await expect( async () => {
+                            await orm.list(Foo, { id__searchi: '' }).exec()
+                        })
+                        .rejects
+                        .toThrow('Cannot search on primary key');
+                    })
                 })
             })
-        })
-        describe('Number', () => {
-            describe('eqality', () => {
-                it('should filter the records on the age', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
+            describe('Number', () => {
+                describe('eqality', () => {
+                    it('should filter the records on the age', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
                         }
-                    }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 42 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
             
-                    orm.registerModel(Foo)
+                        const results = await orm.list(Foo, { age: foo1.age }).exec()
+                        expect(results.length).toBe(2)
+                    })
+                })
+                describe('in', () => {
+                    it('should filter the records on multiple ages', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 36 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Mary", age: 56 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
             
-                    const foo1 = new Foo({ name: "Johnny", age: 42 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-        
-                    const results = await orm.list(Foo, { age: foo1.age }).exec()
-                    expect(results.length).toBe(2)
+                        const results = await orm.list(Foo, { age__in: [foo1.age, foo2.age] }).exec()
+                        expect(results.length).toBe(2)
+                    })
+                })
+                describe('greater/less than', () => {
+                    it('should filter numbers greater than', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 36 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Mary", age: 56 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+            
+                        const results = await orm.list(Foo, { age__gt: foo1.age }).exec()
+                        expect(results.length).toBe(2)
+                    })
+                    it('should filter numbers greater than or equal to', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 36 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Mary", age: 56 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+            
+                        const results = await orm.list(Foo, { age__gte: foo1.age }).exec()
+                        expect(results.length).toBe(3)
+                    })
+                    it('should filter numbers less than', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 36 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Mary", age: 56 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+            
+                        const results = await orm.list(Foo, { age__lt: foo3.age }).exec()
+                        expect(results.length).toBe(2)
+                    })
+                    it('should filter numbers less than or equal to', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 36 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Mary", age: 56 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+            
+                        const results = await orm.list(Foo, { age__lte: foo3.age }).exec()
+                        expect(results.length).toBe(3)
+                    })
+                    it('should filter numbers between', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 36 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Mary", age: 56 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+            
+                        const results = await orm.list(Foo, { age__gt: foo1.age, age__lt: foo3.age }).exec()
+                        expect(results.length).toBe(1)
+                    })
+                    it('should filter numbers between or equal to', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 36 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Mary", age: 56 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+            
+                        const results = await orm.list(Foo, { age__gte: foo1.age, age__lte: foo3.age }).exec()
+                        expect(results.length).toBe(3)
+                    })
                 })
             })
-            describe('in', () => {
-                it('should filter the records on multiple ages', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
+            describe('Document', () => {
+                describe('equality', () => {
+                    it('should select the foo document by selecting on the bar id', async() => {
+                        @Model class Bar extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field address: string
+                        
+                            constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
                         }
-                    }
+                
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                            @Field bar: Bar
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                        orm.registerDocument(Bar)
+                
+                        const bar1 = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
+                        const foo1 = new Foo({ name: "Johnny", age: 42, bar: bar1 })
+                        await orm.insert(Bar, bar1).exec()
+                        await orm.insert(Foo, foo1).exec()
             
-                    orm.registerModel(Foo)
+                        const bar2 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
+                        const foo2 = new Foo({ name: "James", age: 42, bar: bar2 })
+                        await orm.insert(Foo, foo2).exec()
             
-                    const foo1 = new Foo({ name: "Johnny", age: 36 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    const foo3 = new Foo({ name: "Mary", age: 56 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-        
-                    const results = await orm.list(Foo, { age__in: [foo1.age, foo2.age] }).exec()
-                    expect(results.length).toBe(2)
+                        const results = await orm.list(Foo, {bar: bar1.id}).exec()
+                        expect(results.length).toBe(1)
+                        expect(results[0].bar).toBeTruthy()
+                        expect(results[0].bar.id).toBe(bar1.id)
+                    })
+                    it('should select the foo document by selecting on the bar object', async() => {
+                        @Model class Bar extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field address: string
+                        
+                            constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                            @Field bar: Bar
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                        orm.registerDocument(Bar)
+                
+                        const bar1 = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
+                        const foo1 = new Foo({ name: "Johnny", age: 42, bar: bar1 })
+                        await orm.insert(Bar, bar1).exec()
+                        await orm.insert(Foo, foo1).exec()
+            
+                        const bar2 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
+                        const foo2 = new Foo({ name: "James", age: 42, bar: bar2 })
+                        await orm.insert(Foo, foo2).exec()
+            
+                        const results = await orm.list(Foo, {bar: bar1}).exec()
+                        expect(results.length).toBe(1)
+                        expect(results[0].bar).toBeTruthy()
+                        expect(results[0].bar.id).toBe(bar1.id)
+                    })
                 })
-            })
-            describe('greater/less than', () => {
-                it('should filter numbers greater than', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
+                describe('in', () => {
+                    it('should select the foo document by selecting on the bar id', async() => {
+                        @Model class Bar extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field address: string
+                        
+                            constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
                         }
-                    }
-            
-                    orm.registerModel(Foo)
-            
-                    const foo1 = new Foo({ name: "Johnny", age: 36 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    const foo3 = new Foo({ name: "Mary", age: 56 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-        
-                    const results = await orm.list(Foo, { age__gt: foo1.age }).exec()
-                    expect(results.length).toBe(2)
-                })
-                it('should filter numbers greater than or equal to', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
+                
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                            @Field bar: Bar
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
                         }
-                    }
+                
+                        orm.registerDocument(Foo)
+                        orm.registerDocument(Bar)
+                
+                        const bar1 = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
+                        const foo1 = new Foo({ name: "Johnny", age: 42, bar: bar1 })
+                        await orm.insert(Bar, bar1).exec()
+                        await orm.insert(Foo, foo1).exec()
             
-                    orm.registerModel(Foo)
+                        const bar2 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
+                        const foo2 = new Foo({ name: "James", age: 42, bar: bar2 })
+                        await orm.insert(Foo, foo2).exec()
+    
+                        const bar3 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
+                        const foo3 = new Foo({ name: "James", age: 42, bar: bar2 })
+                        await orm.insert(Foo, foo2).exec()
             
-                    const foo1 = new Foo({ name: "Johnny", age: 36 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    const foo3 = new Foo({ name: "Mary", age: 56 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-        
-                    const results = await orm.list(Foo, { age__gte: foo1.age }).exec()
-                    expect(results.length).toBe(3)
-                })
-                it('should filter numbers less than', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-            
-                    const foo1 = new Foo({ name: "Johnny", age: 36 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    const foo3 = new Foo({ name: "Mary", age: 56 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-        
-                    const results = await orm.list(Foo, { age__lt: foo3.age }).exec()
-                    expect(results.length).toBe(2)
-                })
-                it('should filter numbers less than or equal to', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-            
-                    const foo1 = new Foo({ name: "Johnny", age: 36 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    const foo3 = new Foo({ name: "Mary", age: 56 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-        
-                    const results = await orm.list(Foo, { age__lte: foo3.age }).exec()
-                    expect(results.length).toBe(3)
-                })
-                it('should filter numbers between', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-            
-                    const foo1 = new Foo({ name: "Johnny", age: 36 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    const foo3 = new Foo({ name: "Mary", age: 56 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-        
-                    const results = await orm.list(Foo, { age__gt: foo1.age, age__lt: foo3.age }).exec()
-                    expect(results.length).toBe(1)
-                })
-                it('should filter numbers between or equal to', async () => {
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-            
-                    const foo1 = new Foo({ name: "Johnny", age: 36 })
-                    const foo2 = new Foo({ name: "James", age: 42 })
-                    const foo3 = new Foo({ name: "Mary", age: 56 })
-                    await orm.insert(Foo, foo1).exec()
-                    await orm.insert(Foo, foo2).exec()
-                    await orm.insert(Foo, foo3).exec()
-        
-                    const results = await orm.list(Foo, { age__gte: foo1.age, age__lte: foo3.age }).exec()
-                    expect(results.length).toBe(3)
-                })
-            })
-        })
-        describe('Document', () => {
-            describe('equality', () => {
-                it('should select the foo document by selecting on the bar id', async() => {
-                    @Model class Bar extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field address: string
-                    
-                        constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                        @Field bar: Bar
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-                    orm.registerModel(Bar)
-            
-                    const bar1 = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
-                    const foo1 = new Foo({ name: "Johnny", age: 42, bar: bar1 })
-                    await orm.insert(Bar, bar1).exec()
-                    await orm.insert(Foo, foo1).exec()
-        
-                    const bar2 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
-                    const foo2 = new Foo({ name: "James", age: 42, bar: bar2 })
-                    await orm.insert(Foo, foo2).exec()
-        
-                    const results = await orm.list(Foo, {bar: bar1.id}).exec()
-                    expect(results.length).toBe(1)
-                    expect(results[0].bar).toBeTruthy()
-                    expect(results[0].bar.id).toBe(bar1.id)
-                })
-                it('should select the foo document by selecting on the bar object', async() => {
-                    @Model class Bar extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field address: string
-                    
-                        constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                        @Field bar: Bar
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-                    orm.registerModel(Bar)
-            
-                    const bar1 = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
-                    const foo1 = new Foo({ name: "Johnny", age: 42, bar: bar1 })
-                    await orm.insert(Bar, bar1).exec()
-                    await orm.insert(Foo, foo1).exec()
-        
-                    const bar2 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
-                    const foo2 = new Foo({ name: "James", age: 42, bar: bar2 })
-                    await orm.insert(Foo, foo2).exec()
-        
-                    const results = await orm.list(Foo, {bar: bar1}).exec()
-                    expect(results.length).toBe(1)
-                    expect(results[0].bar).toBeTruthy()
-                    expect(results[0].bar.id).toBe(bar1.id)
-                })
-            })
-            describe('in', () => {
-                it('should select the foo document by selecting on the bar id', async() => {
-                    @Model class Bar extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field address: string
-                    
-                        constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    @Model class Foo extends Document {
-            
-                        @Primary id: string
-                        @Field name: string
-                        @Field age: number
-                        @Field bar: Bar
-                    
-                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                            super()
-                            Object.assign( this, params )
-                        }
-                    }
-            
-                    orm.registerModel(Foo)
-                    orm.registerModel(Bar)
-            
-                    const bar1 = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
-                    const foo1 = new Foo({ name: "Johnny", age: 42, bar: bar1 })
-                    await orm.insert(Bar, bar1).exec()
-                    await orm.insert(Foo, foo1).exec()
-        
-                    const bar2 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
-                    const foo2 = new Foo({ name: "James", age: 42, bar: bar2 })
-                    await orm.insert(Foo, foo2).exec()
-
-                    const bar3 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
-                    const foo3 = new Foo({ name: "James", age: 42, bar: bar2 })
-                    await orm.insert(Foo, foo2).exec()
-        
-                    const results = await orm.list(Foo, {bar: bar1.id}).exec()
-                    expect(results.length).toBe(1)
-                    expect(results[0].bar).toBeTruthy()
-                    expect(results[0].bar.id).toBe(bar1.id)
+                        const results = await orm.list(Foo, {bar: bar1.id}).exec()
+                        expect(results.length).toBe(1)
+                        expect(results[0].bar).toBeTruthy()
+                        expect(results[0].bar.id).toBe(bar1.id)
+                    })
                 })
             })
         })
@@ -1222,7 +1241,7 @@ describe('Orm', () => {
                 }
             }
 
-            orm.registerModel(User)
+            orm.registerDocument(User)
 
             const user = new User({ username: "foo" })
             await orm.insert(User, user).exec()
@@ -1253,8 +1272,8 @@ describe('Orm', () => {
                     }
                 }
     
-                orm.registerModel(User)
-                orm.registerModel(Role)
+                orm.registerDocument(User)
+                orm.registerDocument(Role)
     
                 const role = new Role({ name: 'registered' })
                 await orm.insert(Role, role).exec()
@@ -1284,8 +1303,8 @@ describe('Orm', () => {
                     }
                 }
     
-                orm.registerModel(User)
-                orm.registerModel(Role)
+                orm.registerDocument(User)
+                orm.registerDocument(Role)
     
                 const role = new Role({ name: 'registered' })
                 await orm.insert(Role, role).exec()
