@@ -11,6 +11,8 @@ import { Controller, Module } from "./decorators";
 export class Api {
     injector: Injector = new Injector()
 
+    debug: boolean = true
+
     constructor( public module: Class ) {
        const descriptor = Module.descriptor(module)
        if ( ! descriptor ) throw new Error(`${module.name} is not an api Module`) 
@@ -54,15 +56,24 @@ export class Api {
 
 
         try {
+            if ( this.debug ) {
+                console.log(`Calling action ${actionDescriptor.name} on ${controllerInstance.constructor.name}`)
+            }
             const content = await method.call(controllerInstance, ...params)
+            if ( this.debug ) {
+                console.log("Recieved content", content)
+            }
             const statusCode = actionDescriptor.ʘstatus
             apiResponse.status(statusCode)
             apiResponse.send(content)
         }
         catch ( error ) {
+            if ( this.debug ) {
+                console.log("Received error", error)
+            }
             if ( error instanceof Exception ) {
                 apiResponse.status( error.status )
-                apiResponse.send( error.message )
+                apiResponse.send({ status: error.status, message: error.message})
             }
             else {
                 apiResponse.status(400, "Bad Request")
