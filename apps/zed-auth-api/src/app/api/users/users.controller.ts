@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Put, Delete } from '@agape/api';
+import { Exception } from '@agape/exception';
 import { Deflated } from '@agape/types'
 
 import { UserService } from './user.service';
@@ -17,8 +18,15 @@ export class UsersController {
     }
 
     @Post()
-    create( body: Deflated<User> ) {
+    create( params: any, body: Deflated<User> ) {
         const item = body
+
+        const duplicate = this.service.lookup(item.username)
+
+        if ( duplicate ) {
+            throw new Exception(409, "A user with that username already exists")
+        }
+
         return this.service.create( body )
     }
 
@@ -31,14 +39,14 @@ export class UsersController {
     }
 
     @Put(':id')
-    update( params: { id: string }, body: Deflated<User>) {
+    async update( params: { id: string }, body: Deflated<User>) {
         const item = body
-        this.service.update(params.id, item)
+        await this.service.update(params.id, item)
     }
 
     @Delete(':id')
-    delete( params: {id: string} ) {
-        this.service.delete(params.id)
+    async delete( params: {id: string} ) {
+        await this.service.delete(params.id)
     }
 
 

@@ -7,7 +7,7 @@ const DATABASE_NAME = 'zed'
 
 
 import { Foo } from './app/api/foo/foo.model'
-import { Event } from 'lib-platform'
+import { User } from 'lib-platform'
 
 export async function connectOrm() {
     const connection = new MongoConnection(DATABASE_URL);
@@ -24,7 +24,7 @@ export async function connectOrm() {
     const database = new MongoDatabase(connection, DATABASE_NAME)
     orm.registerDatabase('default', database)
     orm.registerDocument(Foo)
-    orm.registerDocument(Event)
+    orm.registerDocument(User)
 }
 
 

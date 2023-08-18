@@ -169,7 +169,7 @@
                 }
             }
         },
-        "/events/{id}": {
+        "/users/{id}": {
             "get": {
                 "summary": "Retrieve a user",
                 "tags": ["Users"],
@@ -246,13 +246,9 @@
                     "id": {
                         "type": "string"
                     },
-                    "firstName": {
+                    "name": {
                         "type": "string",
                         "example": "Foo"
-                    },
-                    "lastName": {
-                        "type": "string",
-                        "example": "Bar"
                     },
                     "username": {
                         "type": "string",
@@ -270,13 +266,9 @@
                     "id": {
                         "type": "string"
                     },
-                    "firstName": {
+                    "name": {
                         "type": "string",
                         "example": "Foo"
-                    },
-                    "lastName": {
-                        "type": "string",
-                        "example": "Bar"
                     },
                     "username": {
                         "type": "string",

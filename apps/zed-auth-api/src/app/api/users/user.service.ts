@@ -12,6 +12,10 @@ export class UserService {
         return orm.list(UserDetailView).exec()
     }
 
+    lookup( username: string ) {
+        return orm.lookup(UserDetailView, { username } ).exec()
+    }
+
     create( user: Deflated<User> ) {
         user.password = this.encryptPassword(user.password)
         return orm.insert(User, user).exec()
