@@ -1,5 +1,5 @@
 import { Module } from "@agape/api";
-import { FooController } from "./foo.component";
+import { FooController } from "./foo.controller";
 
 
 @Module({
