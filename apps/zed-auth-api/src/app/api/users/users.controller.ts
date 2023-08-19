@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete } from '@agape/api';
+import { Controller, Get, Post, Put, Delete, LoggingMiddleware } from '@agape/api';
 import { Exception } from '@agape/exception';
 import { Deflated } from '@agape/types'
 
@@ -6,7 +6,9 @@ import { UserService } from './user.service';
 import { User } from 'lib-platform'
 
 
-@Controller('users')
+@Controller('users', {
+    middleware: [ LoggingMiddleware ]
+})
 export class UsersController {
     constructor(private readonly service: UserService) {}
 

@@ -1,6 +1,7 @@
 import { Class } from '@agape/types';
 import { ActionDescriptor } from './action';
 import { AspectDescriptor } from './aspect.descriptor';
+import { Middleware } from '../interfaces/middleware.interface';
 
 
 export class ControllerDescriptor extends AspectDescriptor {
@@ -8,6 +9,8 @@ export class ControllerDescriptor extends AspectDescriptor {
     path?: string
 
     actions: Map<string, ActionDescriptor> = new Map()
+
+    middleware: Array<Class<Middleware>> = []
 
     services: Class[] = []
 

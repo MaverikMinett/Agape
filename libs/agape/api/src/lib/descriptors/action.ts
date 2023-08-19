@@ -2,7 +2,7 @@ import { ActionDescription, HttMethod, ResponseDescription } from '../types';
 import { Class, Dictionary } from '@agape/types';
 import { ResponseDescriptor } from './response';
 import { BodyDescriptor, BodyDescriptorParams } from './body';
-import { ControllerDescriptor } from './controller';
+import { ControllerDescriptor } from './controller.descriptor';
 import { inherit } from '@agape/object';
 
 

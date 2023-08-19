@@ -1,7 +1,7 @@
 
 import { ActionDescriptor } from './action';
 import { InjectableDescriptor } from './injectable.descriptor';
-import { ControllerDescriptor } from './controller';
+import { ControllerDescriptor } from './controller.descriptor';
 import { AspectDescriptor } from './aspect.descriptor';
 
 import { include } from '@agape/object';

@@ -1,4 +1,4 @@
-import { ControllerDescriptor } from '../../descriptors/controller';
+import { ControllerDescriptor } from '../../descriptors/controller.descriptor';
 import { StubDescriptor } from '../../descriptors';
 import { ControllerParams } from '../../types';
 import { Injectable } from '..'
@@ -22,7 +22,7 @@ function parseControllerParams(...args: Array<ControllerParams|string>) {
  */
 export function Controller( path?:string )
 export function Controller( params: ControllerParams )
-export function Controller( path:string, params: ControllerParams ) 
+export function Controller( path:string, params?: ControllerParams ) 
 export function Controller( ...args: Array<ControllerParams|string> ){
 
     const { path, params } = parseControllerParams(...args)
