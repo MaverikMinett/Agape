@@ -24,7 +24,7 @@ export interface ModuleParams {
     modules?: Class[],
     controllers?: Class[],
     provides?: Class[],
-    middlewares?: Array<Class<Middleware>>
+    middleware?: Array<Class<Middleware>>
 }
 
 

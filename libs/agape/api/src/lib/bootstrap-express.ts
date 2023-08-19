@@ -4,13 +4,18 @@ import { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 import { Api } from './api'
 import { Controller, Module } from "./decorators"
 
-import { ActionDescriptor } from "./descriptors"
+import { ActionDescriptor, ControllerDescriptor, ModuleDescriptor } from "./descriptors"
 import { Class } from "@agape/types"
 import { ApiRequest } from "./api-request"
 import { ApiResponse } from "./api-response"
 
 
-export function routeTo( api: Api, controllerInstance: InstanceType<Class>, actionDescriptor: ActionDescriptor ) {
+export function routeTo( 
+    api: Api, 
+    controllerInstance: InstanceType<Class>, 
+    moduleDescriptor: ModuleDescriptor,
+    controllerDescriptor: ControllerDescriptor,
+    actionDescriptor: ActionDescriptor ) {
 
     return async function (req: ExpressRequest, res: ExpressResponse ) {
         const apiRequest = new ApiRequest()
@@ -23,7 +28,7 @@ export function routeTo( api: Api, controllerInstance: InstanceType<Class>, acti
 
         const apiResponse = new ApiResponse()
 
-        await api.callAction(controllerInstance, actionDescriptor, apiRequest, apiResponse)
+        await api.callAction(controllerInstance, moduleDescriptor, controllerDescriptor, actionDescriptor, apiRequest, apiResponse)
         res.status(apiResponse.statusCode)
 
         if ( apiResponse.statusText !== undefined )
@@ -54,15 +59,15 @@ export function bootstrapExpress( router: ExpressRouter, module: Class ) {
     
             let controllerInstance = newApi.getController(controller)
     
-            for ( let [name, action] of controllerDescriptor.actions.entries() ) {
+            for ( let [actionName, actionDescriptor] of controllerDescriptor.actions.entries() ) {
     
-                const routePath = [...pathSegments, action.ʘroute.path]
+                const routePath = [...pathSegments, actionDescriptor.ʘroute.path]
                     .filter( segment => segment !== undefined && segment !== "" && segment !== "/" )
                     .join("/")
 
-                router[action.ʘroute.method](
+                router[actionDescriptor.ʘroute.method](
                     `/${routePath}`, 
-                    routeTo(newApi, controllerInstance, action)
+                    routeTo(newApi, controllerInstance, moduleDescriptor, controllerDescriptor, actionDescriptor)
                 )
             }
     

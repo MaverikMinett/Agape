@@ -1,9 +1,11 @@
-import { Module } from "@agape/api";
+import { Module, LoggingMiddleware } from "@agape/api";
 import { FooModule } from "./foo/foo.module";
 import { UsersModule } from "./users/users.module";
 
+
 @Module({
-    'modules': [ FooModule, UsersModule ]
+    'modules': [ FooModule, UsersModule ],
+    'middleware': [ LoggingMiddleware ]
 })
 export class ApiModule {
 

@@ -1,10 +1,12 @@
 import { Class } from "@agape/types";
 import { Injector } from "./injector";
-import { ActionDescriptor } from "./descriptors";
+import { ActionDescriptor, ControllerDescriptor, ModuleDescriptor } from "./descriptors";
 import { ApiRequest } from "./api-request";
 import { ApiResponse } from "./api-response";
 import { Exception } from "@agape/exception";
 import { Controller, Module } from "./decorators";
+import { NextFunction } from "./types";
+import { Middleware } from "./interfaces/middleware.interface";
 
 
 
@@ -36,16 +38,41 @@ export class Api {
 
     async callAction( 
         controllerInstance: InstanceType<Class>, 
+        moduleDescriptor: ModuleDescriptor,
+        controllerDescriptor: ControllerDescriptor,
         actionDescriptor: ActionDescriptor, 
         apiRequest: ApiRequest,
         apiResponse: ApiResponse ) {
 
-            const action = async() => {
-                await this.performAction(controllerInstance, actionDescriptor, apiRequest, apiResponse)
+            const executionStack: NextFunction[] = []
+
+            let executionIndex = -1
+
+            const next = async() => {
+                executionIndex++
+                if ( executionStack[executionIndex] ) {
+                    await executionStack[executionIndex](apiRequest, apiResponse, next)
+                }
             }
 
+            const executeAction = async( apiRequest: ApiRequest, apiResponse: ApiResponse, next: NextFunction ) => {
+                await this.performAction(controllerInstance, actionDescriptor, apiRequest, apiResponse)
+            } 
 
-            
+            executionStack.push(executeAction)
+
+            const moduleMiddlewares = moduleDescriptor.middleware
+
+            for ( let middleware of moduleMiddlewares ) {
+                const middlewareInstance: Middleware = this.injector.get(middleware)
+                const executeMiddleware = async() => {
+                    console.log("Executing middleware")
+                    await middlewareInstance.activate(apiRequest, apiResponse, next)
+                }
+                executionStack.unshift(executeMiddleware)
+            }
+
+            await next()
     }
 
     async performAction( 
