@@ -1,5 +1,5 @@
 export * from './action'
-export * from './service'
+export * from './injectable.descriptor'
 export * from './aspect.descriptor'
 export * from './controller'
 export * from './body';

@@ -6,7 +6,7 @@ import { Class } from '@agape/types';
 /**
  * Describe a backend service
  */
-export class ServiceDescriptor extends AspectDescriptor {
+export class InjectableDescriptor extends AspectDescriptor {
 
     operations: Map<string, OperationDescriptor> = new Map()
 

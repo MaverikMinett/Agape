@@ -1,5 +1,5 @@
 
-export * from './class/service.decorator'
+export * from './class/injectable.decorator'
 export * from './class/controller.decorator'
 export * from './class/module.decorator'
 

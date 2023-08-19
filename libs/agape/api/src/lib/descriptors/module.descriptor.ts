@@ -1,5 +1,6 @@
 import { Class } from '@agape/types';
 import { AspectDescriptor } from './aspect.descriptor';
+import { Middleware } from '../interfaces/middleware.interface';
 
 
 
@@ -12,6 +13,8 @@ export class ModuleDescriptor extends AspectDescriptor {
     provides: Class[] = []
 
     path?: string
+
+    middlewares: Array<Class<Middleware>> = []
 
     getControllers() {
         const controllers = this.controllers ? [...this.controllers] : []

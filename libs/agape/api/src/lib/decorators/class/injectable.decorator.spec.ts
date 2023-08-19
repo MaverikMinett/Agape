@@ -1,27 +1,27 @@
 
-import { ServiceDescriptor } from '../../descriptors'
-import { Service } from './service.decorator'
+import { InjectableDescriptor } from '../../descriptors'
+import { Injectable } from './injectable.decorator'
 
 describe('Controller', () => {
 
     it('should decorate a class', () => {
-        @Service()
+        @Injectable()
         class FooService { }
         /* test passes if no errors */
     })
 
     it('should create a service descriptor', () => {
-        @Service()
+        @Injectable()
         class FooService { }
         const d = Reflect.getMetadata( "service:descriptor", FooService.prototype )
-        expect(d).toBeInstanceOf(ServiceDescriptor)
+        expect(d).toBeInstanceOf(InjectableDescriptor)
     })
 
-    describe('Service.descriptor', () => {
+    describe('Injectable.descriptor', () => {
         it('should return a descriptor for the target', () => {
-            @Service()
+            @Injectable()
             class FooService { }
-            const d = Service.descriptor(FooService)
+            const d = Injectable.descriptor(FooService)
             const e = Reflect.getMetadata( "service:descriptor", FooService.prototype )
             expect(d).toBe(e)
         })
@@ -30,15 +30,15 @@ describe('Controller', () => {
 
     describe('dependency injection', () => {
         it('should store type data about constructor params', () => {
-            @Service()
+            @Injectable()
             class BarService {}
 
-            @Service()
+            @Injectable()
             class FooService { 
                 constructor( bar: BarService) { }
             }
 
-            const d = Service.descriptor(FooService)
+            const d = Injectable.descriptor(FooService)
             expect(d.services).toEqual([BarService])
         })
         it('should throw an error of non-injectable set in constructor', () => {
@@ -46,7 +46,7 @@ describe('Controller', () => {
             const tryit = () => {
                 class NotABarService {}
 
-                @Service()
+                @Injectable()
                 class FooService { 
                     constructor( bar: NotABarService) { }
                 } 

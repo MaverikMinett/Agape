@@ -1,10 +1,8 @@
 
-import { ModuleDescriptor, StubDescriptor } from '../../descriptors'
-import {  } from '../../descriptors/module.descriptor'
-import { Get } from '../controller/get'
+import { ModuleDescriptor } from '../../descriptors'
 import { Controller } from './controller.decorator'
 import { Module } from './module.decorator'
-import { Service } from './service.decorator'
+import { Injectable } from './injectable.decorator'
 
 describe('Module', () => {
 
@@ -105,7 +103,7 @@ describe('Module', () => {
         })
         describe('provides', () => {
             it('should validate the service', () => {
-                @Service()
+                @Injectable()
                 class FooService { }
     
                 @Module({

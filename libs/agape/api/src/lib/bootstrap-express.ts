@@ -18,6 +18,8 @@ export function routeTo( api: Api, controllerInstance: InstanceType<Class>, acti
         apiRequest.body   = req.body
         apiRequest.query  = req.query
         apiRequest.headers  = req.headers
+        apiRequest.path  = req.path
+        apiRequest.method = req.method as 'GET'|'PUT'|'POST'|'PATCH'|'DELETE'
 
         const apiResponse = new ApiResponse()
 

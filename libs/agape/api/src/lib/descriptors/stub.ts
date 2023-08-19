@@ -1,6 +1,6 @@
 
 import { ActionDescriptor } from './action';
-import { ServiceDescriptor } from './service';
+import { InjectableDescriptor } from './injectable.descriptor';
 import { ControllerDescriptor } from './controller';
 import { AspectDescriptor } from './aspect.descriptor';
 
@@ -10,8 +10,8 @@ import { include } from '@agape/object';
  * class construction time; before the actual service or Controller descriptors
  * are available.
  */
-export interface StubDescriptor extends ServiceDescriptor, ControllerDescriptor{ }
-@include(ServiceDescriptor, ControllerDescriptor)
+export interface StubDescriptor extends InjectableDescriptor, ControllerDescriptor{ }
+@include(InjectableDescriptor, ControllerDescriptor)
 export class StubDescriptor {
 
     actions: Map<string, ActionDescriptor> = new Map()
@@ -38,9 +38,9 @@ export class StubDescriptor {
         Reflect.deleteMetadata("stub:descriptor", this.target)
     }
 
-    finalizeService( service: ServiceDescriptor ) {
+    finalizeInjectable( injectable: InjectableDescriptor ) {
         for ( const [name, operation] of this.operations.entries() ) {
-            service.operations.set(name, operation)
+            injectable.operations.set(name, operation)
         }
     }
 

@@ -2,7 +2,7 @@
 import { ControllerDescriptor, StubDescriptor } from '../../descriptors'
 import { Get } from '../controller/get'
 import { Controller } from './controller.decorator'
-import { Service } from './service.decorator'
+import { Injectable } from './injectable.decorator'
 
 describe('Controller', () => {
 
@@ -58,7 +58,7 @@ describe('Controller', () => {
 
     describe('dependency injection', () => {
         it('should store type data about constructor params', () => {
-            @Service()
+            @Injectable()
             class FooService {}
 
             @Controller({'path': 'foos'})

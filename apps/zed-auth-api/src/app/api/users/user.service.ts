@@ -1,12 +1,12 @@
 import { orm } from '@agape/orm';
 import { Deflated } from '@agape/types';
-import { Service } from '@agape/api';
+import { Injectable } from '@agape/api';
 import bcrypt from 'bcryptjs';
 
 import { User, UserDetailView , UserUpdatePasswordView, UserUpdateView } from 'lib-platform';
 
 
-@Service()
+@Injectable()
 export class UserService {
     list() {
         return orm.list(UserDetailView).exec()

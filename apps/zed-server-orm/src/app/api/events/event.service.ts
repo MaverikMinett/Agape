@@ -1,9 +1,9 @@
-import { Service } from "@agape/api";
+import { Injectable } from "@agape/api";
 import { orm } from '@agape/orm';
 
 import { Event } from 'lib-platform'
 
-@Service()
+@Injectable()
 export class EventService {
 
 

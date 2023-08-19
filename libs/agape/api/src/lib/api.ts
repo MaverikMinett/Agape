@@ -11,6 +11,8 @@ import { Controller, Module } from "./decorators";
 export class Api {
     injector: Injector = new Injector()
 
+    middlewareInjector: Injector = new Injector()
+
     debug: boolean = true
 
     constructor( public module: Class ) {
@@ -33,6 +35,20 @@ export class Api {
     }
 
     async callAction( 
+        controllerInstance: InstanceType<Class>, 
+        actionDescriptor: ActionDescriptor, 
+        apiRequest: ApiRequest,
+        apiResponse: ApiResponse ) {
+
+            const action = async() => {
+                await this.performAction(controllerInstance, actionDescriptor, apiRequest, apiResponse)
+            }
+
+
+            
+    }
+
+    async performAction( 
         controllerInstance: InstanceType<Class>, 
         actionDescriptor: ActionDescriptor, 
         apiRequest: ApiRequest,
@@ -83,4 +99,6 @@ export class Api {
         }
         
     }
+
+
 }

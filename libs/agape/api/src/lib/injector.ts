@@ -1,5 +1,5 @@
 import { Class } from '@agape/types';
-import { Service } from './decorators'
+import { Injectable } from './decorators'
 
 export class Injector {
 
@@ -10,7 +10,7 @@ export class Injector {
     get( service: Class ) {
         
         // TODO: If the passed in class is not actually injectable, then throw an error
-        const descriptor = Service.descriptor(service)
+        const descriptor = Injectable.descriptor(service)
         if ( ! descriptor ) {
             throw new Error(`Could not inject ${service.name}, not a service`)
         }
@@ -28,7 +28,7 @@ export class Injector {
     private instantiateService(service: Class) {
 
         // TODO: If the service has injectables, inject them
-        const descriptor = Service.descriptor(service)
+        const descriptor = Injectable.descriptor(service)
 
         const services = descriptor.services.map( s => this.get(s) )
 

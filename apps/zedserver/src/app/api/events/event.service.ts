@@ -2,9 +2,9 @@ import { events } from './events.model'
 import { v4 } from 'uuid';
 
 import { Exception } from '@agape/exception';
-import { Service } from '@agape/api';
+import { Injectable } from '@agape/api';
 
-@Service()
+@Injectable()
 export class EventService {
 
     list() {

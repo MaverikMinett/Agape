@@ -1,7 +1,8 @@
 import { Class } from '@agape/types';
 import { ModuleDescriptor } from '../../descriptors/module.descriptor';
-import { Service } from './service.decorator'
 import { Controller } from './controller.decorator';
+import { Middleware } from '../../interfaces/middleware.interface';
+import { Injectable } from './injectable.decorator';
 
 function parseModuleParams(...args: Array<ModuleParams|string>) {
     /* parse the parameters */
@@ -22,7 +23,8 @@ export interface ModuleParams {
     path?: string,
     modules?: Class[],
     controllers?: Class[],
-    provides?: Class[]
+    provides?: Class[],
+    middlewares?: Array<Class<Middleware>>
 }
 
 
@@ -73,7 +75,7 @@ export function Module( ...args: Array<ModuleParams|string> ) {
         if ( params?.provides ) {
             /* validate that constructor params are injectable services */
             for ( let service of params.provides ) {
-                const serviceDescriptor = Service.descriptor(service)
+                const serviceDescriptor = Injectable.descriptor(service)
                 /* throw an error if not a service */
                 if ( ! serviceDescriptor ) 
                     throw new Error(`Invalid argument to 'provides', ${service.name} is not a Service`)

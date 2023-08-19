@@ -1,9 +1,9 @@
-import { Service } from "@agape/api";
+import { Injectable } from "@agape/api";
 import { db } from '../../../db'
 import { IEvent } from "../../interfaces/IEvents";
 import { ObjectId } from "mongodb";
 
-@Service()
+@Injectable()
 export class EventService {
 
 

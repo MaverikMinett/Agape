@@ -1,7 +1,7 @@
 import { ControllerDescriptor } from '../../descriptors/controller';
 import { StubDescriptor } from '../../descriptors';
 import { ControllerParams } from '../../types';
-import { Service } from '..'
+import { Injectable } from '..'
 
 function parseControllerParams(...args: Array<ControllerParams|string>) {
     /* parse the parameters */
@@ -52,7 +52,7 @@ export function Controller( ...args: Array<ControllerParams|string> ){
 
             /* validate that constructor params are injectable services */
             for ( let service of services ) {
-                const serviceDescriptor = Service.descriptor(service)
+                const serviceDescriptor = Injectable.descriptor(service)
                 /* throw an error if not a service */
                 if ( ! serviceDescriptor ) 
                     throw new Error(`Invalid controller constructor parameter, ${service.name} is not a service`)
