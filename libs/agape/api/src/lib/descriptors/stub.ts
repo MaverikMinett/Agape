@@ -1,5 +1,5 @@
 
-import { ActionDescriptor } from './action';
+import { ActionDescriptor } from './action.descriptor';
 import { InjectableDescriptor } from './injectable.descriptor';
 import { ControllerDescriptor } from './controller.descriptor';
 import { AspectDescriptor } from './aspect.descriptor';

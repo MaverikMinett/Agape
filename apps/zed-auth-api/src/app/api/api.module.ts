@@ -5,7 +5,7 @@ import { UsersModule } from "./users/users.module";
 
 @Module({
     'modules': [ FooModule, UsersModule ],
-    'middleware': [ LoggingMiddleware ]
+    'middlewares': [ LoggingMiddleware ]
 })
 export class ApiModule {
 

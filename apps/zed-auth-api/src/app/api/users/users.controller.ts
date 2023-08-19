@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, LoggingMiddleware } from '@agape/api';
+import { Controller, Get, Post, Put, Delete, LoggingMiddleware, Middlwares } from '@agape/api';
 import { Exception } from '@agape/exception';
 import { Deflated } from '@agape/types'
 
@@ -7,13 +7,14 @@ import { User } from 'lib-platform'
 
 
 @Controller('users', {
-    middleware: [ LoggingMiddleware ]
+    middlewares: [ LoggingMiddleware ]
 })
 export class UsersController {
     constructor(private readonly service: UserService) {}
 
 
     @Get()
+    @Middlwares( LoggingMiddleware )
     async list() {
         const items = await this.service.list()
         return items

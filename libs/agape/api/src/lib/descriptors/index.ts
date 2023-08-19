@@ -1,4 +1,4 @@
-export * from './action'
+export * from './action.descriptor'
 export * from './injectable.descriptor'
 export * from './aspect.descriptor'
 export * from './controller.descriptor'

@@ -4,6 +4,7 @@ import { ResponseDescriptor } from './response';
 import { BodyDescriptor, BodyDescriptorParams } from './body';
 import { ControllerDescriptor } from './controller.descriptor';
 import { inherit } from '@agape/object';
+import { Middleware } from '../interfaces/middleware.interface';
 
 
 export class ActionDescriptor {
@@ -19,6 +20,8 @@ export class ActionDescriptor {
     ʘresponses: ResponseDescriptor[]
 
     ʘinject: Dictionary
+
+    ʘmiddlewares: Array<Class<Middleware>> = []
 
     constructor( public name: string ) {
 
@@ -89,6 +92,10 @@ export class ActionDescriptor {
 
         this.ʘbody = descriptor
         return this
+    }
+
+    middlewares( ...middlewares: Array<Class<Middleware>>) {
+        this.ʘmiddlewares.push(...middlewares)
     }
 
 

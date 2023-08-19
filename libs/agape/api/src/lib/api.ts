@@ -61,15 +61,15 @@ export class Api {
 
             executionStack.push(executeAction)
 
-            const moduleMiddlewares = moduleDescriptor.middleware
-            const controllerMiddlewares = controllerDescriptor.middleware
+            const moduleMiddlewares = moduleDescriptor.middlewares
+            const controllerMiddlewares = controllerDescriptor.middlewares
+            const actionMiddlewares = actionDescriptor.ʘmiddlewares
 
-            const middlewares = [...moduleMiddlewares, ...controllerMiddlewares]
+            const middlewares = [...moduleMiddlewares, ...controllerMiddlewares, ...actionMiddlewares]
 
             for ( let middleware of middlewares ) {
                 const middlewareInstance: Middleware = this.injector.get(middleware)
                 const executeMiddleware = async() => {
-                    console.log("Executing middleware")
                     await middlewareInstance.activate(apiRequest, apiResponse, next)
                 }
                 executionStack.unshift(executeMiddleware)

@@ -1,4 +1,4 @@
-import { Service } from "./decorators"
+import { Injectable } from "./decorators"
 import { Injector } from "./injector"
 
 
@@ -19,7 +19,7 @@ describe('Injector', () => {
 
     describe('get', () => {
 
-        @Service() class FooService { }
+        @Injectable() class FooService { }
 
         class NotAService { }
 
@@ -44,10 +44,10 @@ describe('Injector', () => {
     })
 
     describe('a services with a service', () => {
-        @Service() class DooService { }
-        @Service() class FooService { }
+        @Injectable() class DooService { }
+        @Injectable() class FooService { }
 
-        @Service() class BarService { 
+        @Injectable() class BarService { 
             constructor ( public doo: DooService, public foo: FooService ) {
 
             }

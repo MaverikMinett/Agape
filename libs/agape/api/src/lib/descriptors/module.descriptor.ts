@@ -14,7 +14,7 @@ export class ModuleDescriptor extends AspectDescriptor {
 
     path?: string
 
-    middleware: Array<Class<Middleware>> = []
+    middlewares: Array<Class<Middleware>> = []
 
     getControllers() {
         const controllers = this.controllers ? [...this.controllers] : []
