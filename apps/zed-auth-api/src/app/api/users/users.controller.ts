@@ -6,15 +6,12 @@ import { UserService } from './user.service';
 import { User } from 'lib-platform'
 
 
-@Controller('users', {
-    middlewares: [ LoggingMiddleware ]
-})
+@Controller('users')
 export class UsersController {
     constructor(private readonly service: UserService) {}
 
 
     @Get()
-    @Middlwares( LoggingMiddleware )
     async list() {
         const items = await this.service.list()
         return items
