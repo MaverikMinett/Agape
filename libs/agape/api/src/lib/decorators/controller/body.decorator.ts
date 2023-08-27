@@ -2,8 +2,8 @@ import { Class } from '@agape/types'
 import { StubDescriptor } from '../../descriptors/stub';
 
 
-export function Body( )
-export function Body( target:any, name: string, parameterIndex: number )
+export function Body( ): ( target:any, name: string, parameterIndex: number ) => void
+export function Body( target:any, name: string, parameterIndex: number ): void
 export function Body( ...params: any[] ) {
 
     function Body( target:any, name: string, parameterIndex: number ) {
@@ -20,8 +20,6 @@ export function Body( ...params: any[] ) {
     else {
         return Body
     }
-
-
 
 }
 
