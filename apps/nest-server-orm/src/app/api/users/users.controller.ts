@@ -13,7 +13,6 @@ export class UsersController {
 
 
     @Get()
-    @UseGuards(AuthGuard)
     async list() {
         const items = await this.service.list()
 
@@ -25,7 +24,6 @@ export class UsersController {
     }
 
     @Post()
-    @UseGuards(AuthGuard)
     create( @Body() payload: Interface<User> ) {
 
         const item = alchemy.inflate(User, payload)
@@ -34,7 +32,6 @@ export class UsersController {
     }
 
     @Get(':id')
-    @UseGuards(AuthGuard)
     async retrieve( @Param('id') id: string ) {
 
         const item = await this.service.retrieve(id)
@@ -47,7 +44,6 @@ export class UsersController {
     }
 
     @Put(':id')
-    @UseGuards(AuthGuard)
     update( @Param('id') id: string, @Body() payload: Interface<User>) {
 
         const item = alchemy.inflate(User, payload)
@@ -56,7 +52,6 @@ export class UsersController {
     }
 
     @Delete(':id')
-    @UseGuards(AuthGuard)
     delete( @Param('id') id: string ) {
         this.service.delete(id)
     }
