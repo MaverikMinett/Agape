@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Post, Put, Body } from "@agape/api";
+import { Controller, Delete, Get, Post, Put, Body, Params } from "@agape/api";
 import { EventService } from "./event.service";
 // import { IEvent } from "../../interfaces/IEvents";
 import { Exception } from "@agape/exception";
@@ -24,7 +24,7 @@ export class EventsController {
     }
 
     @Get(':id')
-    async retrieve(params: {id: string}, body: any ) {
+    async retrieve( @Params params: any ) {
         const { id } = params
         const item = await this.service.retrieve(id)
         if ( ! item ) {
@@ -35,13 +35,13 @@ export class EventsController {
     }
 
     @Put(':id')
-    async update(params: {id: string}, body: any ) {
+    async update( @Params params: any, @Body item: Event ) {
         const { id } = params
-        return this.service.update(id, body)
+        return this.service.update(id, item)
     }
 
     @Delete(':id')
-    async delete(params: {id: string}, body: any ) {
+    async delete( @Params params: any ) {
         const { id } = params
         return this.service.delete(id)
     }

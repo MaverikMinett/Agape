@@ -4,7 +4,9 @@ export * from './class/controller.decorator'
 export * from './class/module.decorator'
 
 // export * from './controller/action'
-export * from './controller/body'
+export * from './controller/body.decorator'
+export * from './controller/params.decorator'
+
 export * from './controller/delete'
 export * from './controller/description'
 export * from './controller/get'
