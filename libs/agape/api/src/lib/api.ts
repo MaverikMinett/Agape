@@ -104,17 +104,29 @@ export class Api {
 
         // this is where disposable service action needs to happen
         const params = []
-        if ( actionDescriptor.ʘinject ) {
-            for ( const [name,type] of Object.entries(actionDescriptor.ʘinject) ) {
-                if ( name === 'payload' || name === 'body' ) params.push(apiRequest.body)
-                else if ( name === 'params' ) params.push(apiRequest.params)
-                else if ( name === 'query' || name === 'queryParams' ) params.push(apiRequest.params)
-                else if ( name === 'request' || name === 'req') params.push(apiRequest)
-                else if ( name === 'response' || name === 'res' ) params.push(apiResponse)
-                else if ( name === 'headers' ) params.push(apiRequest.headers)
-                else throw new Error(`Invalid paramter name '${name}'`)
-            }
+
+        for ( let actionParameterDefinition of actionDescriptor.ʘinject ) {
+            const name = actionParameterDefinition.parameter
+            if ( name === 'body' ) params.push(apiRequest.body)
+            else if ( name === 'params' ) params.push(apiRequest.params)
+            else if ( name === 'query' ) params.push(apiRequest.params)
+            else if ( name === 'request' ) params.push(apiRequest)
+            else if ( name === 'response' ) params.push(apiResponse)
+            else if ( name === 'headers' ) params.push(apiRequest.headers)
+            else params.push(undefined)
         }
+
+        // if ( actionDescriptor.ʘinject ) {
+            // for ( const [name,type] of Object.entries(actionDescriptor.ʘinject) ) {
+            //     if ( name === 'payload' || name === 'body' ) params.push(apiRequest.body)
+            //     else if ( name === 'params' ) params.push(apiRequest.params)
+            //     else if ( name === 'query' || name === 'queryParams' ) params.push(apiRequest.params)
+            //     else if ( name === 'request' || name === 'req') params.push(apiRequest)
+            //     else if ( name === 'response' || name === 'res' ) params.push(apiResponse)
+            //     else if ( name === 'headers' ) params.push(apiRequest.headers)
+            //     else throw new Error(`Invalid paramter name '${name}'`)
+            // }
+        // }
 
         if ( this.debug ) {
             console.log(`Calling action ${actionDescriptor.name} on ${controllerInstance.constructor.name}`)

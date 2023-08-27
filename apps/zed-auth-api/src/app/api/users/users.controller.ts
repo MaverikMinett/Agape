@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, LoggingMiddleware, Middlwares } from '@agape/api';
+import { Controller, Get, Post, Put, Delete, Body } from '@agape/api';
 import { Exception } from '@agape/exception';
 import { Deflated } from '@agape/types'
 
@@ -18,7 +18,7 @@ export class UsersController {
     }
 
     @Post()
-    create( params: any, body: Deflated<User> ) {
+    create( params: any, body: User ) {
         const item = body
 
         const duplicate = this.service.lookup(item.username)

@@ -11,11 +11,6 @@ export function Middlwares( ...middlewares: Array<Class<Middleware>> ) {
 
         stub.action(name).middlewares(...middlewares)
 
-        /* fake dependency injection */
-        /* let methodParameters = Reflect.getMetadata('controller:action:params', descriptor) */
-        let methodParameters = { 'params': 'any', 'body': 'any', 'query': 'any', 'headers': 'any' }
-        stub.action(name).inject(methodParameters)
-
         return target
     }
 

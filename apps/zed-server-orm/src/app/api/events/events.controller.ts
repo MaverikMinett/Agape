@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Post, Put } from "@agape/api";
+import { Controller, Delete, Get, Post, Put, Body } from "@agape/api";
 import { EventService } from "./event.service";
 // import { IEvent } from "../../interfaces/IEvents";
 import { Exception } from "@agape/exception";
@@ -19,8 +19,8 @@ export class EventsController {
     }
 
     @Post()
-    async create( params: any, body: Interface<Event> ) {
-        return this.service.create( body )
+    async create( @Body item: Event ) {
+        return this.service.create( item )
     }
 
     @Get(':id')

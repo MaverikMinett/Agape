@@ -2,15 +2,26 @@ import { Class } from '@agape/types'
 import { StubDescriptor } from '../../descriptors/stub';
 
 
-export function Body( model: Class, description?: string ) {
+export function Body( )
+export function Body( target:any, name: string, parameterIndex: number )
+export function Body( ...params: any[] ) {
 
-    return function Body( target:any, name: string, descriptor: TypedPropertyDescriptor<Function> ) {
+    function Body( target:any, name: string, parameterIndex: number ) {
+        const paramTypes = Reflect.getMetadata('design:paramtypes', target, name)
         const stub: StubDescriptor = StubDescriptor.descriptor(target, true)
 
-        stub.action(name).body(model, description)
-
-        return target
+        stub.action(name).inject(parameterIndex, 'body', paramTypes[parameterIndex] )
     }
+
+    if ( params.length === 3 ) {
+        const [ target, name, parameterIndex ] = params
+        Body( target, name, parameterIndex )
+    }
+    else {
+        return Body
+    }
+
+
 
 }
 

@@ -5,6 +5,7 @@ import { BodyDescriptor, BodyDescriptorParams } from './body';
 import { ControllerDescriptor } from './controller.descriptor';
 import { inherit } from '@agape/object';
 import { Middleware } from '../interfaces/middleware.interface';
+import { ActionParameterName } from '../interfaces/action-parameter-definition';
 
 
 export class ActionDescriptor {
@@ -19,7 +20,7 @@ export class ActionDescriptor {
 
     ʘresponses: ResponseDescriptor[]
 
-    ʘinject: Dictionary
+    ʘinject: Array<any> = []
 
     ʘmiddlewares: Array<Class<Middleware>> = []
 
@@ -43,8 +44,8 @@ export class ActionDescriptor {
         return this.ʘdescription
     }
 
-    inject( params: Dictionary ) {
-        this.ʘinject = params
+    inject( parameterIndex: number, parameter: ActionParameterName, designType: Class  ) {
+        this.ʘinject[parameterIndex] = { parameter, designType }
     }
 
 
