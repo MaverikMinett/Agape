@@ -5,8 +5,10 @@ import { connect } from './db';
 import router from './app/app.routes'
 import { connectOrm } from './orm';
 
-// import { example } from './examples/mongo-example';
-// example()
+import dotenv from 'dotenv';
+const config = dotenv.config({ path: 'apps/_env/.env'})
+console.log(config)
+
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3008;
 const verbose = true;

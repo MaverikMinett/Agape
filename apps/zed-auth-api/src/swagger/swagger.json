@@ -17,7 +17,7 @@
     "servers": [
         {
         "url": "./",
-        "description": "Project Zed Application Programming Interface"
+        "description": "Project Zed Auth API"
         }
     ],
     "schemes": [
@@ -28,6 +28,9 @@
     ],
     "produces": [
         "application/json"
+    ],
+    "security": [
+        {"BearerAuth": []}
     ],
     "tags": [
         {
@@ -96,6 +99,17 @@
             "post": {
                 "summary": "Login",
                 "tags": ["Auth"],
+                "requestBody": {
+                    "description": "Credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Credentials"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Ok",
@@ -239,7 +253,26 @@
         }
     },
     "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        },
         "schemas": {
+            "Credentials": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "example": "foo"
+                    },
+                    "password": {
+                        "type": "password",
+                        "example": "password"
+                    }
+                }
+            },
             "User": {
                 "type": "object",
                 "properties": {

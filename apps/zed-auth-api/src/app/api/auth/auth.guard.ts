@@ -1,39 +1,40 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
-import { JwtService } from '@nestjs/jwt'
-import { Request } from 'express'
+import { Exception } from "@agape/exception";
+import { ApiRequest, ApiResponse, Injectable, JwtService, Middleware, NextFunction } from "@agape/api";
 
 import process from 'process';
 
-const JWT_SECRET = process.env['JWT_SECRET']
+
+
+
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements Middleware {
     constructor( private jwtService: JwtService ) {
 
     }
 
-    async canActivate(context: ExecutionContext): Promise<boolean> {
-        const request = context.switchToHttp().getRequest()
-
+    async activate( request: ApiRequest, response: ApiResponse, next: NextFunction ) {
+        const JWT_SECRET = process.env['JWT_SECRET']
         const token = this.extractTokenFromHeader(request)
         if ( ! token ) {
-            throw new UnauthorizedException()
+            throw new Exception(401)
         }
         try {
-            const payload = await this.jwtService.verifyAsync(
-                token,
-                { secret: JWT_SECRET }
-            )
+            const payload = this.jwtService.verify( token, JWT_SECRET )
             request['auth'] = payload 
         }
-        catch {
-            throw new UnauthorizedException()
+        catch (error) {
+            console.log(error)
+            throw new Exception(401)
         }
-        return true
+        console.log("Logged in")
+        await next()
     }
 
-    private extractTokenFromHeader(request: Request) {
-        const [type, token] = request.headers.authorization?.split(' ') ?? [ ]
+    private extractTokenFromHeader(request: ApiRequest) {
+        console.log("Headers", request.headers)
+        const [type, token] = request.headers['authorization']?.split(' ') ?? [ ]
         return type === 'Bearer' ? token : undefined
+       
     }
 }

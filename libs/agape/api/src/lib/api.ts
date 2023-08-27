@@ -9,7 +9,6 @@ import { NextFunction } from "./types";
 import { Middleware } from "./interfaces/middleware.interface";
 
 
-
 export class Api {
     injector: Injector = new Injector()
 
@@ -65,6 +64,7 @@ export class Api {
             const controllerMiddlewares = controllerDescriptor.middlewares
             const actionMiddlewares = actionDescriptor.ʘmiddlewares
 
+
             const middlewares = [...moduleMiddlewares, ...controllerMiddlewares, ...actionMiddlewares]
 
             for ( let middleware of middlewares ) {
@@ -75,7 +75,23 @@ export class Api {
                 executionStack.unshift(executeMiddleware)
             }
 
-            await next()
+            try {
+                await next()
+            }
+            catch(error) {
+                if ( this.debug ) {
+                    console.log("Received error", error)
+                }
+                if ( error instanceof Exception ) {
+                    apiResponse.status( error.status )
+                    apiResponse.send({ status: error.status, message: error.message})
+                }
+                else {
+                    apiResponse.status(400, "Bad Request")
+                    apiResponse.send( error.message )
+                    console.error( error )
+                }
+            }
     }
 
     async performAction( 
@@ -100,34 +116,16 @@ export class Api {
             }
         }
 
-
-        try {
-            if ( this.debug ) {
-                console.log(`Calling action ${actionDescriptor.name} on ${controllerInstance.constructor.name}`)
-            }
-            const content = await method.call(controllerInstance, ...params)
-            if ( this.debug ) {
-                console.log("Recieved content", content)
-            }
-            const statusCode = actionDescriptor.ʘstatus
-            apiResponse.status(statusCode)
-            apiResponse.send(content)
+        if ( this.debug ) {
+            console.log(`Calling action ${actionDescriptor.name} on ${controllerInstance.constructor.name}`)
         }
-        catch ( error ) {
-            if ( this.debug ) {
-                console.log("Received error", error)
-            }
-            if ( error instanceof Exception ) {
-                apiResponse.status( error.status )
-                apiResponse.send({ status: error.status, message: error.message})
-            }
-            else {
-                apiResponse.status(400, "Bad Request")
-                apiResponse.send( error.message )
-                console.error( error )
-            }
+        const content = await method.call(controllerInstance, ...params)
+        if ( this.debug ) {
+            console.log("Recieved content", content)
         }
-        
+        const statusCode = actionDescriptor.ʘstatus
+        apiResponse.status(statusCode)
+        apiResponse.send(content)
     }
 
 

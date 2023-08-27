@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable, JwtService } from '@agape/api';
 import bcrypt from 'bcryptjs';
 
 import { orm } from '@agape/orm';
@@ -27,9 +26,10 @@ export class AuthService {
         }
 
         const payload = { username: user.username, sub: user.id };
+        const secret = process.env['JWT_SECRET']
 
         const response =  {
-          token: await this.jwtService.signAsync(payload),
+          token: await this.jwtService.sign(payload,secret),
         };
 
         return response

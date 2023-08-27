@@ -1,21 +1,18 @@
-import { Controller,  Post, Body, HttpStatus, HttpCode  } from '@nestjs/common';
+import { Controller,  Post, Body, Respond, Status } from '@agape/api';
 import { AuthService } from './auth.service';
-import { Interface } from '@agape/types';
+import { Deflated } from '@agape/types';
 import { Credentials } from 'lib-platform';
 
-import { alchemy } from '@agape/alchemy'
 
-@Controller('api/auth')
+@Controller('auth')
 export class AuthController {
   constructor(private readonly service: AuthService) {}
 
-    @HttpCode(HttpStatus.OK)
+    @Status(200)
     @Post('login')
-    create( @Body() payload: Interface<Credentials> ) {
-
-        const credentails = alchemy.inflate(Credentials, payload)
-
-        return this.service.login( credentails )
+    create( params: any, body: Deflated<Credentials> ) {
+      const credentials = body
+      return this.service.login( credentials )
     }
 
 
