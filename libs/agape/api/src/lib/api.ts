@@ -112,7 +112,6 @@ export class Api {
             else if ( name === 'query' ) params.push(apiRequest.params)
             else if ( name === 'request' ) params.push(apiRequest)
             else if ( name === 'response' ) params.push(apiResponse)
-            else if ( name === 'headers' ) params.push(apiRequest.headers)
             else params.push(undefined)
         }
 
