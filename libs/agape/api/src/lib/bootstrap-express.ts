@@ -9,6 +9,8 @@ import { Class } from "@agape/types"
 import { ApiRequest } from "./api-request"
 import { ApiResponse } from "./api-response"
 
+import express from 'express';
+
 
 export function routeTo( 
     api: Api, 
@@ -60,15 +62,23 @@ export function bootstrapExpress( router: ExpressRouter, module: Class ) {
             let controllerInstance = newApi.getController(controller)
     
             for ( let [actionName, actionDescriptor] of controllerDescriptor.actions.entries() ) {
-    
                 const routePath = [...pathSegments, actionDescriptor.ʘroute.path]
                     .filter( segment => segment !== undefined && segment !== "" && segment !== "/" )
                     .join("/")
 
-                router[actionDescriptor.ʘroute.method](
-                    `/${routePath}`, 
-                    routeTo(newApi, controllerInstance, moduleDescriptor, controllerDescriptor, actionDescriptor)
-                )
+                if ( actionDescriptor.ʘstaticFiles ) {
+                    for ( let staticFilePath of actionDescriptor.ʘstaticFiles ) {
+                        router.use(routePath, express.static(staticFilePath))
+                    }
+                }
+                else {
+                    router[actionDescriptor.ʘroute.method](
+                        `/${routePath}`, 
+                        routeTo(newApi, controllerInstance, moduleDescriptor, controllerDescriptor, actionDescriptor)
+                    )
+                }
+    
+                
             }
     
             pathSegments.pop()
