@@ -19,6 +19,8 @@ export class Api {
     constructor( public module: Class ) {
        const descriptor = Module.descriptor(module)
        if ( ! descriptor ) throw new Error(`${module.name} is not an api Module`) 
+
+       this.injector.provide( Api, this )
     }
 
     getController<T extends Class>( controller: T ): InstanceType<T> {

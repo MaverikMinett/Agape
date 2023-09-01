@@ -6,7 +6,7 @@ import {
     ResponseDescriptor
 } from './descriptors';
 
-export type HttMethod = 'put'|'post'|'get'|'patch'|'delete';
+export type HttpMethod = 'put'|'post'|'get'|'patch'|'delete';
 
 export type ActionDescriptionFunction<T=any> = (progenitor: T, action: ActionDescriptor) => string
 export type ActionDescription = string|ActionDescriptionFunction

@@ -32,6 +32,8 @@ export function Controller( ...args: Array<ControllerParams|string> ){
         /* create a descriptor */
         const descriptor = Controller.descriptor( target, true )
 
+        descriptor.class = target
+
         /* assign path if set in decorator */
         if ( path !== undefined) descriptor.path = path
 
@@ -51,12 +53,12 @@ export function Controller( ...args: Array<ControllerParams|string> ){
         if ( services ) {
 
             /* validate that constructor params are injectable services */
-            for ( let service of services ) {
-                const serviceDescriptor = Injectable.descriptor(service)
-                /* throw an error if not a service */
-                if ( ! serviceDescriptor ) 
-                    throw new Error(`Invalid controller constructor parameter, ${service.name} is not a service`)
-            }
+            // for ( let service of services ) {
+            //     const serviceDescriptor = Injectable.descriptor(service)
+            //     /* throw an error if not a service */
+            //     if ( ! serviceDescriptor ) 
+            //         throw new Error(`Invalid controller constructor parameter, ${service.name} is not a service`)
+            // }
 
             /* assign services to descriptor */
             descriptor.services = [...services]

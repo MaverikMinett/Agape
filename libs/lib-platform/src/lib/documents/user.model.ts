@@ -15,14 +15,16 @@ export const UserStatusChoices = [
 
     @Primary id?: string
 
-    @Field name: string
+    @Field({ example: 'Foo' })
+    name: string
 
-    @Field username: string
+    @Field({ example: 'foo' }) 
+    username: string
 
-    @Field({ readable: false })
+    @Field({ readable: false, example: 'password' })
     password: string
 
-    @Field({ })
+    @Field({ example: UserStatus.Enabled })
     status: UserStatus = UserStatus.Enabled
 }
 
@@ -43,7 +45,7 @@ export class UserUpdatePasswordView extends Document {
 export interface UserDetailView extends Pick<User,'id'|'name'|'username'> { }
 
 @View(User, { 
-    pick: ['id', 'name', 'username'] 
+    pick: ['id', 'name', 'username', 'status'] 
 })
  export class UserDetailView extends Document {
 

@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Put, Delete, Body } from '@agape/api';
+import { Controller, Get, Post, Put, Delete, Body, Params, Respond } from '@agape/api';
 import { Exception } from '@agape/exception';
-import { Deflated } from '@agape/types'
 
 import { UserService } from './user.service';
-import { User } from 'lib-platform'
+import { ItemId, User, UserDetailView } from 'lib-platform'
 
 
 @Controller('users')
@@ -12,13 +11,14 @@ export class UsersController {
 
 
     @Get()
+    @Respond([UserDetailView])
     async list() {
         const items = await this.service.list()
         return items
     }
 
     @Post()
-    create( params: any, body: User ) {
+    create( @Body body: User ) {
         const item = body
 
         const duplicate = this.service.lookup(item.username)
@@ -31,7 +31,8 @@ export class UsersController {
     }
 
     @Get(':id')
-    async retrieve( params: { id: string } ) {
+    @Respond([UserDetailView])
+    async retrieve( @Params params: ItemId ) {
 
         const item = await this.service.retrieve(params.id)
         
@@ -39,13 +40,13 @@ export class UsersController {
     }
 
     @Put(':id')
-    async update( params: { id: string }, body: Deflated<User>) {
+    async update( @Params params: ItemId, @Body body: User) {
         const item = body
         await this.service.update(params.id, item)
     }
 
     @Delete(':id')
-    async delete( params: {id: string} ) {
+    async delete( @Params params: ItemId ) {
         await this.service.delete(params.id)
     }
 

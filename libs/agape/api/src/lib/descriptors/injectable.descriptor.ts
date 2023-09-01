@@ -10,6 +10,8 @@ export class InjectableDescriptor extends AspectDescriptor {
 
     operations: Map<string, OperationDescriptor> = new Map()
 
+    description?: string;
+
     services: Class[] = []
 
     operation( name: string ) {

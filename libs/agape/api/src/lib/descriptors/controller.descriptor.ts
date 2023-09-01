@@ -10,9 +10,13 @@ export class ControllerDescriptor extends AspectDescriptor {
 
     actions: Map<string, ActionDescriptor> = new Map()
 
+    description?: string
+
     middlewares: Array<Class<Middleware>> = []
 
     services: Class[] = []
+
+    class: Class
 
     action( name: string ) {
         let action = this.actions.get(name)

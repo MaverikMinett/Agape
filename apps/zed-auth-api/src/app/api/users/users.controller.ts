@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Body } from '@agape/api';
+import { Controller, Get, Post, Put, Delete, Body, Respond } from '@agape/api';
 import { Exception } from '@agape/exception';
 import { Deflated } from '@agape/types'
 
 import { UserService } from './user.service';
-import { User } from 'lib-platform'
+import { User, UserDetailView } from 'lib-platform'
 
 
 @Controller('users')
@@ -12,6 +12,7 @@ export class UsersController {
 
 
     @Get()
+    @Respond([UserDetailView])
     async list() {
         const items = await this.service.list()
         return items

@@ -7,23 +7,25 @@ export class Injector {
 
     serviceMap = new Map<Class, any>()
 
-    get( service: Class ) {
+    get( injectable: Class ) {
         
         // TODO: If the passed in class is not actually injectable, then throw an error
-        const descriptor = Injectable.descriptor(service)
-        if ( ! descriptor ) {
-            throw new Error(`Could not inject ${service.name}, not a service`)
-        }
+        // const descriptor = Injectable.descriptor(injectable)
+        // if ( ! descriptor ) {
+        //     throw new Error(`Could not inject ${injectable.name}, not a service`)
+        // }
 
-        let instance = this.serviceMap.get(service)
+        let instance = this.serviceMap.get(injectable)
         if ( ! instance ) {
-            instance = this.instantiateService(service)
-            this.serviceMap.set(service, instance)
+            instance = this.instantiateService(injectable)
+            this.serviceMap.set(injectable, instance)
         }
         return instance
     }
 
-
+    provide( token: any, value: any ) {
+        this.serviceMap.set( token, value )
+    }   
 
     private instantiateService(service: Class) {
 

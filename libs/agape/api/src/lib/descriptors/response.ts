@@ -1,8 +1,9 @@
 import { Class } from '@agape/types';
 import { ResponseDescription } from '../types';
+import { Exception } from '@agape/exception';
 
 export class ResponseDescriptor {
-    constructor(public model: Class, public description?: ResponseDescription, statusCode?: number ) {
+    constructor(public model: Class|Exception|[Class], public description?: ResponseDescription ) {
 
     }
 }

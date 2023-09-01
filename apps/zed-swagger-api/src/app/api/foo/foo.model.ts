@@ -1,5 +1,5 @@
 
-import { Model, Document } from '@agape/model'
+import { Model, Document, Field } from '@agape/model'
 
 
 
@@ -14,4 +14,10 @@ import { Model, Document } from '@agape/model'
         Object.assign( this, params )
     }
 
+}
+
+
+@Model export class FooResponse {
+    @Field({ example: "pong"}) 
+    message: string;
 }

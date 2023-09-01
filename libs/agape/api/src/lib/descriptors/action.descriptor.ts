@@ -1,4 +1,4 @@
-import { ActionDescription, HttMethod, ResponseDescription } from '../types';
+import { ActionDescription, HttpMethod, ResponseDescription } from '../types';
 import { Class, Dictionary } from '@agape/types';
 import { ResponseDescriptor } from './response';
 import { BodyDescriptor, BodyDescriptorParams } from './body';
@@ -6,7 +6,13 @@ import { ControllerDescriptor } from './controller.descriptor';
 import { inherit } from '@agape/object';
 import { Middleware } from '../interfaces/middleware.interface';
 import { ActionParameterName } from '../interfaces/action-parameter-definition';
+import { Exception } from '@agape/exception';
 
+export interface ActionRouteDefinition {
+    method: HttpMethod
+    path: string;
+    swagger: boolean;
+}
 
 export class ActionDescriptor {
 
@@ -14,13 +20,14 @@ export class ActionDescriptor {
 
     ʘstatus: number;
 
-    ʘroute: { method: string, path: string };
+    ʘroute: ActionRouteDefinition;
 
-    ʘdescription: ActionDescription
+    ʘdescription: string
+    // ʘdescription: ActionDescription
 
     ʘresponses: ResponseDescriptor[]
 
-    ʘinject: Array<any> = []
+    ʘinject: Array<{parameter: ActionParameterName, designType: Class }> = []
 
     ʘmiddlewares: Array<Class<Middleware>> = []
 
@@ -30,30 +37,33 @@ export class ActionDescriptor {
 
     }
 
+    // description(): ActionDescription
+    // description( description: ActionDescription ): this
+    // description( description?: ActionDescription ) {
     description(): string
-    description( description: ActionDescription ): this
-    description( description?: ActionDescription ) {
+    description( description: string ): this
+    description( description?: string ) {        
         if ( description === undefined ) return this.ʘdescription
         this.ʘdescription = description
         return this
     }
 
-    getDescription( controller: ControllerDescriptor ): string {
-        if ( ! this.ʘdescription ) return ""
-        if ( typeof this.ʘdescription === "function" ) {
-            return this.ʘdescription.call(this, controller, this )
-        }
-        return this.ʘdescription
-    }
+    // getDescription( controller: ControllerDescriptor ): string {
+    //     if ( ! this.ʘdescription ) return ""
+    //     if ( typeof this.ʘdescription === "function" ) {
+    //         return this.ʘdescription.call(this, controller, this )
+    //     }
+    //     return this.ʘdescription
+    // }
 
     inject( parameterIndex: number, parameter: ActionParameterName, designType: Class  ) {
         this.ʘinject[parameterIndex] = { parameter, designType }
     }
 
 
-    respond(model: Class, description?: ResponseDescription, statusCode?: number ) {
+    respond(model: Class|Exception|[Class], description?: ResponseDescription ) {
         if ( this.ʘresponses === undefined ) this.ʘresponses = []
-        const descriptor = new ResponseDescriptor( model, description, statusCode )
+        const descriptor = new ResponseDescriptor( model, description )
         this.ʘresponses.push(descriptor)
         return this
     }
@@ -66,11 +76,11 @@ export class ActionDescriptor {
         return this
     }
 
-    route(): { method: string, path: string }
-    route( method:HttMethod, path?: string, params?: any ): this
-    route( method?:HttMethod, path?: string, params?: any ):any {
+    route(): ActionRouteDefinition
+    route( method:HttpMethod, path?: string, params?: Omit<ActionRouteDefinition, 'method'|'path'> ): this
+    route( method?:HttpMethod, path?: string, params?: Omit<ActionRouteDefinition, 'method'|'path'> ):any {
         if ( method === undefined ) return this.ʘroute
-        this.ʘroute = { method, path }
+        this.ʘroute = { method, path, ...params }
         return this
     }
 

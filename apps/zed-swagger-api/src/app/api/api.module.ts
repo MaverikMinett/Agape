@@ -7,7 +7,33 @@ import { SwaggerModule } from "./swagger/swagger.module";
 
 @Module({
     'modules': [ 
-        SwaggerModule,
+        SwaggerModule.configure({
+            title: 'Zed Swagger API',
+            summary: 'API with Auto-generated swagger docs',
+            contact: {
+                name: "Maverik Minett",
+                email: "maverik@maverik.io"
+            },
+            license: {
+                name: "Apache 2.0",
+                url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+            },
+            version: "1.0.1",
+            security: [
+                {"BearerAuth": []}
+            ],
+            
+            components: {
+                "securitySchemes": {
+                    "BearerAuth": {
+                        "type": "http",
+                        "scheme": "bearer"
+                    }
+                },
+                
+            },
+            
+        }),
         FooModule, 
         AuthModule, 
         UsersModule 
