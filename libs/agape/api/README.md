@@ -188,20 +188,16 @@ optional.
 
 `modules`
 
-`provides`
+`path`
 
 ##### Example
 
 ```
 @Module({
     'controllers': [ FooController ],
-    'modules': [ BarModule ],
-    'provides': [ FooService ]
+    'modules': [ BarModule ]
 })
 ```
-
-
-
 
 ## Requisites
 
@@ -214,7 +210,6 @@ support these compiler options.
 
 [Express](https://www.npmjs.com/package/express)
 
-[Nest.js](https://nestjs.com/)
 
 ## Author
 
