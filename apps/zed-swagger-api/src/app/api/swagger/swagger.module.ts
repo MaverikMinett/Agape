@@ -37,8 +37,6 @@ export class SwaggerController {
                 tagName = titalize(tagName.replace('Controller', ''))
                 builder.addTag(tagName, tagDescription)
 
-                console.log(tagName, tagDescription)
-
 
                 for ( let [actionName, actionDescriptor] of controllerDescriptor.actions.entries() ) {
                     const routePath = "/" + [...pathSegments, controllerDescriptor.path, actionDescriptor.ʘroute.path ]
@@ -48,16 +46,10 @@ export class SwaggerController {
                     if ( ! actionDescriptor.ʘstaticFiles 
                         && (actionDescriptor.ʘroute.swagger === undefined || actionDescriptor.ʘroute.swagger === true)  ) {
 
-                        // console.log( "=====>", actionDescriptor.ʘroute.swagger )
-
                         const httpMethod = actionDescriptor.ʘroute.method
 
                         builder.addAction(routePath, actionDescriptor, { tags: [tagName] })
                         
-                        // builder.path({
-                        //     path: routePath,
-                        //     httpMethod: httpMethod
-                        // })
                     }
         
                 }
