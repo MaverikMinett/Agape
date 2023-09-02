@@ -3,8 +3,10 @@ import { Field, Model } from "@agape/model";
 
 @Model export class Credentials {
 
-    @Field username: string;
+    @Field({ example: 'foo' })
+    username: string;
 
-    @Field password: string;
+    @Field({ example: 'password' })
+    password: string;
 
 }

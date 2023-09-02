@@ -46,7 +46,6 @@ export class SwaggerBuilder {
     }   
 
     addTag( name: string, description: string ) {
-        console.log("-------->ADD TAG", name)
         this.document.tags.push({ name, description })
     }
 
@@ -70,7 +69,7 @@ export class SwaggerBuilder {
                 if ( responseDescriptor.model instanceof Array ) {
                     const schemaRef = this.addModelAsSchema(responseDescriptor.model[0])
                     responses[statusCode] = {
-                        description: responseDescriptor.description,
+                        description: responseDescriptor.description || HTTP_STATUS_CODES[action.ʘstatus],
                         content: {
                             "application/json": {
                                 "schema": {
@@ -86,7 +85,7 @@ export class SwaggerBuilder {
                 else {
                     const schemaRef = this.addModelAsSchema(responseDescriptor.model as Class)
                     responses[statusCode] = {
-                        description: responseDescriptor.description,
+                        description: responseDescriptor.description || HTTP_STATUS_CODES[action.ʘstatus],
                         content: {
                             "application/json": {
                                 "schema": {
@@ -133,7 +132,9 @@ export class SwaggerBuilder {
                     const routeParamDefinition = {
                         in: 'path',
                         name: fieldDescriptor.name,
-                        type,
+                        schema: {
+                            type
+                        },
                         required: true,
                         example: fieldDescriptor.example
                     }
@@ -142,7 +143,23 @@ export class SwaggerBuilder {
                 }
             }
 
-            
+        }
+
+        const bodyDefinition = action.ʘinject.find( i => i.parameter === 'body' ) 
+        if ( bodyDefinition ) {
+            const requestBody = {}
+            this.document.paths[path][action.ʘroute.method]['requestBody'] = requestBody
+            const bodyDesignType = bodyDefinition.designType
+            const schemaRef = this.addModelAsSchema(bodyDesignType)
+            requestBody['required'] = true
+            requestBody['content'] = {
+                'application/json': {
+                    schema: {
+                        "$ref": schemaRef
+                    }
+                    
+                }
+            }
         }
         
 

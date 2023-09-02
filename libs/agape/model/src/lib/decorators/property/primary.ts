@@ -1,5 +1,6 @@
 import { FieldDescriptor, FieldDescriptorParams, ModelDescriptor } from "../../descriptors";
 import { Model } from "../class/model";
+import { Field } from "./field"
 
 /**
  * Use the @Primary decorator to annotate a property and designate it
@@ -23,9 +24,11 @@ export function Primary( ...args:any[] ):any {
     function Primary( target:any, name:string, propertyDescriptor:TypedPropertyDescriptor<Function> ) {
         if ( propertyDescriptor ) throw new Error("Cannot use the Primary decorator on a method")
 
-        let model = Model.descriptor(target, true)
+        Field(params)(target, name, propertyDescriptor)
 
-        model.field(name).assign(params)
+        // let model = Model.descriptor(target, true)
+
+        // model.field(name).assign(params)
     }
 
     if ( target ) return Primary(target, name, propertyDescriptor)

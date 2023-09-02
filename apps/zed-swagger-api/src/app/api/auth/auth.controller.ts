@@ -10,8 +10,7 @@ export class AuthController {
 
     @Status(200)
     @Post('login')
-    create( params: any, body: Deflated<Credentials> ) {
-      const credentials = body
+    create( @Body credentials: Credentials ) {
       return this.service.login( credentials )
     }
 
