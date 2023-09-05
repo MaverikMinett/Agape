@@ -1,6 +1,7 @@
 export * from './lib/descriptors'
 export * from './lib/document'
 export * from './lib/decorators/property/field'
+export * from './lib/decorators/property/foreign-key'
 export * from './lib/decorators/property/primary'
 export * from './lib/decorators/property/choices'
 export * from './lib/decorators/property/required'

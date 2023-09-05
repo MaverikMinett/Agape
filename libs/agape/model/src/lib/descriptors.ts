@@ -147,6 +147,10 @@ export class FieldDescriptor {
 
     choices?: Choice[]
 
+    foreignKey?: boolean
+
+    foreignModel?: Class<Document>
+
     designType: 'string'|'number'|'boolean'|'any'|Class
 
     constructor()

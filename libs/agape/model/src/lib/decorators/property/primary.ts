@@ -1,5 +1,4 @@
-import { FieldDescriptor, FieldDescriptorParams, ModelDescriptor } from "../../descriptors";
-import { Model } from "../class/model";
+import { FieldDescriptorParams } from "../../descriptors";
 import { Field } from "./field"
 
 /**
@@ -15,11 +14,13 @@ export function Primary( ...args:any[] ):any {
     // be used as either @Primary or @Primary(params)
     let target:{ new(...args: any[] ): any; }
     let name:string
-    let params:FieldDescriptorParams = { primary: true }
+    let params:FieldDescriptorParams
     let propertyDescriptor:TypedPropertyDescriptor<Function>
     args.length === 1 
         ? [params] = args
         : [target, name, propertyDescriptor] = args
+    params ??= {}    
+    params['primary'] = true   
 
     function Primary( target:any, name:string, propertyDescriptor:TypedPropertyDescriptor<Function> ) {
         if ( propertyDescriptor ) throw new Error("Cannot use the Primary decorator on a method")
