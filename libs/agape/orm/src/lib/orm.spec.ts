@@ -1,4 +1,4 @@
-import { Document, Field, Model, Primary, View } from '@agape/model';
+import { Document, Field, Model, Primary, View, ForeignKey } from '@agape/model';
 import { MongoConnection } from './connections/mongo.connection';
 import { MongoDatabase } from './databases/mongo.database';
 import { Orm } from './orm'
@@ -1316,6 +1316,163 @@ describe('Orm', () => {
         })
     })
 
+    describe('ForeignKey fields', () => {
+        describe('Insert Query', () => {
+
+            it('should retrieve the bar object', async () => {
+                @Model class Bar extends Document{
+                    @Primary id: string
+                    @Field name: string
+                }
+                
+                @Model class Foo extends Document {
+                    @Primary id: string
+                    @Field bar: Bar;
+                }
+    
+                interface FooCreateView extends Omit<Foo, 'bar'> { }
+    
+                @View(Foo, {
+                    omit: ['bar']
+                }) class FooCreateView extends Document {
+                    @ForeignKey bar: string
+                }
+
+                orm.registerDocument(Foo)
+                orm.registerDocument(Bar)
+    
+                const bar = new Bar();
+                bar.name = 'Baz'
+                await orm.insert(Bar, bar).exec()
+    
+                const foo = new FooCreateView();
+                foo.bar = bar.id
+                await orm.insert(FooCreateView, foo).exec()
+    
+                const retrievedFoo = await orm.retrieve(Foo, foo.id).exec()
+                expect(retrievedFoo.bar.name).toEqual(bar.name)
+            })
+            
+        })
+        describe('Retrieve Query', () => {
+            it('should retrieve the bar id', async () => {
+                @Model class Bar extends Document{
+                    @Primary id: string
+                    @Field name: string
+                }
+                
+                @Model class Foo extends Document {
+                    @Primary id: string
+                    @Field bar: Bar;
+                }
+    
+                interface FooCreateView extends Omit<Foo, 'bar'> { }
+    
+                @View(Foo, {
+                    omit: ['bar']
+                }) class FooCreateView extends Document {
+                    @ForeignKey bar: string
+                }
+
+
+                orm.registerDocument(Foo)
+                orm.registerDocument(Bar)
+    
+                const bar = new Bar();
+                bar.name = 'Baz'
+                await orm.insert(Bar, bar).exec()
+    
+                const foo = new FooCreateView();
+                foo.bar = bar.id
+                await orm.insert(FooCreateView, foo).exec()
+    
+                const retrievedFoo = await orm.retrieve(FooCreateView, foo.id).exec()
+                expect(retrievedFoo.bar).toBe(bar.id)
+            })
+        })
+        // describe('Update Query', () => {
+
+        // })
+
+        describe('Lookup Query', () => {
+            it('should retrieve the bar id', async () => {
+                @Model class Bar extends Document{
+                    @Primary id: string
+                    @Field name: string
+                }
+                
+                @Model class Foo extends Document {
+                    @Primary id: string
+                    @Field bar: Bar;
+                }
+    
+                interface FooCreateView extends Omit<Foo, 'bar'> { }
+    
+                @View(Foo, {
+                    omit: ['bar']
+                }) class FooCreateView extends Document {
+                    @ForeignKey bar: string
+                }
+
+
+                orm.registerDocument(Foo)
+                orm.registerDocument(Bar)
+    
+                const bar = new Bar();
+                bar.name = 'Baz'
+                await orm.insert(Bar, bar).exec()
+    
+                const foo = new FooCreateView();
+                foo.bar = bar.id
+                await orm.insert(FooCreateView, foo).exec()
+    
+                const retrievedFoo = await orm.lookup(FooCreateView, { bar: bar.id } ).exec()
+                expect(retrievedFoo.bar).toBe(bar.id)
+            })
+        })
+
+        describe('List Query', () => {
+            it('should retrieve the bar id', async () => {
+                @Model class Bar extends Document{
+                    @Primary id: string
+                    @Field name: string
+                }
+                
+                @Model class Foo extends Document {
+                    @Primary id: string
+                    @Field bar: Bar;
+                }
+    
+                interface FooCreateView extends Omit<Foo, 'bar'> { }
+    
+                @View(Foo, {
+                    omit: ['bar']
+                }) class FooCreateView extends Document {
+                    @ForeignKey bar: string
+                }
+
+
+                orm.registerDocument(Foo)
+                orm.registerDocument(Bar)
+    
+                const bar = new Bar();
+                bar.name = 'Baz'
+                await orm.insert(Bar, bar).exec()
+    
+                const foo1 = new FooCreateView();
+                foo1.bar = bar.id
+                await orm.insert(FooCreateView, foo1).exec()
+
+                const foo2 = new FooCreateView();
+                foo2.bar = bar.id
+                await orm.insert(FooCreateView, foo2).exec()
+    
+                const retrievedFoos = await orm.list(FooCreateView, { bar: bar.id } ).exec()
+                expect(retrievedFoos[0].bar).toBe(bar.id)
+                expect(retrievedFoos[1].bar).toBe(bar.id)
+            })
+        })
+    })
     
 })
 

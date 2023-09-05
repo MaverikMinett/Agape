@@ -90,6 +90,15 @@ export function selectCriteriaFromFilterCriteria<T>( descriptor: ModelDescriptor
                         selectFieldValue = new ObjectId( primaryField.getValue(filterCriteria[filterField]) )
                     }
                 }
+                else if ( descriptor.fields.get(filterField).foreignKey ) {
+                    selectFieldName = filterField
+                    if ( filterCriteria[filterField] !== undefined && filterCriteria[filterField] !== null ) {
+                        selectFieldValue = new ObjectId(filterCriteria[filterField])
+                    }
+                    else {
+                        selectFieldValue = filterCriteria[filterField]
+                    }
+                }
                 else {
                     selectFieldName = filterField
                     selectFieldValue = filterCriteria[filterField]

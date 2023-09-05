@@ -32,6 +32,14 @@ export class InsertQuery<T extends Class> {
                 }
                 
             }
+            else if ( field.foreignKey === true ) {
+                if ( this.item[field.name] !== undefined && this.item[field.name] !== null ) {
+                    _item[field.name] = new ObjectId(this.item[field.name])
+                }
+                else {
+                    _item[field.name] = this.item[field.name]
+                }
+            }
             else {
                 _item[field.name] = this.item[field.name]
             }

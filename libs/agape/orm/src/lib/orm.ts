@@ -240,6 +240,14 @@ export class RetrieveQuery<T extends Class> {
                     item[field.name] = record[field.name]
                 }
             }
+            else if ( field.foreignKey === true ) {
+                if ( record[field.name] !== undefined && record[field.name] !== null ) {
+                    item[field.name] = (record[field.name] as ObjectId).toString()
+                }
+                else {
+                    item[field.name] = record[field.name]
+                }
+            }
             else {
                 item[field.name] = record[field.name]
             }
@@ -316,6 +324,14 @@ export class ListQuery<T extends Class> {
                         const idString = objectId.toString()
                         foreignKeys[field.name] ??= new Set<string>()
                         foreignKeys[field.name].add(idString)
+                    }
+                    else {
+                        item[field.name] = record[field.name]
+                    }
+                }
+                else if ( field.foreignKey === true ) {
+                    if ( record[field.name] !== undefined && record[field.name] !== null ) {
+                        item[field.name] = (record[field.name] as ObjectId).toString()
                     }
                     else {
                         item[field.name] = record[field.name]
@@ -411,6 +427,14 @@ export class LookupQuery<T extends Class> {
                 if (objectId !== undefined && objectId !== null) {
                     const idString = objectId.toString()
                     item[field.name] = await this.orm.retrieve(field.designType, idString).exec()
+                }
+                else {
+                    item[field.name] = record[field.name]
+                }
+            }
+            else if ( field.foreignKey === true ) {
+                if ( record[field.name] !== undefined && record[field.name] !== null ) {
+                    item[field.name] = (record[field.name] as ObjectId).toString()
                 }
                 else {
                     item[field.name] = record[field.name]
