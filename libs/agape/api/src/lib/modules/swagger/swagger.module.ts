@@ -1,4 +1,4 @@
-import { Module } from "@agape/api";
+import { ControllerDescriptor, Module } from "@agape/api";
 
 import { SwaggerDocument } from "./types";
 import { SwaggerModuleDescriptor } from "./swagger.module.descriptor";
@@ -8,6 +8,9 @@ import { SwaggerBuilder } from "./swagger.builder";
 import { Api } from "libs/agape/api/src/lib/api";
 import { Class } from "@agape/types";
 import { titalize } from "@agape/string";
+
+import fs from 'fs';
+
 
 @Controller()
 export class SwaggerController {
@@ -75,7 +78,7 @@ export class SwaggerController {
         return builder.document 
     }
 
-    @StaticFiles('./apps/_swagger')
+    @StaticFiles('/path/to/swagger')
     staticFiles() {
         
     }
@@ -93,7 +96,20 @@ export class SwaggerModule {
 
         const descriptor = new SwaggerModuleDescriptor( options )
         Reflect.defineMetadata("swagger:descriptor", descriptor, target)
+
+
         
+        if ( process.env.SWAGGER_SRC === undefined ) {
+            console.warn(`WARNING: SwaggerModule is loaded but the SWAGGER_SRC environment variable has not been set`)
+        }
+        else if ( ! fs.existsSync(process.env.SWAGGER_SRC) ) {
+            console.warn(`WARNING: Path to swagger source ${process.env.SWAGGER_SRC} does not exist`)
+        }
+        else {
+            const controllerDescriptor = Controller.descriptor(SwaggerController)
+            controllerDescriptor.actions.get('staticFiles').ʘstaticFiles[0] = process.env.SWAGGER_SRC
+        }
+
         return SwaggerModule
     }
 

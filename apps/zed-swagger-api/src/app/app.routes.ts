@@ -11,6 +11,7 @@ const router = Router()
 
 router.get('/ping', ( req, res ) => res.send( { message: 'pong' } ) )
 
+console.log("BOOTSTRAP EXPRESS")
 bootstrapExpress(router, ApiModule)
 
 export default router

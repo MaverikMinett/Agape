@@ -1,15 +1,15 @@
-import { Module, LoggingMiddleware } from "@agape/api";
+import { Module, LoggingMiddleware, SwaggerModule } from "@agape/api";
 import { FooModule } from "./foo/foo.module";
 import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
-import { SwaggerModule } from "./swagger/swagger.module";
+// import { SwaggerModule } from "./swagger/swagger.module";
 
 
 @Module({
     'modules': [ 
         SwaggerModule.configure({
-            title: 'Zed Swagger API',
-            summary: 'API with Auto-generated swagger docs',
+            title: 'Time 4 Cati API',
+            summary: 'API',
             contact: {
                 name: "Maverik Minett",
                 email: "maverik@maverik.io"

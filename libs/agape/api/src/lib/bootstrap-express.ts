@@ -10,6 +10,7 @@ import { ApiRequest } from "./api-request"
 import { ApiResponse } from "./api-response"
 
 import express from 'express';
+import { SwaggerController } from "./modules/swagger/swagger.module"
 
 
 export function routeTo( 
@@ -67,6 +68,7 @@ export function bootstrapExpress( router: ExpressRouter, module: Class ) {
                     .join("/")
 
                 if ( actionDescriptor.ʘstaticFiles ) {
+                    
                     for ( let staticFilePath of actionDescriptor.ʘstaticFiles ) {
                         router.use(routePath, express.static(staticFilePath))
                     }
@@ -78,7 +80,6 @@ export function bootstrapExpress( router: ExpressRouter, module: Class ) {
                     )
                 }
     
-                
             }
     
             pathSegments.pop()
