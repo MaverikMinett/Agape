@@ -1,6 +1,6 @@
 {
   "name": "@agape/object",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "Extensible objects",
   "type": "commonjs",
   "keywords": [
@@ -12,9 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@agape/string": "^1.0.0",
+    "@agape/types": "^1.0.0",
     "reflect-metadata": "^0.1.13"
-  },
-  "peerDependencies": {
-    "@agape/types": "^1.0.0"
   }
 }

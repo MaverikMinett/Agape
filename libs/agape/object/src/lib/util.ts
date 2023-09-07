@@ -1,4 +1,4 @@
-import { Class } from './types'
+import { Class } from '@agape/types'
 
 export function classExtends( model: Class, ancestor: Class ) {
 

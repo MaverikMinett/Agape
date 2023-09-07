@@ -1,6 +1,6 @@
 
 import { meta } from "../meta";
-import { Class } from "../types";
+import { Class } from "@agape/types";
 
 import { include } from './include'
 

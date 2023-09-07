@@ -1,6 +1,6 @@
 
 import { Serializer } from "./serializer"
-import { Class } from "./types"
+import { Class } from "@agape/types"
 
 /**
  * Describes a method and all associated modifiers and provides the

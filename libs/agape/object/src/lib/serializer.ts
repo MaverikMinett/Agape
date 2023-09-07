@@ -1,5 +1,5 @@
 import { meta } from "./meta";
-import { Class, Dictionary } from "./types";
+import { Class, Dictionary } from "@agape/types";
 import { ObjectDescriptor } from "./descriptors";
 
 export class Serializer {

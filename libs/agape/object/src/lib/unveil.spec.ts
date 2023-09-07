@@ -1,4 +1,4 @@
-import { Dictionary } from "./types"
+import { Dictionary } from "@agape/types"
 import { unveil } from "./unveil"
 
 

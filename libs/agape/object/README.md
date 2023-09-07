@@ -38,7 +38,7 @@ javascript objects.
 ## Installation
 
 ```
-npm install @agape/object @agape/types
+npm install @agape/object
 ```
 
 ## Traits

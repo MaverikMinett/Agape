@@ -1,7 +1,7 @@
 import { coerce } from "./decorators/coerce"
 import { ObjectDescriptor } from "./descriptors"
 import { inflate, Serializer } from "./serializer"
-import { Dictionary } from "./types"
+import { Dictionary } from "@agape/types"
 
 describe('inflate', () => {
 

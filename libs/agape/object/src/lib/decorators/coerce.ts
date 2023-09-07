@@ -1,6 +1,6 @@
 import { meta } from "../meta"
 import { Serializer } from "../serializer"
-import { Class } from "../types"
+import { Class } from "@agape/types"
 
 import 'reflect-metadata'
 export function coerce( to:Class ):any

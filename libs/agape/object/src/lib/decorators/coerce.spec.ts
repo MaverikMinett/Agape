@@ -3,8 +3,8 @@ import { coerce } from './coerce'
 import { readonly } from './readonly'
 import { lazy } from './lazy'
 import { deflate, inflate, Serializer } from "../serializer";
-import { Dictionary, TypedInterface } from "../types";
-
+import { Dictionary } from "@agape/types";
+import { TypedInterface } from "../types"
 
 
 let o;
