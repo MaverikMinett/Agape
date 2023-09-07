@@ -35,6 +35,11 @@ o.bar()
 A collection of decorators and meta descriptors for composing extensible 
 javascript objects.
 
+## Installation
+
+```
+npm install @agape/object @agape/types
+```
 
 ## Traits
 

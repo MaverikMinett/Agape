@@ -8,7 +8,7 @@
       "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/agape/object/cjs.in",
+        "outputPath": "dist/libs/agape/object",
         "main": "libs/agape/object/src/index.ts",
         "tsConfig": "libs/agape/object/tsconfig.lib.json",
         "assets": ["libs/agape/object/*.md"]

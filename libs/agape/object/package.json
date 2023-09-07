@@ -1,8 +1,8 @@
 {
   "name": "@agape/object",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Extensible objects",
-  "module": "./es2020/index.js",
+  "type": "commonjs",
   "keywords": [
     "agape",
     "object",
@@ -14,18 +14,7 @@
     "@agape/string": "^1.0.0",
     "reflect-metadata": "^0.1.13"
   },
-  "es2020": "./esm2020/index.js",
-  "es2015": "./esm2020/index.js",
-  "exports": {
-    "./package.json": {
-      "default": "./package.json"
-    },
-    ".": {
-      "es2020": "./es2020/index.js",
-      "es2015": "./es2015/index.js",
-      "node": "./es2015/index.js",
-      "default": "./es2020/index.js",
-      "require": "./cjs/index.js"
-    }
+  "peerDependencies": {
+    "@agape/types": "^1.0.0"
   }
 }
