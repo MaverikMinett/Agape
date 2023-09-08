@@ -59,7 +59,6 @@
     "build:terminal": "nx build agape-terminal",
     "publish:terminal": "cd dist/libs/agape/terminal && npm publish --access public",
     "release:terminal": "npm run build:terminal && npm run publish:terminal",
-    
     "build:object": "nx build agape-object",
     "build:object-old": "npm run build:object:before && npm run build:object:cjs && npm run build:object:es2020 && npm run build:object:es2015 && npm run build:object:after",
     "build:object-old:before": "rm -r -f dist/libs/agape/object",

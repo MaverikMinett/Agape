@@ -1,4 +1,4 @@
-import { Class } from "@agape/object";
+import { Class } from "@agape/types";
 import { ModelDescriptor } from "./descriptors";
 
 export function handle( target:Class ) {

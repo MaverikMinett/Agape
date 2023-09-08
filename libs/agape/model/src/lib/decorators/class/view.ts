@@ -1,4 +1,4 @@
-import { Class } from '@agape/object';
+import { Class } from '@agape/types';
 import { FieldDescriptor, ViewDescriptor } from '../../descriptors'
 
 import 'reflect-metadata'

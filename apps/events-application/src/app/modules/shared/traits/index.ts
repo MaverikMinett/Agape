@@ -1,4 +1,5 @@
-import { Class, include } from "@agape/object";
+import { include } from "@agape/object";
+import { Class } from "@agape/types"
 
 export function Traits( ...traits: Class[] ) {
     return include( ...traits )
