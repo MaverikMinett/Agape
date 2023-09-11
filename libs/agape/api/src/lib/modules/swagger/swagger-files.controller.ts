@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Controller, ExecutionContext, Get} from "../../decorators";
 
 import FAVICON_16_PNG from './swagger-files/favicon-16x16.png'
+import FAVICON_32_PNG from './swagger-files/favicon-32x32.png';
 
 import INDEX_HTML from './swagger-files/index.html'
 import INDEX_CSS from './swagger-files/index.css'
@@ -26,7 +27,15 @@ export class SwaggerFilesController {
 
     @Get('favicon-16x16.png', { swagger: false })
     favicon16( @ExecutionContext context: { req: Request, res: Response } ) {
-        const decodedFile = Buffer.from(JSON.stringify(FAVICON_16_PNG), 'base64').toString('binary')
+        const decodedFile = Buffer.from(JSON.stringify(FAVICON_16_PNG), 'base64')
+        context.res.setHeader('content-type', 'image/png');
+        context.res.write(decodedFile)
+        context.res.end()
+    }
+
+    @Get('favicon-32x32.png', { swagger: false })
+    favicon32( @ExecutionContext context: { req: Request, res: Response } ) {
+        const decodedFile = Buffer.from(JSON.stringify(FAVICON_32_PNG), 'base64')
         context.res.setHeader('content-type', 'image/png');
         context.res.write(decodedFile)
         context.res.end()
@@ -37,6 +46,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(INDEX_HTML), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/html');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('index.css', { swagger: false })
@@ -44,6 +54,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(INDEX_CSS), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/css');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('oauth2-redirect.html', { swagger: false })
@@ -51,6 +62,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(OATH2_REDIRECT_HTML), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/html');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-config.yaml', { swagger: false })
@@ -58,6 +70,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_CONFIG_YAML), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/plain');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-initializer.js', { swagger: false })
@@ -65,6 +78,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_INITIALIZER_JS), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/plain');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-ui-bundle.js.map', { swagger: false })
@@ -72,6 +86,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_UI_BUNDLE_JS_MAP), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/plain');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-ui-bundle.js', { swagger: false })
@@ -79,6 +94,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_UI_BUNDLE_JS), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/plain');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-ui-es-bundle-core.js.map', { swagger: false })
@@ -86,6 +102,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_UI_ES_BUNDLE_CORE_JS_MAP), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/plain');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-ui-es-bundle-core.js', { swagger: false })
@@ -93,6 +110,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_UI_ES_BUNDLE_CORE_JS), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/plain');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-ui-es-bundle.js', { swagger: false })
@@ -100,6 +118,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_UI_ES_BUNDLE_JS), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/plain');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-ui-es-bundle.js.map', { swagger: false })
@@ -107,6 +126,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_UI_ES_BUDNLE_JS_MAP), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/plain');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-ui-standalone-preset.js.map', { swagger: false })
@@ -114,6 +134,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_UI_STANDALONE_PRESET_JS_MAP), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/plain');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-ui-standalone-preset.js', { swagger: false })
@@ -121,6 +142,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_UI_STANDALONE_PRESET), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/plain');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-ui.css.map', { swagger: false })
@@ -128,6 +150,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_UI_CSS_MAP), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/plain');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-ui.css', { swagger: false })
@@ -135,6 +158,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_UI_CSS), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/css');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-ui.js', { swagger: false })
@@ -142,6 +166,7 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_UI_JS), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/plain');
         context.res.write(decodedFile)
+        context.res.end()
     }
 
     @Get('swagger-ui.js.map', { swagger: false })
@@ -149,5 +174,6 @@ export class SwaggerFilesController {
         const decodedFile = Buffer.from(JSON.stringify(SWAGGER_UI_JS_MAP), 'base64').toString('utf8')
         context.res.setHeader('content-type', 'text/plain');
         context.res.write(decodedFile)
+        context.res.end()
     }
 }
