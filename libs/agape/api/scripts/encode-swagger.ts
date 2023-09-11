@@ -2,9 +2,10 @@
 import fs from 'fs';
 import path from 'path';
 
-const ASSETS_DIR = './libs/agape/api/assets/swagger';
 
-const OUTPUT_DIR = './libs/agape/api/src/lib/swagger-files'
+const ASSETS_DIR = './apps/_swagger';
+
+const OUTPUT_DIR = './libs/agape/api/src/lib/modules/swagger/swagger-files'
 
 // console.log( fs.readdirSync('.') )
 
@@ -22,6 +23,16 @@ function createOutputDirectory() {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 }
 
+/**
+ * Get the file mime type from path. No extension required.
+ * @param filePath Path to the file
+ */
+function getMimeType(filePath) {
+    const execSync = require('child_process').execSync;
+    const mimeType = execSync('file --mime-type -b "' + filePath + '"').toString();
+    return mimeType.trim();
+}
+
 createOutputDirectory()
 emptyOutputDirectory()
 
@@ -29,11 +40,15 @@ const files = fs.readdirSync(ASSETS_DIR)
 console.log(files)
 
 for ( let file of files ) {
-    const fileContent = fs.readFileSync( path.join(ASSETS_DIR, file) ) 
-    const outputContent  = `export default \`${fileContent}\` `
-    const outputFilename = `${file}.ts`
+    if ( file !== "swagger.json") {
+        const fileContent = fs.readFileSync( path.join(ASSETS_DIR, file) ) 
+        const encodedFileContent = fileContent.toString('base64')
+        const outputContent  = `export default \`${encodedFileContent}\` `
+        const outputFilename = `${file}.ts`
+        const mimeType = getMimeType( path.join(ASSETS_DIR, file) )
+        console.log(outputFilename, "\t", mimeType)
+    
+        fs.writeFileSync( path.join(OUTPUT_DIR, outputFilename), outputContent)
+    }
 
-    console.log(outputFilename)
-
-    fs.writeFileSync( path.join(OUTPUT_DIR, outputFilename), outputContent)
 }

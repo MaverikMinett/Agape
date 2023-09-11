@@ -5,6 +5,7 @@ export * from './class/module.decorator'
 
 // export * from './controller/action'
 export * from './controller/body.decorator'
+export * from './controller/execution-context.decorator'
 export * from './controller/params.decorator'
 export * from './controller/params.decorator'
 export * from './controller/static-files.decorator'

@@ -31,7 +31,16 @@ export function routeTo(
 
         const apiResponse = new ApiResponse()
 
-        await api.callAction(controllerInstance, moduleDescriptor, controllerDescriptor, actionDescriptor, apiRequest, apiResponse)
+        const context:any = { req, res }
+
+        await api.callAction(
+            controllerInstance, 
+            moduleDescriptor, 
+            controllerDescriptor, 
+            actionDescriptor, 
+            apiRequest, 
+            apiResponse,
+            context)
         res.status(apiResponse.statusCode)
 
         if ( apiResponse.statusText !== undefined )
@@ -68,7 +77,7 @@ export function bootstrapExpress( router: ExpressRouter, module: Class ) {
                     .join("/")
 
                 if ( actionDescriptor.ʘstaticFiles ) {
-                    
+
                     for ( let staticFilePath of actionDescriptor.ʘstaticFiles ) {
                         router.use(routePath, express.static(staticFilePath))
                     }
