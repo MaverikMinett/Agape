@@ -340,6 +340,7 @@ describe('Orm', () => {
             const results = await orm.list(Foo).exec()
             expect(results.length).toBe(2)
         })
+        
         describe('nested documents', () => {
             it('should retrieve the bar documents with the foo documents', async() => {
                 @Model class Bar extends Document {
@@ -534,6 +535,29 @@ describe('Orm', () => {
             
                         const results = await orm.list(Foo, { name: foo1.name }).exec()
                         expect(results.length).toBe(1)
+                    })
+                    it('should match on a regex', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 42 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+            
+                        const results = await orm.list(Foo, { name: /j/i }).exec()
+                        expect(results.length).toBe(2)
                     })
                 })
                 describe('in', () => {

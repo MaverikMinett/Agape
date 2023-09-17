@@ -351,7 +351,7 @@ export class ListQuery<T extends Class> {
             const filterFieldName = foriegnDescriptor.primaryField.name + '__in'
             const objectsList = await this.orm.list(
                 descriptor.fields.get(foreignKeyField).designType as Class, 
-                { [filterFieldName]: Array.from(foreignKeys[foreignKeyField]) }
+                { [filterFieldName]: Array.from(foreignKeys[foreignKeyField]) as any }
             ).exec()
             const objectsDict: Dictionary<object> = { }
             for ( let o of objectsList ) {
