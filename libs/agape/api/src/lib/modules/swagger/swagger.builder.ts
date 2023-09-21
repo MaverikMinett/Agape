@@ -179,23 +179,30 @@ export class SwaggerBuilder {
 
         const modelDescriptor = Model.descriptor(model)
 
-        for ( let fieldDescriptor of modelDescriptor.fields.all() ) {
-            let type: string = ""
-            if ( fieldDescriptor.designType === String ) {
-                type = 'string'
-            }
-            else if ( fieldDescriptor.designType === Number ) {
-                type = 'number'
-            }
-            else if ( fieldDescriptor.designType === Date ) {
-                type = 'date'
-            }
-            else if ( fieldDescriptor.designType instanceof Function ) {
-                type = 'object'
-            }
-            schema.properties[fieldDescriptor.name] = {
-                type,
-                example: fieldDescriptor.example
+        if ( ! modelDescriptor ) {
+            console.log(`Cannot add ${model.name} as Schema because it is not a Model`)
+        }
+        
+
+        if ( modelDescriptor ) {
+            for ( let fieldDescriptor of modelDescriptor.fields.all() ) {
+                let type: string = ""
+                if ( fieldDescriptor.designType === String ) {
+                    type = 'string'
+                }
+                else if ( fieldDescriptor.designType === Number ) {
+                    type = 'number'
+                }
+                else if ( fieldDescriptor.designType === Date ) {
+                    type = 'date'
+                }
+                else if ( fieldDescriptor.designType instanceof Function ) {
+                    type = 'object'
+                }
+                schema.properties[fieldDescriptor.name] = {
+                    type,
+                    example: fieldDescriptor.example
+                }
             }
         }
 

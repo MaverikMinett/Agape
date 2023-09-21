@@ -20,4 +20,5 @@ export class ApiRequest {
 
     context: 'commander'|'rest'|string
 
+    auth: any;
 }

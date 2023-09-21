@@ -117,6 +117,7 @@ export class Api {
             else if ( name === 'request' ) params.push(apiRequest)
             else if ( name === 'response' ) params.push(apiResponse)
             else if ( name === 'execution-context' ) params.push(context)
+            else if ( name === 'auth' ) params.push(apiRequest.auth)
             else params.push(undefined)
         }
 

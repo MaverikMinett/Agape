@@ -1,6 +1,6 @@
 {
   "name": "@agape/api",
-  "version": "0.3.1",
+  "version": "0.4.4",
   "type": "commonjs",
   "description": "Framework for building Rest APIs",
   "author": {
