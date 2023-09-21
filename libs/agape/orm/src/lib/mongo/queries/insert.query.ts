@@ -46,7 +46,7 @@ export class InsertQuery<T extends Class> {
         }
 
         const result = await this.collection.insertOne( _item )
-        descriptor.primaryField.setValue(this.item, result.insertedId.toString())
+        if ( descriptor.primaryField ) descriptor.primaryField.setValue(this.item, result.insertedId.toString())
         return { id: result.insertedId.toString() }
     }
 
