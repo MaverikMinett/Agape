@@ -364,8 +364,14 @@ export class ListQuery<T extends Class> {
             const record = records[i]
             for ( let foreignKeyField of Object.keys(foreignKeys) ) {
                 let foreignObjectId = record[foreignKeyField]
-                let foreignObjectIdString = foreignObjectId.toString()
-                items[i][foreignKeyField] = foreignObjects[foreignKeyField][foreignObjectIdString]
+                if ( foreignObjectId !== undefined && foreignObjectId !== null ) {
+                    let foreignObjectIdString = foreignObjectId.toString()
+                    items[i][foreignKeyField] = foreignObjects[foreignKeyField][foreignObjectIdString]
+                }
+                else {
+                    items[i][foreignKeyField] = foreignObjectId
+                }
+                
             }
         }
 
