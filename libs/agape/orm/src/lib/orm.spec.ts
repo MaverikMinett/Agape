@@ -80,7 +80,7 @@ describe('Orm', () => {
             const foo = new Foo({ name: "Johnny", age: 42 })
             orm.registerDocument(Foo)
 
-            const id = await orm.insert(Foo, foo).exec()
+            const { id } = await orm.insert(Foo, foo).exec()
             expect(id).toBeTruthy()
         })
     
@@ -101,7 +101,7 @@ describe('Orm', () => {
             orm.registerDocument(Foo)
     
     
-            const id = await orm.insert(Foo, foo).exec()
+            await orm.insert(Foo, foo).exec()
             expect(foo.id).toBeTruthy()
             console.log(foo.id)
     
@@ -144,6 +144,54 @@ describe('Orm', () => {
             
             await orm.insert(Foo, foo).exec()
             expect( foo.id ).toBeTruthy()
+        })
+    })
+
+    describe('UpdateQuery', () => {
+        it('should update the foo using the record id', async() => {
+            @Model class Foo extends Document {
+    
+                @Primary id: string
+                @Field name: string
+                @Field age: number
+            
+                constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+    
+            const foo = new Foo({ name: "Johnny", age: 42 })
+            orm.registerDocument(Foo)
+
+            const { id } = await orm.insert(Foo, foo).exec()
+            
+            foo.age = 55
+            await orm.update(Foo, id, foo).exec()
+        })
+        it('should update the foo using a filter', async() => {
+            @Model class Foo extends Document {
+    
+                @Primary id: string
+                @Field name: string
+                @Field age: number
+            
+                constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+    
+            const foo = new Foo({ name: "Johnny", age: 42 })
+            orm.registerDocument(Foo)
+
+            const { id } = await orm.insert(Foo, foo).exec()
+            
+            foo.age = 55
+            await orm.update(Foo, { age: 42 }, foo).exec()
+
+            const retrievedFoo = await orm.retrieve(Foo, id).exec()
+            expect(retrievedFoo.age).toBe(55)
         })
     })
 
@@ -1337,6 +1385,29 @@ describe('Orm', () => {
                 const user = await orm.lookup(User, { username: "foo" }).exec()
                 expect(user.role).toBeDefined()
             }) 
+        })
+    })
+
+    describe('DeleteQuery', () => {
+        it('should delete the foo', async() => {
+            @Model class Foo extends Document {
+    
+                @Primary id: string
+                @Field name: string
+                @Field age: number
+            
+                constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+    
+            const foo = new Foo({ name: "Johnny", age: 42 })
+            orm.registerDocument(Foo)
+
+            const { id } = await orm.insert(Foo, foo).exec()
+            
+            await orm.delete(Foo, id).exec()
         })
     })
 

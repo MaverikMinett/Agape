@@ -7,11 +7,11 @@ import { Collection, ObjectId } from 'mongodb';
 import { MongoDatabase } from './databases/mongo.database';
 
 import { DeleteQuery } from './mongo/queries/delete.query';
-import { UpdateQuery } from './mongo/queries/update.query';
 import { InsertQuery } from './mongo/queries/insert.query';
 
 import { FilterCriteria } from './types'
-import { selectCriteriaFromFilterCriteria } from './util';
+import { itemToRecord, selectCriteriaFromFilterCriteria } from './util';
+import { Exception } from '@agape/exception';
 
 export interface DocumentLocatorParams {
     databaseName?: string;
@@ -44,13 +44,6 @@ export class Orm {
     registerDatabase( identifier: string, database: MongoDatabase ) {
         this.databases.set(identifier, database)
     }
-
-    // registerEntity( entity: Class ) {
-        // TODO: Get the database from the entity definition
-        // const database = Agape.Entity(entity).database
-        // TODO: Allow the database to be passed in as a parameter
-        // this.registerModel( entity, database )
-    // }
 
     registerDocument( model: Class, params: DocumentLocatorParams={} ) {
 
@@ -135,12 +128,14 @@ export class Orm {
         return new LookupQuery<T>(this, model, collection, filter)
     }
 
-    update<T extends Class>(model: T, id: string, item: Pick<InstanceType<T>, keyof InstanceType<T>> ) {
+    update<T extends Class>( model: T, id: string,  item: InstanceType<T> ): UpdateQuery<T>
+    update<T extends Class>( model: T, filter: FilterCriteria<InstanceType<T>>,  item: InstanceType<T> ): UpdateQuery<T>
+    update<T extends Class>( model: T, selector: string|FilterCriteria<InstanceType<T>>, item: InstanceType<T> ): UpdateQuery<T> {
         const locator = this.getLocator(model)
 
         const collection = locator.collection
 
-        return new UpdateQuery(model, collection, id, item)
+        return new UpdateQuery(this, model, collection, selector, item)
     }
 
     list<T extends Class>( model: T, filter?: FilterCriteria<InstanceType<T>> ) {
@@ -153,13 +148,23 @@ export class Orm {
         return query
     }
 
-    delete<T extends Class>(model: T, id: string ) {
+    delete<T extends Class>(model: T, id: string): DeleteQuery<T> {
         const locator = this.getLocator(model)
 
         const collection = locator.collection
 
         return new DeleteQuery<T>(model, collection, id)
     }
+
+    // delete<T extends Class>(model: T, filter: FilterCriteria<InstanceType<T>>): DeleteQuery<T>
+    // delete<T extends Class>(model: T, filter: FilterCriteria<InstanceType<T>>): DeleteQuery<T>
+    // delete<T extends Class>(model: T, selector: string|FilterCriteria<InstanceType<T>>): DeleteQuery<T> {
+    //     const locator = this.getLocator(model)
+
+    //     const collection = locator.collection
+
+    //     return new DeleteQuery<T>(model, collection, id)
+    // }
 
 
     getLocator<T extends Class>(view: T) {
@@ -384,6 +389,7 @@ export class ListQuery<T extends Class> {
     }
 }
 
+
 export class LookupQuery<T extends Class> {
 
     constructor( public orm: Orm, public model: T, public collection: Collection, public filter: FilterCriteria<InstanceType<T>> ) {
@@ -463,4 +469,54 @@ export class LookupQuery<T extends Class> {
         const record = await this.exec()
         return inflate<T>( this.model, record )
     }
+}
+
+export class UpdateQuery<T extends Class> {
+
+    id: ObjectId
+
+    filter: FilterCriteria<InstanceType<T>>
+
+    constructor( orm: Orm, model: T, collection: Collection, id: string, item: InstanceType<T> )
+    constructor( orm: Orm, model: T, collection: Collection, filter: FilterCriteria<InstanceType<T>>, item: Pick<T, keyof T> )
+    constructor( orm: Orm, model: T, collection: Collection, selector: string|FilterCriteria<InstanceType<T>>, item: InstanceType<T> )
+    constructor(  public orm: Orm, public model: T, public collection: Collection, selector: string|FilterCriteria<InstanceType<T>>, public item: InstanceType<T> ) {
+        if ( typeof selector === 'string' ) {
+            try {
+                this.id = new ObjectId(selector)
+            }
+            catch {
+                throw new Error(`Invalid record ${this.id}`)
+            }
+        }
+        else {
+            this.filter = selector
+        }
+    }
+
+    async exec( ) {
+        const descriptor = Model.descriptor(this.model)
+
+        /* selection */
+        let select: Dictionary 
+        if ( this.id ) select = { _id: this.id }
+        if ( this.filter ) select = selectCriteriaFromFilterCriteria( descriptor, this.filter )
+
+        if ( this.orm.debug ) {
+            console.log("SELECT", select )
+        }
+
+        /* record */
+        const record = itemToRecord(this.model, this.item)
+
+        const result = await this.collection.updateOne( select, { $set: record } )
+
+        if ( result.matchedCount === 0 ) {
+            throw new Exception(404, `Could not update ${this.model.name} record with id ${this.id}, record not found`)
+        }
+        if ( result.acknowledged === false ) {
+            throw new Exception(500, `Could not update ${this.model.name} record with id ${this.id}, database did not acknowledge request`)
+        }
+    }
+
 }

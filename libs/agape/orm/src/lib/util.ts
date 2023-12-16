@@ -124,3 +124,38 @@ export function selectCriteriaFromFilterCriteria<T>( descriptor: ModelDescriptor
     return select
 }
 
+export function itemToRecord( model: Class, item: any ) {
+    const descriptor = Model.descriptor(model)
+    const fields = descriptor.fields.all().filter( f => ! f.primary )
+
+    const record: any = { }
+    for ( let field of fields ) {
+        if ( field.designType instanceof Function && field.designType.prototype as any instanceof Document ) {
+            const designTypeModelDescriptor = Model.descriptor(field.designType)
+            const fieldValue = descriptor.fields.get( field.name ).getValue(item)
+            if ( fieldValue !== undefined && fieldValue !== null ) {
+                const idString = designTypeModelDescriptor.primaryField.getValue( fieldValue )
+
+                const objectId = new ObjectId(idString)
+                record[field.name] = objectId
+            }
+            else {
+                record[field.name] = item[field.name]
+            }
+            
+        }
+        else if ( field.foreignKey === true ) {
+            if ( item[field.name] !== undefined && item[field.name] !== null ) {
+                record[field.name] = new ObjectId(item[field.name])
+            }
+            else {
+                record[field.name] = item[field.name]
+            }
+        }
+        else {
+            record[field.name] = item[field.name]
+        }
+    }
+
+    return record
+}
