@@ -159,3 +159,23 @@ export function itemToRecord( model: Class, item: any ) {
 
     return record
 }
+
+export function documentAndViewFromModelParam<T extends Class<Document>, P extends Class<Document>=T>(model: T|[P,T]|{document: P, view: T}): { document: P, view: T} {
+    let document: P
+    let view: T
+
+    if ( Array.isArray(model) ) {
+        document = model[0]
+        view = model[1]
+    }
+    else if ( typeof model === 'function' ) {
+        document = model as unknown as P
+        view = model
+    }
+    else {
+        document = model.document
+        view = model.view
+    }
+
+    return { document, view }
+}

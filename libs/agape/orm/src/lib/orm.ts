@@ -8,7 +8,7 @@ import { MongoDatabase } from './databases/mongo.database';
 import { InsertQuery } from './mongo/queries/insert.query';
 
 import { FilterCriteria } from './types'
-import { itemToRecord, selectCriteriaFromFilterCriteria } from './util';
+import { documentAndViewFromModelParam, itemToRecord, selectCriteriaFromFilterCriteria } from './util';
 import { Exception } from '@agape/exception';
 
 export interface DocumentLocatorParams {
@@ -111,14 +111,19 @@ export class Orm {
     }
 
 
-    retrieve<T extends Class>( model: T, id: string ): RetrieveQuery<T>
-    retrieve<T extends Class>( model: T, filter: FilterCriteria<InstanceType<T>> ): RetrieveQuery<T>
-    retrieve<T extends Class>( model: T, selector: string|FilterCriteria<InstanceType<T>>): RetrieveQuery<T> {
-        const locator = this.getLocator(model)
+    retrieve<T extends Class<Document>>( model: T, id: string ): RetrieveQuery<T>
+    retrieve<T extends Class<Document>>( model: T, filter: FilterCriteria<InstanceType<T>> ): RetrieveQuery<T>
+    retrieve<T extends Class<Document>, P extends Class<Document>>( model: [P,T], filter: FilterCriteria<InstanceType<P>> ): RetrieveQuery<T>
+    retrieve<T extends Class<Document>, P extends Class<Document>>( model: {document: P, view: T}, filter: FilterCriteria<InstanceType<P>> ): RetrieveQuery<T>
+    retrieve<T extends Class<Document>, P extends Class<Document>=T>( model: T|[P,T]|{document: P, view: T}, selector: string|FilterCriteria<InstanceType<P>>): RetrieveQuery<T> {
+
+        const { document } = documentAndViewFromModelParam(model)
+        
+        const locator = this.getLocator(document)
 
         const collection = locator.collection
 
-        return new RetrieveQuery<T>(this, model, collection, selector)
+        return new RetrieveQuery<T,P>(this, model as any, collection, selector as any)
     }
 
     update<T extends Class>( model: T, id: string,  item: InstanceType<T> ): UpdateQuery<T>
@@ -178,16 +183,25 @@ export class Orm {
 /**
  * Retrieve query to lookup a single record by it's ID
  */
-export class RetrieveQuery<T extends Class> {
+export class RetrieveQuery<T extends Class<Document>,P extends Class<Document>=any> {
 
     id: ObjectId
 
-    filter: FilterCriteria<InstanceType<T>>
+    filter: FilterCriteria<InstanceType<P>>
 
-    constructor( orm: Orm,  model: T, collection: Collection, id: string )
-    constructor( orm: Orm,  model: T, collection: Collection, filter: FilterCriteria<InstanceType<T>> )
-    constructor( orm: Orm,  model: T, collection: Collection, selector: string|FilterCriteria<InstanceType<T>> )
-    constructor( public orm: Orm, public model: T, public collection: Collection, selector: string|FilterCriteria<InstanceType<T>> ) {
+    document: P
+
+    view: T
+
+    constructor( orm: Orm, model: T, collection: Collection, id: string )
+    constructor( orm: Orm, model: T, collection: Collection, filter: FilterCriteria<InstanceType<T>> )
+    constructor( orm: Orm, model: [P,T], collection: Collection, filter: FilterCriteria<InstanceType<P>>)
+    constructor( orm: Orm, model: {document: P, view: T}, collection: Collection, filter: FilterCriteria<InstanceType<P>>)
+    constructor( public orm: Orm, model: T|[P,T]|{document: P, view: T}, public collection: Collection, selector: string|FilterCriteria<InstanceType<P>> ) {
+        const { document, view } = documentAndViewFromModelParam(model)
+        this.document = document
+        this.view = view
+        
         if ( typeof selector === 'string' ) {
             try {
                 this.id = new ObjectId(selector)
@@ -203,12 +217,13 @@ export class RetrieveQuery<T extends Class> {
 
     async exec( ): Promise<Pick<InstanceType<T>, keyof InstanceType<T>>> {
         console.log("Perform retrieve")
-        const descriptor = Model.descriptor(this.model)
+        const documentDescriptor = Model.descriptor(this.document)
+        const viewDescriptor = Model.descriptor(this.view)
 
         /* selection */
         let select: Dictionary 
         if ( this.id ) select = { _id: this.id }
-        if ( this.filter ) select = selectCriteriaFromFilterCriteria( descriptor, this.filter )
+        if ( this.filter ) select = selectCriteriaFromFilterCriteria( documentDescriptor, this.filter )
 
         if ( this.orm.debug ) {
             console.log("RETRIEVE", select )
@@ -217,12 +232,12 @@ export class RetrieveQuery<T extends Class> {
         /* projection */
         const projection: Dictionary = { _id: 0 }
 
-        const primaryField = descriptor.fields.all().find( f => f.primary )
+        const primaryField = viewDescriptor.fields.all().find( f => f.primary )
         if ( primaryField ) {
             projection[primaryField.name] = { $toString: "$_id" }
         }
 
-        const otherFields = descriptor.fields.all().filter( f => ! f.primary )
+        const otherFields = viewDescriptor.fields.all().filter( f => ! f.primary )
         for ( let field of otherFields ) {
             projection[field.name] = 1
         }
@@ -266,7 +281,7 @@ export class RetrieveQuery<T extends Class> {
 
     async inflate( ): Promise<InstanceType<T>> {
         const record = await this.exec()
-        return inflate<T>( this.model, record )
+        return inflate<T>( this.view, record )
     }
 }
 

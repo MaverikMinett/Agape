@@ -449,7 +449,48 @@ describe('Orm', () => {
                 }) 
             })
         })
-        
+        describe('by filter with fields not on view', () => {
+            it('should lookup the user by role', async () => {
+
+                @Model class Role extends Document {
+                    @Primary id: string
+                    @Field name: string
+
+                    constructor( params?: Partial<Pick<Role, keyof Role>> ) {
+                        super()
+                        Object.assign(this, params)
+                    }
+                }
+
+                @Model class User extends Document {
+                    @Primary id: string;
+                    @Field username: string;
+                    @Field role: Role;
+    
+                    constructor( params?: Partial<Pick<User, keyof User>> ) {
+                        super()
+                        Object.assign(this, params)
+                    }
+                }
+
+                interface UserView extends Pick<User, 'id'|'username'> { }
+                @View(User, ['id', 'username'] ) 
+                class UserView extends Document { }
+    
+                orm.registerDocument(Role)
+                orm.registerDocument(User)
+
+                const role = new Role({ name: 'bar' })
+                await orm.insert(Role, role).exec()
+
+                const user = new User({ username: "foo", role })
+                await orm.insert(User, user).exec()
+                expect(user.id).toBeDefined()
+    
+                const retrievedUser = await orm.retrieve([User, UserView], { role }).exec()
+                expect(retrievedUser).toBeDefined()
+            })
+        })
     })
 
     describe('ListQuery', () => {
@@ -1389,93 +1430,6 @@ describe('Orm', () => {
         })
     })
 
-    describe('LookupQuery', () => {
-        it('should find the user by username', async () => {
-            @Model class User extends Document {
-                @Primary id: string;
-                @Field username: string;
-
-                constructor( params?: Partial<Pick<User, keyof User>> ) {
-                    super()
-                    Object.assign(this, params)
-                }
-            }
-
-            orm.registerDocument(User)
-
-            const user = new User({ username: "foo" })
-            await orm.insert(User, user).exec()
-            expect(user.id).toBeDefined()
-
-            const retrievedUser = await orm.lookup(User, { username: "foo" }).exec()
-            expect(retrievedUser).toBeDefined()
-        })
-        describe('nested documents', () => {
-            it('should have an undefined role', async () => {
-                @Model class Role extends Document {
-                    @Primary id: string;
-                    @Field name: string;
-    
-                    constructor( params?: Partial<Pick<Role, keyof Role>> ) {
-                        super()
-                        Object.assign(this, params)
-                    }
-                }
-                @Model class User extends Document {
-                    @Primary id: string;
-                    @Field username: string;
-                    @Field role: Role;
-    
-                    constructor( params?: Partial<Pick<User, keyof User>> ) {
-                        super()
-                        Object.assign(this, params)
-                    }
-                }
-    
-                orm.registerDocument(User)
-                orm.registerDocument(Role)
-    
-                const role = new Role({ name: 'registered' })
-                await orm.insert(Role, role).exec()
-                await orm.insert(User, new User({ username: "foo" })).exec()
-    
-                const user = await orm.lookup(User, { username: "foo" }).exec()
-                expect(user).toBeDefined()
-            })
-            it('should lookup the user', async () => {
-                @Model class Role extends Document {
-                    @Primary id: string;
-                    @Field name: string;
-    
-                    constructor( params?: Partial<Pick<Role, keyof Role>> ) {
-                        super()
-                        Object.assign(this, params)
-                    }
-                }
-                @Model class User extends Document {
-                    @Primary id: string;
-                    @Field username: string;
-                    @Field role: Role;
-    
-                    constructor( params?: Partial<Pick<User, keyof User>> ) {
-                        super()
-                        Object.assign(this, params)
-                    }
-                }
-    
-                orm.registerDocument(User)
-                orm.registerDocument(Role)
-    
-                const role = new Role({ name: 'registered' })
-                await orm.insert(Role, role).exec()
-                await orm.insert(User, new User({ username: "foo", role })).exec()
-    
-                const user = await orm.lookup(User, { username: "foo" }).exec()
-                expect(user.role).toBeDefined()
-            }) 
-        })
-    })
-
     describe('DeleteQuery', () => {
         it('should delete the foo by id', async() => {
             @Model class Foo extends Document {
@@ -1631,7 +1585,7 @@ describe('Orm', () => {
                 foo.bar = bar.id
                 await orm.insert(FooCreateView, foo).exec()
     
-                const retrievedFoo = await orm.lookup(FooCreateView, { bar: bar.id } ).exec()
+                const retrievedFoo = await orm.retrieve(FooCreateView, { bar: bar.id } ).exec()
                 expect(retrievedFoo.bar).toBe(bar.id)
             })
         })
