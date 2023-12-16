@@ -110,12 +110,15 @@ export class Orm {
         return new InsertQuery<T>(model, collection, item)
     }
 
-    retrieve<T extends Class>( model: T, id: string ) {
+
+    retrieve<T extends Class>( model: T, id: string ): RetrieveQuery<T>
+    retrieve<T extends Class>( model: T, filter: FilterCriteria<InstanceType<T>> ): RetrieveQuery<T>
+    retrieve<T extends Class>( model: T, selector: string|FilterCriteria<InstanceType<T>>): RetrieveQuery<T> {
         const locator = this.getLocator(model)
 
         const collection = locator.collection
 
-        return new RetrieveQuery<T>(this, model, collection, id)
+        return new RetrieveQuery<T>(this, model, collection, selector)
     }
 
     lookup<T extends Class>( model: T, filter: FilterCriteria<InstanceType<T>> ) {
@@ -185,20 +188,39 @@ export class Orm {
  */
 export class RetrieveQuery<T extends Class> {
 
-    constructor( public orm: Orm, public model: T, public collection: Collection, public id: string ) {
+    id: ObjectId
 
+    filter: FilterCriteria<InstanceType<T>>
+
+    constructor( orm: Orm,  model: T, collection: Collection, id: string )
+    constructor( orm: Orm,  model: T, collection: Collection, filter: FilterCriteria<InstanceType<T>> )
+    constructor( orm: Orm,  model: T, collection: Collection, selector: string|FilterCriteria<InstanceType<T>> )
+    constructor( public orm: Orm, public model: T, public collection: Collection, selector: string|FilterCriteria<InstanceType<T>> ) {
+        if ( typeof selector === 'string' ) {
+            try {
+                this.id = new ObjectId(selector)
+            }
+            catch {
+                throw new Error(`Invalid record id ${this.id}`)
+            }
+        }
+        else {
+            this.filter = selector
+        }
     }
 
     async exec( ): Promise<Pick<InstanceType<T>, keyof InstanceType<T>>> {
-        let _id: ObjectId
-        try {
-            _id = new ObjectId(this.id)
-        }
-        catch {
-            throw new Error(`Invalid record ${this.id}`)
-        }
-
+        console.log("Perform retrieve")
         const descriptor = Model.descriptor(this.model)
+
+        /* selection */
+        let select: Dictionary 
+        if ( this.id ) select = { _id: this.id }
+        if ( this.filter ) select = selectCriteriaFromFilterCriteria( descriptor, this.filter )
+
+        if ( this.orm.debug ) {
+            console.log("RETRIEVE", select )
+        }
 
         /* projection */
         const projection: Dictionary = { _id: 0 }
@@ -212,12 +234,9 @@ export class RetrieveQuery<T extends Class> {
         for ( let field of otherFields ) {
             projection[field.name] = 1
         }
-
-        /* selection */
-        const selection: Dictionary = { _id }
         
         /* mongo query */
-        const record = await this.collection.findOne( selection, { projection } )
+        const record = await this.collection.findOne( select, { projection } )
 
         /* record not found */
         if ( ! record ) return undefined

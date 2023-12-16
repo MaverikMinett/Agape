@@ -196,169 +196,257 @@ describe('Orm', () => {
     })
 
     describe('RetrieveQuery', () => {
-        describe('nested documents', () => {
-            it('should retrieve the bar document with the foo document', async() => {
-                @Model class Bar extends Document {
-        
-                    @Primary id: string
-                    @Field name: string
-                    @Field address: string
-                
-                    constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
-                        super()
-                        Object.assign( this, params )
+        describe('by id', () => {
+            describe('nested documents', () => {
+                it('should retrieve the bar document with the foo document', async() => {
+                    @Model class Bar extends Document {
+            
+                        @Primary id: string
+                        @Field name: string
+                        @Field address: string
+                    
+                        constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
                     }
-                }
-        
-                @Model class Foo extends Document {
-        
-                    @Primary id: string
-                    @Field name: string
-                    @Field age: number
-                    @Field bar: Bar
-                
-                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                        super()
-                        Object.assign( this, params )
+            
+                    @Model class Foo extends Document {
+            
+                        @Primary id: string
+                        @Field name: string
+                        @Field age: number
+                        @Field bar: Bar
+                    
+                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
                     }
-                }
-        
-                orm.registerDocument(Foo)
-                orm.registerDocument(Bar)
-        
-                const bar = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
-                const foo = new Foo({ name: "Johnny", age: 42, bar: bar })
-                
-                await orm.insert(Bar, bar).exec()
-                await orm.insert(Foo, foo).exec()
-        
-                const retrievedFoo = await orm.retrieve(Foo, foo.id).exec()
-                expect(retrievedFoo.bar).toBeTruthy()
-                expect(retrievedFoo.bar.id).toBe(bar.id)
-                expect(retrievedFoo.bar.name).toBe(bar.name)
-                expect(retrievedFoo.bar.address).toBe(bar.address)
+            
+                    orm.registerDocument(Foo)
+                    orm.registerDocument(Bar)
+            
+                    const bar = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
+                    const foo = new Foo({ name: "Johnny", age: 42, bar: bar })
+                    
+                    await orm.insert(Bar, bar).exec()
+                    await orm.insert(Foo, foo).exec()
+            
+                    const retrievedFoo = await orm.retrieve(Foo, foo.id).exec()
+                    expect(retrievedFoo.bar).toBeTruthy()
+                    expect(retrievedFoo.bar.id).toBe(bar.id)
+                    expect(retrievedFoo.bar.name).toBe(bar.name)
+                    expect(retrievedFoo.bar.address).toBe(bar.address)
+                })
+            
+                it('should retrieve the bar name view with the foo document', async() => {
+                    @Model class Bar extends Document {
+            
+                        @Primary id: string
+                        @Field name: string
+                        @Field address: string
+                    
+                        constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    interface BarName extends Pick<Bar, 'id'|'name'> { }
+                    @View(Bar, ['id', 'name'] ) 
+                    class BarName extends Document { }
+            
+                    @Model class Foo extends Document {
+            
+                        @Primary id: string
+                        @Field name: string
+                        @Field age: number
+                        @Field bar: BarName
+                    
+                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    orm.registerDocument(Foo)
+                    orm.registerDocument(Bar)
+            
+                    const bar = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
+                    const foo = new Foo({ name: "Johnny", age: 42, bar: bar })
+    
+                    await orm.insert(Bar, bar).exec()
+                    await orm.insert(Foo, foo).exec()
+            
+                    const retrievedFoo = await orm.retrieve(Foo, foo.id).exec()
+                    expect(retrievedFoo.bar).toBeTruthy()
+                    expect(retrievedFoo.bar.id).toBe(bar.id)
+                    expect(retrievedFoo.bar.name).toBe(bar.name)
+                    expect((retrievedFoo.bar as any).address).toBe(undefined)
+                })
+                it('should allow bar to be undefined', async () => {
+                    @Model class Bar extends Document {
+            
+                        @Primary id: string
+                        @Field name: string
+                        @Field address: string
+                    
+                        constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    @Model class Foo extends Document {
+            
+                        @Primary id: string
+                        @Field name: string
+                        @Field age: number
+                        @Field bar: Bar
+                    
+                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    orm.registerDocument(Foo)
+                    orm.registerDocument(Bar)
+            
+    
+                    const foo = new Foo({ name: "Johnny", age: 42 })
+                    
+    
+                    await orm.insert(Foo, foo).exec()
+            
+                    const retrievedFoo = await orm.retrieve(Foo, foo.id).exec()
+                    expect(retrievedFoo.bar).toBe(null)
+                })
+                it('should allow bar to be null', async () => {
+                    @Model class Bar extends Document {
+            
+                        @Primary id: string
+                        @Field name: string
+                        @Field address: string
+                    
+                        constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    @Model class Foo extends Document {
+            
+                        @Primary id: string
+                        @Field name: string
+                        @Field age: number
+                        @Field bar: Bar
+                    
+                        constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                            super()
+                            Object.assign( this, params )
+                        }
+                    }
+            
+                    orm.registerDocument(Foo)
+                    orm.registerDocument(Bar)
+            
+    
+                    const foo = new Foo({ name: "Johnny", age: 42, bar: null })
+                    
+    
+                    await orm.insert(Foo, foo).exec()
+            
+                    const retrievedFoo = await orm.retrieve(Foo, foo.id).exec()
+                    expect(retrievedFoo.bar).toBe(null)
+                })
             })
-        
-            it('should retrieve the bar name view with the foo document', async() => {
-                @Model class Bar extends Document {
-        
-                    @Primary id: string
-                    @Field name: string
-                    @Field address: string
-                
-                    constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+        })
+        describe('by filter', () => {
+            it('should find the user by username', async () => {
+                @Model class User extends Document {
+                    @Primary id: string;
+                    @Field username: string;
+    
+                    constructor( params?: Partial<Pick<User, keyof User>> ) {
                         super()
-                        Object.assign( this, params )
+                        Object.assign(this, params)
                     }
                 }
-        
-                interface BarName extends Pick<Bar, 'id'|'name'> { }
-                @View(Bar, ['id', 'name'] ) 
-                class BarName extends Document { }
-        
-                @Model class Foo extends Document {
-        
-                    @Primary id: string
-                    @Field name: string
-                    @Field age: number
-                    @Field bar: BarName
-                
-                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                        super()
-                        Object.assign( this, params )
-                    }
-                }
-        
-                orm.registerDocument(Foo)
-                orm.registerDocument(Bar)
-        
-                const bar = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
-                const foo = new Foo({ name: "Johnny", age: 42, bar: bar })
-
-                await orm.insert(Bar, bar).exec()
-                await orm.insert(Foo, foo).exec()
-        
-                const retrievedFoo = await orm.retrieve(Foo, foo.id).exec()
-                expect(retrievedFoo.bar).toBeTruthy()
-                expect(retrievedFoo.bar.id).toBe(bar.id)
-                expect(retrievedFoo.bar.name).toBe(bar.name)
-                expect((retrievedFoo.bar as any).address).toBe(undefined)
+    
+                orm.registerDocument(User)
+    
+                const user = new User({ username: "foo" })
+                await orm.insert(User, user).exec()
+                expect(user.id).toBeDefined()
+    
+                const retrievedUser = await orm.retrieve(User, { username: "foo" }).exec()
+                expect(retrievedUser).toBeDefined()
             })
-            it('should allow bar to be undefined', async () => {
-                @Model class Bar extends Document {
+            describe('nested documents', () => {
+                it('should have an undefined role', async () => {
+                    @Model class Role extends Document {
+                        @Primary id: string;
+                        @Field name: string;
         
-                    @Primary id: string
-                    @Field name: string
-                    @Field address: string
-                
-                    constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
-                        super()
-                        Object.assign( this, params )
+                        constructor( params?: Partial<Pick<Role, keyof Role>> ) {
+                            super()
+                            Object.assign(this, params)
+                        }
                     }
-                }
+                    @Model class User extends Document {
+                        @Primary id: string;
+                        @Field username: string;
+                        @Field role: Role;
         
-                @Model class Foo extends Document {
-        
-                    @Primary id: string
-                    @Field name: string
-                    @Field age: number
-                    @Field bar: Bar
-                
-                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                        super()
-                        Object.assign( this, params )
+                        constructor( params?: Partial<Pick<User, keyof User>> ) {
+                            super()
+                            Object.assign(this, params)
+                        }
                     }
-                }
         
-                orm.registerDocument(Foo)
-                orm.registerDocument(Bar)
+                    orm.registerDocument(User)
+                    orm.registerDocument(Role)
         
-
-                const foo = new Foo({ name: "Johnny", age: 42 })
-                
-
-                await orm.insert(Foo, foo).exec()
+                    const role = new Role({ name: 'registered' })
+                    await orm.insert(Role, role).exec()
+                    await orm.insert(User, new User({ username: "foo" })).exec()
         
-                const retrievedFoo = await orm.retrieve(Foo, foo.id).exec()
-                expect(retrievedFoo.bar).toBe(null)
-            })
-            it('should allow bar to be null', async () => {
-                @Model class Bar extends Document {
+                    const user = await orm.retrieve(User, { username: "foo" }).exec()
+                    expect(user).toBeDefined()
+                })
+                it('should lookup the user', async () => {
+                    @Model class Role extends Document {
+                        @Primary id: string;
+                        @Field name: string;
         
-                    @Primary id: string
-                    @Field name: string
-                    @Field address: string
-                
-                    constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
-                        super()
-                        Object.assign( this, params )
+                        constructor( params?: Partial<Pick<Role, keyof Role>> ) {
+                            super()
+                            Object.assign(this, params)
+                        }
                     }
-                }
+                    @Model class User extends Document {
+                        @Primary id: string;
+                        @Field username: string;
+                        @Field role: Role;
         
-                @Model class Foo extends Document {
-        
-                    @Primary id: string
-                    @Field name: string
-                    @Field age: number
-                    @Field bar: Bar
-                
-                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
-                        super()
-                        Object.assign( this, params )
+                        constructor( params?: Partial<Pick<User, keyof User>> ) {
+                            super()
+                            Object.assign(this, params)
+                        }
                     }
-                }
         
-                orm.registerDocument(Foo)
-                orm.registerDocument(Bar)
+                    orm.registerDocument(User)
+                    orm.registerDocument(Role)
         
-
-                const foo = new Foo({ name: "Johnny", age: 42, bar: null })
-                
-
-                await orm.insert(Foo, foo).exec()
+                    const role = new Role({ name: 'registered' })
+                    await orm.insert(Role, role).exec()
+                    await orm.insert(User, new User({ username: "foo", role })).exec()
         
-                const retrievedFoo = await orm.retrieve(Foo, foo.id).exec()
-                expect(retrievedFoo.bar).toBe(null)
+                    const user = await orm.retrieve(User, { username: "foo" }).exec()
+                    expect(user.role).toBeDefined()
+                }) 
             })
         })
         
