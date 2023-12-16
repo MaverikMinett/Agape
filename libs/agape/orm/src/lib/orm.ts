@@ -121,14 +121,6 @@ export class Orm {
         return new RetrieveQuery<T>(this, model, collection, selector)
     }
 
-    lookup<T extends Class>( model: T, filter: FilterCriteria<InstanceType<T>> ) {
-        const locator = this.getLocator(model)
-
-        const collection = locator.collection
-
-        return new LookupQuery<T>(this, model, collection, filter)
-    }
-
     update<T extends Class>( model: T, id: string,  item: InstanceType<T> ): UpdateQuery<T>
     update<T extends Class>( model: T, filter: FilterCriteria<InstanceType<T>>,  item: InstanceType<T> ): UpdateQuery<T>
     update<T extends Class>( model: T, selector: string|FilterCriteria<InstanceType<T>>, item: InstanceType<T> ): UpdateQuery<T> {
@@ -399,87 +391,6 @@ export class ListQuery<T extends Class> {
     }
 }
 
-
-export class LookupQuery<T extends Class> {
-
-    constructor( public orm: Orm, public model: T, public collection: Collection, public filter: FilterCriteria<InstanceType<T>> ) {
-
-    }
-
-    async exec( ): Promise<Pick<InstanceType<T>, keyof InstanceType<T>>> {
-
-        const descriptor = Model.descriptor(this.model)
-
-        /* projection */
-        const projection: Dictionary = { _id: 0 }
-
-        const primaryField = descriptor.fields.all().find( f => f.primary )
-        if ( primaryField ) {
-            projection[primaryField.name] = { $toString: "$_id" }
-        }
-
-        const otherFields = descriptor.fields.all().filter( f => ! f.primary )
-        for ( let field of otherFields ) {
-            projection[field.name] = 1
-        }
-
-        /* selection */
-        if ( this.orm.debug ) {
-            console.log("FILTER", this.filter )
-        }
-
-        const select = selectCriteriaFromFilterCriteria( descriptor, this.filter )
-
-        if ( this.orm.debug ) {
-            console.log("SELECT", select )
-        }
-        
-        /* mongo query */
-        const record = await this.collection.findOne( select, { projection } )
-
-        /* record not found */
-        if ( ! record ) return undefined
-
-        const item = {}
-        item[primaryField.name] = record[primaryField.name]
-
-        for ( let field of otherFields ) {
-            if ( field.designType instanceof Function && field.designType.prototype as any instanceof Document ) {
-                const objectId: ObjectId = record[field.name]
-                if (objectId !== undefined && objectId !== null) {
-                    const idString = objectId.toString()
-                    item[field.name] = await this.orm.retrieve(field.designType, idString).exec()
-                }
-                else {
-                    item[field.name] = record[field.name]
-                }
-            }
-            else if ( field.foreignKey === true ) {
-                if ( record[field.name] !== undefined && record[field.name] !== null ) {
-                    item[field.name] = (record[field.name] as ObjectId).toString()
-                }
-                else {
-                    item[field.name] = record[field.name]
-                }
-            }
-            else {
-                item[field.name] = record[field.name]
-            }
-        }
-
-        /* record */
-        return item as any
-        /* record */
-        return record as any
-    }
-
-    
-
-    async inflate( ): Promise<Array<InstanceType<T>>> {
-        const record = await this.exec()
-        return inflate<T>( this.model, record )
-    }
-}
 
 export class UpdateQuery<T extends Class> {
 
