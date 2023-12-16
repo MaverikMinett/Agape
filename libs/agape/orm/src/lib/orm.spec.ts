@@ -1389,7 +1389,7 @@ describe('Orm', () => {
     })
 
     describe('DeleteQuery', () => {
-        it('should delete the foo', async() => {
+        it('should delete the foo by id', async() => {
             @Model class Foo extends Document {
     
                 @Primary id: string
@@ -1407,7 +1407,29 @@ describe('Orm', () => {
 
             const { id } = await orm.insert(Foo, foo).exec()
             
-            await orm.delete(Foo, id).exec()
+            const result = await orm.delete(Foo, id).exec()
+            expect(result.deletedCount).toBe(1)
+        })
+        it('should delete the foo by filter', async() => {
+            @Model class Foo extends Document {
+    
+                @Primary id: string
+                @Field name: string
+                @Field age: number
+            
+                constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+    
+            const foo = new Foo({ name: "Johnny", age: 42 })
+            orm.registerDocument(Foo)
+
+            await orm.insert(Foo, foo).exec()
+            
+            const result = await orm.delete(Foo, { name: "Johnny", age: 42 } ).exec()
+            expect(result.deletedCount).toBe(1)
         })
     })
 

@@ -5,8 +5,6 @@ import { Class, Dictionary } from '@agape/types'
 import { Collection, ObjectId } from 'mongodb';
 
 import { MongoDatabase } from './databases/mongo.database';
-
-import { DeleteQuery } from './mongo/queries/delete.query';
 import { InsertQuery } from './mongo/queries/insert.query';
 
 import { FilterCriteria } from './types'
@@ -148,23 +146,16 @@ export class Orm {
         return query
     }
 
-    delete<T extends Class>(model: T, id: string): DeleteQuery<T> {
+    delete<T extends Class>(model: T, id: string): DeleteQuery<T>
+    delete<T extends Class>(model: T, filter: FilterCriteria<InstanceType<T>>): DeleteQuery<T>
+    delete<T extends Class>(model: T, selector: string|FilterCriteria<InstanceType<T>>): DeleteQuery<T> {
         const locator = this.getLocator(model)
 
         const collection = locator.collection
 
-        return new DeleteQuery<T>(model, collection, id)
+        return new DeleteQuery<T>(this, model, collection, selector)
     }
 
-    // delete<T extends Class>(model: T, filter: FilterCriteria<InstanceType<T>>): DeleteQuery<T>
-    // delete<T extends Class>(model: T, filter: FilterCriteria<InstanceType<T>>): DeleteQuery<T>
-    // delete<T extends Class>(model: T, selector: string|FilterCriteria<InstanceType<T>>): DeleteQuery<T> {
-    //     const locator = this.getLocator(model)
-
-    //     const collection = locator.collection
-
-    //     return new DeleteQuery<T>(model, collection, id)
-    // }
 
 
     getLocator<T extends Class>(view: T) {
@@ -480,7 +471,7 @@ export class UpdateQuery<T extends Class> {
     constructor( orm: Orm, model: T, collection: Collection, id: string, item: InstanceType<T> )
     constructor( orm: Orm, model: T, collection: Collection, filter: FilterCriteria<InstanceType<T>>, item: Pick<T, keyof T> )
     constructor( orm: Orm, model: T, collection: Collection, selector: string|FilterCriteria<InstanceType<T>>, item: InstanceType<T> )
-    constructor(  public orm: Orm, public model: T, public collection: Collection, selector: string|FilterCriteria<InstanceType<T>>, public item: InstanceType<T> ) {
+    constructor( public orm: Orm, public model: T, public collection: Collection, selector: string|FilterCriteria<InstanceType<T>>, public item: InstanceType<T> ) {
         if ( typeof selector === 'string' ) {
             try {
                 this.id = new ObjectId(selector)
@@ -517,6 +508,59 @@ export class UpdateQuery<T extends Class> {
         if ( result.acknowledged === false ) {
             throw new Exception(500, `Could not update ${this.model.name} record with id ${this.id}, database did not acknowledge request`)
         }
+    }
+
+}
+
+
+export class DeleteQuery<T extends Class> {
+
+    id: ObjectId
+
+    filter: FilterCriteria<InstanceType<T>>
+
+    constructor( orm: Orm,  model: T, collection: Collection, id: string )
+    constructor( orm: Orm,  model: T, collection: Collection, filter: FilterCriteria<InstanceType<T>> )
+    constructor( orm: Orm,  model: T, collection: Collection, selector: string|FilterCriteria<InstanceType<T>> )
+    constructor( public orm: Orm, public model: T, public collection: Collection, selector: string|FilterCriteria<InstanceType<T>> ) {
+        if ( typeof selector === 'string' ) {
+            try {
+                this.id = new ObjectId(selector)
+            }
+            catch {
+                throw new Error(`Invalid record id ${this.id}`)
+            }
+        }
+        else {
+            this.filter = selector
+        }
+    }
+
+    async exec( ) {
+        console.log("Perform delete")
+        const descriptor = Model.descriptor(this.model)
+
+        /* selection */
+        let select: Dictionary 
+        if ( this.id ) select = { _id: this.id }
+        if ( this.filter ) select = selectCriteriaFromFilterCriteria( descriptor, this.filter )
+
+        if ( this.orm.debug ) {
+            console.log("DELETE", select )
+        }
+
+        const result = await this.collection.deleteOne(
+            select
+        )
+
+        if ( result.deletedCount === 0 ) {
+            throw new Exception(404, `Could not delete ${this.model.name} record where ${JSON.stringify(select)}, record not found`)
+        }
+        if ( result.acknowledged === false ) {
+            throw new Exception(500, `Could not delete ${this.model.name} record where ${JSON.stringify(select)}, database did not acknowledge request`)
+        }
+
+        return result
     }
 
 }
