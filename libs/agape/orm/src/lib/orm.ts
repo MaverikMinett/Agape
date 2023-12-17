@@ -111,13 +111,13 @@ export class Orm {
     }
 
 
-    retrieve<T extends Class<Document>>( model: T, id: string ): RetrieveQuery<T>
-    retrieve<T extends Class<Document>>( model: T, filter: FilterCriteria<InstanceType<T>> ): RetrieveQuery<T>
-    retrieve<T extends Class<Document>, P extends Class<Document>>( model: [P,T], filter: FilterCriteria<InstanceType<P>> ): RetrieveQuery<T>
-    retrieve<T extends Class<Document>, P extends Class<Document>>( model: {document: P, view: T}, filter: FilterCriteria<InstanceType<P>> ): RetrieveQuery<T>
-    retrieve<T extends Class<Document>, P extends Class<Document>=T>( model: T|[P,T]|{document: P, view: T}, selector: string|FilterCriteria<InstanceType<P>>): RetrieveQuery<T> {
+    retrieve<T extends Class<Document>, P extends Class<Document>=T>( model: T, id: string ): RetrieveQuery<T,P>
+    retrieve<T extends Class<Document>, P extends Class<Document>=T>( model: T, filter: FilterCriteria<InstanceType<P>> ): RetrieveQuery<T,P>
+    retrieve<T extends Class<Document>, P extends Class<Document>>( model: [P,T], filter: FilterCriteria<InstanceType<P>> ): RetrieveQuery<T,P>
+    retrieve<T extends Class<Document>, P extends Class<Document>>( model: {document: P, view: T}, filter: FilterCriteria<InstanceType<P>> ): RetrieveQuery<T,P>
+    retrieve<T extends Class<Document>, P extends Class<Document>=T>( model: T|[P,T]|{document: P, view: T}, selector: string|FilterCriteria<InstanceType<P>>): RetrieveQuery<T,P> {
 
-        const { document } = documentAndViewFromModelParam(model)
+        const { document, view } = documentAndViewFromModelParam(model)
         
         const locator = this.getLocator(document)
 
@@ -126,14 +126,18 @@ export class Orm {
         return new RetrieveQuery<T,P>(this, model as any, collection, selector as any)
     }
 
-    update<T extends Class>( model: T, id: string,  item: InstanceType<T> ): UpdateQuery<T>
-    update<T extends Class>( model: T, filter: FilterCriteria<InstanceType<T>>,  item: InstanceType<T> ): UpdateQuery<T>
-    update<T extends Class>( model: T, selector: string|FilterCriteria<InstanceType<T>>, item: InstanceType<T> ): UpdateQuery<T> {
-        const locator = this.getLocator(model)
+    update<T extends Class<Document>, P extends Class<Document>=T>( model: T, id: string,  item: InstanceType<T> ): UpdateQuery<T,P>
+    update<T extends Class<Document>, P extends Class<Document>=T>( model: T, filter: FilterCriteria<InstanceType<P>>,  item: InstanceType<T> ): UpdateQuery<T,P>
+    update<T extends Class<Document>, P extends Class<Document>=T>( model: [P,T], filter: FilterCriteria<InstanceType<P>>,  item: InstanceType<T> ): UpdateQuery<T,P>
+    update<T extends Class<Document>, P extends Class<Document>=T>( model: {document: P, view: T}, filter: FilterCriteria<InstanceType<P>>,  item: InstanceType<T> ): UpdateQuery<T,P>
+    update<T extends Class<Document>, P extends Class<Document>=T>( model: T|[P,T]|{document: P, view: T}, selector: string|FilterCriteria<InstanceType<P>>, item: InstanceType<T> ): UpdateQuery<T,P> {
+        const { document, view } = documentAndViewFromModelParam(model)
+        
+        const locator = this.getLocator(document)
 
         const collection = locator.collection
 
-        return new UpdateQuery(this, model, collection, selector, item)
+        return new UpdateQuery<T,P>(this, {document,view}, collection, selector, item)
     }
 
     list<T extends Class<Document>, P extends Class<Document>=T>( model: T, filter?: FilterCriteria<InstanceType<P>> ): ListQuery<T,P>
@@ -418,16 +422,23 @@ export class ListQuery<T extends Class<Document>,P extends Class<Document>> {
 }
 
 
-export class UpdateQuery<T extends Class> {
+export class UpdateQuery<T extends Class,P extends Class<Document>> {
 
     id: ObjectId
 
-    filter: FilterCriteria<InstanceType<T>>
+    filter: FilterCriteria<InstanceType<P>>
 
-    constructor( orm: Orm, model: T, collection: Collection, id: string, item: InstanceType<T> )
-    constructor( orm: Orm, model: T, collection: Collection, filter: FilterCriteria<InstanceType<T>>, item: Pick<T, keyof T> )
-    constructor( orm: Orm, model: T, collection: Collection, selector: string|FilterCriteria<InstanceType<T>>, item: InstanceType<T> )
-    constructor( public orm: Orm, public model: T, public collection: Collection, selector: string|FilterCriteria<InstanceType<T>>, public item: InstanceType<T> ) {
+    document: P
+
+    view: T
+
+    constructor( orm: Orm, model: {document: P, view: T}, collection: Collection, id: string, item: InstanceType<T> )
+    constructor( orm: Orm, model: {document: P, view: T}, collection: Collection, filter: FilterCriteria<InstanceType<P>>, item: InstanceType<T> )
+    constructor( orm: Orm, model: {document: P, view: T}, collection: Collection, filter: string|FilterCriteria<InstanceType<P>>, item: InstanceType<T> )
+    constructor( public orm: Orm, model: {document: P, view: T}, public collection: Collection, selector: string|FilterCriteria<InstanceType<T>>, public item: InstanceType<T> ) {
+        this.document = model.document
+        this.view = model.view
+
         if ( typeof selector === 'string' ) {
             try {
                 this.id = new ObjectId(selector)
@@ -442,27 +453,27 @@ export class UpdateQuery<T extends Class> {
     }
 
     async exec( ) {
-        const descriptor = Model.descriptor(this.model)
+        const documentDescriptor = Model.descriptor(this.document)
 
         /* selection */
         let select: Dictionary 
         if ( this.id ) select = { _id: this.id }
-        if ( this.filter ) select = selectCriteriaFromFilterCriteria( descriptor, this.filter )
+        if ( this.filter ) select = selectCriteriaFromFilterCriteria( documentDescriptor, this.filter )
 
         if ( this.orm.debug ) {
             console.log("SELECT", select )
         }
 
         /* record */
-        const record = itemToRecord(this.model, this.item)
+        const record = itemToRecord(this.view, this.item)
 
         const result = await this.collection.updateOne( select, { $set: record } )
 
         if ( result.matchedCount === 0 ) {
-            throw new Exception(404, `Could not update ${this.model.name} record with id ${this.id}, record not found`)
+            throw new Exception(404, `Could not update ${this.view.name} record, record not found`)
         }
         if ( result.acknowledged === false ) {
-            throw new Exception(500, `Could not update ${this.model.name} record with id ${this.id}, database did not acknowledge request`)
+            throw new Exception(500, `Could not update ${this.view.name} record, database did not acknowledge request`)
         }
     }
 

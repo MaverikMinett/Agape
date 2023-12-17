@@ -193,6 +193,68 @@ describe('Orm', () => {
             const retrievedFoo = await orm.retrieve(Foo, id).exec()
             expect(retrievedFoo.age).toBe(55)
         })
+        describe('filter by properties not on view', () => {
+            it('should specify the document/view as an array', async () => {
+                @Model class Foo extends Document {
+    
+                    @Primary id: string
+                    @Field name: string
+                    @Field age: number
+                
+                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+
+                interface FooName extends Pick<Foo,'id'|'name'> { }
+                @View(Foo, ['id','name']) 
+                class FooName extends Document { }
+        
+                const foo = new Foo({ name: "Johnny", age: 42 })
+                orm.registerDocument(Foo)
+     
+                const { id } = await orm.insert(Foo, foo).exec()
+
+                const bar = await orm.retrieve(FooName, id).exec()
+                bar.name = "Jimmy"
+                
+                await orm.update([Foo,FooName], { age: 42 }, bar).exec()
+    
+                const retrievedFoo = await orm.retrieve(Foo, id).exec()
+                expect(retrievedFoo.name).toBe("Jimmy")
+            })
+            it('should specify the document/view as an object', async () => {
+                @Model class Foo extends Document {
+    
+                    @Primary id: string
+                    @Field name: string
+                    @Field age: number
+                
+                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+
+                interface FooName extends Pick<Foo,'id'|'name'> { }
+                @View(Foo, ['id','name']) 
+                class FooName extends Document { }
+        
+                const foo = new Foo({ name: "Johnny", age: 42 })
+                orm.registerDocument(Foo)
+     
+                const { id } = await orm.insert(Foo, foo).exec()
+
+                const bar = await orm.retrieve(FooName, id).exec()
+                bar.name = "Jimmy"
+                
+                await orm.update({document: Foo, view: FooName}, { age: 42 }, bar).exec()
+    
+                const retrievedFoo = await orm.retrieve(Foo, id).exec()
+                expect(retrievedFoo.name).toBe("Jimmy")
+            })
+        })
     })
 
     describe('RetrieveQuery', () => {
