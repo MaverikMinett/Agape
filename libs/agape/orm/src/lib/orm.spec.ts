@@ -1428,6 +1428,68 @@ describe('Orm', () => {
                 })
             })
         })
+        describe('Filter by fields not on view', () => {
+            it('should specify document/view as an array', async () => {
+                @Model class Foo extends Document {
+    
+                    @Primary id: string
+                    @Field name: string
+                    @Field age: number
+                
+                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+
+
+                interface FooName extends Pick<Foo, 'id'|'name'> { }
+                @View(Foo, ['id', 'name'])
+                class FooName extends Document {
+
+                }
+
+                orm.registerDocument(Foo)
+
+                const foo1 = new Foo({ name: "Johnny", age: 42 })
+                const foo2 = new Foo({ name: "James", age: 42 })
+                orm.insert(Foo, foo1).exec()
+                orm.insert(Foo, foo2).exec()
+        
+                const foos = await orm.list([Foo,FooName], { age: 42 }).exec()
+                expect(foos.length).toBe(2)
+            })
+            it('should specify document/view as an object', async () => {
+                @Model class Foo extends Document {
+    
+                    @Primary id: string
+                    @Field name: string
+                    @Field age: number
+                
+                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+
+
+                interface FooName extends Pick<Foo, 'id'|'name'> { }
+                @View(Foo, ['id', 'name'])
+                class FooName extends Document {
+
+                }
+
+                orm.registerDocument(Foo)
+
+                const foo1 = new Foo({ name: "Johnny", age: 42 })
+                const foo2 = new Foo({ name: "James", age: 42 })
+                orm.insert(Foo, foo1).exec()
+                orm.insert(Foo, foo2).exec()
+        
+                const foos = await orm.list({document: Foo, view: FooName}, { age: 42 }).exec()
+                expect(foos.length).toBe(2)
+            })
+        })
     })
 
     describe('DeleteQuery', () => {

@@ -136,12 +136,17 @@ export class Orm {
         return new UpdateQuery(this, model, collection, selector, item)
     }
 
-    list<T extends Class>( model: T, filter?: FilterCriteria<InstanceType<T>> ) {
-        const locator = this.getLocator(model)
+    list<T extends Class<Document>, P extends Class<Document>=T>( model: T, filter?: FilterCriteria<InstanceType<P>> ): ListQuery<T,P>
+    list<T extends Class<Document>, P extends Class<Document>>( model: [P,T], filter?: FilterCriteria<InstanceType<P>> ): ListQuery<T,P>
+    list<T extends Class<Document>, P extends Class<Document>>( model: {document: P, view: T}, filter?: FilterCriteria<InstanceType<P>> ): ListQuery<T,P>
+    list<T extends Class<Document>, P extends Class<Document>=T>( model: T|[P,T]|{document: P, view: T}, filter?: FilterCriteria<InstanceType<P>> ): ListQuery<T,P> {
+        const { document, view } = documentAndViewFromModelParam(model)
+        
+        const locator = this.getLocator(document)
 
         const collection = locator.collection
 
-        const query = new ListQuery<T>(this, model, collection, filter)
+        const query = new ListQuery<T,P>(this, {document, view}, collection, filter)
 
         return query
     }
@@ -289,24 +294,30 @@ export class RetrieveQuery<T extends Class<Document>,P extends Class<Document>=a
 /**
  * List query to retrieve a list of filtered records
  */
-export class ListQuery<T extends Class> {
+export class ListQuery<T extends Class<Document>,P extends Class<Document>> {
 
-    constructor( public orm: Orm, public model: T, public collection: Collection, public filter?: FilterCriteria<T> ) {
+    document: P
 
+    view: T
+
+    constructor( public orm: Orm, model: {document: P, view: T}, public collection: Collection, public filter?: FilterCriteria<InstanceType<P>> ) {
+        this.document = model.document
+        this.view = model.view
     }
 
     async exec( ): Promise<Array<Pick<InstanceType<T>, keyof InstanceType<T>>>> {
 
-        const descriptor = Model.descriptor(this.model)
+        const documentDescriptor = Model.descriptor(this.document)
+        const viewDescriptor = Model.descriptor(this.view)
 
         const projection: Dictionary = { _id: 0 }
 
-        const primaryField = descriptor.fields.all().find( f => f.primary )
+        const primaryField = viewDescriptor.fields.all().find( f => f.primary )
         if ( primaryField ) {
             projection[primaryField.name] = { $toString: "$_id" }
         }
 
-        const otherFields = descriptor.fields.all().filter( f => ! f.primary )
+        const otherFields = viewDescriptor.fields.all().filter( f => ! f.primary )
         for ( let field of otherFields ) {
             projection[field.name] = 1
         }
@@ -315,7 +326,7 @@ export class ListQuery<T extends Class> {
             console.log("FILTER", this.filter )
         }
 
-        const select = selectCriteriaFromFilterCriteria( descriptor, this.filter )
+        const select = selectCriteriaFromFilterCriteria( documentDescriptor, this.filter )
 
         if ( this.orm.debug ) {
             console.log("SELECT", select )
@@ -369,10 +380,10 @@ export class ListQuery<T extends Class> {
 
         const foreignObjects: Dictionary<Dictionary<object>> = {}
         for ( let foreignKeyField of Object.keys(foreignKeys) ) {
-            const foriegnDescriptor = Model.descriptor(descriptor.fields.get(foreignKeyField).designType as Class)
+            const foriegnDescriptor = Model.descriptor(viewDescriptor.fields.get(foreignKeyField).designType as Class)
             const filterFieldName = foriegnDescriptor.primaryField.name + '__in'
             const objectsList = await this.orm.list(
-                descriptor.fields.get(foreignKeyField).designType as Class, 
+                viewDescriptor.fields.get(foreignKeyField).designType as Class, 
                 { [filterFieldName]: Array.from(foreignKeys[foreignKeyField]) as any }
             ).exec()
             const objectsDict: Dictionary<object> = { }
@@ -402,7 +413,7 @@ export class ListQuery<T extends Class> {
 
     async inflate( ): Promise<Array<InstanceType<T>>> {
         const records = await this.exec()
-        return inflate<T>( [this.model], records )
+        return inflate<T>( [this.view], records )
     }
 }
 
