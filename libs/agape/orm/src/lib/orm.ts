@@ -123,13 +123,13 @@ export class Orm {
 
         const collection = locator.collection
 
-        return new RetrieveQuery<T,P>(this, model as any, collection, selector as any)
+        return new RetrieveQuery<T,P>(this, {document,view}, collection, selector)
     }
 
     update<T extends Class<Document>, P extends Class<Document>=T>( model: T, id: string,  item: InstanceType<T> ): UpdateQuery<T,P>
     update<T extends Class<Document>, P extends Class<Document>=T>( model: T, filter: FilterCriteria<InstanceType<P>>,  item: InstanceType<T> ): UpdateQuery<T,P>
-    update<T extends Class<Document>, P extends Class<Document>=T>( model: [P,T], filter: FilterCriteria<InstanceType<P>>,  item: InstanceType<T> ): UpdateQuery<T,P>
-    update<T extends Class<Document>, P extends Class<Document>=T>( model: {document: P, view: T}, filter: FilterCriteria<InstanceType<P>>,  item: InstanceType<T> ): UpdateQuery<T,P>
+    update<T extends Class<Document>, P extends Class<Document>>( model: [P,T], filter: FilterCriteria<InstanceType<P>>,  item: InstanceType<T> ): UpdateQuery<T,P>
+    update<T extends Class<Document>, P extends Class<Document>>( model: {document: P, view: T}, filter: FilterCriteria<InstanceType<P>>,  item: InstanceType<T> ): UpdateQuery<T,P>
     update<T extends Class<Document>, P extends Class<Document>=T>( model: T|[P,T]|{document: P, view: T}, selector: string|FilterCriteria<InstanceType<P>>, item: InstanceType<T> ): UpdateQuery<T,P> {
         const { document, view } = documentAndViewFromModelParam(model)
         
@@ -202,14 +202,12 @@ export class RetrieveQuery<T extends Class<Document>,P extends Class<Document>=a
 
     view: T
 
-    constructor( orm: Orm, model: T, collection: Collection, id: string )
-    constructor( orm: Orm, model: T, collection: Collection, filter: FilterCriteria<InstanceType<T>> )
-    constructor( orm: Orm, model: [P,T], collection: Collection, filter: FilterCriteria<InstanceType<P>>)
+    constructor( orm: Orm, model: {document: P, view: T}, collection: Collection, id: string)
     constructor( orm: Orm, model: {document: P, view: T}, collection: Collection, filter: FilterCriteria<InstanceType<P>>)
-    constructor( public orm: Orm, model: T|[P,T]|{document: P, view: T}, public collection: Collection, selector: string|FilterCriteria<InstanceType<P>> ) {
-        const { document, view } = documentAndViewFromModelParam(model)
-        this.document = document
-        this.view = view
+    constructor( orm: Orm, model: {document: P, view: T}, collection: Collection, filter: string|FilterCriteria<InstanceType<P>>)
+    constructor( public orm: Orm, model: {document: P, view: T}, public collection: Collection, selector: string|FilterCriteria<InstanceType<P>> ) {
+        this.document = model.document
+        this.view = model.view
         
         if ( typeof selector === 'string' ) {
             try {
@@ -232,7 +230,7 @@ export class RetrieveQuery<T extends Class<Document>,P extends Class<Document>=a
         /* selection */
         let select: Dictionary 
         if ( this.id ) select = { _id: this.id }
-        if ( this.filter ) select = selectCriteriaFromFilterCriteria( documentDescriptor, this.filter )
+        else if ( this.filter ) select = selectCriteriaFromFilterCriteria( documentDescriptor, this.filter )
 
         if ( this.orm.debug ) {
             console.log("RETRIEVE", select )
@@ -458,7 +456,7 @@ export class UpdateQuery<T extends Class,P extends Class<Document>> {
         /* selection */
         let select: Dictionary 
         if ( this.id ) select = { _id: this.id }
-        if ( this.filter ) select = selectCriteriaFromFilterCriteria( documentDescriptor, this.filter )
+        else if ( this.filter ) select = selectCriteriaFromFilterCriteria( documentDescriptor, this.filter )
 
         if ( this.orm.debug ) {
             console.log("SELECT", select )
