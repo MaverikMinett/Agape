@@ -37,7 +37,7 @@ describe('Orm', () => {
     })
 
     describe('registerDocument', () => {
-        it('should register a document', async () => {
+        it('should register a document (no params)', async () => {
             @Model class Foo extends Document {
         
                 @Primary id: string
@@ -50,17 +50,81 @@ describe('Orm', () => {
                 }
             }
 
-            const foo = new Foo({ name: "Johnny", age: 42 })
             orm.registerDocument(Foo)
+            
+            const locator = orm.getLocator(Foo)
+            expect(locator).toBeTruthy()
+            expect(locator.databaseName).toBe('default')
+            expect(locator.collectionName).toBe('foos')
+            expect(locator.collection).toBeTruthy()
+        })  
+        it('should register a document (with collectionName param)', async() => {
+            @Model class Foo extends Document {
+        
+                @Primary id: string
+                @Field name: string
+                @Field age: number
+            
+                constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
 
-            try {
-                const id = await orm.insert(Foo, foo).exec()
-                expect(id).toBeTruthy()
+            orm.registerDocument(Foo, { collectionName: 'bars' })
+            
+            const locator = orm.getLocator(Foo)
+            expect(locator.collectionName).toBe('bars')
+            expect(locator.collection).toBeTruthy()
+        })
+        it('should not allow two documents to be mapped to the same collection', async() => {
+            @Model class Foo extends Document {
+        
+                @Primary id: string
+                @Field name: string
+            
+                constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
+                    Object.assign( this, params )
+                }
             }
-            catch (error) {
-                console.log(error)
+
+            @Model class Bar extends Document {
+                @Primary id: string
+                @Field name: string
+            
+                constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
+                    Object.assign( this, params )
+                }
             }
-    })  
+
+            orm.registerDocument(Foo, { collectionName: 'foos' })
+
+            expect( () => orm.registerDocument(Bar, { collectionName: 'foos' }) ).toThrowError()
+        })
+        it('should not register a view', () => {
+            @Model class Foo extends Document {
+        
+                @Primary id: string
+                @Field name: string
+                @Field age: number
+            
+                constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+
+            interface FooName extends Pick<Foo,'id'|'name'> { }
+            @View(Foo, ['id','name'])
+            class FooName extends Document { }
+
+            expect( () => orm.registerDocument(FooName) ).toThrowError()
+        })
+        it('should not register multiple documents to the same collection', () => {
+
+        })
     })
 
     describe('InsertQuery', () => {

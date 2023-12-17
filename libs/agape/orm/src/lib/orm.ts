@@ -45,13 +45,24 @@ export class Orm {
 
     registerDocument( model: Class, params: DocumentLocatorParams={} ) {
 
+        /* don't register models that aren't documents */
         if ( ! classExtends(model, Document) ) {
             throw new Error(`Model ${model.name} must inherit from Document`)
         }
 
+        /* don't register views */
+        const descriptor = Model.descriptor(model)
+
+        if ( descriptor instanceof ViewDescriptor ) {
+            throw new Error(`Error registering ${model.name}, views do not need to be registered,
+            try registering the base model the instead`)
+        }
+
+        /* infer the default database and collection name */
         const databaseName = params?.databaseName ?? 'default';
         const collectionName = params?.collectionName ?? camelize(pluralize(model.name));
 
+        /* don't allow two different models to map to the same collection */
         const existing = Array.from(this.documents.values()).find( locator => 
             locator.databaseName === databaseName && locator.collectionName === collectionName 
         )
