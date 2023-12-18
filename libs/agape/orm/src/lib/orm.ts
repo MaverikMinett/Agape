@@ -85,32 +85,6 @@ export class Orm {
         this.documents.set(model, locator)
     }
 
-    /**
-     * Register a model with the orm
-     * @deprecated
-     * @param model 
-     * @param params 
-     */
-    registerModel( model: Class, params: DocumentLocatorParams={} ) {
-
-        console.log(`RegisterModel is deprecated, use register document instead`)
-
-        const databaseName = params?.databaseName ?? 'default';
-        const collectionName = params?.collectionName ?? camelize(pluralize(model.name));
-
-        const database = this.databases.get(databaseName)
-        if ( ! database )
-            throw new Error(`Error registering model ${model.name}, database with identifier ${databaseName} does not exit`)
-
-        // Determine the collection
-        const collection = database.getCollection(collectionName)
-
-        // Create a locator object
-        const locator = new DocumentLocator({ databaseName, collectionName, collection})
-
-        this.documents.set(model, locator)
-
-    }
 
     insert<T extends Class>( model: T, item: Pick<InstanceType<T>, keyof InstanceType<T>> ) {
 
@@ -150,6 +124,20 @@ export class Orm {
 
         return new UpdateQuery<T,P>(this, {document,view}, collection, selector, item)
     }
+
+    updateMany<T extends Class<Document>, P extends Class<Document>=T>( model: T, filter: FilterCriteria<InstanceType<P>>, changes: InstanceType<T> ): UpdateManyQuery<T,P>
+    updateMany<T extends Class<Document>, P extends Class<Document>>( model: [P,T], filter: FilterCriteria<InstanceType<P>>,  changes: InstanceType<T> ): UpdateManyQuery<T,P>
+    updateMany<T extends Class<Document>, P extends Class<Document>>( model: {document: P, view: T}, filter: FilterCriteria<InstanceType<P>>,  changes: InstanceType<T> ): UpdateManyQuery<T,P>
+    updateMany<T extends Class<Document>, P extends Class<Document>=T>( model: T|[P,T]|{document: P, view: T}, filter: FilterCriteria<InstanceType<P>>, changes: InstanceType<T> ): UpdateManyQuery<T,P> {
+        const { document, view } = documentAndViewFromModelParam(model)
+
+        const locator = this.getLocator(document)
+
+        const collection = locator.collection
+
+        return new UpdateManyQuery<T,P>(this, {document,view}, collection, filter, changes)
+    }
+
 
     list<T extends Class<Document>, P extends Class<Document>=T>( model: T, filter?: FilterCriteria<InstanceType<P>> ): ListQuery<T,P>
     list<T extends Class<Document>, P extends Class<Document>>( model: [P,T], filter?: FilterCriteria<InstanceType<P>> ): ListQuery<T,P>
@@ -444,7 +432,7 @@ export class UpdateQuery<T extends Class,P extends Class<Document>> {
     constructor( orm: Orm, model: {document: P, view: T}, collection: Collection, id: string, item: InstanceType<T> )
     constructor( orm: Orm, model: {document: P, view: T}, collection: Collection, filter: FilterCriteria<InstanceType<P>>, item: InstanceType<T> )
     constructor( orm: Orm, model: {document: P, view: T}, collection: Collection, filter: string|FilterCriteria<InstanceType<P>>, item: InstanceType<T> )
-    constructor( public orm: Orm, model: {document: P, view: T}, public collection: Collection, selector: string|FilterCriteria<InstanceType<T>>, public item: InstanceType<T> ) {
+    constructor( public orm: Orm, model: {document: P, view: T}, public collection: Collection, selector: string|FilterCriteria<InstanceType<P>>, public item: InstanceType<T> ) {
         this.document = model.document
         this.view = model.view
 
@@ -481,6 +469,42 @@ export class UpdateQuery<T extends Class,P extends Class<Document>> {
         if ( result.matchedCount === 0 ) {
             throw new Exception(404, `Could not update ${this.view.name} record, record not found`)
         }
+        if ( result.acknowledged === false ) {
+            throw new Exception(500, `Could not update ${this.view.name} record, database did not acknowledge request`)
+        }
+    }
+
+}
+
+
+export class UpdateManyQuery<T extends Class,P extends Class<Document>> {
+
+    id: ObjectId
+
+    document: P
+
+    view: T
+
+    constructor( public orm: Orm, model: {document: P, view: T}, public collection: Collection, public filter: FilterCriteria<InstanceType<P>>, public changes: InstanceType<T> ) {
+        this.document = model.document
+        this.view = model.view
+    }
+
+    async exec( ) {
+        const documentDescriptor = Model.descriptor(this.document)
+
+        /* selection */
+        let select: Dictionary = selectCriteriaFromFilterCriteria( documentDescriptor, this.filter )
+
+        if ( this.orm.debug ) {
+            console.log("SELECT", select )
+        }
+
+        /* record */
+        const record = itemToRecord(this.view, this.changes)
+
+        const result = await this.collection.updateMany( select, { $set: record } )
+
         if ( result.acknowledged === false ) {
             throw new Exception(500, `Could not update ${this.view.name} record, database did not acknowledge request`)
         }

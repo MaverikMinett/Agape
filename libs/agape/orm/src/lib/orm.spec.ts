@@ -321,6 +321,48 @@ describe('Orm', () => {
         })
     })
 
+    describe('UpdateManyQuery', () => {
+        it('should update the foo using a filter', async() => {
+            @Model class Shift extends Document {
+                @Primary id?: string
+                @Field timeIn: Date
+                @Field timeOut?: Date
+            
+                constructor( params?: Partial<Pick<Shift, keyof Shift>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+
+            interface ShiftBatchUpdateView extends Pick<Shift, 'timeOut'> { }
+            @View(Shift, ['timeOut'])
+            class ShiftBatchUpdateView extends Document {
+                constructor( params?: Partial<Pick<ShiftBatchUpdateView, keyof ShiftBatchUpdateView>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+
+            orm.registerDocument(Shift)
+    
+            const shift1 = new Shift({ timeIn: new Date('2012-01-01 17:00:00') })
+            const shift2 = new Shift({ timeIn: new Date('2012-01-01 17:30:00') })
+            const shift3 = new Shift({ timeIn: new Date('2012-01-01 18:00:00') })
+
+            await orm.insert(Shift, shift1).exec()
+            await orm.insert(Shift, shift2).exec()
+            await orm.insert(Shift, shift3).exec()
+
+            const changes = new ShiftBatchUpdateView({timeOut: new Date('2012-01-01 21:00:00')})
+            await orm.updateMany([Shift,ShiftBatchUpdateView], {timeOut: null}, changes).exec()
+
+            const shifts = await orm.list(Shift).exec()
+            for ( const shift of shifts ) {
+                expect(shift.timeOut).toEqual( new Date('2012-01-01 21:00:00') )
+            }
+        })
+    })
+
     describe('RetrieveQuery', () => {
         describe('by id', () => {
             describe('nested documents', () => {
