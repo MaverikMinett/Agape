@@ -33,6 +33,9 @@ describe('Orm', () => {
         const users = database.getCollection('users')
         await users.deleteMany({})
 
+        const shifts = database.getCollection('shifts')
+        await shifts.deleteMany({})
+
         await connection.disconnect()
     })
 
@@ -322,7 +325,7 @@ describe('Orm', () => {
     })
 
     describe('UpdateManyQuery', () => {
-        it('should update the foo using a filter', async() => {
+        it('should update the shifts', async() => {
             @Model class Shift extends Document {
                 @Primary id?: string
                 @Field timeIn: Date
@@ -1702,6 +1705,38 @@ describe('Orm', () => {
             
             const result = await orm.delete(Foo, { name: "Johnny", age: 42 } ).exec()
             expect(result.deletedCount).toBe(1)
+        })
+    })
+
+    describe('DeleteManyQuery', () => {
+        it('should delete the shifts', async() => {
+            @Model class Shift extends Document {
+                @Primary id?: string
+                @Field timeIn: Date
+                @Field timeOut?: Date
+            
+                constructor( params?: Partial<Pick<Shift, keyof Shift>>) {
+                    super()
+                    Object.assign( this, params )
+                }
+            }
+
+
+            orm.registerDocument(Shift)
+    
+            const shift1 = new Shift({ timeIn: new Date('2012-01-01 17:00:00'), timeOut: new Date('2012-01-01 21:00:00') })
+            const shift2 = new Shift({ timeIn: new Date('2012-01-01 17:30:00'), timeOut: new Date('2012-01-01 21:00:00') })
+            const shift3 = new Shift({ timeIn: new Date('2012-01-01 18:00:00'), timeOut: new Date('2012-01-01 21:00:00') })
+
+            await orm.insert(Shift, shift1).exec()
+            await orm.insert(Shift, shift2).exec()
+            await orm.insert(Shift, shift3).exec()
+
+            await orm.deleteMany(Shift, { timeOut: new Date('2012-01-01 21:00:00') }).exec()
+
+            const shifts = await orm.list(Shift).exec()
+            expect(shifts.length).toBe(0)
+
         })
     })
 

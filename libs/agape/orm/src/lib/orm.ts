@@ -164,7 +164,13 @@ export class Orm {
         return new DeleteQuery<T>(this, model, collection, selector)
     }
 
+    deleteMany<T extends Class>(model: T, filter: FilterCriteria<InstanceType<T>>): DeleteManyQuery<T> {
+        const locator = this.getLocator(model)
 
+        const collection = locator.collection
+
+        return new DeleteManyQuery<T>(this, model, collection, filter)
+    }
 
     getLocator<T extends Class>(view: T) {
         const descriptor = Model.descriptor(view)
@@ -560,7 +566,39 @@ export class DeleteQuery<T extends Class> {
             throw new Exception(500, `Could not delete ${this.model.name} record where ${JSON.stringify(select)}, database did not acknowledge request`)
         }
 
-        return result
+        return { deletedCount: result.deletedCount }
+    }
+
+}
+
+
+
+export class DeleteManyQuery<T extends Class> {
+
+    constructor( public orm: Orm, public model: T, public collection: Collection, public filter: FilterCriteria<InstanceType<T>> ) {
+
+    }
+
+    async exec( ) {
+        console.log("Perform delete many")
+        const descriptor = Model.descriptor(this.model)
+
+        /* selection */
+        let select: Dictionary = selectCriteriaFromFilterCriteria( descriptor, this.filter )
+
+        if ( this.orm.debug ) {
+            console.log("DELETE MANY", select )
+        }
+
+        const result = await this.collection.deleteMany(
+            select
+        )
+
+        if ( result.acknowledged === false ) {
+            throw new Exception(500, `Could not delete ${this.model.name} record where ${JSON.stringify(select)}, database did not acknowledge request`)
+        }
+
+        return { deletedCount: result.deletedCount }
     }
 
 }
