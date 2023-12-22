@@ -13,7 +13,7 @@ export class UserService {
     }
 
     lookup( username: string ) {
-        return orm.lookup(UserDetailView, { username } ).exec()
+        return orm.retrieve(UserDetailView, { username } ).exec()
     }
 
     create( user: Deflated<User> ) {

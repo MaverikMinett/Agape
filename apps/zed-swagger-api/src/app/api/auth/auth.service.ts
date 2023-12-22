@@ -17,7 +17,7 @@ export class AuthService {
     
     async login( credentials: Deflated<Credentials> ) {
         
-        const user = await orm.lookup( User, { username: credentials.username } ).exec()
+        const user = await orm.retrieve( User, { username: credentials.username } ).exec()
 
         const authenticated = bcrypt.compareSync(credentials.password, user.password)
 
