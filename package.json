@@ -18,6 +18,7 @@
     "start:zeduicomponent": "nx serve zed-ui",
     "start:zeduirouting": "nx serve zed-ui-routing",
     "start:zedauthapi": "nx serve zed-auth-api",
+    "start:zedsaasapi": "nx serve zed-saas-api",
     "start:zedswaggerapi": "nx serve zed-swagger-api",
     "start:ngtiedsubscriptions": "nx serve ng-tied-subscriptions",
     "start:ngeventstailwind": "nx serve ng-events-tailwind",

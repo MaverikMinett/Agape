@@ -4,7 +4,7 @@ import { FooResponse } from "./foo.model";
 
 
 @Controller('foo', {
-    description: 'Foo operations. Requires authorization.'
+    description: 'Foo operations'
 })
 export class FooController {
 
