@@ -2,6 +2,7 @@ import { ControllerDescriptor } from '../../descriptors/controller.descriptor';
 import { StubDescriptor } from '../../descriptors';
 import { ControllerParams } from '../../types';
 import { Injectable } from '..'
+import { titalize, verbalize } from '@agape/string';
 
 function parseControllerParams(...args: Array<ControllerParams|string>) {
     /* parse the parameters */
@@ -45,6 +46,18 @@ export function Controller( ...args: Array<ControllerParams|string> ){
 
         /* merge the stub with the controller descriptor */
         if ( stub ) stub.finalizeController( descriptor )
+
+        /* determine the tag name */
+        if ( !('tag' in descriptor) ) {
+            if ( descriptor.name ) {
+                descriptor.tag = descriptor.name
+            }
+            else {
+                let tagName = descriptor.class.name
+                tagName = titalize(verbalize(tagName.replace('Controller', '')))
+                descriptor.tag = tagName
+            }
+        }
 
         /* dependency injection */
         const services = Reflect.getMetadata('design:paramtypes', target);

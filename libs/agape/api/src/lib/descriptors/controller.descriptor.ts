@@ -12,6 +12,8 @@ export class ControllerDescriptor extends AspectDescriptor {
 
     description?: string
 
+    tag?: string|null
+
     middlewares: Array<Class<Middleware>> = []
 
     services: Class[] = []

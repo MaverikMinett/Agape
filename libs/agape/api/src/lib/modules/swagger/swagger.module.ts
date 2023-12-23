@@ -8,10 +8,9 @@ import { Controller, Get } from "@agape/api";
 import { SwaggerBuilder } from "./swagger.builder";
 import { Api } from "../../api";
 import { Class } from "@agape/types";
-import { titalize } from "@agape/string";
 
 
-@Controller()
+@Controller({ tag: null })
 export class SwaggerController {
 
     constructor( public api: Api ) {
@@ -28,17 +27,16 @@ export class SwaggerController {
 
         let moduleDescriptor = Module.descriptor(this.api.module)
 
-
         function processControllers( controllers: Class[], pathSegments: string[] ) {
 
             for ( let controller of controllers ) {
                 let controllerDescriptor = Controller.descriptor(controller)
 
-                let tagName = controllerDescriptor.class.name
-                let tagDescription = controllerDescriptor.description
-                tagName = titalize(tagName.replace('Controller', ''))
-                builder.addTag(tagName, tagDescription)
-
+                if ( controllerDescriptor.tag ) {
+                    let tagName = controllerDescriptor.tag
+                    let tagDescription = controllerDescriptor.description
+                    builder.addTag(tagName, tagDescription)
+                }
 
                 for ( let [actionName, actionDescriptor] of controllerDescriptor.actions.entries() ) {
                     const routePath = "/" + [...pathSegments, controllerDescriptor.path, actionDescriptor.ʘroute.path ]
@@ -50,7 +48,13 @@ export class SwaggerController {
 
                         const httpMethod = actionDescriptor.ʘroute.method
 
-                        builder.addAction(routePath, actionDescriptor, { tags: [tagName] })
+                        if ( controllerDescriptor.tag ) {
+                            builder.addAction(routePath, actionDescriptor, { tags: [controllerDescriptor.tag] })
+                        }
+                        else {
+                            builder.addAction(routePath, actionDescriptor)
+                        }
+                        
                         
                     }
         

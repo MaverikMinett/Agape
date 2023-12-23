@@ -22,7 +22,7 @@ import SWAGGER_UI_CSS from "./swagger-files/swagger-ui.css";
 import SWAGGER_UI_JS from "./swagger-files/swagger-ui.js";
 import SWAGGER_UI_JS_MAP from "./swagger-files/swagger-ui.js.map";
 
-@Controller()
+@Controller({ tag: null })
 export class SwaggerFilesController {
 
     @Get('favicon-16x16.png', { swagger: false })

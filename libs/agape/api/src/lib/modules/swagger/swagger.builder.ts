@@ -49,14 +49,18 @@ export class SwaggerBuilder {
         this.document.tags.push({ name, description })
     }
 
-    addAction( path: string, actionDescriptor: ActionDescriptor, options: { tags: string[] } ) {
+    addAction( path: string, actionDescriptor: ActionDescriptor, options?: { tags: string[] } ) {
         const action = actionDescriptor
         const summary = action.ʘdescription
         this.document.paths[path] ??= { }
         this.document.paths[path][action.ʘroute.method] = {
             "summary": summary,
-            "tags": options.tags,
         }
+        if ( options?.tags ) {
+            this.document.paths[path][action.ʘroute.method]["tags"] = options.tags
+        }
+        
+
 
         if ( action.ʘresponses && action.ʘresponses.length ) {
             const responses = {}
