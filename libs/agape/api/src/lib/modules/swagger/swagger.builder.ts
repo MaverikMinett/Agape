@@ -193,20 +193,33 @@ export class SwaggerBuilder {
                 let type: string = ""
                 if ( fieldDescriptor.designType === String ) {
                     type = 'string'
+                    schema.properties[fieldDescriptor.name] = {
+                        type,
+                        example: fieldDescriptor.example
+                    }
                 }
                 else if ( fieldDescriptor.designType === Number ) {
                     type = 'number'
+                    schema.properties[fieldDescriptor.name] = {
+                        type,
+                        example: fieldDescriptor.example
+                    }
                 }
                 else if ( fieldDescriptor.designType === Date ) {
                     type = 'date'
+                    schema.properties[fieldDescriptor.name] = {
+                        type,
+                        example: fieldDescriptor.example
+                    }
                 }
                 else if ( fieldDescriptor.designType instanceof Function ) {
-                    type = 'object'
+                    const schemaRef = this.addModelAsSchema(fieldDescriptor.designType)
+
+                    schema.properties[fieldDescriptor.name] = {
+                        "$ref": schemaRef
+                    }
                 }
-                schema.properties[fieldDescriptor.name] = {
-                    type,
-                    example: fieldDescriptor.example
-                }
+
             }
         }
 
