@@ -66,10 +66,10 @@ export class SwaggerController {
             for ( const childModule of modules ) {
                 const childModuleDescriptor = Module.descriptor(childModule)
     
-                pathSegments.push(childModuleDescriptor.path)
+                const childSegments = [...pathSegments, childModuleDescriptor.path] 
     
-                processControllers( childModuleDescriptor.controllers, pathSegments )
-                processModules(childModuleDescriptor.modules, pathSegments)
+                processControllers( childModuleDescriptor.controllers, childSegments )
+                processModules(childModuleDescriptor.modules, childSegments)
             }
         }
     
