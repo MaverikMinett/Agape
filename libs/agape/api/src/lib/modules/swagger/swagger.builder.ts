@@ -50,6 +50,7 @@ export class SwaggerBuilder {
     }
 
     addAction( path: string, actionDescriptor: ActionDescriptor, options?: { tags: string[] } ) {
+        path = path.replace(/:([a-z][a-z0-9_]*)/gi, "{$1}", )
         const action = actionDescriptor
         const summary = action.ʘdescription
         this.document.paths[path] ??= { }
@@ -59,8 +60,6 @@ export class SwaggerBuilder {
         if ( options?.tags ) {
             this.document.paths[path][action.ʘroute.method]["tags"] = options.tags
         }
-        
-
 
         if ( action.ʘresponses && action.ʘresponses.length ) {
             const responses = {}
