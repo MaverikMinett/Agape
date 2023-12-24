@@ -953,11 +953,41 @@ describe('Orm', () => {
                 
                         const foo1 = new Foo({ name: "Johnny", age: 42 })
                         const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Jimmy", age: 42})
                         await orm.insert(Foo, foo1).exec()
                         await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
             
                         const results = await orm.list(Foo, { name__in: [foo1.name, foo2.name] }).exec()
                         expect(results.length).toBe(2)
+                    })
+                })
+                describe('not in', () => {
+                    it('should filter the records on multiple names', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 42 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Jimmy", age: 42})
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+            
+                        const results = await orm.list(Foo, { name__nin: [foo1.name, foo2.name] }).exec()
+                        expect(results.length).toBe(1)
+                        expect(results[0].name).toEqual(foo3.name)
                     })
                 })
                 describe('search', () => {
@@ -1241,11 +1271,41 @@ describe('Orm', () => {
                 
                         const foo1 = new Foo({ name: "Johnny", age: 42 })
                         const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Jimmy", age: 42 })
                         await orm.insert(Foo, foo1).exec()
                         await orm.insert(Foo, foo2).exec()
+                        
             
                         const results = await orm.list(Foo, { id__in: [foo1.id, foo2.id] }).exec()
                         expect(results.length).toBe(2)
+                    })
+                })
+                describe('not in', () => {
+                    it('should filter the records by multiple ids', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 42 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "James", age: 42 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+            
+                        const results = await orm.list(Foo, { id__nin: [foo1.id, foo2.id] }).exec()
+                        expect(results.length).toBe(1)
+                        expect(results[0].id).toBe(foo3.id)
                     })
                 })
                 describe('search',  () => {
@@ -1386,6 +1446,34 @@ describe('Orm', () => {
             
                         const results = await orm.list(Foo, { age__in: [foo1.age, foo2.age] }).exec()
                         expect(results.length).toBe(2)
+                    })
+                })
+                describe('not in', () => {
+                    it('should filter the records on multiple ages', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 36 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Mary", age: 56 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+            
+                        const results = await orm.list(Foo, { age__nin: [foo1.age, foo2.age] }).exec()
+                        expect(results.length).toBe(1)
+                        expect(results[0].age).toBe(foo3.age)
                     })
                 })
                 describe('greater/less than', () => {
@@ -1724,6 +1812,109 @@ describe('Orm', () => {
                         expect(results.length).toBe(1)
                         expect(results[0].bar).toBeTruthy()
                         expect(results[0].bar.id).toBe(bar1.id)
+                    })
+                })
+                describe('in', () => {
+                    it('should select the foo document by selecting on the bar id', async() => {
+                        @Model class Bar extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field address: string
+                        
+                            constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                            @Field bar: Bar
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                        orm.registerDocument(Bar)
+                
+                        const bar1 = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
+                        const foo1 = new Foo({ name: "Johnny", age: 42, bar: bar1 })
+                        await orm.insert(Bar, bar1).exec()
+                        await orm.insert(Foo, foo1).exec()
+            
+                        const bar2 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
+                        const foo2 = new Foo({ name: "James", age: 42, bar: bar2 })
+                        await orm.insert(Bar, bar2).exec()
+                        await orm.insert(Foo, foo2).exec()
+    
+                        const bar3 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
+                        const foo3 = new Foo({ name: "James", age: 42, bar: bar3 })
+                        await orm.insert(Bar, bar3).exec()
+                        await orm.insert(Foo, foo3).exec()
+            
+                        const results = await orm.list(Foo, {bar__in: [bar1,bar2]}).exec()
+                        expect(results.length).toBe(2)
+                        expect(results[0].bar).toBeTruthy()
+                        expect(results[0].bar.id).toBe(bar1.id)
+                        expect(results[1].bar.id).toBe(bar2.id)
+                    })
+                })
+                describe('not in', () => {
+                    it('should select the foo document by selecting on the bar id', async() => {
+                        @Model class Bar extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field address: string
+                        
+                            constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                            @Field bar: Bar
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                        orm.registerDocument(Bar)
+                
+                        const bar1 = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
+                        const foo1 = new Foo({ name: "Johnny", age: 42, bar: bar1 })
+                        await orm.insert(Bar, bar1).exec()
+                        await orm.insert(Foo, foo1).exec()
+            
+                        const bar2 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
+                        const foo2 = new Foo({ name: "James", age: 42, bar: bar2 })
+                        await orm.insert(Bar, bar2).exec()
+                        await orm.insert(Foo, foo2).exec()
+    
+                        const bar3 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
+                        const foo3 = new Foo({ name: "James", age: 42, bar: bar3 })
+                        await orm.insert(Bar, bar3).exec()
+                        await orm.insert(Foo, foo3).exec()
+            
+                        const results = await orm.list(Foo, {bar__nin: [bar1,bar2]}).exec()
+                        expect(results.length).toBe(1)
+                        expect(results[0].bar).toBeTruthy()
+                        expect(results[0].bar.id).toBe(bar3.id)
                     })
                 })
             })

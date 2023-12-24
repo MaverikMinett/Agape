@@ -71,7 +71,7 @@ export function selectCriteriaFromFilterCriteria<T>( descriptor: ModelDescriptor
                     [`$${operator}`]: selectFieldValue
                 }
             }
-            else if ( operator === 'in' ) {
+            else if ( operator === 'in' || operator === 'nin') {
                 if ( descriptor.fields.get(filterFieldName).primary ) {
                     selectFieldValue = filterCriteria[filterField].map( value => new ObjectId(value) )
                 }
@@ -88,7 +88,7 @@ export function selectCriteriaFromFilterCriteria<T>( descriptor: ModelDescriptor
                 else {
                     selectFieldValue = filterCriteria[filterField]
                 }
-                criteria[selectFieldName]['$in'] = selectFieldValue
+                criteria[selectFieldName][`$${operator}`] = selectFieldValue
             }
             else if ( operator === 'search' ) {
                 if ( descriptor.fields.get(filterFieldName).primary ) {
