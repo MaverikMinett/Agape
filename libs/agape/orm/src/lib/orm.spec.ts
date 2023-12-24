@@ -883,6 +883,7 @@ describe('Orm', () => {
             
                         const results = await orm.list(Foo, { name: foo1.name }).exec()
                         expect(results.length).toBe(1)
+                        expect(results[0].name).toBe(foo1.name)
                     })
                     it('should match on a regex', async () => {
                         @Model class Foo extends Document {
@@ -907,6 +908,32 @@ describe('Orm', () => {
                         const results = await orm.list(Foo, { name: /j/i }).exec()
                         expect(results.length).toBe(2)
                     })
+                })
+                describe('not equal', () => {
+                    it('should return records not equal to', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 42 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+            
+                        const results = await orm.list(Foo, { name__ne: foo1.name }).exec()
+                        expect(results.length).toBe(1)
+                        expect(results[0].name).toBe(foo2.name)
+                    }) 
                 })
                 describe('in', () => {
                     it('should filter the records on multiple names', async () => {
@@ -1169,6 +1196,33 @@ describe('Orm', () => {
                         expect(results.length).toBe(1)
                     })
                 })
+                describe('not equal', () => {
+                    it('should filter records where id does not equal', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 42 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "Jimmy", age: 42 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+            
+                        const results = await orm.list(Foo, { id__ne: foo1.id }).exec()
+                        expect(results.length).toBe(2)
+                    })
+                })
                 describe('in', () => {
                     it('should filter the records by multiple ids', async () => {
                         @Model class Foo extends Document {
@@ -1277,6 +1331,34 @@ describe('Orm', () => {
             
                         const results = await orm.list(Foo, { age: foo1.age }).exec()
                         expect(results.length).toBe(2)
+                    })
+                })
+                describe('not equal', () => {
+                    it('should filter the records on age', async () => {
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                
+                        const foo1 = new Foo({ name: "Johnny", age: 42 })
+                        const foo2 = new Foo({ name: "James", age: 42 })
+                        const foo3 = new Foo({ name: "James", age: 56 })
+                        await orm.insert(Foo, foo1).exec()
+                        await orm.insert(Foo, foo2).exec()
+                        await orm.insert(Foo, foo3).exec()
+            
+                        const results = await orm.list(Foo, { age__ne: foo1.age }).exec()
+                        expect(results.length).toBe(1)
+                        expect(results[0].age).toBe(foo3.age)
                     })
                 })
                 describe('in', () => {
@@ -1497,6 +1579,7 @@ describe('Orm', () => {
             
                         const bar2 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
                         const foo2 = new Foo({ name: "James", age: 42, bar: bar2 })
+                        await orm.insert(Bar, bar2).exec()
                         await orm.insert(Foo, foo2).exec()
             
                         const results = await orm.list(Foo, {bar: bar1.id}).exec()
@@ -1546,6 +1629,52 @@ describe('Orm', () => {
                         expect(results.length).toBe(1)
                         expect(results[0].bar).toBeTruthy()
                         expect(results[0].bar.id).toBe(bar1.id)
+                    })
+                })
+                describe('not equal', () => {
+                    it('should select the foo document by selecting on the bar id', async() => {
+                        @Model class Bar extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field address: string
+                        
+                            constructor( params?: Partial<Pick<Bar, keyof Bar>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        @Model class Foo extends Document {
+                
+                            @Primary id: string
+                            @Field name: string
+                            @Field age: number
+                            @Field bar: Bar
+                        
+                            constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                                super()
+                                Object.assign( this, params )
+                            }
+                        }
+                
+                        orm.registerDocument(Foo)
+                        orm.registerDocument(Bar)
+                
+                        const bar1 = new Bar({ name: "The Last Drop", address: "16 Fantasy Lane"})
+                        const foo1 = new Foo({ name: "Johnny", age: 42, bar: bar1 })
+                        await orm.insert(Bar, bar1).exec()
+                        await orm.insert(Foo, foo1).exec()
+            
+                        const bar2 = new Bar({ name: "The Five and Dime", address: "123 Main St"})
+                        const foo2 = new Foo({ name: "James", age: 42, bar: bar2 })
+                        await orm.insert(Bar, bar2).exec()
+                        await orm.insert(Foo, foo2).exec()
+            
+                        const results = await orm.list(Foo, {bar__ne: bar1.id}).exec()
+                        expect(results.length).toBe(1)
+                        expect(results[0].bar).toBeTruthy()
+                        expect(results[0].bar.id).toBe(bar2.id)
                     })
                 })
                 describe('in', () => {
