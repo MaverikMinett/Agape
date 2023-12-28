@@ -3,8 +3,11 @@ import { ActionDescriptor } from './action.descriptor';
 import { InjectableDescriptor } from './injectable.descriptor';
 import { ControllerDescriptor } from './controller.descriptor';
 import { AspectDescriptor } from './aspect.descriptor';
+import { OperationDescriptor } from '.';
 
 import { include } from '@agape/object';
+
+
 /**
  * Provide a stub descriptor that property decorators can attach to during
  * class construction time; before the actual service or Controller descriptors
@@ -15,6 +18,8 @@ export interface StubDescriptor extends InjectableDescriptor, ControllerDescript
 export class StubDescriptor {
 
     actions: Map<string, ActionDescriptor> = new Map()
+
+    operations: Map<string, OperationDescriptor> = new Map()
 
     constructor( public target: any ) {
 
@@ -39,14 +44,31 @@ export class StubDescriptor {
     }
 
     finalizeInjectable( injectable: InjectableDescriptor ) {
-        for ( const [name, operation] of this.operations.entries() ) {
-            injectable.operations.set(name, operation)
+        if ( this.operations ) {
+            for ( const [name, operation] of this.operations.entries() ) {
+                injectable.operations.set(name, operation)
+            }
         }
+        if ( this.actions ) {
+            for ( const [name, action] of this.actions.entries() ) {
+                const descriptor = new OperationDescriptor(name)
+                descriptor.exceptions(...action.exceptions())
+                this.operations.set(name, descriptor)
+            }
+        }
+        if ( this.operations ) {
+            for ( const [name, action] of this.actions.entries() ) {
+                injectable.operations.set(name, action)
+            }
+        }
+        console.log("Injectable", injectable)
     }
 
     finalizeController( controller: ControllerDescriptor ) {
-        for ( const [name, action] of this.actions.entries() ) {
-            controller.actions.set(name, action)
+        if ( this.actions ) {
+            for ( const [name, action] of this.actions.entries() ) {
+                controller.actions.set(name, action)
+            }
         }
     }
 

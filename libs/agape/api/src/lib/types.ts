@@ -1,21 +1,9 @@
 import { ApiRequest } from './api-request';
 import { ApiResponse } from './api-response';
-import {
-    ActionDescriptor, ControllerDescriptor,
-    OperationDescriptor,
-    ResponseDescriptor
-} from './descriptors';
+import { ControllerDescriptor } from './descriptors';
 
 export type HttpMethod = 'put'|'post'|'get'|'patch'|'delete';
 
-export type ActionDescriptionFunction<T=any> = (progenitor: T, action: ActionDescriptor) => string
-export type ActionDescription = string|ActionDescriptionFunction
-
-export type OperationDescriptionFunction<T=any> = (progenitor: T, operation: OperationDescriptor) => string
-export type OperationDescription = string|OperationDescriptionFunction
-
-export type ResponseDescriptionFunction<T=any> = (progenitor: T, response: ResponseDescriptor) => string
-export type ResponseDescription = string|ResponseDescriptionFunction
 
 export type ControllerParams = Partial<Omit<ControllerDescriptor,'actions'|'services'>>
 

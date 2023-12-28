@@ -1,4 +1,3 @@
-import { ActionDescription} from '../../types';
 import { StubDescriptor } from '../../descriptors/stub';
 
 

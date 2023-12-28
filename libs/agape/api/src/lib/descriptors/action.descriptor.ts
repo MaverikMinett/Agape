@@ -1,9 +1,6 @@
-import { ActionDescription, HttpMethod, ResponseDescription } from '../types';
+import {  HttpMethod } from '../types';
 import { Class, Dictionary } from '@agape/types';
 import { ResponseDescriptor } from './response';
-import { BodyDescriptor, BodyDescriptorParams } from './body';
-import { ControllerDescriptor } from './controller.descriptor';
-import { inherit } from '@agape/object';
 import { Middleware } from '../interfaces/middleware.interface';
 import { ActionParameterName } from '../interfaces/action-parameter-definition';
 import { Exception } from '@agape/exception';
@@ -32,6 +29,8 @@ export class ActionDescriptor {
 
     ʘexceptions: Exception[]
 
+    ʘuses: Array<[Class,string]>
+
     constructor( public name: string ) {
 
     }
@@ -56,11 +55,23 @@ export class ActionDescriptor {
         return this
     }
 
+    uses( ): Array<[Class,string]>
+    uses( ...operations: Array<[Class,string]> ): this
+    uses( ...operations: Array<[Class,string]> ) {
+        if ( operations.length === 0 ) {
+            return this.ʘuses
+        }
+
+        this.ʘuses ??= []
+        this.ʘuses.push(...operations)
+        return this
+    }
+
     inject( parameterIndex: number, parameter: ActionParameterName, designType: Class  ) {
         this.ʘinject[parameterIndex] = { parameter, designType }
     }
 
-    respond(model: Class|Exception|[Class], description?: ResponseDescription ) {
+    respond(model: Class|Exception|[Class], description?: string ) {
         if ( this.ʘresponses === undefined ) this.ʘresponses = []
         const descriptor = new ResponseDescriptor( model, description )
         this.ʘresponses.push(descriptor)

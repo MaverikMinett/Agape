@@ -1,9 +1,10 @@
-import { ActionDescriptor, HTTP_STATUS_CODES } from "@agape/api";
+import { ActionDescriptor, HTTP_STATUS_CODES, Injectable, InjectableDescriptor } from "@agape/api";
 import { Model } from '@agape/model'
 import { SWAGGER_BASE } from "./swagger.base";
 import { SwaggerDocument } from "./types";
 import { Exception } from "@agape/exception";
 import { Class } from "@agape/types";
+
 
 
 export class SwaggerBuilder {
@@ -109,24 +110,41 @@ export class SwaggerBuilder {
             }
         }
 
+        const exceptions: Exception[] = []
         if ( action.ʘexceptions ) {
+            exceptions.push(...action.ʘexceptions)
+        }
+        if ( action.ʘuses ) {
+            for ( const definition of action.ʘuses ) {
+                const [service, method] = definition
+                const injectableDescriptor = Injectable.descriptor(service)
+                if (injectableDescriptor.operations) {
+                    const operation =injectableDescriptor.operations.get(method)
+                    if ( ! operation ) {
+                        throw new Error(`Operation "${method}" does not exist on ${service.name}`)
+                    }
+                    if ( operation.ʘexceptions ) {
+                        exceptions.push( ...operation.ʘexceptions )
+                    }
+                }
                 
-            for ( const exception of action.ʘexceptions ) {
-                responses[exception.status] = {
-                    description:  exception.statusText || HTTP_STATUS_CODES[action.ʘstatus],
-                    content: {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "status": {
-                                        "type": "number",
-                                        "example": exception.status
-                                    },
-                                    "message": {
-                                        "type": "string",
-                                        "example": exception.message
-                                    }
+            }
+        }
+        for ( const exception of exceptions ) {
+            responses[exception.status] = {
+                description:  exception.statusText || HTTP_STATUS_CODES[action.ʘstatus],
+                content: {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "status": {
+                                    "type": "number",
+                                    "example": exception.status
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": exception.message
                                 }
                             }
                         }
