@@ -61,7 +61,6 @@ export class StubDescriptor {
                 injectable.operations.set(name, action)
             }
         }
-        console.log("Injectable", injectable)
     }
 
     finalizeController( controller: ControllerDescriptor ) {

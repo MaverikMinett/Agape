@@ -100,7 +100,6 @@ export class SwaggerBuilder {
                     }
                 }
             }
-            console.log(action.name,  action.ʘexceptions )
             
         }
         else {
