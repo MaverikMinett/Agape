@@ -61,8 +61,6 @@ export class Api {
                 await this.performAction(controllerInstance, actionDescriptor, apiRequest, apiResponse, context)
             } 
 
-            executionStack.push(executeAction)
-
             const middlewares = this.getMiddlewares(moduleDescriptors, controllerDescriptor, actionDescriptor)
 
             for ( let middleware of middlewares ) {
@@ -70,8 +68,9 @@ export class Api {
                 const executeMiddleware = async() => {
                     await middlewareInstance.activate(apiRequest, apiResponse, next)
                 }
-                executionStack.unshift(executeMiddleware)
+                executionStack.push(executeMiddleware)
             }
+            executionStack.push(executeAction)
 
             try {
                 await next()
@@ -108,7 +107,7 @@ export class Api {
             const name = actionParameterDefinition.parameter
             if ( name === 'body' ) params.push(apiRequest.body)
             else if ( name === 'params' ) params.push(apiRequest.params)
-            else if ( name === 'query' ) params.push(apiRequest.params)
+            else if ( name === 'query' ) params.push(apiRequest.query)
             else if ( name === 'request' ) params.push(apiRequest)
             else if ( name === 'response' ) params.push(apiResponse)
             else if ( name === 'execution-context' ) params.push(context)

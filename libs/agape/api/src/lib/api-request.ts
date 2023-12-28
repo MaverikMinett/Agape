@@ -2,7 +2,7 @@ import { Dictionary } from "@agape/types"
 
 
 
-export class ApiRequest {
+export class ApiRequest<T=any> {
 
     path: string
 
@@ -20,5 +20,5 @@ export class ApiRequest {
 
     context: 'commander'|'rest'|string
 
-    auth: any;
+    auth?: T;
 }
