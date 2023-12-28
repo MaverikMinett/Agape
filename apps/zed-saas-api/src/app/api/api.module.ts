@@ -1,9 +1,10 @@
 import { Module, LoggingMiddleware, SwaggerModule } from "@agape/api";
-import { FooModule } from "./foo/foo.module";
-import { UsersModule } from "./users/users.module";
-import { AuthModule } from "./auth/auth.module";
-// import { SwaggerModule } from "./swagger/swagger.module";
-
+import { FooModule } from "./modules/foo/foo.module";
+import { UsersModule } from "./modules/users/users.module";
+import { AuthModule } from "./modules/auth/auth.module";
+import { AdminApiModule } from "../admin/api/admin-api.module";
+import { AuthenticateRequestMiddleware } from "../shared/middlewares/authenticate-request.middleware";
+import { PublicApiModule } from "./modules/public-api.module";
 
 @Module({
     'modules': [ 
@@ -34,11 +35,12 @@ import { AuthModule } from "./auth/auth.module";
             },
             
         }),
-        FooModule, 
-        AuthModule, 
-        UsersModule 
+        AdminApiModule, 
+        AuthModule,
+        FooModule,
+        UsersModule
     ],
-    'middlewares': [ LoggingMiddleware ]
+    'middlewares': [ LoggingMiddleware, AuthenticateRequestMiddleware ]
 })
 export class ApiModule {
 

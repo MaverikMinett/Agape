@@ -35,6 +35,5 @@ export class AuthGuard implements Middleware {
         console.log("Headers", request.headers)
         const [type, token] = request.headers['authorization']?.split(' ') ?? [ ]
         return type === 'Bearer' ? token : undefined
-       
     }
 }

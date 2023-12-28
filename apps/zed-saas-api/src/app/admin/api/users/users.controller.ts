@@ -1,37 +1,31 @@
 import { Controller, Get, Post, Put, Delete, Body, Params, Respond } from '@agape/api';
 import { Exception } from '@agape/exception';
 
-import { UserService } from './user.service';
-import { ItemId, User, UserDetailView } from 'lib-platform'
+import { AdminUserService } from './user.service';
+import { User, AdminUserDetailView, AdminUserCreateView } from '../../models/user.models';
+import { ItemId } from 'lib-platform';
 
 
 @Controller('users')
-export class UsersController {
-    constructor(private readonly service: UserService) {}
+export class AdminUsersController {
+    constructor(private readonly service: AdminUserService) {}
+
 
 
     @Get()
-    @Respond([UserDetailView])
+    @Respond([AdminUserDetailView])
     async list() {
         const items = await this.service.list()
         return items
     }
 
     @Post()
-    create( @Body body: User ) {
-        const item = body
-
-        const duplicate = this.service.lookup(item.username)
-
-        if ( duplicate ) {
-            throw new Exception(409, "A user with that username already exists")
-        }
-
+    create( @Body body: AdminUserCreateView ) {
         return this.service.create( body )
     }
 
     @Get(':id')
-    @Respond([UserDetailView])
+    @Respond([AdminUserDetailView])
     async retrieve( @Params params: ItemId ) {
 
         const item = await this.service.retrieve(params.id)

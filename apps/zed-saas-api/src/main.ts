@@ -5,7 +5,6 @@ const config = dotenv.config({ path: 'apps/_env/.env'})
 import cors from 'cors';
 import express, { Application, Router } from 'express';
 import { log, proxy } from '@lib/express';
-import { connect } from './db';
 import router from './app/app.routes'
 import { connectOrm } from './orm';
 
@@ -47,8 +46,6 @@ app.use('*', (req, res) => {
 
 
 async function main() {
-
-    await connect()
 
     await connectOrm()
   

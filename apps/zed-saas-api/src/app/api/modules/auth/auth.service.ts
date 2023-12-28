@@ -1,11 +1,12 @@
-import { Injectable, JwtService } from '@agape/api';
+import { Exceptions, Injectable, JwtService } from '@agape/api';
 import bcrypt from 'bcryptjs';
 
 import { orm } from '@agape/orm';
-import { Deflated } from '@agape/types';
 import { Exception } from '@agape/exception';
 
-import { Credentials, User } from 'lib-platform';
+import { User } from '../../../shared/documents/user.document';
+import { Credentials } from 'lib-platform';
+import { Authentication } from '../../../shared/models/auth/authentication.model';
 
 
 @Injectable()
@@ -15,17 +16,18 @@ export class AuthService {
 
     }
     
-    async login( credentials: Deflated<Credentials> ) {
+    @Exceptions( new Exception(401, 'Invalid credentials') )
+    async login( credentials: Credentials ) {
         
         const user = await orm.retrieve( User, { username: credentials.username } ).exec()
 
         const authenticated = bcrypt.compareSync(credentials.password, user.password)
 
         if ( ! authenticated ) {
-            throw new Exception(401)
+            throw new Exception(401, "Invalid credentials")
         }
 
-        const payload = { username: user.username, sub: user.id };
+        const payload: Authentication = { username: user.username, sub: user.id, isAdmin: user.isAdmin };
         const secret = process.env['JWT_SECRET']
 
         const response =  {
