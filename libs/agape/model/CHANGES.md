@@ -1,6 +1,8 @@
 
+0.6.2 Dec 28 2023
+- add boolean to allowed types for field descriptor example
 
-0.5.0 May 27
+0.5.0 May 27 2023
 - add collection to model field descriptor
 
 0.3.1 May 22 2023

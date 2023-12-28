@@ -1,6 +1,6 @@
 {
   "name": "@agape/model",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "type": "commonjs",
   "description": "Annotated object models",
   "author": {

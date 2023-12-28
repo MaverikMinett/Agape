@@ -141,7 +141,7 @@ export class FieldDescriptor {
 
     readable?: boolean;       // can read value? default to true (set to false on password fields)
 
-    example?: string|number|Date|Dictionary
+    example?: string|number|Date|Dictionary|boolean
 
     primary?: boolean;
 
