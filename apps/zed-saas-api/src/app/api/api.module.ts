@@ -4,7 +4,6 @@ import { UsersModule } from "./modules/users/users.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { AdminApiModule } from "../admin/api/admin-api.module";
 import { AuthenticateRequestMiddleware } from "../shared/middlewares/authenticate-request.middleware";
-import { PublicApiModule } from "./modules/public-api.module";
 
 @Module({
     'modules': [ 

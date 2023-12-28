@@ -7,8 +7,6 @@ const ASSETS_DIR = './apps/_swagger';
 
 const OUTPUT_DIR = './libs/agape/api/src/lib/modules/swagger/swagger-files'
 
-// console.log( fs.readdirSync('.') )
-
 // empty tht output directory
 function emptyOutputDirectory() {
     const oldFiles = fs.readdirSync(OUTPUT_DIR)
@@ -37,7 +35,6 @@ createOutputDirectory()
 emptyOutputDirectory()
 
 const files = fs.readdirSync(ASSETS_DIR)
-console.log(files)
 
 for ( let file of files ) {
     if ( file !== "swagger.json") {
@@ -46,7 +43,6 @@ for ( let file of files ) {
         const outputContent  = `export default \`${encodedFileContent}\` `
         const outputFilename = `${file}.ts`
         const mimeType = getMimeType( path.join(ASSETS_DIR, file) )
-        console.log(outputFilename, "\t", mimeType)
     
         fs.writeFileSync( path.join(OUTPUT_DIR, outputFilename), outputContent)
     }
