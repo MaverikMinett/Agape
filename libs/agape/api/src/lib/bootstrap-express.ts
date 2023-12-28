@@ -10,13 +10,10 @@ import { ApiRequest } from "./api-request"
 import { ApiResponse } from "./api-response"
 
 import express from 'express';
-import { SwaggerController } from "./modules/swagger/swagger.module"
-
-
 export function routeTo( 
     api: Api, 
     controllerInstance: InstanceType<Class>, 
-    moduleDescriptor: ModuleDescriptor,
+    moduleDescriptors: ModuleDescriptor[],
     controllerDescriptor: ControllerDescriptor,
     actionDescriptor: ActionDescriptor ) {
 
@@ -35,7 +32,7 @@ export function routeTo(
 
         await api.callAction(
             controllerInstance, 
-            moduleDescriptor, 
+            moduleDescriptors, 
             controllerDescriptor, 
             actionDescriptor, 
             apiRequest, 
@@ -61,18 +58,18 @@ export function bootstrapExpress( router: ExpressRouter, module: Class ) {
 
     let pathSegments = [ moduleDescriptor.path ]
 
-    function processControllers( controllers: Class[] ) {
+    function processControllers( controllers: Class[], moduleDescriptors:ModuleDescriptor[], pathSegments: string[] ) {
 
         for ( let controller of controllers ) {
 
             let controllerDescriptor = Controller.descriptor(controller)
     
-            pathSegments.push(controllerDescriptor.path)
+            const controllerPathSegments = [ ...pathSegments, controllerDescriptor.path ]
     
             let controllerInstance = newApi.getController(controller)
     
             for ( let [actionName, actionDescriptor] of controllerDescriptor.actions.entries() ) {
-                const routePath = [...pathSegments, actionDescriptor.ʘroute.path]
+                const routePath = [...controllerPathSegments, actionDescriptor.ʘroute.path]
                     .filter( segment => segment !== undefined && segment !== "" && segment !== "/" )
                     .join("/")
 
@@ -85,7 +82,7 @@ export function bootstrapExpress( router: ExpressRouter, module: Class ) {
                 else {
                     router[actionDescriptor.ʘroute.method](
                         `/${routePath}`, 
-                        routeTo(newApi, controllerInstance, moduleDescriptor, controllerDescriptor, actionDescriptor)
+                        routeTo(newApi, controllerInstance, moduleDescriptors, controllerDescriptor, actionDescriptor)
                     )
                 }
     
@@ -96,21 +93,21 @@ export function bootstrapExpress( router: ExpressRouter, module: Class ) {
         }
     }
 
-    function processModules( modules: Class[] ) {
+    function processModules( modules: Class[], moduleDescriptors:ModuleDescriptor[], pathSegments: string[] ) {
         for ( const childModule of modules ) {
             const childModuleDescriptor = Module.descriptor(childModule)
 
-            pathSegments.push(childModuleDescriptor.path)
+            const modulePathSegments = [...pathSegments, childModuleDescriptor.path]
 
-            processControllers( childModuleDescriptor.controllers )
-            processModules(childModuleDescriptor.modules)
+            processControllers( childModuleDescriptor.controllers, [...moduleDescriptors, childModuleDescriptor], modulePathSegments )
+            processModules(childModuleDescriptor.modules, [...moduleDescriptors, childModuleDescriptor], modulePathSegments)
         }
     }
 
     
-    processControllers( moduleDescriptor.controllers )
+    processControllers( moduleDescriptor.controllers, [moduleDescriptor], pathSegments )
 
-    processModules( moduleDescriptor.modules )
+    processModules( moduleDescriptor.modules, [moduleDescriptor], pathSegments )
 
 }
 

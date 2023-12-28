@@ -39,7 +39,7 @@ export class Api {
 
     async callAction( 
         controllerInstance: InstanceType<Class>, 
-        moduleDescriptor: ModuleDescriptor,
+        moduleDescriptors: ModuleDescriptor[],
         controllerDescriptor: ControllerDescriptor,
         actionDescriptor: ActionDescriptor, 
         apiRequest: ApiRequest,
@@ -63,12 +63,7 @@ export class Api {
 
             executionStack.push(executeAction)
 
-            const moduleMiddlewares = moduleDescriptor.middlewares
-            const controllerMiddlewares = controllerDescriptor.middlewares
-            const actionMiddlewares = actionDescriptor.ʘmiddlewares
-
-
-            const middlewares = [...moduleMiddlewares, ...controllerMiddlewares, ...actionMiddlewares]
+            const middlewares = this.getMiddlewares(moduleDescriptors, controllerDescriptor, actionDescriptor)
 
             for ( let middleware of middlewares ) {
                 const middlewareInstance: Middleware = this.injector.get(middleware)
@@ -133,5 +128,19 @@ export class Api {
         apiResponse.send(content)
     }
 
+    private getMiddlewares(
+        moduleDescriptors: ModuleDescriptor[],
+        controllerDescriptor: ControllerDescriptor,
+        actionDescriptor: ActionDescriptor, 
+    ) {
+        const middlewares: Class<Middleware>[] = []
+        const controllerMiddlewares = controllerDescriptor.middlewares
+        const actionMiddlewares = actionDescriptor.ʘmiddlewares
+        for ( const moduleDescriptor of moduleDescriptors ) {
+            middlewares.push(...moduleDescriptor.middlewares)
+        }
+        middlewares.push(...controllerMiddlewares, ...actionMiddlewares)
 
+        return middlewares
+    }
 }
