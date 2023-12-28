@@ -16,14 +16,11 @@ export interface ActionRouteDefinition {
 
 export class ActionDescriptor {
 
-    // ʘbody: BodyDescriptor;
-
     ʘstatus: number;
 
     ʘroute: ActionRouteDefinition;
 
     ʘdescription: string
-    // ʘdescription: ActionDescription
 
     ʘresponses: ResponseDescriptor[]
 
@@ -33,13 +30,12 @@ export class ActionDescriptor {
 
     ʘstaticFiles: string[]
 
+    ʘexceptions: Exception[]
+
     constructor( public name: string ) {
 
     }
 
-    // description(): ActionDescription
-    // description( description: ActionDescription ): this
-    // description( description?: ActionDescription ) {
     description(): string
     description( description: string ): this
     description( description?: string ) {        
@@ -48,18 +44,21 @@ export class ActionDescriptor {
         return this
     }
 
-    // getDescription( controller: ControllerDescriptor ): string {
-    //     if ( ! this.ʘdescription ) return ""
-    //     if ( typeof this.ʘdescription === "function" ) {
-    //         return this.ʘdescription.call(this, controller, this )
-    //     }
-    //     return this.ʘdescription
-    // }
+    exceptions( ): Exception[]
+    exceptions( ...exceptions: Exception[] ): this
+    exceptions( ...exceptions: Exception[] ) {
+        if ( exceptions.length === 0 ) {
+            return this.ʘexceptions
+        }
+
+        this.ʘexceptions ??= []
+        this.ʘexceptions.push(...exceptions)
+        return this
+    }
 
     inject( parameterIndex: number, parameter: ActionParameterName, designType: Class  ) {
         this.ʘinject[parameterIndex] = { parameter, designType }
     }
-
 
     respond(model: Class|Exception|[Class], description?: ResponseDescription ) {
         if ( this.ʘresponses === undefined ) this.ʘresponses = []
@@ -83,29 +82,6 @@ export class ActionDescriptor {
         this.ʘroute = { method, path, ...params }
         return this
     }
-
-    // body(): BodyDescriptor
-    // body( model: Class, description?: string, contentType?: string ): this
-    // body( params: BodyDescriptorParams )
-    // body( params?: Class|BodyDescriptorParams, description?: string, contentType?: string ) {
-    //     if ( params === undefined ) return this.ʘbody
-
-    //     let descriptor: BodyDescriptor
-
-    //     if ( typeof params === 'function' ) {
-    //         const model = params
-    //         descriptor = new BodyDescriptor({ model })
-
-    //         descriptor.model = model
-    //         if ( description !== undefined ) descriptor.description = description
-    //     }
-    //     else {
-    //         descriptor = new BodyDescriptor(params)
-    //     }
-
-    //     this.ʘbody = descriptor
-    //     return this
-    // }
 
     middlewares( ...middlewares: Array<Class<Middleware>>) {
         this.ʘmiddlewares.push(...middlewares)

@@ -61,14 +61,14 @@ export class SwaggerBuilder {
             this.document.paths[path][action.ʘroute.method]["tags"] = options.tags
         }
 
+        const responses = {}
         if ( action.ʘresponses && action.ʘresponses.length ) {
-            const responses = {}
             this.document.paths[path][action.ʘroute.method]['responses']
             const statusCode = action.ʘstatus
             for ( const responseDescriptor of action.ʘresponses ) {
-                if ( responseDescriptor.model instanceof Exception ) {
-                    // TODO
-                }
+                // if ( responseDescriptor.model instanceof Exception ) {
+                //     // TODO
+                // }
                 if ( responseDescriptor.model instanceof Array ) {
                     const schemaRef = this.addModelAsSchema(responseDescriptor.model[0])
                     responses[statusCode] = {
@@ -99,16 +99,43 @@ export class SwaggerBuilder {
                     }
                 }
             }
-            this.document.paths[path][action.ʘroute.method]['responses'] = responses
+            console.log(action.name,  action.ʘexceptions )
+            
         }
         else {
-            const responses: any = {}
             const statusCode = action.ʘstatus
             responses[statusCode] = {
                 description: HTTP_STATUS_CODES[action.ʘstatus],
             }
-            this.document.paths[path][action.ʘroute.method]['responses'] = responses
         }
+
+        if ( action.ʘexceptions ) {
+                
+            for ( const exception of action.ʘexceptions ) {
+                responses[exception.status] = {
+                    description:  exception.statusText || HTTP_STATUS_CODES[action.ʘstatus],
+                    content: {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "status": {
+                                        "type": "number",
+                                        "example": exception.status
+                                    },
+                                    "message": {
+                                        "type": "string",
+                                        "example": exception.message
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        this.document.paths[path][action.ʘroute.method]['responses'] = responses
 
         const parametersDefinition = action.ʘinject.find( i => i.parameter === 'params')
         if ( parametersDefinition ) {
