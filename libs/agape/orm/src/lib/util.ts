@@ -129,7 +129,7 @@ export function selectCriteriaFromFilterCriteria<T>( descriptor: ModelDescriptor
     return select
 }
 
-export function serializeRecordField( modelDescriptor: ModelDescriptor, field: FieldDescriptor, item: any ) {
+function serializeRecordField( modelDescriptor: ModelDescriptor, field: FieldDescriptor, item: any ) {
     let value: any
     if ( field.designType instanceof Function && field.designType.prototype as any instanceof Document ) {
         const designTypeModelDescriptor = Model.descriptor(field.designType)
