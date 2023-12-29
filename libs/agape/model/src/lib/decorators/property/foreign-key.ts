@@ -1,6 +1,7 @@
 import { Class } from "@agape/types";
 import { FieldDescriptorParams } from "../../descriptors";
 import { Field } from "./field"
+import { Document } from "@agape/model"
 
 /**
  * Use the @ForeignKey decorator to annotate a property and designate it

@@ -1,7 +1,7 @@
-import { Collection, ObjectId } from 'mongodb';
+import { Collection } from 'mongodb';
 import { Class } from '@agape/types';
-import { Document, Model } from '@agape/model';
-import { itemToRecord } from '../../util';
+import { Model } from '@agape/model';
+import { itemToNewRecord } from '../../util';
 
 
 export class InsertQuery<T extends Class> {
@@ -15,7 +15,7 @@ export class InsertQuery<T extends Class> {
 
     async exec( ): Promise<{ id: string }> {
 
-        const record = itemToRecord(this.model, this.item)
+        const record = itemToNewRecord(this.model, this.item)
 
         const result = await this.collection.insertOne( record )
 

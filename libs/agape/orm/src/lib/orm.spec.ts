@@ -167,11 +167,8 @@ describe('Orm', () => {
             const foo = new Foo({ name: "Johnny", age: 42 })
             orm.registerDocument(Foo)
     
-    
             await orm.insert(Foo, foo).exec()
             expect(foo.id).toBeTruthy()
-            console.log(foo.id)
-    
         })
     
         it('should store the id of the bar document', async() => {
@@ -211,6 +208,60 @@ describe('Orm', () => {
             
             await orm.insert(Foo, foo).exec()
             expect( foo.id ).toBeTruthy()
+        })
+
+        describe('default values', () => {
+            it('should set the default value if not defined', async () => {
+                @Model class Foo extends Document {
+    
+                    @Primary id: string
+                    @Field name: string
+                    @Field({ default: 42 }) age: number
+                
+                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+                
+                orm.registerDocument(Foo)
+        
+                const foo = new Foo({ name: "Johnny" })
+                await orm.insert(Foo, foo).exec()
+                const saved = await orm.retrieve(Foo, foo.id).exec()
+                expect(saved.age).toBe(42)
+            })
+            it('should set the default value from the base model', async () => {
+                @Model class Foo extends Document {
+    
+                    @Primary id: string
+                    @Field name: string
+                    @Field({ default: 42 }) age: number
+                
+                    constructor( params?: Partial<Pick<Foo, keyof Foo>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+                }
+
+                interface FooCreateView extends Pick<Foo, 'id'|'name'> { }
+                @View(Foo, { pick: ['id','name'] })
+                class FooCreateView extends Document {
+
+                    constructor( params?: Partial<Pick<FooCreateView, keyof FooCreateView>>) {
+                        super()
+                        Object.assign( this, params )
+                    }
+
+                }
+                
+                orm.registerDocument(Foo)
+        
+                const foo = new FooCreateView({ name: "Johnny" })
+                await orm.insert(FooCreateView, foo).exec()
+                const saved = await orm.retrieve(Foo, foo.id).exec()
+                expect(saved.age).toBe(42)
+            })
         })
     })
 

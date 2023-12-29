@@ -8,7 +8,7 @@ import { MongoDatabase } from './databases/mongo.database';
 import { InsertQuery } from './mongo/queries/insert.query';
 
 import { FilterCriteria } from './types'
-import { documentAndViewFromModelParam, itemToRecord, selectCriteriaFromFilterCriteria } from './util';
+import { documentAndViewFromModelParam, getRootModel, itemToRecord, selectCriteriaFromFilterCriteria } from './util';
 import { Exception } from '@agape/exception';
 
 export interface DocumentLocatorParams {
@@ -173,11 +173,7 @@ export class Orm {
     }
 
     getLocator<T extends Class>(view: T) {
-        const descriptor = Model.descriptor(view)
-
-        const model: Class = descriptor instanceof ViewDescriptor
-            ? descriptor.model 
-            : view
+        const model = getRootModel(view)
 
         const locator: DocumentLocator = this.documents.get(model)
 
@@ -332,6 +328,9 @@ export class ListQuery<T extends Class<Document>,P extends Class<Document>> {
         if ( this.orm.debug ) {
             console.log("FILTER", this.filter )
         }
+
+        console.log("----------->", documentDescriptor)
+        console.log("----------->", documentDescriptor.field('organization'))
 
         const select = selectCriteriaFromFilterCriteria( documentDescriptor, this.filter )
 

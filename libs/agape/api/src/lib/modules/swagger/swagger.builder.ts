@@ -238,21 +238,28 @@ export class SwaggerBuilder {
                     type = 'string'
                     schema.properties[fieldDescriptor.name] = {
                         type,
-                        example: fieldDescriptor.example
+                        example: fieldDescriptor.example ?? fieldDescriptor.default
                     }
                 }
                 else if ( fieldDescriptor.designType === Number ) {
                     type = 'number'
                     schema.properties[fieldDescriptor.name] = {
                         type,
-                        example: fieldDescriptor.example
+                        example: fieldDescriptor.example ?? fieldDescriptor.default
                     }
                 }
                 else if ( fieldDescriptor.designType === Date ) {
                     type = 'date'
                     schema.properties[fieldDescriptor.name] = {
                         type,
-                        example: fieldDescriptor.example
+                        example: fieldDescriptor.example ?? fieldDescriptor.default
+                    }
+                }
+                else if ( fieldDescriptor.designType === Boolean ) {
+                    type = 'boolean'
+                    schema.properties[fieldDescriptor.name] = {
+                        type,
+                        example: fieldDescriptor.example ?? fieldDescriptor.default
                     }
                 }
                 else if ( fieldDescriptor.designType instanceof Function ) {
