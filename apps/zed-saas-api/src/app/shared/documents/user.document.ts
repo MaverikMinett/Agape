@@ -27,7 +27,7 @@ import { Organization } from './organization.document';
     @Field({ example: 'george.harrison@example.com' }) 
     email: string
 
-    @Field({ example: false })
+    @Field({ default: false })
     isAdmin: boolean
 
 
@@ -39,18 +39,20 @@ import { Organization } from './organization.document';
 }
 
 /* User Create View */
-export interface UserCreateView extends Pick<User,'username'|'password'|'firstName'|'lastName'|'email'> { }
+export interface UserCreateView extends Omit<User,'id'|'organization'|'isAdmin'> { }
 
-@View(User, { pick: [ 'username','password','firstName','lastName','email' ] } ) 
+@View(User, { omit: [ 'id', 'organization', 'isAdmin' ] } ) 
 export class UserCreateView extends Document {
 
 }
 
-/* User Create View with SAAS Contstraint */
-export interface UserCreateViewSaas extends Pick<User,'username'|'password'|'firstName'|'lastName'|'email'> { }
+/* User Update View */
+export interface UserUpdateView extends Omit<User, 'id'|'organization'|'isAdmin'> { };
 
-@View(User, { pick: [ 'username','password','firstName','lastName','email','organization' ] } ) 
-export class UserCreateViewSaas extends Document { }
+@View(User, { omit: [ 'id','organization', 'isAdmin' ] } ) 
+export class UserUpdateView extends Document {
+
+}
 
 /* User Login View */
 export interface UserLoginView extends Pick<User, 'id'|'password'|'username'|'firstName'|'lastName'|'organization'> { };
@@ -59,13 +61,7 @@ export interface UserLoginView extends Pick<User, 'id'|'password'|'username'|'fi
 export class UserLoginView extends Document {}
 
 
-/* User Update View */
-export interface UserUpdateView extends Omit<User, 'id'|'password'|'orgCode'|'organization'> { };
 
-@View(User, { omit: [ 'id','password','organization' ] } ) 
-export class UserUpdateView extends Document {
-
-}
 
 /* User Update Password View */
 export interface UserUpdatePasswordView extends Pick<User, 'password'> { };
@@ -76,9 +72,9 @@ export class UserUpdatePasswordView extends Document {
 }
 
 /* User Detail View */
-export interface UserDetailView extends Omit<User, 'password'> { };
+export interface UserDetailView extends Omit<User, 'password'|'organization'|'isAdmin'> { };
 
-@View(User, { omit: [ 'password' ] } ) 
+@View(User, { omit: [ 'password','organization','isAdmin' ] } ) 
 export class UserDetailView extends Document {
-
+   
 }

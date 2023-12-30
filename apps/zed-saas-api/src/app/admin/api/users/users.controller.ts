@@ -1,8 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Body, Params, Respond } from '@agape/api';
-import { Exception } from '@agape/exception';
 
 import { AdminUserService } from './user.service';
-import { User, AdminUserDetailView, AdminUserCreateView } from '../../models/user.models';
+import { AdminUserDetailView, AdminUserCreateView, AdminUserUpdateView } from '../../models/user.models';
 import { ItemId } from 'lib-platform';
 
 
@@ -34,7 +33,7 @@ export class AdminUsersController {
     }
 
     @Put(':id')
-    async update( @Params params: ItemId, @Body body: User) {
+    async update( @Params params: ItemId, @Body body: AdminUserUpdateView) {
         const item = body
         await this.service.update(params.id, item)
     }

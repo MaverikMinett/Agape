@@ -5,4 +5,5 @@ import { Field, Model } from "@agape/model";
     @Field username: string
     @Field sub: string
     @Field isAdmin: boolean
+    @Field organization: string
 }

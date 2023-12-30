@@ -3,51 +3,64 @@ import { Deflated } from '@agape/types';
 import { Injectable } from '@agape/api';
 import bcrypt from 'bcryptjs';
 
-// import { User, UserDetailView , UserUpdatePasswordView, UserUpdateView } from 'lib-platform';
+import { User, UserCreateView, UserDetailView , UserUpdatePasswordView, UserUpdateView } from '../../../shared/documents/user.document';
+import { Exception } from '@agape/exception';
+import { DataService } from '../../../shared/services/data-service';
+import { Authentication } from '../../../shared/models/auth/authentication.model';
 
 
 @Injectable()
 export class UserService {
-    // list() {
-    //     return orm.list(UserDetailView).exec()
-    // }
 
-    // lookup( username: string ) {
-    //     return orm.retrieve(UserDetailView, { username } ).exec()
-    // }
+    constructor( private data: DataService ) {
 
-    // create( user: Deflated<User> ) {
-    //     user.password = this.encryptPassword(user.password)
-    //     return orm.insert(User, user).exec()
-    // }
+    }
 
-    // retrieve( id: string ) {
-    //     return orm.retrieve(UserDetailView, id).exec()
-    // }
+    async list(auth: Authentication) {
+        return this.data.list(auth, UserDetailView)
+    }
 
-    // update( id: string, user: Deflated<User> ) {
-    //     const password = user.password;
-    //     delete user.password;
+    async lookup( auth: Authentication, username: string ) {
+        return this.data.retrieve(auth, UserDetailView, { username: new RegExp(`^${username}$`, 'i') } )
+    }
+
+    async create( auth: Authentication, user: UserCreateView ) {
+        const duplicate = await this.lookup(auth, user.username)
+
+        if ( duplicate ) {
+            throw new Exception(409, "A user with that username already exists")
+        }
+
+        user.password = this.encryptPassword(user.password)
+        return this.data.create(auth, UserCreateView, user)
+    }
+
+    async retrieve( auth: Authentication, id: string ) {
+        return this.data.retrieve(auth, UserDetailView, {id})
+    }
+
+    async update( id: string, user: UserUpdateView ) {
+        const password = user.password;
+        delete user.password;
        
-    //     const userUpdateView: UserUpdateView = user
+        const userUpdateView: UserUpdateView = user
 
-    //     orm.update(UserUpdateView, id, user).exec()
+        await orm.update(UserUpdateView, id, user).exec()
 
-    //     if ( password !== undefined) {
-    //       user.password = this.encryptPassword(password)
-    //       orm.update(UserUpdatePasswordView, id, user).exec()
-    //     }
-    // }
+        if ( password !== undefined) {
+          user.password = this.encryptPassword(password)
+          await orm.update(UserUpdatePasswordView, id, user).exec()
+        }
+    }
 
-    // delete( id: string ) {
-    //     return orm.delete(User, id).exec()
-    // }
+    delete( id: string ) {
+        return orm.delete(User, id).exec()
+    }
 
 
-    // private encryptPassword( password: string ) {
-    //     const salt = bcrypt.genSaltSync(10)
-    //     const salted = bcrypt.hashSync(password, salt);
-    //     console.log(salted)
-    //     return salted
-    // }
+    private encryptPassword( password: string ) {
+        const salt = bcrypt.genSaltSync(10)
+        const salted = bcrypt.hashSync(password, salt);
+        return salted
+    }
 }

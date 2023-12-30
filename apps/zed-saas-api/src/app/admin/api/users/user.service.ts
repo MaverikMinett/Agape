@@ -12,12 +12,11 @@ export class AdminUserService {
         return orm.list(AdminUserDetailView).exec()
     }
 
-    lookup( username: string ) {
-        return orm.retrieve(AdminUserDetailView, { username } ).exec()
-    }
-
     async create( user: AdminUserCreateView ) {
-        const duplicate = await this.lookup(user.username)
+        const duplicate = await orm.retrieve( User, { 
+            username: new RegExp(`^${user.username}$`, 'i'),
+            organization: user.organization
+        }).exec()
 
         if ( duplicate ) {
             throw new Exception(409, "A user with that username already exists")
@@ -33,6 +32,17 @@ export class AdminUserService {
     }
 
     async update( id: string, user: AdminUserUpdateView ) {
+
+        const duplicate = await orm.retrieve( User, { 
+            id__ne: id, 
+            username: new RegExp(`^${user.username}$`, 'i'),
+            organization: user.organization
+        }).exec()
+
+        if ( duplicate ) {
+            throw new Exception(409, `A user with the username "${user.username}" already exists`)
+        }
+
         const password = user.password;
         delete user.password;
 

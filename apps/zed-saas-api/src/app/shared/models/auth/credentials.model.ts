@@ -9,4 +9,7 @@ import { Field, Model } from "@agape/model";
     @Field({ example: 'password' })
     password: string;
 
+    @Field({ example: 'ACME' })
+    organizationCode: string;
+
 }

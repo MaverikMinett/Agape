@@ -1,6 +1,6 @@
 import { Controller,  Post, Body, Status, Uses } from '@agape/api';
 import { AuthService } from './auth.service';
-import { Credentials } from 'lib-platform';
+import { Credentials } from '../../../shared/models/auth/credentials.model';
 
 
 @Controller('auth')

@@ -10,7 +10,9 @@ export class AdminAuthGuard implements Middleware {
             throw new Exception(401)
         }
 
-        if ( ! request.auth)
+        if ( ! request.auth.isAdmin ) {
+            throw new Exception(403)
+        }
 
         await next()
     }
