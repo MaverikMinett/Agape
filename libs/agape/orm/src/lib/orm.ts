@@ -5,10 +5,9 @@ import { Class, Dictionary } from '@agape/types'
 import { Collection, ObjectId } from 'mongodb';
 
 import { MongoDatabase } from './databases/mongo.database';
-import { InsertQuery } from './mongo/queries/insert.query';
 
 import { FilterCriteria } from './types'
-import { documentAndViewFromModelParam, getRootModel, itemToRecord, selectCriteriaFromFilterCriteria } from './util';
+import { documentAndViewFromModelParam, getRootModel, itemToNewRecord, itemToRecord, selectCriteriaFromFilterCriteria } from './util';
 import { Exception } from '@agape/exception';
 
 export interface DocumentLocatorParams {
@@ -86,13 +85,17 @@ export class Orm {
     }
 
 
-    insert<T extends Class>( model: T, item: Pick<InstanceType<T>, keyof InstanceType<T>> ) {
+    insert<T extends Class<Document>, P extends Class<Document>=T>( model: T, item: Pick<InstanceType<T>, keyof InstanceType<T>> ): InsertQuery<T,P>
+    insert<T extends Class<Document>, P extends Class<Document>>( model: [P,T], item: Pick<InstanceType<T>, keyof InstanceType<T>> ): InsertQuery<T,P>
+    insert<T extends Class<Document>, P extends Class<Document>>( model: {document: P, view: T}, item: Pick<InstanceType<T>, keyof InstanceType<T>> ): InsertQuery<T,P>
+    insert<T extends Class<Document>, P extends Class<Document>>( model: T|[P,T]|{document: P, view: T}, item: Pick<InstanceType<T>, keyof InstanceType<T>> ): InsertQuery<T,P>{
+        const { document, view } = documentAndViewFromModelParam(model)
 
-        const locator = this.getLocator(model)
+        const locator = this.getLocator(document)
 
         const collection = locator.collection
 
-        return new InsertQuery<T>(model, collection, item)
+        return new InsertQuery<T,P>(this, {document,view}, collection, item)
     }
 
 
@@ -154,9 +157,9 @@ export class Orm {
         return query
     }
 
-    delete<T extends Class>(model: T, id: string): DeleteQuery<T>
-    delete<T extends Class>(model: T, filter: FilterCriteria<InstanceType<T>>): DeleteQuery<T>
-    delete<T extends Class>(model: T, selector: string|FilterCriteria<InstanceType<T>>): DeleteQuery<T> {
+    delete<T extends Class<Document>>(model: T, id: string): DeleteQuery<T>
+    delete<T extends Class<Document>>(model: T, filter: FilterCriteria<InstanceType<T>>): DeleteQuery<T>
+    delete<T extends Class<Document>>(model: T, selector: string|FilterCriteria<InstanceType<T>>): DeleteQuery<T> {
         const locator = this.getLocator(model)
 
         const collection = locator.collection
@@ -328,10 +331,6 @@ export class ListQuery<T extends Class<Document>,P extends Class<Document>> {
         if ( this.orm.debug ) {
             console.log("FILTER", this.filter )
         }
-
-        console.log("----------->", documentDescriptor)
-        console.log("----------->", documentDescriptor.field('organization'))
-
         const select = selectCriteriaFromFilterCriteria( documentDescriptor, this.filter )
 
         if ( this.orm.debug ) {
@@ -599,5 +598,32 @@ export class DeleteManyQuery<T extends Class> {
 
         return { deletedCount: result.deletedCount }
     }
+
+}
+
+
+export class InsertQuery<T extends Class<Document>,P extends Class<Document>> {
+
+    document: P
+
+    view: T
+
+    constructor( public orm: Orm, model: {document: P, view: T}, public collection: Collection, public item: Pick<InstanceType<T>, keyof InstanceType<T>> ) {
+        this.document = model.document
+        this.view = model.view
+    }
+
+    async exec( ): Promise<{ id: string }> {
+
+        const record = itemToNewRecord(this.view, this.item)
+
+        const result = await this.collection.insertOne( record )
+
+        const descriptor = Model.descriptor(this.view)
+        if ( descriptor.primaryField ) descriptor.primaryField.setValue(this.item, result.insertedId.toString())
+        
+        return { id: result.insertedId.toString() }
+    }
+
 
 }
