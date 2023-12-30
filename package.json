@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently \"npm:start:server\" \"npm:start:zedserver\" \"npm:start:zedservermongo\"  \"npm:start:zedserverorm\" \"npm:start:nestserver\" \"npm:start:express-no-db\" \"npm:start:tserver\" \"npm:start:command-line\" \"npm:start:clientng\" \"npm:start:zeduicomponent\" \"npm:start:zeduirouting\" \"npm:start:ngtiedsubscriptions\" \"npm:start:ngeventstailwind\" \"npm:start:ngmatdatetime\" \"npm:start:ngmatforms\" \"npm:start:nestserverorm\" \"npm:start:eventsapplication\" \"npm:start:zedauthapi\" \"npm:start:zedswaggerapi\" \"npm:start:zedsaasapi\"",
+    "start": "concurrently \"npm:start:server\" \"npm:start:zedserver\" \"npm:start:zedservermongo\"  \"npm:start:zedserverorm\" \"npm:start:nestserver\" \"npm:start:express-no-db\" \"npm:start:tserver\" \"npm:start:command-line\" \"npm:start:clientng\" \"npm:start:zeduicomponent\" \"npm:start:zeduirouting\" \"npm:start:ngtiedsubscriptions\" \"npm:start:ngeventstailwind\" \"npm:start:ngmatdatetime\" \"npm:start:ngmatforms\" \"npm:start:nestserverorm\" \"npm:start:eventsapplication\" \"npm:start:zedauthapi\" \"npm:start:zedswaggerapi\" \"npm:start:zedsaasapi\" \"npm:start:zedvalidatedapi\"",
     "db:clear": "mongo fixtures/load-fixtures.js",
     "start:clientag": "nx serve clientag",
     "start:clientng": "nx serve clientng",
@@ -20,6 +20,7 @@
     "start:zedauthapi": "nx serve zed-auth-api",
     "start:zedsaasapi": "nx serve zed-saas-api",
     "start:zedswaggerapi": "nx serve zed-swagger-api",
+    "start:zedvalidatedapi": "nx serve zed-validated-api",
     "start:ngtiedsubscriptions": "nx serve ng-tied-subscriptions",
     "start:ngeventstailwind": "nx serve ng-events-tailwind",
     "start:ngmatdatetime": "nx serve ng-mat-datetime",
@@ -130,7 +131,11 @@
     "test:datetime-control": "npx nx test agape-ng-mat-datetime-control",
     "build:datetime-control": "npx nx build agape-ng-mat-datetime-control",
     "publish:datetime-control": "cd dist/libs/agape/ng-mat-datetime-control && npm publish --access public",
-    "release:datetime-control": "npm run build:datetime-control && npm run publish:datetime-control"
+    "release:datetime-control": "npm run build:datetime-control && npm run publish:datetime-control",
+    "test:validator": "nx test agape-validator",
+    "build:validator": "nx build agape-validator",
+    "publish:validator": "cd dist/libs/agape/validator && npm publish --access public",
+    "release:validator": "npm run build:validator && npm run publish:validator"
   },
   "private": true,
   "dependencies": {

@@ -176,6 +176,19 @@
             <div class="card-body">
                 <div class="service-icon-grid">
 
+                    <a class="service-link" href="http://localhost:3011/api/" target="_blank">
+                        <div class="service-icon-label">
+                            <div class="service-icon">
+                                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <use href="#soft-serve"></use>
+                                </svg>
+                            </div>
+                            <div class="service-label">
+                                Zed<br/>Validated Api
+                            </div>
+                        </div>
+                    </a>
+
                     <a class="service-link" href="http://localhost:3010/api/" target="_blank">
                         <div class="service-icon-label">
                             <div class="service-icon">
@@ -617,6 +630,34 @@
     
             <div class="card-body">
                 <table>
+                    <tr>
+                        <td>
+                            <div class="app-title">Validated API</div>
+                            <div class="app-desc">
+                                API that validates incoming requests. Saas application built with Agape API with Express 
+                                and Agape ORM with Mongo DB and auto-generated swagger documentation.
+                            </div>
+                            <div class="app-pills">
+
+                                <a 
+                                href="https://github.com/MaverikIO/project-zed/tree/main/apps/zed-validated-api"
+                                target="_blank">
+                                    <div class="pill">
+                                        <div class="pill-icon">
+                                            <svg viewBox="0 0 48 48" fill="none">
+                                                <use href="#folder-open"></use>
+                                            </svg>
+                                        </div>
+                                        <div class="pill-content">apps/zed-validated-api</div>
+                                    </div>
+                                </a>
+
+                            </div>
+                        </td>
+
+                        <td class="text-right"><a href="http://localhost:3011/api" target="_blank">http://localhost:3011/api</a></td>
+                    </tr>
+
                     <tr>
                         <td>
                             <div class="app-title">SAAS API</div>
@@ -1329,6 +1370,43 @@
                                             </svg>
                                         </div>
                                         <div class="pill-content">libs/agape/orm</div>
+                                    </div>
+                                </a>
+                            </div>
+
+                        </td>
+                        <td class="text-right"></td>
+                    </tr>
+                    <tr>
+                        <td width="*">
+
+                            <div class="app-title">Validator</div>
+                            <div class="app-desc">
+                                Validation for data models
+                            </div>
+                            <div class="app-pills">
+                                <a 
+                                href="https://www.npmjs.com/package/@agape/validator"
+                                target="_blank">
+                                    <div class="pill" href="">
+                                        <div class="pill-icon">
+                                            <svg viewBox="0 0 48 48" fill="none">
+                                                <use href="#book"></use>
+                                            </svg>
+                                        </div>
+                                        <div class="pill-content">@agape/validator</div>
+                                    </div>
+                                </a>
+                                <a 
+                                href="https://github.com/MaverikIO/project-zed/tree/main/libs/agape/validator"
+                                target="_blank">
+                                    <div class="pill" href="">
+                                        <div class="pill-icon">
+                                            <svg viewBox="0 0 48 48" fill="none">
+                                                <use href="#folder-open"></use>
+                                            </svg>
+                                        </div>
+                                        <div class="pill-content">libs/agape/validator</div>
                                     </div>
                                 </a>
                             </div>
@@ -2054,7 +2132,7 @@
             <path d="M224 48c44.2 0 80 35.8 80 80v32H144V128c0-44.2 35.8-80 80-80zM96 128v32H48 0v48V464v48H48 400h48V464 208 160H400 352V128C352 57.3 294.7 0 224 0S96 57.3 96 128zM48 208H96h48H304h48 48V464H48V208zM283.1 440H336L250.4 254.6l-1.8-3.8L240 232H208l-8.7 18.8-1.8 3.8L112 440h52.9l18.5-40h81.3l18.5 40zM224 311.9L242.5 352h-37L224 311.9z" fill="currentColor"/>
         </svg>
 
-        <!-- Thumbs UP -->
+        <!-- Thumbs Up -->
         <svg id="thumbs-up" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             <path d="M224 32h24 96 24V56 89c0 30.3-5.9 59.8-16.9 87H448h40 24v24 80 24H496v40 24H472v40 24H448v24 24H424 384 272 259.9h-7.3l-6-4-10.1-6.7-76.5-51V360.6l103.1 68.8 4 2.7H272 384h16V408 384h24V344 320h24V280 256h16V224H448 311.9 268.4l23.2-36.8C309.8 158.3 320 124.4 320 89V80H272v9c0 49.8-27.2 95.6-70.9 119.4l-4.6 2.5-18.6 10.1-5.4 2.9h-6.1H164h-4V176h.3l13.2-7.2 4.6-2.5C206.4 150.9 224 121.2 224 89V56 32zM128 192V480H0V192H128z" fill="currentColor"/>
         </svg>
@@ -2062,6 +2140,16 @@
         <!-- Alicorn -->
         <svg id="alicorn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
             <path d="M84.1 160.1c7-10.1 15.6-18.9 25.5-26.2c5.6 16.6 12.6 31.8 20.6 45.5C119 191 112 206.8 112 224.2c0 8.2 1.6 16.3 4.6 23.9l25.3 63.3 3.5 8.6-3.3 8.7-20.6 54.8-2.7 7.3 2.1 7.5L139.1 464h49.8l-17.6-63.4-2.1-7.5 2.7-7.3 15.8-42.1c2.8-7.5 4.3-15.4 4.3-23.5c0-.4 0-.9 0-1.3l-.7-32.7 31.4 9.2 88 25.7c2.1 .6 4.2 1.1 6.3 1.6l19 4v19.4V464h48V318.2 308.1l7.3-7.1c15.1-14.8 24.7-35.3 24.7-58.8c0-11.2-2.2-21.7-6.2-31.4l-1.8-4.4v-4.8V184 160h24 8 9.9l7 7 28.3 28.3 42.7-19V115.3L483.2 48H480h-8H440c-53 0-96.8 39.7-103.2 91l-2.6 21H320h-7H296h-6.8l-5.8-3.5L181.3 94.1c9.5 38.9 30.2 66.9 51.1 86.4c14.3 13.4 28.6 22.8 39.4 28.8c5.3 3 9.7 5.1 12.7 6.5c1.5 .7 2.6 1.1 3.3 1.4l.7 .3 0 0c0 0 0 0-8.4 22.5s-8.4 22.5-8.5 22.5l0 0-.1 0-.2-.1-.5-.2c-.4-.1-.8-.3-1.4-.6c-1.2-.5-2.8-1.2-4.9-2.1c-4-1.8-9.7-4.6-16.3-8.3c-13.3-7.5-30.9-19.1-48.6-35.7C163.9 182 128 128 128 48V5.2l36.5 22.3 130.2 79.6C313.9 45.1 371.7 0 440 0h32 8 16 12.8H536h24V48H540.8l10.7 16H640V80l-64 21.3V108v84 15.6l-14.3 6.3-72 32-15.1 6.7L464 241.9l0 .3c0 33.2-12.2 62.9-32 85.5V488v24H408 312 288V488 364.5l-51.8-15.1c-1 3.8-2.2 7.5-3.6 11.2l-13 34.8 24 86.3 8.5 30.4H220.5 120.8 102.6l-4.9-17.6L74.6 411.3l-4.2-15.1-2.1-7.5 2.7-7.3 5.5-14.6 17.3-46.1L72 265.9c-5.3-13.3-8-27.4-8-41.7c0-2.9 .1-5.7 .3-8.5C54.4 223 48 234.8 48 248v64 24H0V312 248c0-47.3 37.3-85.9 84.1-87.9zM448 96a16 16 0 1 1 32 0 16 16 0 1 1 -32 0z" fill="currentColor"/>
+        </svg>
+
+        <!-- Alien -->
+        <!-- <svg id="alien" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path d="M224 48C126.8 48 48 126.8 48 224c0 67.2 43.3 127.2 96 174.2c25.5 22.8 51.2 40.7 70.6 53c3.3 2.1 6.5 4 9.4 5.8c2.9-1.8 6-3.7 9.4-5.8c19.4-12.3 45.1-30.2 70.6-53c52.7-47 96-106.9 96-174.2c0-97.2-78.8-176-176-176zM0 224C0 100.3 100.3 0 224 0S448 100.3 448 224c0 176-224 288-224 288S0 400 0 224zm240 80c0-44.2 35.8-80 80-80h48v16c0 44.2-35.8 80-80 80H240V304zM128 224c44.2 0 80 35.8 80 80v16H160c-44.2 0-80-35.8-80-80V224h48z" fill="currentColor"/>
+        </svg> -->
+
+        <!-- Soft Serve -->
+        <svg id="soft-serve" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path d="M256 0H211.2L236 37.3l10.8 16.3c.7 1.1 1.1 2.4 1.1 3.7c0 3.7-3 6.7-6.7 6.7H172c-42 0-76 34-76 76c0 4.9 .5 9.8 1.4 14.5C50.8 164.8 16 206.3 16 256v72 24H40h8.3c4.1 53.7 49 96 103.7 96h32l-24 64H352l-24-64h32c54.7 0 99.6-42.3 103.7-96H472h24V328 256c0-49.9-35.2-91.6-82.1-101.7c1.4-5.9 2.1-12 2.1-18.3C416 60.9 355.1 0 280 0H256zm40 57.3c0-2.7-.2-5.3-.6-8C336.7 56.6 368 92.7 368 136c0 5.8-1.5 11.3-4.3 16H280 256v48h24 36.4 58.8H384h8c30.9 0 56 25.1 56 56v48H64V256c0-30.9 25.1-56 56-56h8 6.5H168h22.8H192V152H168 146.7c-1.7-3.6-2.7-7.7-2.7-12c0-15.5 12.5-28 28-28h69.3c30.2 0 54.7-24.5 54.7-54.7z" fill="currentColor"/>
         </svg>
     </div>
 
