@@ -9,7 +9,6 @@ export function selectCriteriaFromFilterCriteria<T>( descriptor: ModelDescriptor
     let select = {}
     const criterias = []
 
-
     // create select criteria from filter
     if ( filterCriteria ) {
         for ( let filterField of Object.keys(filterCriteria) ) {
@@ -42,7 +41,10 @@ export function selectCriteriaFromFilterCriteria<T>( descriptor: ModelDescriptor
                     selectFieldValue = new ObjectId(filterCriteria[filterField])
                 }
                 else if ( classExtends(descriptor.fields.get(filterFieldName).designType as Class, Document) ) {
-                    if ( typeof filterCriteria[filterField][0] === 'string' ) {
+                    if (filterCriteria[filterField] === null || filterCriteria[filterField] === undefined ) {
+                        selectFieldValue = null
+                    }
+                    else if ( typeof filterCriteria[filterField] === 'string' ) {
                         selectFieldValue = new ObjectId(filterCriteria[filterField])
                     }
                     else {
