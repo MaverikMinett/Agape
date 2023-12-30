@@ -7,10 +7,6 @@ import { Exception } from "@agape/exception";
 import { Authentication } from "../models/auth/authentication.model";
 import { FilterCriteria } from "libs/agape/orm/src/lib/types";
 
-class WithOrganization {
-    organization: string;
-}
-
 @Injectable()
 export class DataService {
 
