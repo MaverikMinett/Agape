@@ -1,8 +1,8 @@
 {
   "name": "@agape/alchemy",
-  "version": "1.1.0",
+  "version": "2.0.0-alpha.1",
   "type": "commonjs",
-  "description": "Transmute data models",
+  "description": "Deserialize and validate data models",
   "author": {
     "name": "Maverik Minett",
     "email": "maverik.minett@gmail.com"

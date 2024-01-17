@@ -1,13 +1,7 @@
 export * from './lib/alchemy'
-export * from './lib/date.serializer'
-export * from './lib/serializer'
-export * from './lib/transmuted'
+export * from './lib/serializers/serializer'
+export * from './lib/serializers/boolean-serializer'
+export * from './lib/serializers/date-serializer'
+export * from './lib/serializers/number-serializer'
+export * from './lib/serializers/string-serializer'
 
-import { Alchemy } from './lib/alchemy'
-import { DateSerializer } from './lib/date.serializer';
-
-const alchemy = new Alchemy();
-alchemy.register( Date, new DateSerializer() )
-
-export { alchemy }
-export default alchemy
