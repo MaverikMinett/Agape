@@ -22,7 +22,7 @@ describe('Required', () => {
         
         const d: ModelDescriptor = Reflect.getMetadata( "model:descriptor", Foo );
         expect(d.fields.length).toBe(1)
-        expect(d.fields.get('bar').required).toBe(true)
+        expect(d.fields.get('bar').optional).toBe(false)
     })
 
 })

@@ -1,6 +1,6 @@
 import { camelize, pluralize, tokenize, verbalize } from "@agape/string";
 import { Class, Dictionary } from '@agape/types';
-import { Choice } from "./types";
+import { Choice, DesignType } from "./types";
 
 
 export type FieldDescriptorParams = Partial<Pick<FieldDescriptor, keyof FieldDescriptor>>;
@@ -130,7 +130,7 @@ export class FieldDescriptor {
 
     column?: string;          // property name in the database
 
-    required?: boolean;       // markt the field as required
+    required?: boolean;       // the field is required to have a non empty value
 
     token?: string;           // kebab-case version of the field name
 
@@ -152,9 +152,15 @@ export class FieldDescriptor {
 
     default?: any
 
+    optional?: boolean
+
     foreignModel?: Class
 
-    designType: 'string'|'number'|'boolean'|'any'|Class
+    designType: DesignType
+
+    min?: number
+
+    max?: number
 
     constructor()
     constructor( name:string, type?:string, widget?:string ) 
