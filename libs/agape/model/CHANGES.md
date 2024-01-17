@@ -1,4 +1,9 @@
 
+0.7.0 Jan 17 2023
+- allow designType to be set as first argument to Field decorator
+- add Optional decorator
+- add Required decorator
+
 0.6.2 Dec 28 2023
 - add boolean to allowed types for field descriptor example
 
