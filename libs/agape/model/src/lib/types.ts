@@ -1,9 +1,10 @@
 
 import { Document } from './document';
-import { IsArray, IsDate, IsMap, IsPrimitive, IsSet, OmitMethods } from '@agape/types';
+import { Class, IsArray, IsDate, IsMap, IsPrimitive, IsSet, OmitMethods } from '@agape/types';
 
 type FieldType = 'integer'|'decimal'|'number'|'string'|'text'|'date'|'time';
 type WidgetType = 'input'|'date'|'number'|'textarea'|'time';
+export type DesignType = String|Number|Boolean|Date|Class|[String]|[Number]|[Boolean]|[Date]|[Class]
 
 export interface Choice  {
     value: undefined|string|number|boolean;
