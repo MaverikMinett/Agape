@@ -32,7 +32,6 @@ export class AuthGuard implements Middleware {
     }
 
     private extractTokenFromHeader(request: ApiRequest) {
-        console.log("Headers", request.headers)
         const [type, token] = request.headers['authorization']?.split(' ') ?? [ ]
         return type === 'Bearer' ? token : undefined
     }

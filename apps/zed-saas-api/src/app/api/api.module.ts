@@ -1,4 +1,4 @@
-import { Module, LoggingMiddleware, SwaggerModule } from "@agape/api";
+import { Module, SwaggerModule } from "@agape/api";
 import { FooModule } from "./modules/foo/foo.module";
 import { UsersModule } from "./modules/users/users.module";
 import { AuthModule } from "./modules/auth/auth.module";
@@ -40,7 +40,7 @@ import { AuthenticateRequestMiddleware } from "../shared/middlewares/authenticat
         FooModule,
         UsersModule
     ],
-    'middlewares': [ LoggingMiddleware, AuthenticateRequestMiddleware ]
+    'middlewares': [ AuthenticateRequestMiddleware ]
 })
 export class ApiModule {
 
