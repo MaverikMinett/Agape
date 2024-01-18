@@ -56,12 +56,13 @@ export function Model( ...args:any[] ):any {
             // Copy in params
             Object.assign(descriptor,params)
             // Autopopulate empty label/token values
+            descriptor.target = target
             descriptor.autopopulate()
         }
         // If a model descriptor does not already exist, create one using the
         // parameters applied to the @Model decorator
         else  {
-            descriptor = new ModelDescriptor( params )
+            descriptor = new ModelDescriptor( {...params, target} )
         }
         Reflect.defineMetadata( "model:descriptor", descriptor, target );
     }
@@ -77,7 +78,7 @@ Model.descriptor = function ( target:Class, create:boolean=false ) {
     let descriptor: ModelDescriptor = Reflect.getMetadata( "model:descriptor", target )
 
     if ( ! descriptor && create === true ) {
-        descriptor = new ModelDescriptor( )
+        descriptor = new ModelDescriptor({ target: target, name: target.name})
         Reflect.defineMetadata("model:descriptor", descriptor, target)
     }
 

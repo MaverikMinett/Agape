@@ -14,10 +14,10 @@ export function Required( ...args:any[] ):any {
     // be used as either @Required or @Required(params)
     let target:{ new(...args: any[] ): any; }
     let name:string
-    let params:Partial<FieldDescriptorParams> = { optional: false }
+    let params:Partial<FieldDescriptorParams> = { required: true }
     let propertyDescriptor:TypedPropertyDescriptor<Function>
     args.length === 1 && (args[0] === true || args [0] === false)
-        ? params.optional = ! args[0]
+        ? params.required = args[0]
         : args.length === 1
         ? Object.assign(params,args[0])
         : [target, name, propertyDescriptor] = args

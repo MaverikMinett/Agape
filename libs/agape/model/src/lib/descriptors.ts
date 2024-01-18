@@ -1,6 +1,7 @@
 import { camelize, pluralize, tokenize, verbalize } from "@agape/string";
 import { Class, Dictionary } from '@agape/types';
 import { Choice, DesignType } from "./types";
+import { Document } from "./document";
 
 
 export type FieldDescriptorParams = Partial<Pick<FieldDescriptor, keyof FieldDescriptor>>;
@@ -10,6 +11,8 @@ export type ModelDescriptorParams = Partial<Pick<ModelDescriptor, keyof ModelDes
  * Meta data describing a model.
  */
 export class ModelDescriptor {
+
+    target: Class
 
     name: string;
 
@@ -74,7 +77,10 @@ export class ModelDescriptor {
             this.plural ??= pluralize(this.label)
             this.token  ??= tokenize(this.name)
             this.tokens ??= pluralize(this.token)
-            this.collection ??= pluralize(this.name)
+            if ( this.target.prototype instanceof Document ) {
+                this.collection ??= pluralize(this.name)
+            }
+            
         }
     }
 
@@ -96,17 +102,17 @@ export class ViewDescriptor extends ModelDescriptor {
 
     viewName: string;
 
-    constructor ( model?: Class )
-    constructor ( name?:string, params?:Partial<Pick<ModelDescriptor, keyof ModelDescriptor>> )
-    constructor ( params?:Partial<Pick<ModelDescriptor, keyof ModelDescriptor>> )
-    constructor ( ...args:any[] ) {
+    constructor ( target: Class, model?: Class )
+    constructor ( target: Class, name?:string, params?:Partial<Pick<ModelDescriptor, keyof ModelDescriptor>> )
+    constructor ( target: Class, params?:Partial<Pick<ModelDescriptor, keyof ModelDescriptor>> )
+    constructor ( target: Class, ...args:any[] ) {
         if ( args.length === 1 ) {
             const model = args.shift()
-            super( )
+            super()
             this.model = model;
         }
         else {
-            super( ...args )
+            super(...args)
         }
     }
 

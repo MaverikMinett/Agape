@@ -32,6 +32,7 @@ export function View( progenitor: Class, fieldSelection?: any ):any {
         let protoDescriptor = Reflect.getMetadata( "model:descriptor", target.prototype );
 
         let viewDescriptor  = new ViewDescriptor( progenitor )
+        viewDescriptor.target = target
         viewDescriptor.symbol = target.name
 
         function addFieldFromProgentior(name:string) {
