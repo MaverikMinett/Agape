@@ -33,22 +33,32 @@ export class AdminUserService {
 
     async update( id: string, user: AdminUserUpdateView ) {
 
-        const duplicate = await orm.retrieve( User, { 
-            id__ne: id, 
-            username: new RegExp(`^${user.username}$`, 'i'),
-            organization: user.organization
-        }).exec()
+        // retrieve the user to perform username change check
+        const retrievedUser = await orm.retrieve( User, id ).exec()
 
-        if ( duplicate ) {
-            throw new Exception(409, `A user with the username "${user.username}" already exists`)
+        // if username is changing
+        if ( user.username !== retrievedUser.username ) {
+
+            // check for a user that has the new username to avoid duplicates
+            const duplicate = await orm.retrieve( User, { 
+                organization: retrievedUser.organization,
+                username: new RegExp(`^${user.username}$`, 'i')
+            }).exec()
+
+            // if there is user with the new username, throw an error
+            if ( duplicate ) {
+                throw new Exception(409, `A user with the username "${user.username}" already exists`)
+            }    
         }
 
+        // don't update the password with the raw password when writing the user to the database
         const password = user.password;
         delete user.password;
 
         await orm.update(AdminUserUpdateFieldsView, id, user).exec()
 
-        if ( password !== undefined && password !== '' ) {
+        // update the password only if the password field is not empty
+        if ( password !== undefined && password !== null && password !== '' ) {
           user.password = this.encryptPassword(password)
           await orm.update(AdminUserUpdatePasswordView, id, user).exec()
         }
