@@ -14,16 +14,20 @@ export class SwaggerBuilder {
     modelsSchemaUris = new Map<Class,string>()
 
     configure( options: Partial<SwaggerDocument>) {
-        if ( 'title' in options ) this.document.title = options.title
-        if ( 'summary' in options ) this.document.summary = options.summary
-        if ( 'description' in options ) this.document.description = options.description
-        if ( 'contact' in options ) this.document.contact = options.contact
-        if ( 'license' in options ) this.document.license = options.license
-        if ( 'version' in options ) this.document.version = options.version
+        if ( ! this.document.info ) this.document.info = {}
+        if ( options.info ) {
+            if ( 'title' in options.info ) this.document.info.title = options.info.title
+            if ( 'summary' in options.info ) this.document.info.summary = options.info.summary
+            if ( 'description' in options.info ) this.document.info.description = options.info.description
+            if ( 'contact' in options.info ) this.document.info.contact = options.info.contact
+            if ( 'license' in options.info ) this.document.info.license = options.info.license
+            if ( 'version' in options.info ) this.document.info.version = options.info.version
+        }
+
         if ( 'servers' in options ) this.document.servers = options.servers
-        if ( 'schemes' in options ) this.document.schemes = options.schemes
-        if ( 'consumes' in options ) this.document.consumes = options.consumes
-        if ( 'produces' in options ) this.document.produces = options.produces
+        // if ( 'schemes' in options ) this.document.schemes = options.schemes
+        // if ( 'consumes' in options ) this.document.consumes = options.consumes
+        // if ( 'produces' in options ) this.document.produces = options.produces
         if ( 'security' in options ) this.document.security = options.security
         if ( 'tags' in options ) this.document.tags.push(...options.tags)
         if ( 'paths' in options ) this.document.paths = { ...this.document.paths, ...options.paths }

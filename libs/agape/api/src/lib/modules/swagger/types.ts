@@ -69,21 +69,22 @@ export interface SwaggerDocumentSchemaRef {
     $ref: string;
 }
 
+export interface SwaggerDocumentInfo {
+    "title"?: string;
+    "summary"?: string;
+    "description"?: string;
+    "termsOfService"?: string;
+    "contact"?: SwaggerDocumentContact,
+    "license"?: SwaggerDocumentLicense,
+    "version"?: string,
+}
+
 
 
 export interface SwaggerDocument {
-    "title": string;
-    "summary": string;
-    "description": string;
-    "termsOfService": string;
-    "contact": SwaggerDocumentContact,
-    "license": SwaggerDocumentLicense,
-    "version": string,
+    "info": SwaggerDocumentInfo,
     "openapi": string,
     "servers": SwaggerDocumentServer[],
-    "schemes": string[],
-    "consumes": string[],
-    "produces": string[],
     "security": SwaggerDocumentSecurity[],
     "tags": SwaggerDocumentTag[],
     "paths": Dictionary<SwaggerDocumentPath>,
