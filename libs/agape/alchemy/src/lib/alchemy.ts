@@ -8,6 +8,7 @@ import { DateSerializer } from "./serializers/date-serializer";
 import { BooleanSerializer } from "./serializers/boolean-serializer";
 import { StringSerializer } from "./serializers/string-serializer";
 import { NumberSerializer } from "./serializers/number-serializer";
+import { ObjectSerializer } from "./serializers/object-serializer";
 
 export class Alchemy {
 
@@ -16,6 +17,7 @@ export class Alchemy {
         [ Date, new DateSerializer ],
         [ Number, new NumberSerializer ],
         [ String, new StringSerializer ], 
+        [ Object, new ObjectSerializer ]
     ])
 
     registerSerializer( type: Class, serializer: Class<Serializer> ) {
@@ -55,6 +57,10 @@ export class Alchemy {
     private deserializeValue<T extends Class>( type: [T], input: any): Array<InstanceType<T>>
     private deserializeValue<T>( type: T|[T], input: any ): any {
 
+        if ( input === null || input === undefined ) {
+            return input
+        }
+
         if ( Array.isArray(type) ) {
             const value = this.deserializeArray( type[0] as any, input as any[] )
             return value
@@ -72,7 +78,7 @@ export class Alchemy {
             return value
         }
 
-        throw new Error(`Cannot deserialize value ${input}, don't know how`)
+        throw new Error(`Cannot deserialize input of type ${(type as any).name}, don't know how`)
         
     }
 
@@ -120,17 +126,21 @@ export class Alchemy {
         return { valid, error }
     }
 
-    private validateSerializedValue<T extends typeof Boolean>( type: T, value: any ): { valid: boolean, error: string }
-    private validateSerializedValue<T extends typeof String>( type: T, value: any ): { valid: boolean, error: string }
-    private validateSerializedValue<T extends typeof Number>( type: T, value: any ): { valid: boolean, error: string }
-    private validateSerializedValue<T extends typeof Date>( type: T, value: any ): { valid: boolean, error: string }
-    private validateSerializedValue<T extends Class>( type: T, value: any): { valid: boolean, error: ErrorReport<InstanceType<T>> }
-    private validateSerializedValue<T extends typeof Boolean>( type: [T], value: any ): { valid: boolean, error: string[] }
-    private validateSerializedValue<T extends typeof String>( type: [T], value: any ): { valid: boolean, error: string[] }
-    private validateSerializedValue<T extends typeof Number>( type: [T], value: any ): { valid: boolean, error: string[] }
-    private validateSerializedValue<T extends typeof Date>( type: [T], value: any ): { valid: boolean, error: string[] }
-    private validateSerializedValue<T extends Class>( type: [T], value: any): { valid: boolean, error: ErrorReport<Array<InstanceType<T>>> }
+    private validateSerializedValue<T extends typeof Boolean>( type: T, input: any ): { valid: boolean, error: string }
+    private validateSerializedValue<T extends typeof String>( type: T, input: any ): { valid: boolean, error: string }
+    private validateSerializedValue<T extends typeof Number>( type: T, input: any ): { valid: boolean, error: string }
+    private validateSerializedValue<T extends typeof Date>( type: T, input: any ): { valid: boolean, error: string }
+    private validateSerializedValue<T extends Class>( type: T, input: any): { valid: boolean, error: ErrorReport<InstanceType<T>> }
+    private validateSerializedValue<T extends typeof Boolean>( type: [T], input: any ): { valid: boolean, error: string[] }
+    private validateSerializedValue<T extends typeof String>( type: [T], input: any ): { valid: boolean, error: string[] }
+    private validateSerializedValue<T extends typeof Number>( type: [T], input: any ): { valid: boolean, error: string[] }
+    private validateSerializedValue<T extends typeof Date>( type: [T], input: any ): { valid: boolean, error: string[] }
+    private validateSerializedValue<T extends Class>( type: [T], input: any): { valid: boolean, error: ErrorReport<Array<InstanceType<T>>> }
     private validateSerializedValue<T>( type: T|[T], input: any ): { valid: boolean, error: any } {
+
+        if ( input === null || input === undefined ) {
+            return { valid: true, error: undefined }
+        }
 
         if ( Array.isArray(type) ) {
             if ( ! Array.isArray(input) ) {
@@ -191,11 +201,22 @@ export class Alchemy {
         // verify that all properties present are valid fields
         for ( let property of Object.keys(input) ) {
             if ( ! descriptor.fields.has(property) ) {
-                modelError[property] = `${property} is not a valid field of ${type.name}`
+                modelValid = false
+                modelError[property] = `Invalid field`
                 continue
             }
 
             const field = descriptor.fields.get(property)
+
+            if ( field.required ) {
+                const inputValue = input[property]
+                if ( inputValue === undefined || inputValue === null || inputValue === '' ) {
+                    modelValid = false
+                    modelError[property] = `Field is required`
+                    continue
+                }
+            }
+
             const { valid, error } = this.validateSerializedValue(field.designType as any, input[property])
             if ( ! valid ) {
                 modelValid = false
@@ -209,12 +230,102 @@ export class Alchemy {
             }
             else if ( ! (field.name in input) ) {
                 modelValid = false
-                modelError[field.name] = `Field ${field.name} is missing from ${type.name}`
+                modelError[field.name] = `Field is missing`
             } 
         }
 
         return { valid: modelValid, error: modelError }
     }
+
+    serialize<T extends typeof Boolean>( type: T, value: boolean ): any
+    serialize<T extends typeof String>( type: T, value: string ): any
+    serialize<T extends typeof Number>( type: T, value: number ): any
+    serialize<T extends typeof Date>( type: T, value: Date ): any
+    serialize<T extends Class>( type: T, value: InstanceType<T> ): any
+    serialize<T extends typeof Boolean>( type: [T], value: boolean[] ): any[]
+    serialize<T extends typeof String>( type: [T], value: string[] ): any[]
+    serialize<T extends typeof Number>( type: [T], value: number[] ): any[]
+    serialize<T extends typeof Date>( type: [T], value: Date[] ): any[]
+    serialize<T extends Class>( type: [T], value: InstanceType<T>[] ): any[]
+    serialize<T>( type: T, value: any ): any {
+        const output = this.serializeValue( type as any, value )
+        return output
+    }
+
+    private serializeValue<T extends typeof Boolean>( type: T, value: boolean ): any
+    private serializeValue<T extends typeof String>( type: T, value: string ): any
+    private serializeValue<T extends typeof Number>( type: T, value: number ): any
+    private serializeValue<T extends typeof Date>( type: T, value: Date ): any
+    private serializeValue<T extends Class>( type: T, value: InstanceType<T> ): any
+    private serializeValue<T extends typeof Boolean>( type: [T], value: boolean ): any[]
+    private serializeValue<T extends typeof String>( type: [T], value: string ): any[]
+    private serializeValue<T extends typeof Number>( type: [T], value: number ): any[]
+    private serializeValue<T extends typeof Date>( type: [T], value: Date ): any[]
+    private serializeValue<T extends Class>( type: [T], value: InstanceType<T> ): any[]
+    private serializeValue<T>( type: T, value: any ): any {
+
+        if ( value === null || value === undefined ) {
+            return value
+        }
+
+        if ( Array.isArray(type) ) {
+            const output = this.serializeArray( type[0] as any, value as any[] )
+            return output
+        }
+        
+        if ( this.serializers.has(type as Class) ) {
+            const serializer = this.serializers.get(type as Class)
+            const output = serializer.serializeValue(value)
+            return output
+        }
+
+        const descriptor = Model.descriptor(type as Class)
+
+        if ( descriptor ) {
+            const output = this.serializeModel(type as Class, value)
+            return output
+        }
+
+        throw new Error(`Cannot serialize value of type ${(type as any).name}, don't know how`)
+    }
+
+    private serializeArray<T extends typeof Boolean>( type: T, value: boolean[] ): boolean[]
+    private serializeArray<T extends typeof String>( type: T, value: string[] ): string[]
+    private serializeArray<T extends typeof Number>( type: T, value: number[] ): number[]
+    private serializeArray<T extends typeof Date>( type: T, value: Date[] ): Date[]
+    private serializeArray<T extends Class>( type: T, value: InstanceType<T>[] ): any[]
+    private serializeArray<T>( type: T, value: any[] ): any[] {
+        let output: any[] = []
+        for ( let element of value ) {
+            const serializedElement = this.serializeValue( type as any, element )
+            output.push(serializedElement)
+        }
+        return output
+    }
+
+    private serializeModel<T extends Class>( type: T, value: InstanceType<T>): any {
+        let output: any = {}
+
+        const descriptor = Model.descriptor(type)
+
+        
+
+        const fields = descriptor.fields.all()
+
+        for ( const field of fields ) {
+            // do not include optional values which do not exist in the model
+            if ( field.optional && !(field.name in value) ) {
+                continue
+            }
+            else {
+                let fieldValue = value[field.name]
+                output[field.name] = this.serializeValue( field.designType as any, fieldValue )
+            }
+        }
+
+        return output
+    }
+
 
 
     // validateJson<T extends Class>( model: T, json: any ): { valid: boolean, error: any }

@@ -1,25 +1,24 @@
 
-
 import { Serializer } from './serializer'
 
-export class StringSerializer extends Serializer {
+export class ObjectSerializer extends Serializer {
 
     validateSerializedValue( value: any ) {
         let valid = true
         let error = undefined
-        if ( ! (typeof value === 'string') ) {
+        if ( ! (typeof value === 'object') ) {
             valid = false
-            error = `Invalid data type: expected a string, received ${typeof value}`
+            error = `Invalid data type: expected a object, received ${typeof value}`
         }
         return { valid, error }
     }
 
     deserializeValue(value: any) {
-        return value
+        return JSON.parse(JSON.stringify(value))
     }
 
     serializeValue(value: any) {
-        return value
+        return JSON.parse(JSON.stringify(value))
     }
 
 }

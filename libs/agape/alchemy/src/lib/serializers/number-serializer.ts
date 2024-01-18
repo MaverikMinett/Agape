@@ -17,6 +17,10 @@ export class NumberSerializer extends Serializer {
         return value
     }
 
+    serializeValue(value: any) {
+        return value
+    }
+
     // validateField() {
     //     if ( field.min !== undefined && field.min !== null && value < field.min ) {
     //         valid = false

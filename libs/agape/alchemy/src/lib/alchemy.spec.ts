@@ -1,4 +1,4 @@
-import { Field, Model } from '@agape/model'
+import { Field, Model, Optional, Required } from '@agape/model'
 import { Alchemy } from './alchemy'
 
 describe('Alchemy', () => {
@@ -10,7 +10,7 @@ describe('Alchemy', () => {
     })
 
     describe('deserialize', () => {
-        describe('raw primitives', () => {
+        describe('primitives', () => {
             describe('boolean', () => {
                 it('should be valid', () => {
                     const json = true
@@ -24,6 +24,20 @@ describe('Alchemy', () => {
                     const { valid, error, value } = a.deserialize(Boolean, json)
                     expect(valid).toBe(false)
                     expect(error).toBe(`Invalid data type: expected a boolean, received ${typeof json}`)
+                    expect(value).toBe(undefined)
+                })
+                it('should be valid if null', () => {
+                    const json = null
+                    const { valid, error, value } = a.deserialize(Boolean, json)
+                    expect(valid).toBe(true)
+                    expect(error).toBe(undefined)
+                    expect(value).toBe(null)
+                })
+                it('should be valid if undefined', () => {
+                    const json = undefined
+                    const { valid, error, value } = a.deserialize(Boolean, json)
+                    expect(valid).toBe(true)
+                    expect(error).toBe(undefined)
                     expect(value).toBe(undefined)
                 })
             })
@@ -42,6 +56,20 @@ describe('Alchemy', () => {
                     expect(error).toBe(`Invalid data type: expected a string, received ${typeof json}`)
                     expect(value).toBe(undefined)
                 })
+                it('should be valid if null', () => {
+                    const json = null
+                    const { valid, error, value } = a.deserialize(String, json)
+                    expect(valid).toBe(true)
+                    expect(error).toBe(undefined)
+                    expect(value).toBe(null)
+                })
+                it('should be valid if undefined', () => {
+                    const json = undefined
+                    const { valid, error, value } = a.deserialize(String, json)
+                    expect(valid).toBe(true)
+                    expect(error).toBe(undefined)
+                    expect(value).toBe(undefined)
+                })
             })
             describe('number', () => {
                 it('should be valid', () => {
@@ -56,6 +84,20 @@ describe('Alchemy', () => {
                     const { valid, error, value } = a.deserialize(Number, json)
                     expect(valid).toBe(false)
                     expect(error).toBe(`Invalid data type: expected a number, received ${typeof json}`)
+                    expect(value).toBe(undefined)
+                })
+                it('should be valid if null', () => {
+                    const json = null
+                    const { valid, error, value } = a.deserialize(Number, json)
+                    expect(valid).toBe(true)
+                    expect(error).toBe(undefined)
+                    expect(value).toBe(null)
+                })
+                it('should be valid if undefined', () => {
+                    const json = undefined
+                    const { valid, error, value } = a.deserialize(Number, json)
+                    expect(valid).toBe(true)
+                    expect(error).toBe(undefined)
                     expect(value).toBe(undefined)
                 })
             })
@@ -90,6 +132,20 @@ describe('Alchemy', () => {
                 expect(valid).toBe(false)
                 expect(error).toBe(`Invalid date`)
                 expect(value).toEqual(undefined)
+            })
+            it('should be valid if null', () => {
+                const json = null
+                const { valid, error, value } = a.deserialize(Date, json)
+                expect(valid).toBe(true)
+                expect(error).toBe(undefined)
+                expect(value).toBe(null)
+            })
+            it('should be valid if undefined', () => {
+                const json = undefined
+                const { valid, error, value } = a.deserialize(Date, json)
+                expect(valid).toBe(true)
+                expect(error).toBe(undefined)
+                expect(value).toBe(undefined)
             })
         })
         describe('model', () => {
@@ -146,6 +202,146 @@ describe('Alchemy', () => {
                     dateField: 'Invalid data type: expected a date as an iso string, received number'
                 })
                 expect(value).toBe(undefined)
+            })
+            it('should be valid if null', () => {
+                @Model class Foo {
+                    bar: string
+                }
+                const json = null
+                const { valid, error, value } = a.deserialize(Foo, json)
+                expect(valid).toBe(true)
+                expect(error).toBe(undefined)
+                expect(value).toBe(null)
+            })
+            it('should be valid if undefined', () => {
+                @Model class Foo {
+                    bar: string
+                }
+                const json = undefined
+                const { valid, error, value } = a.deserialize(Foo, json)
+                expect(valid).toBe(true)
+                expect(error).toBe(undefined)
+                expect(value).toBe(undefined)
+            })
+            it('should be invalid if has additional properties', () => {
+                @Model class Foo {
+                    @Field foo: string
+                }
+                const json = { foo: 'bar', bar: 'baz' }
+                const { valid, error, value } = a.deserialize(Foo, json)
+                expect(valid).toBe(false)
+                expect(error).toEqual({bar: 'Invalid field' })
+                expect(value).toBe(undefined)
+            })
+            it('should be invalid if missing properties', () => {
+                @Model class Foo {
+                    @Field foo: string
+                    @Field bar: string
+                }
+                const json = { foo: 'bar' }
+                const { valid, error, value } = a.deserialize(Foo, json)
+                expect(valid).toBe(false)
+                expect(error).toEqual({ bar: 'Field is missing' })
+                expect(value).toBe(undefined)
+            })
+            it('should be valid if missing optional properties', () => {
+                @Model class Foo {
+                    @Field foo: string
+                    @Optional @Field bar: string
+                }
+
+                const json = { foo: 'bar' }
+                const { valid, error, value } = a.deserialize(Foo, json)
+                expect(valid).toBe(true)
+                expect(error).toBe(undefined)
+                expect(value).toEqual({foo: 'bar'})
+            })
+            it('should be invalid if required properties are empty', () => {
+                @Model class Foo {
+                    @Required @Field stringField: string
+                    @Required @Field booleanField: boolean
+                    @Required @Field dateField: Date
+                }
+                const json = {
+                    stringField: '',
+                    booleanField: null,
+                    dateField: undefined
+                }
+                const { valid, error, value } = a.deserialize(Foo, json)
+                expect(valid).toBe(false)
+                expect(error).toEqual({
+                    stringField: 'Field is required',
+                    booleanField: 'Field is required',
+                    dateField: 'Field is required'
+                })
+                expect(value).toBe(undefined)
+            })
+            it('should be valid if required properties are not empty', () => {
+                @Model class Foo {
+                    @Required @Field stringField: string
+                    @Required @Field booleanField: boolean
+                    @Required @Field dateField: Date
+                }
+                const date = new Date()
+                const json = {
+                    stringField: 'foo',
+                    booleanField: false,
+                    dateField: date.toISOString()
+                }
+                const { valid, error, value } = a.deserialize(Foo, json)
+                expect(valid).toBe(true)
+                expect(error).toBe(undefined)
+                expect(value).toEqual({
+                    stringField: 'foo',
+                    booleanField: false,
+                    dateField: date
+                })
+            })
+            it('optional and required to work together', () => {
+                @Model class Foo {
+                    @Required @Field foo: string
+                    @Optional @Required @Field bar: string
+                }
+
+                {
+                    const json = {
+                        foo: 'foo',
+                        bar: 'bar'
+                    }
+                    const { valid, error, value } = a.deserialize(Foo, json)
+                    expect(valid).toBe(true)
+                    expect(error).toBe(undefined)
+                    expect(value).toEqual({
+                        foo: 'foo',
+                        bar: 'bar',
+                    })
+                }
+
+                {
+                    const json = {
+                        foo: 'foo'
+                    }
+                    const { valid, error, value } = a.deserialize(Foo, json)
+                    expect(valid).toBe(true)
+                    expect(error).toBe(undefined)
+                    expect(value).toEqual({
+                        foo: 'foo',
+                    })
+                }
+
+                {
+                    const json = {
+                        foo: 'foo',
+                        bar: ''
+                    }
+                    const { valid, error, value } = a.deserialize(Foo, json)
+                    expect(valid).toBe(false)
+                    expect(error).toEqual({
+                        bar: 'Field is required'
+                    })
+                    expect(value).toBe(undefined)
+                }
+
             })
             describe('nested models', () => {
                 it('should be valid', () =>{
@@ -243,6 +439,7 @@ describe('Alchemy', () => {
                     expect(value).toBe(undefined)
                 })
             })
+            
         })
         describe('array', () => {
             it('should be valid', () => {
@@ -357,6 +554,241 @@ describe('Alchemy', () => {
                     })
                     expect(value).toBe(undefined)
                 })
+            })
+            it('should be valid if null', () => {
+                const json = null
+                const { valid, error, value } = a.deserialize([Boolean], json)
+                expect(valid).toBe(true)
+                expect(error).toBe(undefined)
+                expect(value).toBe(null)
+            })
+            it('should be valid if undefined', () => {
+                const json = undefined
+                const { valid, error, value } = a.deserialize([Boolean], json)
+                expect(valid).toBe(true)
+                expect(error).toBe(undefined)
+                expect(value).toBe(undefined)
+            })
+        })
+
+        describe('object', () => {
+
+        })
+
+        describe('null handling', () => {
+
+        })
+
+        describe('undefined handling', () => {
+
+        })
+
+        describe('required handling', () => {
+
+        })
+
+        describe('optional handlings', () => {
+
+        })
+
+        describe('optional/required combined', () => {
+
+        })
+    })
+
+    describe('serialize', () => {
+        describe('primitives', () => {
+            describe('boolean', () => {
+                it('should serialize true', () => {
+                    const value = true
+                    const output = a.serialize(Boolean, value)
+                    expect(output).toBe(true)
+                })
+                it('should serialize false', () => {
+                    const value = false
+                    const output = a.serialize(Boolean, value)
+                    expect(output).toBe(false)
+                })
+                it('should serialize undefined', () => {
+                    const value = undefined
+                    const output = a.serialize(Boolean, undefined)
+                    expect(output).toBe(undefined)
+                })
+                it('should serialize null', () => {
+                    const value = null
+                    const output = a.serialize(Boolean, value)
+                    expect(output).toBe(null)
+                })
+            })
+            describe('number', () => {
+                it('should serialize a number', () => {
+                    const value = 42
+                    const output = a.serialize(Number, value)
+                    expect(output).toBe(42)
+                })
+                it('should serialize undefined', () => {
+                    const value = undefined
+                    const output = a.serialize(Number, value)
+                    expect(output).toBe(undefined)
+                })
+                it('should serialize null', () => {
+                    const value = null
+                    const output = a.serialize(Number, value)
+                    expect(output).toBe(null)
+                })
+            })
+            describe('string', () => {
+                it('should serialize a string', () => {
+                    const value = 'foo'
+                    const output = a.serialize(String, value)
+                    expect(output).toBe('foo')
+                })
+                it('should serialize undefined', () => {
+                    const value = undefined
+                    const output = a.serialize(String, value)
+                    expect(output).toBe(undefined)
+                })
+                it('should serialize null', () => {
+                    const value = null
+                    const output = a.serialize(String, value)
+                    expect(output).toBe(null)
+                })
+            })
+        })
+        describe('date', () => {
+            it('should serialize a date', () => {
+                const value = new Date()
+                const output = a.serialize(Date, value)
+                expect(output).toBe(value.toISOString())
+            })
+            it('should serialize undefined', () => {
+                const value = undefined
+                const output = a.serialize(Date, value)
+                expect(output).toBe(undefined)
+            })
+            it('should serialize null', () => {
+                const value = null
+                const output = a.serialize(Date, value)
+                expect(output).toBe(null)
+            })
+        })
+        describe('array', () => {
+            it('should serialize an array of booleans', () => {
+                const value = [true, true, false] 
+                const output = a.serialize([Boolean], value)
+                expect(output).toEqual([true, true, false])
+            })
+            it('should serialize an array of booleans with undefind and null', () => {
+                const value = [true, null, undefined]
+                const output = a.serialize([Boolean], value)
+                expect(output).toEqual([true, null, undefined])
+            })
+            it('should serialize null', () => {
+                const value = null
+                const output = a.serialize([Boolean], value)
+                expect(output).toEqual(null)
+            })
+            it('should serialize undefined', () => {
+                const value = undefined
+                const output = a.serialize([Boolean], value)
+                expect(output).toEqual(undefined)
+            })
+        })
+        describe('model', () => {
+            it('should serialize a model', () => {
+
+                interface SomeInterface {
+                    foo: string;
+                    bar: string;
+                }
+
+                @Model class Bar {
+                    @Field bar: string
+                }
+
+                @Model class Foo {
+                    @Field booleanField: boolean
+                    @Field numberField: number
+                    @Field stringField: string
+                    @Field dateField: Date
+                    @Field([Bar]) bars: Bar[]
+                    @Field interfaceField: SomeInterface
+                }
+
+                const value: Foo = {
+                    booleanField: true,
+                    numberField: 24,
+                    stringField: 'foo',
+                    dateField: new Date(),
+                    bars: [
+                        { bar: 'biz' },
+                        { bar: 'buz' },
+                        { bar: 'baz' }
+                    ],
+                    interfaceField: { foo: 'string', bar: 'string' }
+                }
+
+                const output = a.serialize(Foo, value)
+                expect(output === value).toBe(false)
+                expect(output.bars !== value.bars)
+                expect(output.interfaceField !== value.interfaceField)
+
+                expect(output).toEqual(
+                    {
+                        booleanField: true,
+                        numberField: 24,
+                        stringField: 'foo',
+                        dateField: value.dateField.toISOString(),
+                        bars:[
+                            { bar: 'biz' },
+                            { bar: 'buz' },
+                            { bar: 'baz' }
+                        ],
+                        interfaceField: { foo: 'string', bar: 'string' }
+                    }
+                )
+            })
+            it('should serialize null', () => {
+                @Model class Foo {
+                    bar: string
+                }
+                const value = null
+                const output = a.serialize(Foo, value)
+                expect(output).toEqual(null)
+            })
+            it('should serialize undefined', () => {
+                @Model class Foo {
+                    bar: string
+                }
+                const value = undefined
+                const output = a.serialize(Foo, value)
+                expect(output).toEqual(undefined)
+            })
+        })
+        describe('object', () => {
+            it('should serialize an interface', () => {
+                interface Foo {
+                    bar: string;
+                }
+                const value: Foo = { bar: 'baz' }
+                const output = a.serialize(Object, value)
+                expect(output).toEqual({ bar: 'baz'})
+            })
+            it('should serialize null', () => {
+                interface Foo {
+                    bar: string;
+                }
+                const value: Foo = undefined
+                const output = a.serialize(Object, value)
+                expect(output).toEqual(undefined)
+            })
+            it('should serialize undefined', () => {
+                interface Foo {
+                    bar: string;
+                }
+                const value: Foo = null
+                const output = a.serialize(Object, value)
+                expect(output).toEqual(null)
             })
         })
     })

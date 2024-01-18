@@ -17,4 +17,8 @@ export class BooleanSerializer extends Serializer {
         return value
     }
 
+    serializeValue(value: any) {
+        return value
+    }
+
 }

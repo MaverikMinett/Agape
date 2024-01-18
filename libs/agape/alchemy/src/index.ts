@@ -4,4 +4,4 @@ export * from './lib/serializers/boolean-serializer'
 export * from './lib/serializers/date-serializer'
 export * from './lib/serializers/number-serializer'
 export * from './lib/serializers/string-serializer'
-
+export * from './lib/types'

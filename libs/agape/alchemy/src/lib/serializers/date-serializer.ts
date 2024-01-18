@@ -30,14 +30,10 @@ export class DateSerializer extends Serializer {
         value = new Date(jsonValue) 
 
         return value
+    }
 
-        // if ( value.toString() === 'Invalid Date') {
-        //     valid = false
-        //     error = "Invalid date"
-        //     value = undefined
-        // }
-
-        // return {valid, error, value}
+    serializeValue(value: Date) {
+        return value.toISOString()
     }
 
     // validateDeserializedField( value: any, field: FieldDescriptor ) {

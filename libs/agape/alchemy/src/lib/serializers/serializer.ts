@@ -9,6 +9,8 @@ export abstract class Serializer {
 
     abstract deserializeValue( value: any ): any
 
+    abstract serializeValue( value: any ): any
+
     // abstract validateDeserializedField( value: number, field: FieldDescriptor ): {valid: boolean, error: string} 
 }
 
