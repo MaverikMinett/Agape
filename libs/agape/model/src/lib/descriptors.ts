@@ -142,7 +142,7 @@ export class FieldDescriptor {
 
     tokens?: string;          // plural kebab-case version of the field name
 
-    type?: string;            // string, number, text, date
+    type?: string;            // string, number, text, date, email, password, phone, decimal, integer
 
     widget?: string;          // input, date, textarea, does not autopopulate
 
@@ -167,6 +167,8 @@ export class FieldDescriptor {
     min?: number
 
     max?: number
+
+    trim?: boolean
 
     constructor()
     constructor( name:string, type?:string, widget?:string ) 
