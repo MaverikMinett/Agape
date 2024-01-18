@@ -7,8 +7,10 @@ import { Exception } from "@agape/exception";
 import { Controller, Module } from "./decorators";
 import { NextFunction } from "./types";
 import { Middleware } from "./interfaces/middleware.interface";
-import { BodyParserMiddleware } from "./middleware/body-parser.middleware";
 import { LogStash } from "./interfaces/log-stash";
+import { Alchemy } from "@agape/alchemy";
+import { Model } from "@agape/model";
+import { ValidationException } from "./exceptions/validation-exception";
 
 
 export class Api {
@@ -21,6 +23,8 @@ export class Api {
     logging: boolean = true
 
     bodyParsing: boolean = true
+
+    alchemy: Alchemy = new Alchemy()
 
     constructor( public module: Class ) {
        const descriptor = Module.descriptor(module)
@@ -57,6 +61,16 @@ export class Api {
                 logStash = this.initiateLogging()
             }
 
+            if ( this.bodyParsing ) {
+                try {
+                    this.parseBody(actionDescriptor, apiRequest, logStash)
+                }
+                catch(error) {
+                    this.handleError(error, apiRequest, apiResponse, logStash)
+                    return
+                }
+            }
+
             const executionStack: NextFunction[] = []
 
             let executionIndex = -1
@@ -73,15 +87,8 @@ export class Api {
             } 
 
             const middlewares = this.getMiddlewares(moduleDescriptors, controllerDescriptor, actionDescriptor)
-
-            const systemMiddlewares: Array<Class<Middleware>> = []
             
-
-            if ( this.bodyParsing ) {
-                systemMiddlewares.push(BodyParserMiddleware)
-            }
-
-            for ( let middleware of [...systemMiddlewares, ...middlewares] ) {
+            for ( let middleware of middlewares ) {
                 const middlewareInstance: Middleware = this.injector.get(middleware)
                 const executeMiddleware = async() => {
                     await middlewareInstance.activate(apiRequest, apiResponse, next)
@@ -100,21 +107,7 @@ export class Api {
                 await next()
             }
             catch(error) {
-                if ( this.debug ) {
-                    console.log("Received error", error)
-                }
-                if ( error instanceof Exception ) {
-                    apiResponse.status( error.status )
-                    apiResponse.send({ status: error.status, message: error.message})
-                }
-                else {
-                    apiResponse.status(400, "Bad Request")
-                    apiResponse.send( error.message )
-                    console.error( error )
-                }
-                if ( this.logging ) {
-                    this.finishLogging(logStash, apiRequest, apiResponse)
-                }
+                this.handleError( error, apiRequest, apiResponse, logStash )
             }
     }
 
@@ -191,5 +184,57 @@ export class Api {
         log += "  "
         log += diff + 'ms'
         console.log(log)
+    }
+
+    parseBody( action: ActionDescriptor, apiRequest: ApiRequest, logStash: LogStash ) {
+
+        const actionParameterDefinition = action.ʘinject.find( definition => definition.parameter === 'body' )
+
+        if ( actionParameterDefinition ) {
+            const designType = actionParameterDefinition.designType
+
+            const modelDescriptor = Model.descriptor(designType)
+    
+            if ( modelDescriptor ) {
+                const { valid, error, value } = this.alchemy.deserialize(designType, apiRequest.body)
+                if ( ! valid ) {
+                    if ( this.debug ) {
+                        console.log("Invalid request body", error)
+                    }
+                    throw new ValidationException("Invalid request body", error)
+                }
+                else {
+                    apiRequest.body = value
+                }
+            }
+        }
+    }
+
+    handleError( error: Error, apiRequest: ApiRequest, apiResponse: ApiResponse, logStash: LogStash ) {
+        if ( this.debug ) {
+            console.log("Received error", error)
+        }
+        if ( error instanceof Exception ) {
+
+            const constructor: Class = Object.getPrototypeOf(error).constructor
+            const descriptor = Model.descriptor( constructor )
+            if ( descriptor ) {
+                const responseBody = this.alchemy.serialize( constructor, error )
+                apiResponse.status( error.status )
+                apiResponse.send(responseBody)
+            }
+            else {
+                apiResponse.status( error.status )
+                apiResponse.send({ status: error.status, message: error.message})
+            }
+        }
+        else {
+            apiResponse.status(400, "Bad Request")
+            apiResponse.send( error.message )
+            console.error( error )
+        }
+        if ( this.logging ) {
+            this.finishLogging(logStash, apiRequest, apiResponse)
+        }
     }
 }
