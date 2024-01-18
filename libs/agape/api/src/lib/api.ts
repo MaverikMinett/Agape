@@ -7,6 +7,8 @@ import { Exception } from "@agape/exception";
 import { Controller, Module } from "./decorators";
 import { NextFunction } from "./types";
 import { Middleware } from "./interfaces/middleware.interface";
+import { BodyParserMiddleware } from "./middleware/body-parser.middleware";
+import { LogStash } from "./interfaces/log-stash";
 
 
 export class Api {
@@ -15,6 +17,10 @@ export class Api {
     middlewareInjector: Injector = new Injector()
 
     debug: boolean = true
+
+    logging: boolean = true
+
+    bodyParsing: boolean = true
 
     constructor( public module: Class ) {
        const descriptor = Module.descriptor(module)
@@ -46,6 +52,11 @@ export class Api {
         apiResponse: ApiResponse,
         context: any ) {
 
+            let logStash: LogStash 
+            if ( this.logging ) {
+                logStash = this.initiateLogging()
+            }
+
             const executionStack: NextFunction[] = []
 
             let executionIndex = -1
@@ -63,7 +74,14 @@ export class Api {
 
             const middlewares = this.getMiddlewares(moduleDescriptors, controllerDescriptor, actionDescriptor)
 
-            for ( let middleware of middlewares ) {
+            const systemMiddlewares: Array<Class<Middleware>> = []
+            
+
+            if ( this.bodyParsing ) {
+                systemMiddlewares.push(BodyParserMiddleware)
+            }
+
+            for ( let middleware of [...systemMiddlewares, ...middlewares] ) {
                 const middlewareInstance: Middleware = this.injector.get(middleware)
                 const executeMiddleware = async() => {
                     await middlewareInstance.activate(apiRequest, apiResponse, next)
@@ -71,6 +89,12 @@ export class Api {
                 executionStack.push(executeMiddleware)
             }
             executionStack.push(executeAction)
+
+            if ( this.logging ) {
+                executionStack.push( async() => {
+                    this.finishLogging(logStash, apiRequest, apiResponse)
+                })
+            }
 
             try {
                 await next()
@@ -87,6 +111,9 @@ export class Api {
                     apiResponse.status(400, "Bad Request")
                     apiResponse.send( error.message )
                     console.error( error )
+                }
+                if ( this.logging ) {
+                    this.finishLogging(logStash, apiRequest, apiResponse)
                 }
             }
     }
@@ -141,5 +168,28 @@ export class Api {
         middlewares.push(...controllerMiddlewares, ...actionMiddlewares)
 
         return middlewares
+    }
+
+    initiateLogging() {
+        const stash: LogStash = { start: new Date() }
+        return stash
+    }
+
+    finishLogging( stash: LogStash, request: ApiRequest, response: ApiResponse ) {
+        let log: string = ''
+        const startTime: Date = stash.start
+        const timestamp = startTime.toISOString()
+        log += timestamp
+        log += "  "
+        log += request.method
+        log += "  "
+        log += response.statusCode
+        log += "  "
+        log += request.path
+        const endTime = new Date()
+        const diff = endTime.getTime() - startTime.getTime() 
+        log += "  "
+        log += diff + 'ms'
+        console.log(log)
     }
 }
