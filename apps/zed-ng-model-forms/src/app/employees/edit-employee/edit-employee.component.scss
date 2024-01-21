@@ -1,0 +1,45 @@
+
+
+.form-grid {
+    display: grid;
+    width: 100%;
+}
+
+.form-grid.employee {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 12px;
+    column-gap: 12px;
+
+    .birthdate {
+        grid-row: 2;
+    }
+    .facility, .status {
+        grid-row: 3;
+    }
+
+    .notes {
+        grid-column: span 2;
+    }
+}
+
+.action-area {
+    display: flex;
+    justify-content: flex-start;
+    direction: rtl;
+}
+
+.btn {
+    @apply font-bold py-2 px-4 rounded;
+}
+.btn-blue {
+    @apply bg-blue-500 text-white;
+}
+.btn-blue:hover {
+    @apply enabled:bg-blue-700;
+}
+.btn-disabled {
+    @apply opacity-50 cursor-not-allowed
+}
+// .btn-disabled:hover {
+//     @apply bg-gray-300 text-gray-500
+// }

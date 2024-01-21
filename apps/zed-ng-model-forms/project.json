@@ -1,0 +1,105 @@
+{
+  "name": "zed-ng-model-forms",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "project-zed",
+  "sourceRoot": "apps/zed-ng-model-forms/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/zed-ng-model-forms",
+        "index": "apps/zed-ng-model-forms/src/index.html",
+        "main": "apps/zed-ng-model-forms/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/zed-ng-model-forms/tsconfig.app.json",
+        "assets": [
+          "apps/zed-ng-model-forms/src/favicon.ico",
+          "apps/zed-ng-model-forms/src/assets"
+        ],
+        "styles": ["apps/zed-ng-model-forms/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "port": 4209
+      },
+      "configurations": {
+        "production": {
+          "browserTarget": "zed-ng-model-forms:build:production"
+        },
+        "development": {
+          "browserTarget": "zed-ng-model-forms:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "zed-ng-model-forms:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "apps/zed-ng-model-forms/**/*.ts",
+          "apps/zed-ng-model-forms/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/zed-ng-model-forms/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "serve-static": {
+      "executor": "@nrwl/web:file-server",
+      "options": {
+        "buildTarget": "zed-ng-model-forms:build",
+        "port": 4209
+      }
+    }
+  }
+}

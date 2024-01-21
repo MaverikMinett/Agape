@@ -1,0 +1,19 @@
+
+
+:host {
+    padding: 12px;
+    display: block;
+}
+
+.app-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 30% 70%;
+}
+
+.router-outlet-container {
+    min-width: 80%;
+    max-width: 100%;
+    width: 700px;
+    margin: 0 auto;
+}

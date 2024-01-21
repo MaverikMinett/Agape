@@ -1,0 +1,19 @@
+
+
+.form-grid {
+    display: grid;
+    width: 100%;
+}
+
+.form-grid.facility {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 12px;
+    column-gap: 12px;
+}
+
+.action-area {
+    display: flex;
+    justify-content: flex-start;
+    direction: rtl;
+}
+

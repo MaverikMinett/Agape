@@ -1,0 +1,75 @@
+
+<div class="flex flex-col items-center">
+    <div class="rounded overflow-hidden shadow-lg w-full bg-slate-100 p-4">
+        <form [formGroup]="form">
+            <div class="form-grid employee">
+                <mat-form-field class="first-name">
+                    <mat-label>First name</mat-label>
+                    <input matInput formControlName="firstName">
+                </mat-form-field>
+                <mat-form-field class="last-name">
+                    <mat-label>Last name</mat-label>
+                    <input matInput formControlName="lastName">
+                </mat-form-field>
+                <mat-form-field class="birthdate">
+                    <mat-label>Birthdate</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="birthdate">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="facility">
+                    <mat-label>Facility</mat-label>
+                    <mat-select formControlName="facility">
+                        <mat-option *ngFor="let facility of facilities" [value]="facility.id">{{facility.label}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="status">
+                    <mat-label>Status</mat-label>
+                    <mat-select formControlName="status">
+                        <mat-option *ngFor="let option of statusOptions" [value]="option.value">{{option.label}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="notes">
+                    <mat-label>Notes</mat-label>
+                    <textarea matInput
+                        formControlName="notes"
+                        cdkTextareaAutosize
+                        #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="3"
+                        cdkAutosizeMaxRows="5"></textarea>
+                </mat-form-field>
+
+            </div>
+            <div class="rounded w-full bg-slate-300 p-2 my-2">
+                <span class="rounded bg-slate-200 mr-2 py-1 px-2">
+                    <span class="mr-1">Dirty:</span>
+                    <span [ngClass]="{ 'text-red-500': ! form.dirty, 'text-green-500': form.dirty }">
+                        {{ form.dirty }}
+                    </span>
+                </span>
+                
+                <span class="rounded bg-slate-200 mr-2 py-1 px-2">
+                    <span class="mr-1">Valid:</span>
+                    <span [ngClass]="{ 'text-red-500': ! form.valid, 'text-green-500': form.valid }">
+                        {{ form.valid }}
+                    </span>
+                </span>
+            </div>
+        </form>
+        <div class="action-area">
+            <button (click)="submit()" 
+            class="btn btn-blue"
+            [ngClass]="{'btn-disabled': ! form.valid || ! form.dirty}"
+            [disabled]="! form.valid || ! form.dirty">
+                Submit
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="isSubmitted"
+        class="rounded overflow-hidden shadow-lg w-full bg-slate-100 p-4 mt-6">
+        <pre>{{ this.form.value | json }}</pre>
+    </div>
+</div>
+

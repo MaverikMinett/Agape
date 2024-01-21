@@ -1,0 +1,33 @@
+{
+  "name": "zed-ng-model-forms-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/zed-ng-model-forms-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/zed-ng-model-forms-e2e/cypress.config.ts",
+        "devServerTarget": "zed-ng-model-forms:serve:development",
+        "testingType": "e2e"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "zed-ng-model-forms:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "zed-ng-model-forms:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/zed-ng-model-forms-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["zed-ng-model-forms"]
+}
