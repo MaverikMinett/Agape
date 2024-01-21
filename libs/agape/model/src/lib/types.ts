@@ -1,6 +1,19 @@
 
 import { Document } from './document';
-import { Class, IsArray, IsDate, IsMap, IsPrimitive, IsSet, OmitMethods } from '@agape/types';
+import { Class, Dictionary, IsArray, IsDate, IsMap, IsPrimitive, IsSet, OmitMethods } from '@agape/types';
+
+/* validator function */
+export type ValidatorFunction = (value: any) => Dictionary<string>
+
+/* validation error report */
+export type ErrorReport<T> = IsPrimitive<T> extends true ? string
+    : IsArray<T> extends true ? ArrayErrors<T>
+    : IsDate<T> extends true ? string
+    : { [K in keyof OmitMethods<T>]?: ErrorReport<T[K]> } & Dictionary<string>;
+
+type ArrayErrors<T> = T extends Array<infer I> ? Array<ErrorReport<I>> : T
+
+
 
 type FieldType = 'integer'|'decimal'|'number'|'string'|'text'|'date'|'time';
 type WidgetType = 'input'|'date'|'number'|'textarea'|'time';

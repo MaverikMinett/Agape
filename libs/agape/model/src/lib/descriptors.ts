@@ -1,6 +1,6 @@
-import { camelize, pluralize, tokenize, verbalize } from "@agape/string";
+import { camelize, pluralize, tokenize, labelize } from "@agape/string";
 import { Class, Dictionary } from '@agape/types';
-import { Choice, DesignType } from "./types";
+import { Choice, DesignType, ValidatorFunction } from "./types";
 import { Document } from "./document";
 
 
@@ -73,7 +73,7 @@ export class ModelDescriptor {
     public autopopulate() {
         if ( this.name || this.label ) {
             this.name   ??= camelize(this.label)
-            this.label  ??= verbalize(this.name)
+            this.label  ??= labelize(this.name)
             this.plural ??= pluralize(this.label)
             this.token  ??= tokenize(this.name)
             this.tokens ??= pluralize(this.token)
@@ -170,6 +170,14 @@ export class FieldDescriptor {
 
     trim?: boolean
 
+    decimals?: number
+
+    minLength?: number
+
+    maxLength?: number
+
+    validators?: ValidatorFunction[]
+
     constructor()
     constructor( name:string, type?:string, widget?:string ) 
     constructor( params: FieldDescriptorParams )
@@ -192,7 +200,7 @@ export class FieldDescriptor {
     autopopulate() {
         if ( this.name || this.label ) {
             this.name   ??= camelize(this.label)
-            this.label  ??= verbalize(this.name)
+            this.label  ??= labelize(this.name)
             this.plural ??= pluralize(this.label)
             this.token  ??= tokenize(this.name)
             this.tokens ??= pluralize(this.token)
