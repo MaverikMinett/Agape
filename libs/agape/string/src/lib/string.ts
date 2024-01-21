@@ -49,6 +49,22 @@ export function verbalize( string?:string ) {
 }
 
 /**
+ * Returns a string formatted as a label. Adds spaces between words,
+ * replacing underscores and hyphens, captilize the first word.
+ * @param string A string to be returned as spoken words
+ */
+export function labelize( string?:string ) {
+
+    string = string === undefined ? this : string
+
+    return string
+        .replace(/(.)([A-Z][a-z]+)/g , (str, left, right) => { return left + ' ' + right } )
+        .replace(/[-_]/, ' ')
+        .toLocaleLowerCase()
+        .replace(/^([a-z])/, (str) => { return str.toUpperCase() } )
+}
+
+/**
  * Returns a string formatted as a class name. Removes all spaces and symbols,
  * captializes the first letter of each word.
  * @param string A string to be returned as a class name
