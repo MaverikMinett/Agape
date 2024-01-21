@@ -1,16 +1,14 @@
 import { FieldDescriptor } from "@agape/model"
 import { Class } from "@agape/types"
+import { DeserializeOptions, SerializeOptions } from "../types"
 
 export abstract class Serializer {
 
-    // abstract type: Class
-
     abstract validateSerializedValue( value: any ): {valid: boolean, error: string}
 
-    abstract deserializeValue( value: any ): any
+    abstract deserializeValue( value: any, options?: DeserializeOptions ): any
 
-    abstract serializeValue( value: any ): any
+    abstract serializeValue( value: any, options?: SerializeOptions ): any
 
-    // abstract validateDeserializedField( value: number, field: FieldDescriptor ): {valid: boolean, error: string} 
 }
 

@@ -1,11 +1,12 @@
 
-import { Dictionary, IsArray, IsDate, IsPrimitive, OmitMethods } from '@agape/types';
-
-export type ErrorReport<T> = IsPrimitive<T> extends true ? string
-    : IsArray<T> extends true ? ArrayErrors<T>
-    : IsDate<T> extends true ? string
-    : { [K in keyof OmitMethods<T>]?: ErrorReport<T[K]> } & Dictionary<string>;
-
-type ArrayErrors<T> = T extends Array<infer I> ? Array<ErrorReport<I>> : T
 
 
+export interface DeserializeOptions {
+    trim?: boolean
+    validate?: boolean
+}
+
+export interface SerializeOptions {
+    trim?: boolean
+    validate?: boolean
+}

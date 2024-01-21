@@ -1,4 +1,5 @@
 
+import { DeserializeOptions, SerializeOptions } from "../types"
 import { Serializer } from "./serializer"
 
 const isoDateFormatRegex = /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/
@@ -22,7 +23,7 @@ export class DateSerializer extends Serializer {
         return { valid, error }
     }
 
-    deserializeValue( jsonValue: string ) {
+    deserializeValue( jsonValue: string, options?: DeserializeOptions ) {
         let valid: boolean = true
         let value: Date
         let error: string
@@ -32,7 +33,7 @@ export class DateSerializer extends Serializer {
         return value
     }
 
-    serializeValue(value: Date) {
+    serializeValue(value: Date, options?: SerializeOptions) {
         return value.toISOString()
     }
 

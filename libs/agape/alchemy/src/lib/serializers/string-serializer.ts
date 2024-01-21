@@ -1,5 +1,6 @@
 
 
+import { DeserializeOptions, SerializeOptions } from '../types'
 import { Serializer } from './serializer'
 
 export class StringSerializer extends Serializer {
@@ -14,12 +15,12 @@ export class StringSerializer extends Serializer {
         return { valid, error }
     }
 
-    deserializeValue(value: any) {
-        return value
+    deserializeValue(value: any, options?: DeserializeOptions) {
+        return options?.trim ? value.trim() : value
     }
 
-    serializeValue(value: any) {
-        return value
+    serializeValue(value: any, options?: SerializeOptions) {
+        return options?.trim ? value.trim() : value
     }
 
 }

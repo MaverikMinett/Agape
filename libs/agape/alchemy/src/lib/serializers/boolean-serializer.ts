@@ -1,4 +1,5 @@
 
+import { DeserializeOptions, SerializeOptions } from "../types"
 import { Serializer } from "./serializer"
 
 export class BooleanSerializer extends Serializer {
@@ -13,11 +14,11 @@ export class BooleanSerializer extends Serializer {
         return { valid, error }
     }
 
-    deserializeValue(value: any) {
+    deserializeValue(value: any, options?: DeserializeOptions) {
         return value
     }
 
-    serializeValue(value: any) {
+    serializeValue(value: any, options?: SerializeOptions) {
         return value
     }
 

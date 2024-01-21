@@ -570,30 +570,6 @@ describe('Alchemy', () => {
                 expect(value).toBe(undefined)
             })
         })
-
-        describe('object', () => {
-
-        })
-
-        describe('null handling', () => {
-
-        })
-
-        describe('undefined handling', () => {
-
-        })
-
-        describe('required handling', () => {
-
-        })
-
-        describe('optional handlings', () => {
-
-        })
-
-        describe('optional/required combined', () => {
-
-        })
     })
 
     describe('serialize', () => {
@@ -789,6 +765,99 @@ describe('Alchemy', () => {
                 const value: Foo = null
                 const output = a.serialize(Object, value)
                 expect(output).toEqual(null)
+            })
+        })
+    })
+
+    describe('trim', () => {
+        describe('deserializing', () => {
+            it('should not trim a string', () => {
+                const json = ' foo '
+                const { valid, error, value } = a.deserialize(String, json)
+                expect(value).toBe(' foo ')
+            })
+            it('should trim the string if the trim option is passed in', () => {
+                const json = ' foo '
+                const { valid, error, value } = a.deserialize(String, json, { trim: true })
+                expect(value).toBe('foo')
+            })
+            it('should not trim fields', () => {
+                @Model class Foo {
+                    @Field foo: string
+                }
+                const json = { foo: ' foo ' }
+                const { valid, error, value } = a.deserialize(Foo, json)
+                expect(value.foo).toBe(' foo ')
+            })
+            it('should trim fields if the trim option passed to deserialize method', () => {
+                @Model class Foo {
+                    @Field foo: string
+                }
+                const json = { foo: ' foo ' }
+                const { valid, error, value } = a.deserialize(Foo, json, { trim: true })
+                expect(value.foo).toBe('foo')
+            })
+            it('should trim fields if the trim option passed to the field descriptor', () => {
+                @Model class Foo {
+                    @Field({ trim: true }) foo: string
+                }
+                const json = { foo: ' foo ' }
+                const { valid, error, value } = a.deserialize(Foo, json)
+                expect(value.foo).toBe('foo')
+            })
+            it('should not trim the field if global trim is true and field descriptor trim is false', () => {
+                @Model class Foo {
+                    @Field({ trim: false }) foo: string
+                }
+    
+                const json = { foo: ' foo ' }
+                const { valid, error, value } = a.deserialize(Foo, json, { trim: true })
+                expect(value.foo).toBe(' foo ')
+            })
+        })
+        describe('serializing', () => {
+            it('should not trim a string', () => {
+                const json = ' foo '
+                const { valid, error, value } = a.deserialize(String, json)
+                expect(value).toBe(' foo ')
+            })
+            it('should trim the string if the trim option is passed in', () => {
+                const json = ' foo '
+                const { valid, error, value } = a.deserialize(String, json, { trim: true })
+                expect(value).toBe('foo')
+            })
+            it('should not trim fields', () => {
+                @Model class Foo {
+                    @Field foo: string
+                }
+                const json = { foo: ' foo ' }
+                const { valid, error, value } = a.deserialize(Foo, json)
+                expect(value.foo).toBe(' foo ')
+            })
+            it('should trim fields if the trim option passed to deserialize method', () => {
+                @Model class Foo {
+                    @Field foo: string
+                }
+                const json = { foo: ' foo ' }
+                const { valid, error, value } = a.deserialize(Foo, json, { trim: true })
+                expect(value.foo).toBe('foo')
+            })
+            it('should trim fields if the trim option passed to the field descriptor', () => {
+                @Model class Foo {
+                    @Field({ trim: true }) foo: string
+                }
+                const json = { foo: ' foo ' }
+                const { valid, error, value } = a.deserialize(Foo, json)
+                expect(value.foo).toBe('foo')
+            })
+            it('should not trim the field if global trim is true and field descriptor trim is false', () => {
+                @Model class Foo {
+                    @Field({ trim: false }) foo: string
+                }
+    
+                const json = { foo: ' foo ' }
+                const { valid, error, value } = a.deserialize(Foo, json, { trim: true })
+                expect(value.foo).toBe(' foo ')
             })
         })
     })
