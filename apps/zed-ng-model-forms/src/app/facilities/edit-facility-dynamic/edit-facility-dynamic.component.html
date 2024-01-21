@@ -2,13 +2,28 @@
 <div class="flex flex-col items-center">
     <div class="rounded overflow-hidden shadow-lg w-full bg-slate-100 p-4">
         <h2 class="text-lg">
-            Edit Facility - Reactive Form
+            Edit Facility - Dynamic Form
         </h2>
         <form [formGroup]="form">
+
+            <div class="form-grid facility">
+                <dynamic-form-field [model]="model" field="label" >
+
+                </dynamic-form-field>
+
+                <dynamic-form-field [model]="model" field="stations">
+
+                </dynamic-form-field>
+
+                <dynamic-form-field [model]="model" field="status">
+                
+                </dynamic-form-field>
+            </div>
+
             <div class="form-grid facility">
                 <mat-form-field class="label">
                     <mat-label>Label</mat-label>
-                    <input matInput formControlName="label">
+                    <input matInput [formControl]="form.controls['label']">
                 </mat-form-field>
                 <mat-form-field class="stations">
                     <mat-label>Stations</mat-label>
@@ -48,7 +63,7 @@
         </div>
     </div>
 
-    <div *ngIf="isSubmitted"
+    <div
         class="rounded overflow-hidden shadow-lg w-full bg-slate-100 p-4 mt-6">
         <pre>{{ this.form.value | json }}</pre>
     </div>

@@ -1,4 +1,4 @@
-import { Field, Model, Primary } from "@agape/model";
+import { Enum, Field, Model, Primary } from "@agape/model";
 
 
 export enum FacilityStatus {
@@ -12,5 +12,8 @@ export enum FacilityStatus {
 
     @Field label: string
 
+    @Enum(FacilityStatus)
     @Field status: FacilityStatus
+
+    @Field({min: 0}) stations: number
 }

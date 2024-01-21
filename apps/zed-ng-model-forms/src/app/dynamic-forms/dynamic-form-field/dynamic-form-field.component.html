@@ -1,0 +1,42 @@
+
+<ng-container *ngIf="formFieldDescriptor">
+    {{ formFieldDescriptor.label }} {{ formFieldDescriptor.widget }}
+
+    <ng-container *ngIf="formFieldDescriptor.widget === 'input'">
+        <ng-container *ngIf="formFieldDescriptor.type === 'string'">
+            <ng-container *ngTemplateOutlet="inputString"></ng-container>
+        </ng-container>
+        <ng-container *ngIf="formFieldDescriptor.type === 'number'">
+            <ng-container *ngTemplateOutlet="inputNumber"></ng-container>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="formFieldDescriptor.widget === 'select'">
+        <ng-container *ngTemplateOutlet="select"></ng-container>
+    </ng-container>
+    
+
+    <ng-template #inputString>
+        <mat-form-field>
+            <mat-label>{{formFieldDescriptor.label}}</mat-label>
+            <input matInput>
+        </mat-form-field>
+    </ng-template>
+    <ng-template #inputNumber>
+        <mat-form-field>
+            <mat-label>{{formFieldDescriptor.label}}</mat-label>
+            <input matInput type="number" [min]="formFieldDescriptor.min" [max]="formFieldDescriptor.max">
+        </mat-form-field>
+    </ng-template>
+    <ng-template #select>
+        <mat-form-field>
+            <mat-label>{{formFieldDescriptor.label}}</mat-label>
+            <mat-select>
+                <ng-container *ngIf="formFieldDescriptor.choices">
+                    <mat-option *ngFor="let choice of formFieldDescriptor.choices" [value]="choice.value">{{ choice.label }}</mat-option>
+                </ng-container>
+            </mat-select>
+        </mat-form-field>
+    </ng-template>
+</ng-container>
+

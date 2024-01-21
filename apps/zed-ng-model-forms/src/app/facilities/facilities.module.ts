@@ -11,6 +11,8 @@ import { MatSelectModule } from "@angular/material/select"
 import { MatButtonModule } from "@angular/material/button";
 import { FacilitiesIndexComponent } from "./facilities-index/facilities-index.component";
 import { EditFacilityReactiveComponent } from "./edit-facility-reactive/edit-facility-reactive.component";
+import { EditFacilityDynamicComponent } from "./edit-facility-dynamic/edit-facility-dynamic.component";
+import { DynammicFormsModule } from "../dynamic-forms/dynamic-forms.module";
 
 const routes: Route[] = [
     {
@@ -18,20 +20,27 @@ const routes: Route[] = [
         component: FacilitiesIndexComponent
     },
     {
-        path: 'facilities/edit',
+        path: 'facilities/edit-reactive',
         component: EditFacilityReactiveComponent
+    },
+    {
+        path: 'facilities/edit-dynamic',
+        component: EditFacilityDynamicComponent
     }
 ]
 
 @NgModule({
     declarations: [
         FacilitiesIndexComponent,
-        EditFacilityReactiveComponent
+        EditFacilityReactiveComponent,
+        EditFacilityDynamicComponent
     ],
     imports: [
         CommonModule,
         ReactiveFormsModule,
         RouterModule.forChild(routes),
+
+        DynammicFormsModule,
 
         MatFormFieldModule,
         MatInputModule,
