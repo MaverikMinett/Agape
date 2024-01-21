@@ -22,6 +22,7 @@ export type DesignType = String|Number|Boolean|Date|Class|[String]|[Number]|[Boo
 export interface Choice  {
     value: undefined|string|number|boolean;
     label: string;
+    item?: any
 }
 
 export type IsDocument<T> = T extends Document ? true : false

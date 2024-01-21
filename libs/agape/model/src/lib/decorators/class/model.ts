@@ -65,6 +65,11 @@ export function Model( ...args:any[] ):any {
             descriptor = new ModelDescriptor( {...params, target} )
         }
         Reflect.defineMetadata( "model:descriptor", descriptor, target );
+
+        // autopopulate field data
+        for ( const field of descriptor.fields.all() ) {
+            field.autopopulate()
+        }
     }
 
     if ( target ) return Model(target)

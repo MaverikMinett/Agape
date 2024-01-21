@@ -178,6 +178,8 @@ export class FieldDescriptor {
 
     validators?: ValidatorFunction[]
 
+    enum?: object
+
     constructor()
     constructor( name:string, type?:string, widget?:string ) 
     constructor( params: FieldDescriptorParams )
@@ -191,6 +193,7 @@ export class FieldDescriptor {
             params = { name, type, widget }
         }
         this.assign( params )
+        // this.autopopulate()
     }
 
     assign( params: FieldDescriptorParams ) {
@@ -205,6 +208,18 @@ export class FieldDescriptor {
             this.token  ??= tokenize(this.name)
             this.tokens ??= pluralize(this.token)
         }
+        if ( this.designType === String) {
+            // this.widget ??= 'input' 
+            this.type ??= 'string'
+        }
+        else if ( this.designType === Number ) {
+            // this.widget ??= 'input'
+            this.type ??= 'number' 
+        }
+        if ( this.enum ) {
+            this.widget ??= 'select'
+        }
+        this.widget ??= 'input'
     }
 
     getValue( instance: any ): any {
