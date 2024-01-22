@@ -1,4 +1,4 @@
-import { FieldDescriptor, Model, ModelDescriptor } from "@agape/model";
+import { FieldDescriptor, Model, ModelDescriptor, getFieldValidator, getValidators, validateField } from "@agape/model";
 import { Class } from "@agape/types";
 import { Component, Host, Input, OnChanges, Optional, Output, Self, SimpleChanges, SkipSelf, EventEmitter } from "@angular/core";
 import { FormFieldDescriptor } from "../form-field-descriptor";
@@ -192,6 +192,10 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
 
             this.control.clearValidators()
 
+            const controlValidator = this.getControlValidator( this.control, this.modelFieldDescriptor)
+            this.control.addValidators( controlValidator )
+
+
             if ( this.formFieldDescriptor.required ) {
                 this.control.addValidators( Validators.required )
             }
@@ -199,6 +203,28 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
             this.control.updateValueAndValidity()
         // })
 
+    }
+
+    getControlValidator( control: AbstractControl, modelFieldDescriptor: FieldDescriptor ) {
+        const parent = control.parent
+        const validator = getFieldValidator( modelFieldDescriptor )
+
+        function controlValidator (control: AbstractControl) {
+            console.log(`Running control validator for ${modelFieldDescriptor.name}`)
+            const instance = parent.value
+            const value = control.value
+            const { valid, error } = validator(instance, value)
+
+            console.log(`Valid ${valid}, error`, error)
+
+            if ( valid ) { return null }
+            else { 
+                console.log(error)
+                return { field: error }
+            }
+        }
+
+        return controlValidator
     }
 
 

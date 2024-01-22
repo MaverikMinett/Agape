@@ -5,6 +5,7 @@ import { FacilityService } from "apps/zed-ng-model-forms/src/shared/services/fac
 import { Facility, FacilityEditView, FacilityStatus } from "apps/zed-ng-model-forms/src/shared/models/facility";
 import { Class } from "@agape/types";
 import { DynamicFormGroup } from "../../dynamic-forms/dynamic-form-group";
+import { DynamicFormChangesEvent } from "../../dynamic-forms/dynamic-form-interfaces";
 
 
 function enumToOptions( set: any ) {
@@ -34,11 +35,15 @@ export class EditFacilityDynamicFormComponent {
     }
 
 
-    // valueChanged( event: any, fieldName: string, onChange: string, via: string ) {
-    //     this.changes.push(`${fieldName} changed ${onChange} ${via}: ${this.form.value[fieldName]}` )
-    // }
+    valueChanges( event: DynamicFormChangesEvent, onChange: string ) {
+
+        for ( const [fieldName, value] of Object.entries(event.changes) ) {
+            this.changes.push(`${fieldName} changed ${onChange} : ${value}` )
+        }
+        
+    }
 
     submit() {
-        // this.form.markAsPristine()
+        this.form.markAsPristine()
     }
 }

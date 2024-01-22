@@ -5,7 +5,9 @@
             Edit Facility - Dynamic Form
         </h2>
 
-        <dynamic-form [group]="form"></dynamic-form>
+        <dynamic-form [group]="form"
+            (changes)="valueChanges($event, '(change)')"
+            (ngModelChanges)="valueChanges($event, 'ngModelChange')"></dynamic-form>
 
 
         <div class="rounded w-full bg-slate-300 p-2 my-2">

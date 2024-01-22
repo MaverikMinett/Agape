@@ -28,7 +28,7 @@ function validateModel<T extends Class>( model: T, instance: InstanceType<T> ) {
 
     for ( let field of descriptor.fields.all() ) {
         let value = instance[field.name]
-        const { valid, error } = this.validateField(instance, field, value)
+        const { valid, error } = validateField(instance, field, value)
         if ( valid  === false ) {
             modelErrors[field.name] = error
         }
@@ -38,8 +38,56 @@ function validateModel<T extends Class>( model: T, instance: InstanceType<T> ) {
 }
 
 
+export function getValidators( field: FieldDescriptor) {
+    console.log(`Get validators for ${field.name}`)
+    let validators: Function[] = []
+
+    if ( field.required ) validators.push( Validators.required )
+
+    if ( field.designType === Number ) {
+        if ( defined(field.min) ) validators.push( Validators.min(field.min) )
+        if ( defined(field.max) ) validators.push( Validators.max(field.max) )
+    }
+    if ( field.designType === String ) {
+        if ( defined(field.minLength) ) validators.push( Validators.maxLength(field.maxLength) )
+        if ( defined(field.maxLength) ) validators.push( Validators.maxLength(field.maxLength) )
+    }
+
+    if ( field.validators ) {
+        validators.push( ...field.validators )
+    }
+
+    return validators
+}
+
+export function getFieldValidator( field: FieldDescriptor ) {
+    let validators: Function[] = getValidators(field)
+
+    function fieldValidator(instance: any, value: any) {
+        for ( let validator of validators ) {
+            const errors = validator( value, instance )
+            if ( errors ) {
+                let valid = false
+                let entries = Object.entries(errors)
+                const [ token, message ] = entries[0]
+
+                return {
+                    valid,
+                    error: {
+                        token,
+                        message
+                    }
+                }
+            }
+        }
+        return { valid: true, error: undefined }
+    }
+
+    return fieldValidator
+}
+
 // private
-function validateField( instance: any, field: FieldDescriptor, value: any ) {
+export function validateField( instance: any, field: FieldDescriptor, value: any ) {
     let validators: Function[] = []
 
     if ( field.required ) validators.push( Validators.required )
@@ -71,7 +119,7 @@ function validateField( instance: any, field: FieldDescriptor, value: any ) {
     if ( typeof field.designType === 'function' && field.designType.prototype ) {
         const descriptor = Model.descriptor(field.designType)
         if ( descriptor ) {
-            const { valid, error } = this.validateModel(field.designType, value)
+            const { valid, error } = validateModel(field.designType, value)
             if ( ! valid ) {
                 return { valid, error }
             }

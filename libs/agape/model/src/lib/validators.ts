@@ -8,6 +8,7 @@ export namespace Validators {
 
     export function min( min: number ) {
         return function ( value: number ) {
+            console.log(`Running min validator ${value} < ${min}`)
             return value < min 
                 ? { min: `Less than minimum value of ${min}` }
                 : null

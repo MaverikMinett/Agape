@@ -4,11 +4,11 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 
 
-export class DynamicFormGroup {
+export class DynamicFormGroup<T extends Class=Class> {
 
     ngFormGroup: FormGroup
 
-    model: Class
+    model: T
 
     private modelDescriptor: ModelDescriptor
 
@@ -18,7 +18,7 @@ export class DynamicFormGroup {
         return this._fieldNames
     }
 
-    constructor( model: Class ) {
+    constructor( model: T ) {
         const descriptor = Model.descriptor(model)
         if ( ! descriptor ) {
             throw new Error(`${model.name} is not a valid Model`)
@@ -55,5 +55,9 @@ export class DynamicFormGroup {
 
     get value() {
         return this.ngFormGroup.value
+    }
+
+    markAsPristine() {
+        return this.ngFormGroup.markAsPristine()
     }
 }

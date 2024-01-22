@@ -1,6 +1,7 @@
 import { Class } from "@agape/types";
-import { Component, Input } from "@angular/core";
+import { Component, Input, EventEmitter, Output } from "@angular/core";
 import { DynamicFormGroup } from "../dynamic-form-group";
+import { DynamicFormChangesEvent } from "../dynamic-form-interfaces";
 
 
 @Component({
@@ -11,8 +12,34 @@ import { DynamicFormGroup } from "../dynamic-form-group";
 export class DynamicFormComponent {
     @Input() group: DynamicFormGroup
 
-    ngOnInit() {
-        console.log(this.group)
+    @Output() changes: EventEmitter<DynamicFormChangesEvent> = new EventEmitter()
+
+    @Output() ngModelChanges: EventEmitter<DynamicFormChangesEvent> = new EventEmitter()
+
+
+    emitChange( fieldName: string, event: any ) {
+        const fieldValue = this.group.ngFormGroup.value[fieldName]
+
+        const changesEvent: DynamicFormChangesEvent = {
+            event,
+            changes: {
+                [fieldName]: fieldValue
+            }
+        }
+        
+        this.changes.emit(changesEvent)
     }
 
+    emitNgModelChange( fieldName: string, event: any ) {
+        const fieldValue = this.group.ngFormGroup.value[fieldName]
+
+        const changesEvent: DynamicFormChangesEvent = {
+            event,
+            changes: {
+                [fieldName]: fieldValue
+            }
+        }
+        
+        this.ngModelChanges.emit(changesEvent)
+    }
 }
