@@ -86,6 +86,7 @@
             <mat-select
                 [formControl]="this.control"
                 (ngModelChange)="this.emitNgModelChange($event)"
+                (selectionChange)="this.emitChange($event)"
                 (blur)="this.emitCtrlBlur($event)"
                 (click)="this.emitCtrlClick($event)"
                 (contextmenu)="this.emitCtrlContextmenu($event)"

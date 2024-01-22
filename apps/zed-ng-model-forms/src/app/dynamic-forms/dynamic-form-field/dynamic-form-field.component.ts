@@ -31,6 +31,8 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
 
     @Output() ngModelChange: EventEmitter<any> = new EventEmitter()
 
+    @Output() change: EventEmitter<any> = new EventEmitter()
+
     @Output() ctrlBlur: EventEmitter<Event> = new EventEmitter()
 
     @Output() ctrlClick: EventEmitter<PointerEvent> = new EventEmitter()
@@ -221,6 +223,10 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
 
     emitNgModelChange(event: any) {
         this.ngModelChange.emit(event)
+    }
+
+    emitChange(event: any) {
+        this.change.emit(event)
     }
 
     emitCtrlBlur(event: Event) {
