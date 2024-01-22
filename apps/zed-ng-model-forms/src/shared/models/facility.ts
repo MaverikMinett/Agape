@@ -1,4 +1,4 @@
-import { Enum, Field, Model, Primary } from "@agape/model";
+import { Enum, Field, Model, Primary, Required, View } from "@agape/model";
 
 
 export enum FacilityStatus {
@@ -10,10 +10,23 @@ export enum FacilityStatus {
 @Model export class Facility {
     @Primary id: string
 
+    @Required
     @Field label: string
 
+    @Required
+    @Field({min: 0}) stations: number
+
+    @Required
     @Enum(FacilityStatus)
     @Field status: FacilityStatus
 
-    @Field({min: 0}) stations: number
+}
+
+
+
+export interface FacilityEditView extends Omit<Facility, 'id'> { }
+
+@View(Facility, { omit: ['id'] }) 
+export class FacilityEditView {
+
 }

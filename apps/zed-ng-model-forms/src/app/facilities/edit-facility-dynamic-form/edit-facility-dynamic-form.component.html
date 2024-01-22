@@ -1,0 +1,54 @@
+
+<div class="flex flex-col items-center">
+    <div class="rounded overflow-hidden shadow-lg w-full bg-slate-100 p-4">
+        <h2 class="text-lg mb-3">
+            Edit Facility - Dynamic Form
+        </h2>
+
+        <dynamic-form [group]="form"></dynamic-form>
+
+
+        <div class="rounded w-full bg-slate-300 p-2 my-2">
+            <span class="rounded bg-slate-200 mr-2 py-1 px-2">
+                <span class="mr-1">Dirty:</span>
+                <span [ngClass]="{ 'text-red-500': ! form.dirty, 'text-green-500': form.dirty }">
+                    {{ form.dirty }}
+                </span>
+            </span>
+            
+            <span class="rounded bg-slate-200 mr-2 py-1 px-2">
+                <span class="mr-1">Valid:</span>
+                <span [ngClass]="{ 'text-red-500': ! form.valid, 'text-green-500': form.valid }">
+                    {{ form.valid }}
+                </span>
+            </span>
+        </div>
+
+
+        <div class="action-area">
+            <button (click)="submit()" 
+            class="btn btn-blue"
+            [ngClass]="{'btn-disabled': ! form.valid || ! form.dirty}"
+            [disabled]="! form.valid || ! form.dirty">
+                Submit
+            </button>
+        </div>
+    </div>
+
+    <div class="rounded overflow-hidden shadow-lg w-full bg-slate-100 p-4 mt-6">
+        <h3 class="text-lg mb-3">
+            Form Value
+        </h3>
+        <pre>{{ this.form.value | json }}</pre>
+    </div>
+
+    <div class="rounded overflow-hidden shadow-lg w-full bg-slate-100 p-4 mt-6">
+        <h3 class="text-lg mb-3">
+            Changes
+        </h3>
+        <div *ngFor="let change of changes">
+            {{ change }}
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,8 @@
+
+<form [formGroup]="group.ngFormGroup">
+    <div class="form-grid">
+        <ng-container *ngFor="let fieldName of group.fieldNames">
+            <dynamic-form-field [model]="group.model" [field]="fieldName"></dynamic-form-field> 
+        </ng-container>
+    </div>
+</form>

@@ -14,6 +14,8 @@ export class FormFieldDescriptor {
 
     choices: Choice[]
 
+    required: boolean
+
 }
 
 export interface Choice {
