@@ -86,7 +86,7 @@ export function View( progenitor: Class, fieldSelection?: any ):any {
                 let fieldDescriptor = viewDescriptor.fields.get(name)
                 // create a new descriptor for the field if it does not exist on the model
                 if ( ! fieldDescriptor ) {
-                    const fieldDescriptor = new FieldDescriptor(name)
+                    fieldDescriptor = new FieldDescriptor(name)
                     const protoFieldDescriptor = protoDescriptor.fields.get(name)
                     Object.assign(fieldDescriptor,protoFieldDescriptor) 
                     viewDescriptor.add(fieldDescriptor)
@@ -96,6 +96,7 @@ export function View( progenitor: Class, fieldSelection?: any ):any {
                     const protoFieldDescriptor = protoDescriptor.fields.get(name)
                     Object.assign(fieldDescriptor,protoFieldDescriptor) 
                 }
+                fieldDescriptor.autopopulate()
             }
         }
 

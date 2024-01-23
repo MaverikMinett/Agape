@@ -19,11 +19,21 @@ type FieldType = 'integer'|'decimal'|'number'|'string'|'text'|'date'|'time';
 type WidgetType = 'input'|'date'|'number'|'textarea'|'time';
 export type DesignType = String|Number|Boolean|Date|Class|[String]|[Number]|[Boolean]|[Date]|[Class]
 
-export interface Choice  {
-    value: undefined|string|number|boolean;
+export interface Choice<T=any>  {
+    value: null|undefined|string|number|boolean|object;
     label: string;
-    item?: any
+    item?: T
 }
+
+export interface TextFieldParams {
+    autosize?: boolean;
+    minRows?: number;
+    maxRows?: number;
+    rows?: number;
+}
+
+
+export type ChoiceFormatterFunction = (item: any) => Choice
 
 export type IsDocument<T> = T extends Document ? true : false
 
