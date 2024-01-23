@@ -10,7 +10,6 @@ function enumToOptions( set: any ) {
         const label = labelize(key)
         return { label, value }
     })
-    console.log( options )
     return options
 }
 

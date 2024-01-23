@@ -8,6 +8,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { ChooseQuantityComponent } from "./choose-quantity-component/choose-quantity.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DynamicFormComponent } from "./dynamic-form/dynamic-form.component";
+import { MatDatepickerModule } from "@angular/material/datepicker";
 
 
 
@@ -27,9 +28,10 @@ import { DynamicFormComponent } from "./dynamic-form/dynamic-form.component";
         ReactiveFormsModule,
         FormsModule,
         MatFormFieldModule,
+        MatDatepickerModule,
         MatInputModule,
         MatSelectModule,
-        MatIconModule
+        MatIconModule,
     ]
 })
 export class DynammicFormsModule { }

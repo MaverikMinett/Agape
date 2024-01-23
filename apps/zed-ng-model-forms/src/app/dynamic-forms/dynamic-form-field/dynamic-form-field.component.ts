@@ -1,9 +1,10 @@
-import { FieldDescriptor, Model, ModelDescriptor, getFieldValidator, getValidators, validateField } from "@agape/model";
+import { Choice, ChoiceFormatterFunction, FieldDescriptor, Model, ModelDescriptor, getFieldValidator, getValidators, validateField } from "@agape/model";
 import { Class } from "@agape/types";
-import { Component, Host, Input, OnChanges, Optional, Output, Self, SimpleChanges, SkipSelf, EventEmitter } from "@angular/core";
+import { Component, Host, Input, OnChanges, Optional, Output, Self, SimpleChanges, SkipSelf, EventEmitter, HostBinding } from "@angular/core";
 import { FormFieldDescriptor } from "../form-field-descriptor";
 import { enumToChoices } from "../dynamic-forms-util";
 import { AbstractControl, ControlContainer, ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl, Validators } from "@angular/forms";
+
 
 
 @Component({
@@ -25,9 +26,26 @@ import { AbstractControl, ControlContainer, ControlValueAccessor, FormControl, N
 })
 export class DynamicFormFieldComponent implements OnChanges, ControlValueAccessor {
 
+    @Input('class') userClass: string
+
+	@HostBinding('class') get class() {
+        const classList = 'ag-dynamic-form-field'
+        let classes: string[] = ['ag-dynamic-form-field']
+        if ( this.modelDescriptor ) classes.push(this.modelDescriptor.token )
+        if ( this.modelFieldDescriptor ) classes.push(this.modelFieldDescriptor.token)
+        if ( this.userClass ) classes.push(this.userClass)
+        return classes.join(' ')
+	}
+
     @Input() model: Class
 
     @Input() field: string
+
+    @Input() choices: any[]
+
+    @Input() choiceFormatter: ChoiceFormatterFunction
+
+    formattedChoices: Choice[]
 
     @Output() ngModelChange: EventEmitter<any> = new EventEmitter()
 
@@ -128,7 +146,7 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
   }
 
     ngOnInit() {
-        console.log("init")
+
     }
 
     resolveControl() {
@@ -167,6 +185,7 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
     ngOnChanges(changes: SimpleChanges): void {
 
         this.resolveControl()
+
         const modelDescriptor = Model.descriptor(this.model)
 
         if ( ! modelDescriptor ) {
@@ -186,23 +205,21 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
         this.modelFieldDescriptor = modelFieldDescriptor
 
         this.buildFormFieldDescriptor()
+        this.bindValidators()
+    }
 
-        // validators are handled by the model, call in timeout to avoid change detection error
-        // setTimeout( () => {
+    bindValidators() {
+        this.control.clearValidators()
 
-            this.control.clearValidators()
-
-            const controlValidator = this.getControlValidator( this.control, this.modelFieldDescriptor)
-            this.control.addValidators( controlValidator )
+        const controlValidator = this.getControlValidator( this.control, this.modelFieldDescriptor)
+        this.control.addValidators( controlValidator )
 
 
-            if ( this.formFieldDescriptor.required ) {
-                this.control.addValidators( Validators.required )
-            }
+        if ( this.formFieldDescriptor.required ) {
+            this.control.addValidators( Validators.required )
+        }
 
-            this.control.updateValueAndValidity()
-        // })
-
+        this.control.updateValueAndValidity()
     }
 
     getControlValidator( control: AbstractControl, modelFieldDescriptor: FieldDescriptor ) {
@@ -210,16 +227,11 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
         const validator = getFieldValidator( modelFieldDescriptor )
 
         function controlValidator (control: AbstractControl) {
-            console.log(`Running control validator for ${modelFieldDescriptor.name}`)
             const instance = parent.value
             const value = control.value
             const { valid, error } = validator(instance, value)
-
-            console.log(`Valid ${valid}, error`, error)
-
             if ( valid ) { return null }
             else { 
-                console.log(error)
                 return { field: error }
             }
         }
@@ -230,21 +242,62 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
 
     buildFormFieldDescriptor() {
         const formField = new FormFieldDescriptor()
+
         formField.widget = this.modelFieldDescriptor.widget ?? 'input'
-        formField.label = this.modelFieldDescriptor.label
         formField.type = this.modelFieldDescriptor.type ?? 'string'
-        formField.min = this.modelFieldDescriptor.min
-        formField.max = this.modelFieldDescriptor.max
-        formField.choices = this.modelFieldDescriptor.choices
-        formField.required = this.modelFieldDescriptor.required
+
+        for ( const fieldName of ['label', 'required']) {
+            if ( fieldName in this.modelFieldDescriptor ) {
+                formField[fieldName] = this.modelFieldDescriptor[fieldName]
+            }
+        }
+
+        /* select */
+        const formattedChoices = this.getFormFieldChoices()
+        if ( formattedChoices ) {
+            formField.choices = formattedChoices
+        }
+
+        /* number */
+        if ( formField.type === 'number' ) {
+            formField.min = this.modelFieldDescriptor.min
+            formField.max = this.modelFieldDescriptor.max
+        }
+        
+        /* textarea */
+        if ( formField.widget === 'textarea' ) {
+            formField.autosize = this.modelFieldDescriptor.autosize
+            if ( formField.autosize ) {
+                formField.minRows = this.modelFieldDescriptor.minRows
+                formField.maxRows = this.modelFieldDescriptor.maxRows
+            }
+            else {
+                formField.rows = this.modelFieldDescriptor.rows
+            }
+        }
 
         if (this.modelFieldDescriptor.enum) {
             formField.choices = enumToChoices(this.modelFieldDescriptor.enum)
         }
 
-        console.log(this.modelFieldDescriptor, formField)
-
         this.formFieldDescriptor = formField
+
+        console.log(formField)
+    }
+
+    getFormFieldChoices( ) {
+        let formattedChoices: Choice[]
+        let choices: any[] = this.choices ?? this.modelFieldDescriptor.choices
+        let choiceFormatter: ChoiceFormatterFunction = this.choiceFormatter ?? this.modelFieldDescriptor.choiceFormatter
+        if ( this.choices ) {
+            if ( choiceFormatter ) {
+                formattedChoices = choices.map( choiceFormatter )
+            }
+            else {
+                formattedChoices = choices
+            }
+        }
+        return formattedChoices
     }
 
     emitNgModelChange(event: any) {

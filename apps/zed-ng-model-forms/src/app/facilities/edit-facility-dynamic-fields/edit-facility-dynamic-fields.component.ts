@@ -21,15 +21,6 @@ export class EditFacilityDynamicFieldsComponent {
         status: [null],
     })
 
-    ngOnInit() {
-        setTimeout( () => {
-            this.form.controls['label'].addValidators(Validators.required)
-            this.form.controls['stations'].addValidators(Validators.required)
-            this.form.controls['stations'].updateValueAndValidity()
-            // this.form.updateValueAndValidity()
-        },50)
-        
-    }
 
     valueChanged( event: any, fieldName: string, onChange: string, via: string ) {
         this.changes.push(`${fieldName} changed ${onChange} ${via}: ${this.form.value[fieldName]}` )

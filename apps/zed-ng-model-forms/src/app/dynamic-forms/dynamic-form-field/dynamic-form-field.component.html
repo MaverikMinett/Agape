@@ -1,5 +1,11 @@
 
+
 <ng-container *ngIf="formFieldDescriptor">
+
+    <ng-container *ngIf="formFieldDescriptor.widget === 'date'">
+        <ng-container *ngTemplateOutlet="date"></ng-container>
+    </ng-container>
+
     <ng-container *ngIf="formFieldDescriptor.widget === 'input'">
         <ng-container *ngIf="formFieldDescriptor.type === 'string'">
             <ng-container *ngTemplateOutlet="inputString"></ng-container>
@@ -12,7 +18,51 @@
     <ng-container *ngIf="formFieldDescriptor.widget === 'select'">
         <ng-container *ngTemplateOutlet="select"></ng-container>
     </ng-container>
+
+    <ng-container *ngIf="formFieldDescriptor.widget === 'textarea'">
+        <ng-container *ngIf="formFieldDescriptor.autosize">
+            <ng-container *ngTemplateOutlet="textareaAutosize"></ng-container>
+        </ng-container>
+        <ng-container *ngIf="! formFieldDescriptor.autosize">
+            <ng-container *ngTemplateOutlet="textareaFixedSize"></ng-container>
+        </ng-container>
+    </ng-container>
     
+    <ng-template #date>
+        <mat-form-field>
+            <mat-label>{{formFieldDescriptor.label}}</mat-label>
+            <input matInput 
+            [formControl]="this.control"
+            [matDatepicker]="picker"
+            (ngModelChange)="this.emitNgModelChange($event)"
+            (blur)="this.emitCtrlBlur($event)"
+            (click)="this.emitCtrlClick($event)"
+            (contextmenu)="this.emitCtrlContextmenu($event)"
+            (copy)="this.emitCtrlCopy($event)"
+            (dblclick)="this.emitCtrlDblclick($event)"
+            (focus)="this.emitCtrlFocus($event)"
+            (focusin)="this.emitCtrlFocusin($event)"
+            (focusout)="this.emitCtrlFocusout($event)"
+            (keydown)="this.emitCtrlKeydown($event)"
+            (keyup)="this.emitCtrlKeyup($event)"
+            (keypress)="this.emitCtrlKeypress($event)"
+            (mousedown)="this.emitCtrlMousedown($event)"
+            (mouseenter)="this.emitCtrlMouseenter($event)"
+            (mouseleave)="this.emitCtrlMouseleave($event)"
+            (mousemove)="this.emitCtrlMousemove($event)"
+            (mouseout)="this.emitCtrlMouseout($event)"
+            (mouseover)="this.emitCtrlMouseover($event)"
+            (mouseup)="this.emitCtrlMouseup($event)"
+            (paste)="this.emitCtrlPaste($event)"
+            (scroll)="this.emitCtrlScroll($event)"
+            (scrollend)="this.emitCtrlScrollend($event)"
+            (wheel)="this.emitCtrlWheel($event)"
+            >
+            <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+    </ng-template>
 
     <ng-template #inputString>
         <mat-form-field>
@@ -120,5 +170,73 @@
             <mat-error *ngIf="this.control.errors?.['field']">{{this.control.errors?.['field'].message}}</mat-error>
         </mat-form-field>
     </ng-template>
+
+    <ng-template #textareaFixedSize>
+        <mat-form-field>
+            <mat-label>{{formFieldDescriptor.label}}</mat-label>
+            <textarea matInput
+            [formControl]="this.control"
+            [rows]="formFieldDescriptor.rows"
+            (ngModelChange)="this.emitNgModelChange($event)"
+            (blur)="this.emitCtrlBlur($event)"
+            (click)="this.emitCtrlClick($event)"
+            (contextmenu)="this.emitCtrlContextmenu($event)"
+            (copy)="this.emitCtrlCopy($event)"
+            (dblclick)="this.emitCtrlDblclick($event)"
+            (focus)="this.emitCtrlFocus($event)"
+            (focusin)="this.emitCtrlFocusin($event)"
+            (focusout)="this.emitCtrlFocusout($event)"
+            (keydown)="this.emitCtrlKeydown($event)"
+            (keyup)="this.emitCtrlKeyup($event)"
+            (keypress)="this.emitCtrlKeypress($event)"
+            (mousedown)="this.emitCtrlMousedown($event)"
+            (mouseenter)="this.emitCtrlMouseenter($event)"
+            (mouseleave)="this.emitCtrlMouseleave($event)"
+            (mousemove)="this.emitCtrlMousemove($event)"
+            (mouseout)="this.emitCtrlMouseout($event)"
+            (mouseover)="this.emitCtrlMouseover($event)"
+            (mouseup)="this.emitCtrlMouseup($event)"
+            (paste)="this.emitCtrlPaste($event)"
+            (scroll)="this.emitCtrlScroll($event)"
+            (scrollend)="this.emitCtrlScrollend($event)"
+            (wheel)="this.emitCtrlWheel($event)"></textarea>
+        </mat-form-field>
+    </ng-template>
+
+    <ng-template #textareaAutosize>
+        <mat-form-field>
+            <mat-label>{{formFieldDescriptor.label}}</mat-label>
+            <textarea matInput
+            [formControl]="this.control"
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            [cdkAutosizeMinRows]="formFieldDescriptor.minRows"
+            [cdkAutosizeMaxRows]="formFieldDescriptor.maxRows"
+            (ngModelChange)="this.emitNgModelChange($event)"
+            (blur)="this.emitCtrlBlur($event)"
+            (click)="this.emitCtrlClick($event)"
+            (contextmenu)="this.emitCtrlContextmenu($event)"
+            (copy)="this.emitCtrlCopy($event)"
+            (dblclick)="this.emitCtrlDblclick($event)"
+            (focus)="this.emitCtrlFocus($event)"
+            (focusin)="this.emitCtrlFocusin($event)"
+            (focusout)="this.emitCtrlFocusout($event)"
+            (keydown)="this.emitCtrlKeydown($event)"
+            (keyup)="this.emitCtrlKeyup($event)"
+            (keypress)="this.emitCtrlKeypress($event)"
+            (mousedown)="this.emitCtrlMousedown($event)"
+            (mouseenter)="this.emitCtrlMouseenter($event)"
+            (mouseleave)="this.emitCtrlMouseleave($event)"
+            (mousemove)="this.emitCtrlMousemove($event)"
+            (mouseout)="this.emitCtrlMouseout($event)"
+            (mouseover)="this.emitCtrlMouseover($event)"
+            (mouseup)="this.emitCtrlMouseup($event)"
+            (paste)="this.emitCtrlPaste($event)"
+            (scroll)="this.emitCtrlScroll($event)"
+            (scrollend)="this.emitCtrlScrollend($event)"
+            (wheel)="this.emitCtrlWheel($event)"></textarea>
+        </mat-form-field>
+    </ng-template>
+
 </ng-container>
 

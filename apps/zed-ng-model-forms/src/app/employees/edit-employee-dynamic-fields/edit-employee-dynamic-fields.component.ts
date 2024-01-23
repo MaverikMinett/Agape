@@ -1,9 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import { Employee, EmployeeStatus } from "../../../shared/models/employee";
+import { Employee, EmployeeEditView, EmployeeStatus } from "../../../shared/models/employee";
 import { FormBuilder, Validators } from "@angular/forms";
 import { labelize } from "@agape/string";
 import { FacilityService } from "apps/zed-ng-model-forms/src/shared/services/facility.service";
 import { Facility } from "apps/zed-ng-model-forms/src/shared/models/facility";
+import { Class } from "@agape/types";
+import { Choice } from "@agape/model";
+
 
 
 function enumToOptions( set: any ) {
@@ -11,29 +14,34 @@ function enumToOptions( set: any ) {
         const label = labelize(key)
         return { label, value }
     })
-    console.log( options )
     return options
 }
 
+function documentsToChoices<T>( set: T[], transformer: (item: T) => Choice<T> ): Choice<T>[] {
+    return set.map( item =>  ({ ...transformer(item), item } ) )
+}
+
 @Component({
-    selector: 'app-edit-employee',
-    templateUrl: 'edit-employee.component.html',
-    styleUrls: ['edit-employee.component.scss']
+    selector: 'app-edit-employee-dynamic-fields',
+    templateUrl: 'edit-employee-dynamic-fields.component.html',
+    styleUrls: ['edit-employee-dynamic-fields.component.scss']
 }) 
-export class EditEmployeeComponent implements OnInit {
+export class EditEmployeeDynamicFieldsComponent implements OnInit {
     
-    model = Employee
+    model = EmployeeEditView
 
     statusOptions = enumToOptions( EmployeeStatus )
 
     facilities: Facility[] = []
 
+    facilityChoices: Choice<Facility>[] = []
+
     form = new FormBuilder().group({
-        firstName: [null, Validators.required],
-        lastName: [null, Validators.required],
+        firstName: [null],
+        lastName: [null],
         birthdate: [null],
-        facility: [null, Validators.required],
-        status: [null, Validators.required],
+        facility: [null],
+        status: [null],
         notes: [null],
     })
 
@@ -48,6 +56,10 @@ export class EditEmployeeComponent implements OnInit {
         this.facilityService.listFacilities().subscribe({
             next: facilities => {
                 this.facilities = facilities
+                this.facilityChoices = documentsToChoices(
+                    facilities, 
+                    facility => ({ value: facility.id, label: facility.label})
+                )
             },
             error: error => {
                 console.log(error)

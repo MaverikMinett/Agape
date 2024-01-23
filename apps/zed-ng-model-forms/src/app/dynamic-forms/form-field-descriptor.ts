@@ -16,6 +16,19 @@ export class FormFieldDescriptor {
 
     required: boolean
 
+    /* textarea */
+    autosize?: boolean
+
+    minRows?: number
+
+    maxRows?: number
+
+    rows?: number
+
+    /* date */
+    minDate?: Date|string
+
+    maxDate?: Date|string
 }
 
 export interface Choice {

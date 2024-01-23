@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { Route, RouterModule } from "@angular/router";
 import { EmployeesIndexComponent } from "./employees-index/employee-index.component";
-import { EditEmployeeComponent } from "./edit-employee/edit-employee.component";
+import { EditEmployeeReactiveComponent } from "./edit-employee-reactive/edit-employee-reactive.component";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 
@@ -11,6 +11,8 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select"
 import { MatButtonModule } from "@angular/material/button";
+import { EditEmployeeDynamicFieldsComponent } from "./edit-employee-dynamic-fields/edit-employee-dynamic-fields.component";
+import { DynammicFormsModule } from "../dynamic-forms/dynamic-forms.module";
 
 const routes: Route[] = [
     {
@@ -18,20 +20,26 @@ const routes: Route[] = [
         component: EmployeesIndexComponent
     },
     {
-        path: 'employees/edit',
-        component: EditEmployeeComponent
+        path: 'employees/edit-reactive',
+        component: EditEmployeeReactiveComponent
+    },
+    {
+        path: 'employees/edit-dynamic-fields',
+        component: EditEmployeeDynamicFieldsComponent
     }
 ]
 
 @NgModule({
     declarations: [
         EmployeesIndexComponent,
-        EditEmployeeComponent
+        EditEmployeeReactiveComponent,
+        EditEmployeeDynamicFieldsComponent
     ],
     imports: [
         CommonModule,
         ReactiveFormsModule,
         RouterModule.forChild(routes),
+        DynammicFormsModule,
 
         MatFormFieldModule,
         MatInputModule,

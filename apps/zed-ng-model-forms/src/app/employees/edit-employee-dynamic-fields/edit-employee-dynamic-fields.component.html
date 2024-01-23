@@ -1,0 +1,64 @@
+
+<div class="flex flex-col items-center">
+    <div class="rounded overflow-hidden shadow-lg w-full bg-slate-100 p-4">
+        <h2 class="text-lg mb-3">
+            Edit Employee - Reactive Form with Dynamic Fields
+        </h2>
+        <form [formGroup]="form">
+            <div class="form-grid employee">
+                
+                <dynamic-form-field [model]="model" field="firstName"></dynamic-form-field>
+                <dynamic-form-field [model]="model" field="lastName"></dynamic-form-field>
+                <dynamic-form-field [model]="model" field="birthdate"></dynamic-form-field>
+                
+                <dynamic-form-field 
+                    [model]="model" 
+                    field="facility" 
+                    [choices]="facilityChoices"
+                ></dynamic-form-field>
+                <dynamic-form-field [model]="model" field="status"></dynamic-form-field>
+                <dynamic-form-field [model]="model" field="notes"></dynamic-form-field>
+
+                <!-- <mat-form-field class="notes">
+                    <mat-label>Notes</mat-label>
+                    <textarea matInput
+                        formControlName="notes"
+                        cdkTextareaAutosize
+                        #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="3"
+                        cdkAutosizeMaxRows="5"></textarea>
+                </mat-form-field> -->
+
+            </div>
+            <div class="rounded w-full bg-slate-300 p-2 my-2">
+                <span class="rounded bg-slate-200 mr-2 py-1 px-2">
+                    <span class="mr-1">Dirty:</span>
+                    <span [ngClass]="{ 'text-red-500': ! form.dirty, 'text-green-500': form.dirty }">
+                        {{ form.dirty }}
+                    </span>
+                </span>
+                
+                <span class="rounded bg-slate-200 mr-2 py-1 px-2">
+                    <span class="mr-1">Valid:</span>
+                    <span [ngClass]="{ 'text-red-500': ! form.valid, 'text-green-500': form.valid }">
+                        {{ form.valid }}
+                    </span>
+                </span>
+            </div>
+        </form>
+        <div class="action-area">
+            <button (click)="submit()" 
+            class="btn btn-blue"
+            [ngClass]="{'btn-disabled': ! form.valid || ! form.dirty}"
+            [disabled]="! form.valid || ! form.dirty">
+                Submit
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="isSubmitted"
+        class="rounded overflow-hidden shadow-lg w-full bg-slate-100 p-4 mt-6">
+        <pre>{{ this.form.value | json }}</pre>
+    </div>
+</div>
+
