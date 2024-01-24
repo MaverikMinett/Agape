@@ -10,6 +10,7 @@ import { FacilitiesModule } from './facilities/facilities.module';
 
 import { AppIndexComponent } from './core-components/app-index/app-index.component';
 import { AppMenuComponent } from './core-components/app-menu/app-menu.component';
+import { PlaygroundModule } from './playgroud/playground.module';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { AppMenuComponent } from './core-components/app-menu/app-menu.component'
     BrowserAnimationsModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
     EmployeesModule,
-    FacilitiesModule
+    FacilitiesModule,
+    PlaygroundModule
   ],
   providers: [],
   bootstrap: [AppComponent],

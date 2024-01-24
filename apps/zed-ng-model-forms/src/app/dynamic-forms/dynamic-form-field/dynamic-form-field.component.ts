@@ -1,9 +1,10 @@
 import { Choice, ChoiceFormatterFunction, FieldDescriptor, Model, ModelDescriptor, getFieldValidator, getValidators, validateField } from "@agape/model";
 import { Class } from "@agape/types";
-import { Component, Host, Input, OnChanges, Optional, Output, Self, SimpleChanges, SkipSelf, EventEmitter, HostBinding } from "@angular/core";
+import { Component, Host, Input, OnChanges, Optional, Output, Self, SimpleChanges, SkipSelf, EventEmitter, HostBinding, OnDestroy } from "@angular/core";
 import { FormFieldDescriptor } from "../form-field-descriptor";
 import { enumToChoices } from "../dynamic-forms-util";
 import { AbstractControl, ControlContainer, ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl, Validators } from "@angular/forms";
+import { Observable, Subscription } from "rxjs";
 
 
 
@@ -24,13 +25,12 @@ import { AbstractControl, ControlContainer, ControlValueAccessor, FormControl, N
         // }
     ]
 })
-export class DynamicFormFieldComponent implements OnChanges, ControlValueAccessor {
+export class DynamicFormFieldComponent implements OnChanges, ControlValueAccessor, OnDestroy {
 
     @Input('class') userClass: string
 
 	@HostBinding('class') get class() {
-        const classList = 'ag-dynamic-form-field'
-        let classes: string[] = ['ag-dynamic-form-field']
+        let classes: string[] = ['dynamic-form-field']
         if ( this.modelDescriptor ) classes.push(this.modelDescriptor.token )
         if ( this.modelFieldDescriptor ) classes.push(this.modelFieldDescriptor.token)
         if ( this.userClass ) classes.push(this.userClass)
@@ -41,9 +41,13 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
 
     @Input() field: string
 
-    @Input() choices: any[]
+    @Input() choices: any[]|Observable<any>|Promise<any>
 
     @Input() choiceFormatter: ChoiceFormatterFunction
+
+    // @Input() choicesResolver: Observable<any>|Promise<any>
+
+    choicesSubscription: Subscription
 
     formattedChoices: Choice[]
 
@@ -138,74 +142,93 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
     control: AbstractControl
 
 
-  constructor (
-    @Optional() @Host() @SkipSelf()
-    private controlContainer: ControlContainer,
-  ) {
+    constructor (
+        @Optional() @Host() @SkipSelf()
+        private controlContainer: ControlContainer,
+        ) {
+    }
 
-  }
-
-    ngOnInit() {
-
+    ngOnDestroy(): void {
+        this.clearChoicesSubscription()
     }
 
     resolveControl() {
         this.control = this.controlContainer.control.get(this.field)
     }
 
-    writeValue(value: any) {
-        // console.log("Write Value")
-        // this.value = value
-    }
-
-    registerOnChange( onChange: any ){
-        this.onChange = onChange
-    }
-
-    registerOnTouched( onTouched: any ) {
-        this.onTouched = onTouched
-    }
-
-    markAsTouched() {
-        if (!this.touched) {
-            this.onTouched()
-            this.touched = true
-        }
-    }
-
-    validate(control: AbstractControl ) {
-        const value = control.value
-
-    }
-
-    setDisabledState(disabled: boolean) {
-        this.disabled = disabled
-    }
+    /* unused dummy methods because the angular form control is passed
+     directly to the child form control */
+    writeValue(value: any) { }
+    registerOnChange( onChange: any ){ }
+    registerOnTouched( onTouched: any ) { }
+    markAsTouched() {}
+    validate(control: AbstractControl ) { }
+    setDisabledState(disabled: boolean) { }
+    /******************************************/
 
     ngOnChanges(changes: SimpleChanges): void {
 
-        this.resolveControl()
+        if ( changes['model'] ) {
+            if ( this.model ) {
+                this.modelDescriptor = Model.descriptor(this.model)
 
-        const modelDescriptor = Model.descriptor(this.model)
-
-        if ( ! modelDescriptor ) {
-            throw new Error(`${this.model.name} is not a valid model`)
+                if ( ! this.modelDescriptor ) {
+                    throw new Error(`${this.model.name} is not a valid model`)
+                }
+            }
         }
 
-        let modelFieldDescriptor: FieldDescriptor
-
-        if ( modelDescriptor.fields.has(this.field) ) {
-            modelFieldDescriptor = modelDescriptor.field(this.field)
+        if ( changes['model'] || changes['field'] ) {
+            if ( this.model ) {
+                if ( this.modelDescriptor.fields.has(this.field) ) {
+                    this.modelFieldDescriptor = this.modelDescriptor.field(this.field)
+                }
+                else {
+                    throw new Error(`${this.field} is not a field of ${this.model.name}`)
+                }
+    
+                this.resolveControl()
+                this.buildFormFieldDescriptor()
+                this.bindValidators()
+            }
         }
-        else {
-            throw new Error(`${this.field} is not a field of ${this.model.name}`)
+
+        if ( changes['choices']  ) {
+            this.clearChoicesSubscription()
+
+            if ( this.choices instanceof Observable ) {
+                this.choices.subscribe({
+                    next: choices => this.formatAndSetChoices(choices)
+                })
+            }
+            else if ( this.choices instanceof Promise ) {
+                this.choices.then(
+                    choices => this.formatAndSetChoices(choices)
+                )
+            }
+            else  {
+                this.formatAndSetChoices( this.choices )
+            }
         }
+    }
 
-        this.modelDescriptor = modelDescriptor
-        this.modelFieldDescriptor = modelFieldDescriptor
+    formatAndSetChoices( choices: any[] ) {
+        let choiceFormatter: ChoiceFormatterFunction = this.choiceFormatter ?? this.modelFieldDescriptor.choiceFormatter
+        const formattedChoices = this.choiceFormatter
+        ? choices.map( this.choiceFormatter )
+        : choices
+        this.formFieldDescriptor.choices = formattedChoices
+    }
 
-        this.buildFormFieldDescriptor()
-        this.bindValidators()
+    clearChoicesSubscription() {
+        if ( this.choicesSubscription ) {
+            this.choicesSubscription.unsubscribe()
+            this.choicesSubscription = null
+        }
+    }
+
+    onSetChoicesResolver() {
+
     }
 
     bindValidators() {
@@ -242,6 +265,7 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
 
     buildFormFieldDescriptor() {
         const formField = new FormFieldDescriptor()
+        this.formFieldDescriptor = formField
 
         formField.widget = this.modelFieldDescriptor.widget ?? 'input'
         formField.type = this.modelFieldDescriptor.type ?? 'string'
@@ -252,10 +276,9 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
             }
         }
 
-        /* select */
-        const formattedChoices = this.getFormFieldChoices()
-        if ( formattedChoices ) {
-            formField.choices = formattedChoices
+
+        if ( this.modelFieldDescriptor.choices ) {
+            this.formatAndSetChoices(this.modelFieldDescriptor.choices)
         }
 
         /* number */
@@ -276,29 +299,11 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
             }
         }
 
-        if (this.modelFieldDescriptor.enum) {
+        if (this.modelFieldDescriptor.enum ) {
             formField.choices = enumToChoices(this.modelFieldDescriptor.enum)
         }
-
-        this.formFieldDescriptor = formField
-
-        console.log(formField)
     }
 
-    getFormFieldChoices( ) {
-        let formattedChoices: Choice[]
-        let choices: any[] = this.choices ?? this.modelFieldDescriptor.choices
-        let choiceFormatter: ChoiceFormatterFunction = this.choiceFormatter ?? this.modelFieldDescriptor.choiceFormatter
-        if ( this.choices ) {
-            if ( choiceFormatter ) {
-                formattedChoices = choices.map( choiceFormatter )
-            }
-            else {
-                formattedChoices = choices
-            }
-        }
-        return formattedChoices
-    }
 
     emitNgModelChange(event: any) {
         this.ngModelChange.emit(event)
