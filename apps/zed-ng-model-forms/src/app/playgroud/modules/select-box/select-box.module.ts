@@ -8,6 +8,7 @@ import { SelectBoxExample002 } from "./examples/select-box-example-002.component
 import { CommonModule } from "@angular/common";
 import { SelectBoxExample003 } from "./examples/select-box-example-003.component";
 import { SelectBoxExample004 } from "./examples/select-box-example-004.component";
+import { SelectBoxExample005 } from "./examples/select-box-example-005.component";
 
 const routes: Route[] = [
     { 
@@ -22,7 +23,8 @@ const routes: Route[] = [
         SelectBoxExample001,
         SelectBoxExample002,
         SelectBoxExample003,
-        SelectBoxExample004
+        SelectBoxExample004,
+        SelectBoxExample005
     ],
     imports: [
         CommonModule,

@@ -1,38 +1,38 @@
 
 
-<ng-container *ngIf="formFieldDescriptor">
+<ng-container *ngIf="agControl">
 
-    <ng-container *ngIf="formFieldDescriptor.widget === 'date'">
+    <ng-container *ngIf="agControl.widget === 'date'">
         <ng-container *ngTemplateOutlet="date"></ng-container>
     </ng-container>
 
-    <ng-container *ngIf="formFieldDescriptor.widget === 'input'">
-        <ng-container *ngIf="formFieldDescriptor.type === 'string'">
+    <ng-container *ngIf="agControl.widget === 'input'">
+        <ng-container *ngIf="agControl.type === 'string'">
             <ng-container *ngTemplateOutlet="inputString"></ng-container>
         </ng-container>
-        <ng-container *ngIf="formFieldDescriptor.type === 'number'">
+        <ng-container *ngIf="agControl.type === 'number'">
             <ng-container *ngTemplateOutlet="inputNumber"></ng-container>
         </ng-container>
     </ng-container>
 
-    <ng-container *ngIf="formFieldDescriptor.widget === 'select'">
+    <ng-container *ngIf="agControl.widget === 'select'">
         <ng-container *ngTemplateOutlet="select"></ng-container>
     </ng-container>
 
-    <ng-container *ngIf="formFieldDescriptor.widget === 'textarea'">
-        <ng-container *ngIf="formFieldDescriptor.autosize">
+    <ng-container *ngIf="agControl.widget === 'textarea'">
+        <ng-container *ngIf="agControl.autosize">
             <ng-container *ngTemplateOutlet="textareaAutosize"></ng-container>
         </ng-container>
-        <ng-container *ngIf="! formFieldDescriptor.autosize">
+        <ng-container *ngIf="! agControl.autosize">
             <ng-container *ngTemplateOutlet="textareaFixedSize"></ng-container>
         </ng-container>
     </ng-container>
     
     <ng-template #date>
         <mat-form-field>
-            <mat-label>{{formFieldDescriptor.label}}</mat-label>
+            <mat-label>{{agControl.label}}</mat-label>
             <input matInput 
-            [formControl]="this.control"
+            [formControl]="this.ngControl"
             [matDatepicker]="picker"
             (ngModelChange)="this.emitNgModelChange($event)"
             (blur)="this.emitCtrlBlur($event)"
@@ -66,9 +66,9 @@
 
     <ng-template #inputString>
         <mat-form-field>
-            <mat-label>{{formFieldDescriptor.label}}</mat-label>
+            <mat-label>{{agControl.label}}</mat-label>
             <input matInput 
-                [formControl]="this.control"
+                [formControl]="this.ngControl"
                 (ngModelChange)="this.emitNgModelChange($event)"
                 (blur)="this.emitCtrlBlur($event)"
                 (click)="this.emitCtrlClick($event)"
@@ -93,19 +93,19 @@
                 (scrollend)="this.emitCtrlScrollend($event)"
                 (wheel)="this.emitCtrlWheel($event)"
             >
-            <mat-error *ngIf="this.control.errors?.['field']">{{this.control.errors?.['field'].message}}</mat-error>
+            <mat-error *ngIf="this.agControl.errors?.['field']">{{this.agControl.errors?.['field'].message}}</mat-error>
         </mat-form-field>
 
     </ng-template>
     <ng-template #inputNumber>
         <mat-form-field>
-            <mat-label>{{formFieldDescriptor.label}}</mat-label>
+            <mat-label>{{agControl.label}}</mat-label>
 
             <input matInput 
                 type="number" 
-                [min]="formFieldDescriptor.min" 
-                [max]="formFieldDescriptor.max"
-                [formControl]="this.control"
+                [min]="agControl.min" 
+                [max]="agControl.max"
+                [formControl]="this.ngControl"
                 (ngModelChange)="this.emitNgModelChange($event)"
                 (blur)="this.emitCtrlBlur($event)"
                 (click)="this.emitCtrlClick($event)"
@@ -130,14 +130,14 @@
                 (scrollend)="this.emitCtrlScrollend($event)"
                 (wheel)="this.emitCtrlWheel($event)"
             >
-            <mat-error *ngIf="this.control.errors?.['field']">{{this.control.errors?.['field'].message}}</mat-error>
+            <mat-error *ngIf="this.agControl.errors?.['field']">{{this.agControl.errors?.['field'].message}}</mat-error>
         </mat-form-field>
     </ng-template>
     <ng-template #select>
         <mat-form-field>
-            <mat-label>{{formFieldDescriptor.label}}</mat-label>
+            <mat-label>{{agControl.label}}</mat-label>
             <mat-select
-                [formControl]="this.control"
+                [formControl]="this.ngControl"
                 (ngModelChange)="this.emitNgModelChange($event)"
                 (selectionChange)="this.emitChange($event)"
                 (blur)="this.emitCtrlBlur($event)"
@@ -163,20 +163,20 @@
                 (scrollend)="this.emitCtrlScrollend($event)"
                 (wheel)="this.emitCtrlWheel($event)"
                 >
-                <ng-container *ngIf="formFieldDescriptor.choices">
-                    <mat-option *ngFor="let choice of formFieldDescriptor.choices" [value]="choice.value">{{ choice.label }}</mat-option>
+                <ng-container *ngIf="formattedChoices">
+                    <mat-option *ngFor="let choice of formattedChoices" [value]="choice.value">{{ choice.label }}</mat-option>
                 </ng-container>
             </mat-select>
-            <mat-error *ngIf="this.control.errors?.['field']">{{this.control.errors?.['field'].message}}</mat-error>
+            <mat-error *ngIf="this.agControl.errors?.['field']">{{this.agControl.errors?.['field'].message}}</mat-error>
         </mat-form-field>
     </ng-template>
 
     <ng-template #textareaFixedSize>
         <mat-form-field>
-            <mat-label>{{formFieldDescriptor.label}}</mat-label>
+            <mat-label>{{agControl.label}}</mat-label>
             <textarea matInput
-            [formControl]="this.control"
-            [rows]="formFieldDescriptor.rows"
+            [formControl]="this.ngControl"
+            [rows]="agControl.rows"
             (ngModelChange)="this.emitNgModelChange($event)"
             (blur)="this.emitCtrlBlur($event)"
             (click)="this.emitCtrlClick($event)"
@@ -205,13 +205,13 @@
 
     <ng-template #textareaAutosize>
         <mat-form-field>
-            <mat-label>{{formFieldDescriptor.label}}</mat-label>
+            <mat-label>{{agControl.label}}</mat-label>
             <textarea matInput
-            [formControl]="this.control"
+            [formControl]="this.ngControl"
             cdkTextareaAutosize
             #autosize="cdkTextareaAutosize"
-            [cdkAutosizeMinRows]="formFieldDescriptor.minRows"
-            [cdkAutosizeMaxRows]="formFieldDescriptor.maxRows"
+            [cdkAutosizeMinRows]="agControl.minRows"
+            [cdkAutosizeMaxRows]="agControl.maxRows"
             (ngModelChange)="this.emitNgModelChange($event)"
             (blur)="this.emitCtrlBlur($event)"
             (click)="this.emitCtrlClick($event)"

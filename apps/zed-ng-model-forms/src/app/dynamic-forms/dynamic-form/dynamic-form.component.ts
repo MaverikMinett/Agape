@@ -52,8 +52,11 @@ export class DynamicFormComponent {
         if ( Array.isArray(this.fieldOrder) ) {
             fieldNames = [...this.fieldOrder]
         }
-        else {
+        else if ( this.fieldOrder ) {
             fieldNames = this.fieldOrder.split(',').map( fieldName => fieldName.trim() )
+        }
+        else {
+            fieldNames = this.modelDescriptor.fields.all().map( field => field.name )
         }
 
         for ( let fieldName of fieldNames ) {

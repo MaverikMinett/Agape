@@ -1,14 +1,24 @@
-import { Model, ModelDescriptor } from "@agape/model";
+import { ChoiceFormatterFunction, Model, ModelDescriptor } from "@agape/model";
 import { Class } from "@agape/types";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Observable } from "rxjs";
 
+export interface DynamicFormGroupOptions<T> {
+    fields?: { [K in keyof T]?: DynamicFormGroupFieldOptions }
+}
 
+export interface DynamicFormGroupFieldOptions {
+    choices?: any[]|Observable<any[]>|Promise<any[]>
+    choicesFormatter?: ChoiceFormatterFunction
+}
 
 export class DynamicFormGroup<T extends Class=Class> {
 
     ngFormGroup: FormGroup
 
     model: T
+
+    options: DynamicFormGroupOptions<T> = { }
 
     private modelDescriptor: ModelDescriptor
 
@@ -18,7 +28,7 @@ export class DynamicFormGroup<T extends Class=Class> {
         return this._fieldNames
     }
 
-    constructor( model: T ) {
+    constructor( model: T, options?: DynamicFormGroupOptions<InstanceType<T>> ) {
         const descriptor = Model.descriptor(model)
         if ( ! descriptor ) {
             throw new Error(`${model.name} is not a valid Model`)
@@ -28,6 +38,7 @@ export class DynamicFormGroup<T extends Class=Class> {
         this.modelDescriptor = descriptor
         this.buildNgFormGroup()
         this._fieldNames = descriptor.fields.all().map( field => field.name )
+        this.mergeOptions( options )
     }
     
     private buildNgFormGroup( ) {
@@ -43,6 +54,16 @@ export class DynamicFormGroup<T extends Class=Class> {
         const ngFormGroup = new FormBuilder().group(ngFormBuilderArgs)
 
         this.ngFormGroup = ngFormGroup
+    }
+
+    private mergeOptions( options: DynamicFormGroupOptions<T> ) {
+        if ( options.fields ) {
+            this.options.fields ??= { }
+            for ( const fieldName of Object.keys(options.fields) ) {
+                this.options.fields[fieldName] ??= {}
+                this.options.fields[fieldName] = {...this.options.fields[fieldName], ...options.fields[fieldName]}
+            }
+        }
     }
 
     get dirty() {

@@ -38,51 +38,31 @@ class FoodItemService {
 
 /* component */
 @Component({
-    selector: 'select-box-example-003',
+    selector: 'select-box-example-005',
     template:`
 
-    <dynamic form
+    <dynamic-form [group]="form">
 
-
-    <!-- <form [formGroup]="form">
-        <dynamic-form-field 
-        [model]="model" 
-        field="foodItem"
-        [choices]="$foodItems"
-        [choiceFormatter]="foodItemChoiceFormatter"
-        ></dynamic-form-field>
-        <div class="text-gray-500 text-sm">
-            {{ form.value | json }}
-        </div>
-    </form> -->
+    </dynamic-form>
+    <div class="text-gray-500 text-sm">
+        {{ form.value | json }}
+    </div>
     `,
     providers: [FoodItemService]
 })
-export class SelectBoxExample003 {
-
-    model = ExampleForm
-
-    // foodItemChoiceFormatter: ChoiceFormatterFunction = ( foodItem: FoodItem ) => {
-    //     return { value: foodItem.id, label: foodItem.name }
-    // }
+export class SelectBoxExample005 {
 
     form: DynamicFormGroup
 
-    // $foodItems: Observable<FoodItem[]>
-
     constructor( public service: FoodItemService ) {
-
         this.form = new DynamicFormGroup(ExampleForm, {
             fields: {
-                
+                foodItem: {
+                    choices: this.service.getFoodItems(),
+                    choicesFormatter: ( food: FoodItem ) => ({value: food.id, label: food.name})
+                }
             }
         })
-
-        // this.$foodItems = this.service.getFoodItems()
     }
-
-
-
-
 
 }
