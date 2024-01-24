@@ -39,7 +39,6 @@ function validateModel<T extends Class>( model: T, instance: InstanceType<T> ) {
 
 
 export function getValidators( field: FieldDescriptor) {
-    console.log(`Get validators for ${field.name}`)
     let validators: Function[] = []
 
     if ( field.required ) validators.push( Validators.required )
@@ -48,9 +47,13 @@ export function getValidators( field: FieldDescriptor) {
         if ( defined(field.min) ) validators.push( Validators.min(field.min) )
         if ( defined(field.max) ) validators.push( Validators.max(field.max) )
     }
-    if ( field.designType === String ) {
+    else if ( field.designType === String ) {
         if ( defined(field.minLength) ) validators.push( Validators.maxLength(field.maxLength) )
         if ( defined(field.maxLength) ) validators.push( Validators.maxLength(field.maxLength) )
+    }
+    else if ( Array.isArray(field.designType) ) {
+        if ( defined(field.minElements) ) validators.push( Validators.minElements(field.minElements) )
+        if ( defined(field.maxElements) ) validators.push( Validators.minElements(field.maxElements) )
     }
 
     if ( field.validators ) {

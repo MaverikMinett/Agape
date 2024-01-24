@@ -212,9 +212,11 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
         if ( changes['choices'] ) {
             this.onSetChoices()
         }
-        console.log(changes)
-        if ( changes['choicesFormatter'] ) {
-            
+
+        if ( changes['choicesFormatter'] && ! changes['choices'] ) {
+            if ( this.choices ) {
+                this.formattedChoices = this.formatChoiceItems( this.resolvedChoiceItems )
+            }
         }
     }
 
@@ -243,6 +245,7 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
             })
         }
         else {
+            this.resolvedChoiceItems = this.choices
             this.formattedChoices = this.formatChoiceItems( this.choices )
         }
     }

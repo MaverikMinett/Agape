@@ -1,7 +1,11 @@
 export namespace Validators {
 
     export function required( value: any ) {
-        return value === undefined || value === null || value === ""
+
+        return value === undefined 
+            || value === null 
+            || value === ""
+            || ( Array.isArray(value) && value.length === 0 )
             ? { required: `This field is required` }
             : null
     }
@@ -35,6 +39,22 @@ export namespace Validators {
         return function ( value: string ) {
             return value.length > maxLength
                 ? { maxLength: `Exceeds maximum number of characters (${maxLength})` }
+                : null
+        }
+    }
+
+    export function minElements( minElements: number ) {
+        return function ( value: any[] ) {
+            return value.length < minElements 
+                ? { minElements: `Requires at least ${minElements} items`}
+                : null
+        }
+    }
+
+    export function maxElements( maxElements: number ) {
+        return function ( value: any[] ) {
+            return value.length > maxElements 
+                ? { minElements: `Exceeds maximum of ${maxElements} items`}
                 : null
         }
     }

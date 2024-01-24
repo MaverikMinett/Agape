@@ -93,7 +93,7 @@
                 (scrollend)="this.emitCtrlScrollend($event)"
                 (wheel)="this.emitCtrlWheel($event)"
             >
-            <mat-error *ngIf="this.agControl.errors?.['field']">{{this.agControl.errors?.['field'].message}}</mat-error>
+            <mat-error *ngIf="this.ngControl.errors?.['field']">{{this.ngControl.errors?.['field'].message}}</mat-error>
         </mat-form-field>
 
     </ng-template>
@@ -130,13 +130,14 @@
                 (scrollend)="this.emitCtrlScrollend($event)"
                 (wheel)="this.emitCtrlWheel($event)"
             >
-            <mat-error *ngIf="this.agControl.errors?.['field']">{{this.agControl.errors?.['field'].message}}</mat-error>
+            <mat-error *ngIf="this.ngControl.errors?.['field']">{{this.ngControl.errors?.['field'].message}}</mat-error>
         </mat-form-field>
     </ng-template>
     <ng-template #select>
         <mat-form-field>
             <mat-label>{{agControl.label}}</mat-label>
             <mat-select
+                [multiple]="agControl.multi"
                 [formControl]="this.ngControl"
                 (ngModelChange)="this.emitNgModelChange($event)"
                 (selectionChange)="this.emitChange($event)"
@@ -167,7 +168,7 @@
                     <mat-option *ngFor="let choice of formattedChoices" [value]="choice.value">{{ choice.label }}</mat-option>
                 </ng-container>
             </mat-select>
-            <mat-error *ngIf="this.agControl.errors?.['field']">{{this.agControl.errors?.['field'].message}}</mat-error>
+            <mat-error *ngIf="this.ngControl.errors?.['field']">{{this.ngControl.errors?.['field'].message}}</mat-error>
         </mat-form-field>
     </ng-template>
 

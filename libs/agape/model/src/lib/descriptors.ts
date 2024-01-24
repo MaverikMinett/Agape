@@ -203,9 +203,14 @@ export class FieldDescriptor {
     rows?: number
 
     // for dates
-    minDate: Date|string
+    minDate?: Date|string
 
-    maxDate: Date|string
+    maxDate?: Date|string
+
+    // for arrays
+    minElements?: number
+
+    maxElements?: number
 
     constructor()
     constructor( name:string, type?:string, widget?:string ) 
@@ -235,34 +240,34 @@ export class FieldDescriptor {
             this.token  ??= tokenize(this.name)
             this.tokens ??= pluralize(this.token)
         }
-        if ( this.designType === String) {
-            // this.widget ??= 'input' 
-            this.type ??= 'string'
-            if ( this.foreignKey ) {
-                this.widget ??= 'select'
-            }
-        }
-        else if ( this.designType === Number ) {
-            // this.widget ??= 'input'
-            this.type ??= 'number' 
-        }
-        else if ( this.designType === Date ) {
-            this.type ??= 'date'
-        }
-        else if ( this.designType instanceof Function && this.designType.prototype ) {
-            this.type ??= 'object'
-            this.widget ??= 'select'
-        }
-        if ( this.type === 'text' ) {
-            this.widget ??= 'textarea'
-        }
-        if ( this.type === 'date' ) {
-            this.widget ??= 'date'
-        }
-        if ( this.enum ) {
-            this.widget ??= 'select'
-        }
-        this.widget ??= 'input'
+        // if ( this.designType === String) {
+        //     // this.widget ??= 'input' 
+        //     this.type ??= 'string'
+        //     if ( this.foreignKey ) {
+        //         this.widget ??= 'select'
+        //     }
+        // }
+        // else if ( this.designType === Number ) {
+        //     // this.widget ??= 'input'
+        //     this.type ??= 'number' 
+        // }
+        // else if ( this.designType === Date ) {
+        //     this.type ??= 'date'
+        // }
+        // else if ( this.designType instanceof Function && this.designType.prototype ) {
+        //     this.type ??= 'object'
+        //     this.widget ??= 'select'
+        // }
+        // if ( this.type === 'text' ) {
+        //     this.widget ??= 'textarea'
+        // }
+        // if ( this.type === 'date' ) {
+        //     this.widget ??= 'date'
+        // }
+        // if ( this.enum ) {
+        //     this.widget ??= 'select'
+        // }
+        // this.widget ??= 'input'
     }
 
     getValue( instance: any ): any {

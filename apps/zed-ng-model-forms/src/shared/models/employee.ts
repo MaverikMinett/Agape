@@ -42,7 +42,3 @@ export class EmployeeEditView {
     @ForeignKey(Facility)
     @Field facility: string
 }
-
-
-console.log(">>",Model.descriptor(EmployeeEditView).field('facility'))
-console.log(">>",Model.descriptor(EmployeeEditView).field('status'))

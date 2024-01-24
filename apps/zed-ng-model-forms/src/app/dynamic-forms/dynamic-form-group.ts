@@ -57,11 +57,13 @@ export class DynamicFormGroup<T extends Class=Class> {
     }
 
     private mergeOptions( options: DynamicFormGroupOptions<T> ) {
-        if ( options.fields ) {
-            this.options.fields ??= { }
-            for ( const fieldName of Object.keys(options.fields) ) {
-                this.options.fields[fieldName] ??= {}
-                this.options.fields[fieldName] = {...this.options.fields[fieldName], ...options.fields[fieldName]}
+        if ( options ) {
+            if ( options.fields ) {
+                this.options.fields ??= { }
+                for ( const fieldName of Object.keys(options.fields) ) {
+                    this.options.fields[fieldName] ??= {}
+                    this.options.fields[fieldName] = {...this.options.fields[fieldName], ...options.fields[fieldName]}
+                }
             }
         }
     }
