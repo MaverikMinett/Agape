@@ -2,6 +2,7 @@ import { camelize, pluralize, tokenize, labelize } from "@agape/string";
 import { Class, Dictionary } from '@agape/types';
 import { Choice, ChoiceFormatterFunction, DesignType, ValidatorFunction } from "./types";
 import { Document } from "./document";
+import { Model } from "./decorators/class/model";
 
 
 export type FieldDescriptorParams = Partial<Pick<FieldDescriptor, keyof FieldDescriptor>>;
@@ -98,24 +99,32 @@ export class ViewDescriptor extends ModelDescriptor {
 
     title?: string;
 
-    model?: Class;
+    model: Class;
 
     viewName: string;
 
-    constructor ( target: Class, model?: Class )
-    constructor ( target: Class, name?:string, params?:Partial<Pick<ModelDescriptor, keyof ModelDescriptor>> )
-    constructor ( target: Class, params?:Partial<Pick<ModelDescriptor, keyof ModelDescriptor>> )
-    constructor ( target: Class, ...args:any[] ) {
-        if ( args.length === 1 ) {
-            const model = args.shift()
-            super()
-            this.model = model;
-        }
-        else {
-            super(...args)
-        }
+    constructor ( target: Class, model: Class ) {
+    // constructor ( target: Class, name?:string, params?:Partial<Pick<ViewDescriptor, keyof ViewDescriptor>> )
+    // constructor ( target: Class, params?:Partial<Pick<ViewDescriptor, keyof ViewDescriptor>> )
+    // constructor ( target: Class, ...args:any[] ) {
+        super()
+        this.target = target
+        this.model = model
+        this.autopopulate()
     }
 
+    public autopopulate(): void {
+        if ( this.model ) {
+            const modelDescriptor = Model.descriptor(this.model)
+            this.name = modelDescriptor.name
+            this.label = modelDescriptor.label
+            this.plural = modelDescriptor.plural
+            this.description = modelDescriptor.description
+            this.token = modelDescriptor.token
+            this.tokens = modelDescriptor.tokens
+        }
+
+    }
 }
 
 

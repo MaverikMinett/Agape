@@ -31,8 +31,7 @@ export function View( progenitor: Class, fieldSelection?: any ):any {
         // this descriptor is set by any @Field decorators prior to execution of @View decorator
         let protoDescriptor = Reflect.getMetadata( "model:descriptor", target.prototype );
 
-        let viewDescriptor  = new ViewDescriptor( progenitor )
-        viewDescriptor.target = target
+        let viewDescriptor  = new ViewDescriptor( target, progenitor )
         viewDescriptor.symbol = target.name
 
         function addFieldFromProgentior(name:string) {
@@ -99,8 +98,6 @@ export function View( progenitor: Class, fieldSelection?: any ):any {
                 fieldDescriptor.autopopulate()
             }
         }
-
-
 
         Reflect.defineMetadata("model:descriptor", viewDescriptor, target )
     }
