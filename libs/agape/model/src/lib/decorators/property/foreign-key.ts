@@ -6,6 +6,7 @@ import { Document } from "@agape/model"
 /**
  * Use the @ForeignKey decorator to annotate a property and designate it
  * as the primary key of the model or view to which it belongs
+ * @deprecated since version 0.7 use Foreign instead
  */
 export function ForeignKey( foreignDocument?: Class<Document>, params?:FieldDescriptorParams ):any
 export function ForeignKey( target:any, name:string, propertyDescriptor?:TypedPropertyDescriptor<Function> ):any

@@ -1,6 +1,6 @@
 import { camelize, pluralize, tokenize, labelize } from "@agape/string";
 import { Class, Dictionary } from '@agape/types';
-import { Choice, ChoiceFormatterFunction, DesignType, ValidatorFunction } from "./types";
+import { Choice, ChoiceFormatterFunction, ValidatorFunction } from "./types";
 import { Document } from "./document";
 import { Model } from "./decorators/class/model";
 
@@ -167,13 +167,13 @@ export class FieldDescriptor {
 
     foreignKey?: boolean
 
+    foreignDocument?: Class
+
     default?: any
 
     optional?: boolean
 
-    foreignModel?: Class
-
-    designType: DesignType
+    designType: String|Number|Boolean|Date|Class|[String]|[Number]|[Boolean]|[Date]|[Class]
 
     // for numbers
     min?: number

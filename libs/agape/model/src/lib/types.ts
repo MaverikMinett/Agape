@@ -17,7 +17,7 @@ type ArrayErrors<T> = T extends Array<infer I> ? Array<ErrorReport<I>> : T
 
 type FieldType = 'integer'|'decimal'|'number'|'string'|'text'|'date'|'time';
 type WidgetType = 'input'|'date'|'number'|'textarea'|'time';
-export type DesignType = String|Number|Boolean|Date|Class|[String]|[Number]|[Boolean]|[Date]|[Class]
+// export type DesignType = String|Number|Boolean|Date|Class|[String]|[Number]|[Boolean]|[Date]|[Class]
 
 export interface Choice<T=any>  {
     value: null|undefined|string|number|boolean|object;

@@ -1,12 +1,12 @@
+import { Class } from "@agape/types";
 import { FieldDescriptor, FieldDescriptorParams, ModelDescriptor } from "../../descriptors";
-import { DesignType } from "../../types";
 import { Model } from "../class/model";
 
 /**
  * Use the @Field decorator to annotate a property and designate it
  * as a field of the model or view to which it belongs
  */
-export function Field( designType: DesignType ): any
+export function Field( designType: String|Number|Boolean|Date|Class|[String]|[Number]|[Boolean]|[Date]|[Class] ): any
 export function Field( params?:FieldDescriptorParams ):any
 export function Field( target:any, name:string, propertyDescriptor?:TypedPropertyDescriptor<Function> ):any
 export function Field( ...args:any[] ):any {
