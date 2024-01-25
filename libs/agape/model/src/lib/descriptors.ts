@@ -4,8 +4,16 @@ import { Choice, ChoiceFormatterFunction, ValidatorFunction } from "./types";
 import { Document } from "./document";
 import { Model } from "./decorators/class/model";
 
+export type ElementDescriptorParams =
+     Partial<Pick<ElementDescriptor, keyof ElementDescriptor>> 
+     & { foreign?: Class<Document> }
 
-export type FieldDescriptorParams = Partial<Pick<FieldDescriptor, keyof FieldDescriptor>>;
+export interface FieldDescriptorParams 
+    extends Partial<Pick<FieldDescriptor, keyof Omit<FieldDescriptor, 'elements'>>> {
+        elements?: ElementDescriptorParams
+}
+
+
 export type ModelDescriptorParams = Partial<Pick<ModelDescriptor, keyof ModelDescriptor>>;
 
 /**
@@ -161,9 +169,9 @@ export class FieldDescriptor {
 
     primary?: boolean;
 
-    choices?: Array<Choice|any>
+    choices?: Array<Choice>
 
-    choiceFormatter?: ChoiceFormatterFunction
+    // choiceFormatter?: ChoiceFormatterFunction
 
     foreignKey?: boolean
 
@@ -173,7 +181,7 @@ export class FieldDescriptor {
 
     optional?: boolean
 
-    designType: String|Number|Boolean|Date|Class|[String]|[Number]|[Boolean]|[Date]|[Class]
+    designType: String|Number|Boolean|Date|Class|[String|Number|Boolean|Date|Class]
 
     // for numbers
     min?: number
@@ -212,6 +220,8 @@ export class FieldDescriptor {
 
     maxElements?: number
 
+    elements?: ElementDescriptor
+
     constructor()
     constructor( name:string, type?:string, widget?:string ) 
     constructor( params: FieldDescriptorParams )
@@ -229,7 +239,13 @@ export class FieldDescriptor {
     }
 
     assign( params: FieldDescriptorParams ) {
-        Object.assign(this, params)
+        const parameters = { ...params }
+        if ( 'elements' in parameters ) {
+            const elementParameters = parameters.elements
+            delete parameters.elements
+            this.elements = new ElementDescriptor(elementParameters)
+        }
+        Object.assign(this, parameters)
     }
 
     autopopulate() {
@@ -240,34 +256,6 @@ export class FieldDescriptor {
             this.token  ??= tokenize(this.name)
             this.tokens ??= pluralize(this.token)
         }
-        // if ( this.designType === String) {
-        //     // this.widget ??= 'input' 
-        //     this.type ??= 'string'
-        //     if ( this.foreignKey ) {
-        //         this.widget ??= 'select'
-        //     }
-        // }
-        // else if ( this.designType === Number ) {
-        //     // this.widget ??= 'input'
-        //     this.type ??= 'number' 
-        // }
-        // else if ( this.designType === Date ) {
-        //     this.type ??= 'date'
-        // }
-        // else if ( this.designType instanceof Function && this.designType.prototype ) {
-        //     this.type ??= 'object'
-        //     this.widget ??= 'select'
-        // }
-        // if ( this.type === 'text' ) {
-        //     this.widget ??= 'textarea'
-        // }
-        // if ( this.type === 'date' ) {
-        //     this.widget ??= 'date'
-        // }
-        // if ( this.enum ) {
-        //     this.widget ??= 'select'
-        // }
-        // this.widget ??= 'input'
     }
 
     getValue( instance: any ): any {
@@ -278,6 +266,65 @@ export class FieldDescriptor {
         instance[this.name] = value
     }
 
+}
+
+
+
+export class ElementDescriptor {
+    foreignKey?: boolean
+
+    foreignDocument?: Class
+
+    designType: String|Number|Boolean|Date|Class|[String|Number|Boolean|Date|Class]
+
+    widget?: string;          // input, date, textarea, does not autopopulate
+
+    enum?: object
+
+    choices?: Array<Choice>
+
+    // for numbers
+    min?: number
+
+    max?: number
+
+    decimals?: number
+
+    // for strings
+    trim?: boolean
+
+    minLength?: number
+
+    maxLength?: number
+
+    validators?: ValidatorFunction[]
+
+    // for text fields
+    autosize?: boolean
+
+    minRows?: number
+    
+    maxRows?: number
+
+    rows?: number
+
+    // for dates
+    minDate?: Date|string
+
+    maxDate?: Date|string
+
+    constructor( 
+        params: ElementDescriptorParams
+        ) {
+        const parameters = { ...params }
+        if ( 'foreign' in parameters ) {
+            const foreignDocument = params['foreign']
+            delete parameters['foreign']
+            parameters.foreignKey = true
+            parameters.foreignDocument = foreignDocument
+        }
+        Object.assign(this, parameters)
+    }
 }
 
 
