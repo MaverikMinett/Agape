@@ -1,5 +1,5 @@
 import { Component, Injectable } from "@angular/core";
-import { Field, ForeignKey, Model, Primary, Document, Enum, Required } from "@agape/model";
+import { Field, ForeignKey, Model, Primary, Document, Enum, Required, Elements } from "@agape/model";
 import { DynamicFormGroup } from "apps/zed-ng-model-forms/src/app/dynamic-forms/dynamic-form-group";
 
 /* SELECT MULTIPLE ENUMS */
@@ -16,8 +16,8 @@ enum Topping {
 
 @Model export class ExampleForm {
     @Required()
-    @Enum(Topping)
-    @Field([String]) toppings: Topping[]
+    @Elements(Topping)
+    @Field toppings: Topping[]
 }
 
 

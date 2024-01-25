@@ -69,9 +69,15 @@ export class DynamicFormControl {
         }
 
         if ( field.choices ) this.choices = field.choices
+        else if ( this.type === 'array') {
+            if ( field.elements?.choices ) {
+                this.choices = field.elements.choices
+            }
+            else if ( field.elements?.enum ) {
+                this.choices = enumToChoices( field.elements.enum )
+            }
+        }
         else if ( field.enum ) this.choices = enumToChoices( field.enum )
-
-        console.log(this)
     }
 
     buildTypeAndWidgetFromFieldDescriptor( field: FieldDescriptor ) {
@@ -79,8 +85,7 @@ export class DynamicFormControl {
         if ( field.widget ) this.widget = field.widget
 
         if ( Array.isArray(field.designType) ) {
-            this.widget ??= 'select'
-            this.type ??= this.getFieldTypeFromDesignType(field.designType[0])
+            this.type ??= 'array'
             this.multi = true
         }
         else {
@@ -95,6 +100,9 @@ export class DynamicFormControl {
         }
         else if ( this.type === 'date' ) {
             this.widget ??= 'date'
+        }
+        else if ( this.type === 'array' ) {
+            this.widget ??= 'select'
         }
         if ( field.foreignKey ) {
             this.widget ??= 'select'

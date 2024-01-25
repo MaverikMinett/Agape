@@ -1,5 +1,5 @@
 import { Component, Injectable } from "@angular/core";
-import { Field, Model, Primary, Document, Enum, Required, Foreign, DesignType } from "@agape/model";
+import { Field, Model, Primary, Document, Enum, Required, Foreign, DesignType, Elements } from "@agape/model";
 import { DynamicFormGroup } from "apps/zed-ng-model-forms/src/app/dynamic-forms/dynamic-form-group";
 import { of } from "rxjs";
 
@@ -12,7 +12,7 @@ import { of } from "rxjs";
 
 @Model export class ExampleForm {
     @Required()
-    @DesignType([String])
+    @Elements(String, { foreign: Topping })
     @Field toppings: string[]
 }
 
