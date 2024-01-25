@@ -9,7 +9,7 @@ export interface DynamicFormGroupOptions<T> {
 
 export interface DynamicFormGroupFieldOptions {
     choices?: any[]|Observable<any[]>|Promise<any[]>
-    choicesFormatter?: ChoiceFormatterFunction
+    choiceFormatter?: ChoiceFormatterFunction
 }
 
 export class DynamicFormGroup<T extends Class=Class> {

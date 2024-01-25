@@ -213,7 +213,7 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
             this.onSetChoices()
         }
 
-        if ( changes['choicesFormatter'] && ! changes['choices'] ) {
+        if ( changes['choiceFormatter'] && ! changes['choices'] ) {
             if ( this.choices ) {
                 this.formattedChoices = this.formatChoiceItems( this.resolvedChoiceItems )
             }

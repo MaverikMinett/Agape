@@ -12,6 +12,7 @@ import { SelectBoxExample005 } from "./examples/select-box-example-005.component
 import { SelectBoxPageReactiveComponent } from "./select-box-page-reactive/select-box-page-reactive.component";
 import { SelectBoxPageDynamicComponent } from "./select-box-page-dynamic/select-box-page-dynamic.component";
 import { SelectBoxExample006 } from "./examples/select-box-example-006.component";
+import { SelectBoxExample007 } from "./examples/select-box-example-007.component";
 
 const routes: Route[] = [
     { 
@@ -38,7 +39,8 @@ const routes: Route[] = [
         SelectBoxExample003,
         SelectBoxExample004,
         SelectBoxExample005,
-        SelectBoxExample006
+        SelectBoxExample006,
+        SelectBoxExample007
     ],
     imports: [
         CommonModule,

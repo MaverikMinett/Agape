@@ -17,7 +17,7 @@ enum Topping {
 @Model export class ExampleForm {
     @Required()
     @Enum(Topping)
-    @Field([String], { minLength: 1, maxLength: 3 }) toppings: Topping[]
+    @Field([String]) toppings: Topping[]
 }
 
 

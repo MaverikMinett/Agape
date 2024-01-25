@@ -43,35 +43,6 @@ export class DynamicFormControl {
         this.bindFieldValidator( field, ngControl )    
     }
 
-    // buildFormControlFromFieldDescriptor( field: FieldDescriptor ) {
-    //     this.widget = field.widget ?? 'input'
-    //     this.type = field.type ?? 'string'
-
-    //     if ( field.label ) this.label = field.label
-    //     if ( this.required ) this.required = field.required
-
-    //     /* number */
-    //     if ( field.type === 'number' ) {
-    //         this.min = field.min
-    //         this.max = field.max
-    //     }
-        
-    //     /* textarea */
-    //     if ( field.widget === 'textarea' ) {
-    //         this.autosize = field.autosize
-    //         if ( field.autosize ) {
-    //             this.minRows = field.minRows
-    //             this.maxRows = field.maxRows
-    //         }
-    //         else {
-    //             this.rows = field.rows
-    //         }
-    //     }
-
-    //     if ( field.choices ) this.choices = field.choices
-    //     else if ( field.enum ) this.choices = enumToChoices( field.enum )
-    // }
-
     buildFormControlFromFieldDescriptor( field: FieldDescriptor ) {
  
         this.buildTypeAndWidgetFromFieldDescriptor( field )
@@ -99,6 +70,8 @@ export class DynamicFormControl {
 
         if ( field.choices ) this.choices = field.choices
         else if ( field.enum ) this.choices = enumToChoices( field.enum )
+
+        console.log(this)
     }
 
     buildTypeAndWidgetFromFieldDescriptor( field: FieldDescriptor ) {
@@ -106,6 +79,7 @@ export class DynamicFormControl {
         if ( field.widget ) this.widget = field.widget
 
         if ( Array.isArray(field.designType) ) {
+            this.widget ??= 'select'
             this.type ??= this.getFieldTypeFromDesignType(field.designType[0])
             this.multi = true
         }

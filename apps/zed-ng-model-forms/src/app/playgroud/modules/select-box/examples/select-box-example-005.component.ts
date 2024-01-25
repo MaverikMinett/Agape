@@ -59,7 +59,7 @@ export class SelectBoxExample005 {
             fields: {
                 foodItem: {
                     choices: this.service.getFoodItems(),
-                    choicesFormatter: ( food: FoodItem ) => ({value: food.id, label: food.name})
+                    choiceFormatter: ( food: FoodItem ) => ({value: food.id, label: food.name})
                 }
             }
         })
