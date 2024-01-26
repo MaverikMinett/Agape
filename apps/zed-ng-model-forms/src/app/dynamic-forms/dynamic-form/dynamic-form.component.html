@@ -1,4 +1,3 @@
-
 <form [formGroup]="group.ngFormGroup">
     <div class="form-grid {{this.modelDescriptor?.token}}">
         <ng-container *ngFor="let fieldName of fieldNames">
@@ -9,6 +8,7 @@
             (ngModelChange)="emitNgModelChange(fieldName, $event)"
             [choices]="group.options?.fields?.[fieldName]?.choices"
             [choiceFormatter]="group.options?.fields?.[fieldName]?.choiceFormatter"
+            [disabled]="group.options?.fields?.[fieldName]?.disabled"
             ></dynamic-form-field> 
         </ng-container>
     </div>

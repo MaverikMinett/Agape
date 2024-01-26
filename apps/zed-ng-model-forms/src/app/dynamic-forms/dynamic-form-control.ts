@@ -78,6 +78,10 @@ export class DynamicFormControl {
             }
         }
         else if ( field.enum ) this.choices = enumToChoices( field.enum )
+
+        console.log(field)
+        console.log(this)
+
     }
 
     buildTypeAndWidgetFromFieldDescriptor( field: FieldDescriptor ) {
@@ -95,6 +99,9 @@ export class DynamicFormControl {
         if ( this.type === 'object' ) {
             this.widget ??= 'select'
         }
+        else if ( this.type === 'boolean' ) {
+            this.widget ??= 'checkbox'
+        } 
         else if ( this.type === 'text' ) {
             this.widget ??= 'textarea'
         }
@@ -118,6 +125,7 @@ export class DynamicFormControl {
         if ( designType === Number ) type = 'number'
         else if ( designType === Date ) type = 'date'
         else if ( designType === String ) type = 'string'
+        else if ( designType === Boolean ) type = 'boolean'
         else if ( designType instanceof Function && designType.prototype ) {
             type = 'object'
         }

@@ -29,6 +29,7 @@ export class DynamicFormComponent {
 
     @Output() ngModelChanges: EventEmitter<DynamicFormChangesEvent> = new EventEmitter()
 
+
     token: string
 
     modelDescriptor: ModelDescriptor
@@ -76,13 +77,20 @@ export class DynamicFormComponent {
     emitChange( fieldName: string, event: any ) {
         const fieldValue = this.group.ngFormGroup.value[fieldName]
 
+        this.group.value = this.group.ngFormGroup.value
+
+        // call change bindings supplied to the options of the form group
+        console.log(this.group.options)
+
+        this.group.options?.fields?.[fieldName].on?.['change']?.(event)
+
+        // emit the changes event on the form component
         const changesEvent: DynamicFormChangesEvent = {
             event,
             changes: {
                 [fieldName]: fieldValue
             }
         }
-        
         this.changes.emit(changesEvent)
     }
 

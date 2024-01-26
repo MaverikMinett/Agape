@@ -2,6 +2,14 @@
 
 <ng-container *ngIf="agControl">
 
+    <ng-container *ngIf="agControl.widget === 'checkbox'">
+        <ng-container *ngTemplateOutlet="checkbox"></ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="agControl.widget === 'checkboxes'">
+        <ng-container *ngTemplateOutlet="checkboxes"></ng-container>
+    </ng-container>
+
     <ng-container *ngIf="agControl.widget === 'date'">
         <ng-container *ngTemplateOutlet="date"></ng-container>
     </ng-container>
@@ -28,6 +36,55 @@
         </ng-container>
     </ng-container>
     
+    <ng-template #checkbox>
+        <div class="checkbox-control">
+            <mat-checkbox
+                [formControl]="this.ngControl"
+                (change)="this.emitChange($event)"
+                (ngModelChange)="this.emitNgModelChange($event)"
+                (blur)="this.emitCtrlBlur($event)"
+                (click)="this.emitCtrlClick($event)"
+                (contextmenu)="this.emitCtrlContextmenu($event)"
+                (copy)="this.emitCtrlCopy($event)"
+                (dblclick)="this.emitCtrlDblclick($event)"
+                (focus)="this.emitCtrlFocus($event)"
+                (focusin)="this.emitCtrlFocusin($event)"
+                (focusout)="this.emitCtrlFocusout($event)"
+                (keydown)="this.emitCtrlKeydown($event)"
+                (keyup)="this.emitCtrlKeyup($event)"
+                (keypress)="this.emitCtrlKeypress($event)"
+                (mousedown)="this.emitCtrlMousedown($event)"
+                (mouseenter)="this.emitCtrlMouseenter($event)"
+                (mouseleave)="this.emitCtrlMouseleave($event)"
+                (mousemove)="this.emitCtrlMousemove($event)"
+                (mouseout)="this.emitCtrlMouseout($event)"
+                (mouseover)="this.emitCtrlMouseover($event)"
+                (mouseup)="this.emitCtrlMouseup($event)"
+                (paste)="this.emitCtrlPaste($event)"
+                (scroll)="this.emitCtrlScroll($event)"
+                (scrollend)="this.emitCtrlScrollend($event)"
+                (wheel)="this.emitCtrlWheel($event)">
+                {{ agControl.label }}
+            </mat-checkbox>
+        </div>
+    </ng-template>
+
+    <ng-template #checkboxes>
+        <div class="checkboxes-control">
+            <div class="ag-mat-control-group-header">
+                <label>
+                    <mat-label class="ag-mat-control-group-label">{{ agControl.label }}</mat-label><span aria-hidden="true" class="ag-mat-control-group-label--required"> </span>
+                </label>
+                <mat-error class="ag-mat-control-group-error mat-caption">This field is required</mat-error>  
+            </div>
+
+            <mat-checkbox-group
+                [formControl]="this.ngControl"
+                [choices]="formattedChoices"
+            ></mat-checkbox-group>
+        </div>
+    </ng-template>
+
     <ng-template #date>
         <mat-form-field>
             <mat-label>{{agControl.label}}</mat-label>

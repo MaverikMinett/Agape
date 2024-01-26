@@ -1,5 +1,5 @@
 import { ChoiceFormatterFunction, Model, ModelDescriptor } from "@agape/model";
-import { Class } from "@agape/types";
+import { Class, Dictionary } from "@agape/types";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 
@@ -10,6 +10,8 @@ export interface DynamicFormGroupOptions<T> {
 export interface DynamicFormGroupFieldOptions {
     choices?: any[]|Observable<any[]>|Promise<any[]>
     choiceFormatter?: ChoiceFormatterFunction
+    disabled?: boolean
+    on?: Dictionary<(...args: any[]) => any>
 }
 
 export class DynamicFormGroup<T extends Class=Class> {
@@ -28,6 +30,20 @@ export class DynamicFormGroup<T extends Class=Class> {
         return this._fieldNames
     }
 
+    get dirty() {
+        return this.ngFormGroup.dirty
+    }
+
+    get valid() {
+        return this.ngFormGroup.valid
+    }
+
+    // get value() {
+    //     return this.ngFormGroup.value
+    // }
+
+    value: InstanceType<T>
+
     constructor( model: T, options?: DynamicFormGroupOptions<InstanceType<T>> ) {
         const descriptor = Model.descriptor(model)
         if ( ! descriptor ) {
@@ -39,6 +55,14 @@ export class DynamicFormGroup<T extends Class=Class> {
         this.buildNgFormGroup()
         this._fieldNames = descriptor.fields.all().map( field => field.name )
         this.mergeOptions( options )
+    }
+
+    configure( options: DynamicFormGroupOptions<InstanceType<T>> ) {
+        this.mergeOptions( options )
+    }
+
+    markAsPristine() {
+        return this.ngFormGroup.markAsPristine()
     }
     
     private buildNgFormGroup( ) {
@@ -54,6 +78,8 @@ export class DynamicFormGroup<T extends Class=Class> {
         const ngFormGroup = new FormBuilder().group(ngFormBuilderArgs)
 
         this.ngFormGroup = ngFormGroup
+
+        this.value = ngFormGroup.value as any
     }
 
     private mergeOptions( options: DynamicFormGroupOptions<T> ) {
@@ -68,19 +94,4 @@ export class DynamicFormGroup<T extends Class=Class> {
         }
     }
 
-    get dirty() {
-        return this.ngFormGroup.dirty
-    }
-
-    get valid() {
-        return this.ngFormGroup.valid
-    }
-
-    get value() {
-        return this.ngFormGroup.value
-    }
-
-    markAsPristine() {
-        return this.ngFormGroup.markAsPristine()
-    }
 }

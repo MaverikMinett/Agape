@@ -45,6 +45,8 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
 
     @Input() choiceFormatter: ChoiceFormatterFunction
 
+    @Input() disabled = false
+
     resolvedChoiceItems: any[]
 
     formattedChoices: Choice[]
@@ -139,7 +141,7 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
 
     touched = false
 
-    disabled = false
+
 
     ngControl: AbstractControl
 
@@ -155,7 +157,7 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
     }
 
     ngOnDestroy(): void {
-        // this.clearChoicesSubscription()
+        this.clearChoicesSubscription()
     }
 
     resolveNgFormControlByName( name: string ) {
@@ -218,6 +220,12 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
                 this.formattedChoices = this.formatChoiceItems( this.resolvedChoiceItems )
             }
         }
+
+        if ( changes['disabled'] ) {
+            this.disabled ? this.ngControl.disable() : this.ngControl.enable()
+        }
+
+        
     }
 
     onSetChoices() {
