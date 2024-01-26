@@ -44,6 +44,7 @@ export function verbalize( string?:string ) {
 
     return string
         .replace(/(.)([A-Z][a-z]+)/g , (str, left, right) => { return left + ' ' + right } )
+        .replace(/([a-z0-9])([A-Z])/g, (str, left, right) => { return left + ' ' + right } )
         .replace(/[-_]/, ' ')
         .replace(/^([a-z])/, (str) => { return str.toUpperCase() } )
 }
@@ -59,6 +60,7 @@ export function labelize( string?:string ) {
 
     return string
         .replace(/(.)([A-Z][a-z]+)/g , (str, left, right) => { return left + ' ' + right } )
+        .replace(/([a-z0-9])([A-Z])/g, (str, left, right) => { return left + ' ' + right } )
         .replace(/[-_]/, ' ')
         .toLocaleLowerCase()
         .replace(/^([a-z])/, (str) => { return str.toUpperCase() } )
@@ -100,7 +102,9 @@ export function pluralize( string?:string ) {
     else if ( string.endsWith('us') ) {
         return string.replace(/us$/, 'i')
     }
-
+    else if ( string.endsWith('s') ) {
+        return string
+    }
     else {
         return string + 's'
     }
