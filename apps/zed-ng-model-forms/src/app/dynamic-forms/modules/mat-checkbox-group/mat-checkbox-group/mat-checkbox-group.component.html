@@ -1,0 +1,10 @@
+<span class="mat-checkbox-container">
+    <ng-container *ngIf="choices">
+        <mat-checkbox
+            *ngFor="let choice of choices"
+            (change)="onCheckboxChange($event, choice.value)"
+            [checked]="value?.includes(choice.value)">
+            {{ choice.label }}
+        </mat-checkbox>
+    </ng-container>
+</span>
