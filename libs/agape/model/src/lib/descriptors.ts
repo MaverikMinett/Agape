@@ -4,9 +4,12 @@ import { Choice, ChoiceFormatterFunction, ValidatorFunction } from "./types";
 import { Document } from "./document";
 import { Model } from "./decorators/class/model";
 
-export type ElementDescriptorParams =
-     Partial<Pick<ElementDescriptor, keyof ElementDescriptor>> 
-     & { foreign?: Class<Document> }
+export interface ElementDescriptorParams 
+    extends Partial<Pick<ElementDescriptor, keyof ElementDescriptor>> {
+        foreign?: Class<Document>
+}
+
+
 
 export interface FieldDescriptorParams 
     extends Partial<Pick<FieldDescriptor, keyof Omit<FieldDescriptor, 'elements'>>> {

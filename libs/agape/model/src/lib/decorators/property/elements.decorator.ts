@@ -6,14 +6,32 @@ import { ElementDescriptorParams, FieldDescriptorParams } from "../../descriptor
 import { Model} from "../class/model";
 import { determineEnumDesignType } from "../../util";
 
+
+interface ElementsParams extends ElementDescriptorParams {
+    minElements?: number
+    maxElements?: number
+}
+
+
 /**
  * Use the @Choices decorator to denote which options should be available
  * for the given field
  */
-export function Elements( designType: object, parameters?: ElementDescriptorParams ):any 
-export function Elements( designType: Boolean|Date|Number|String|Class, parameters?: ElementDescriptorParams ):any 
-export function Elements( type: object|Boolean|Date|Number|String|Class, parameters?: ElementDescriptorParams ):any 
+export function Elements( designType: object, parameters?: ElementsParams ):any 
+export function Elements( designType: Boolean|Date|Number|String|Class, parameters?: ElementsParams ):any 
+export function Elements( type: object|Boolean|Date|Number|String|Class, parameters?: ElementsParams ):any 
 {
+
+    let fieldDescriptorParams: FieldDescriptorParams = {}
+    if ( parameters?.minElements ) {
+        fieldDescriptorParams.minElements = parameters.minElements
+        delete parameters.minElements
+    }
+
+    if ( parameters?.maxElements ) {
+        fieldDescriptorParams.maxElements = parameters.maxElements
+        delete parameters.maxElements
+    }
 
     let elementDescriptorParams: ElementDescriptorParams = parameters ?? { }
 
@@ -26,9 +44,10 @@ export function Elements( type: object|Boolean|Date|Number|String|Class, paramet
         designType = type
     }
 
-    const fieldDescriptorParams: FieldDescriptorParams = {
+    fieldDescriptorParams = {
         elements: elementDescriptorParams,
-        designType: [designType] 
+        designType: [designType],
+        ...fieldDescriptorParams
     }
 
     function Elements( target:any, name:string, propertyDescriptor:TypedPropertyDescriptor<Function> ) {
