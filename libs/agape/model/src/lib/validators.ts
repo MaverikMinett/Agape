@@ -45,6 +45,9 @@ export namespace Validators {
 
     export function minElements( minElements: number ) {
         return function ( value: any[] ) {
+            if ( ! value ) {
+                return { minElements: `Requires at least ${minElements} items`}
+            }
             return value.length < minElements 
                 ? { minElements: `Requires at least ${minElements} items`}
                 : null
@@ -53,6 +56,9 @@ export namespace Validators {
 
     export function maxElements( maxElements: number ) {
         return function ( value: any[] ) {
+            if ( ! value ) {
+                return null
+            }
             return value.length > maxElements 
                 ? { minElements: `Exceeds maximum of ${maxElements} items`}
                 : null
