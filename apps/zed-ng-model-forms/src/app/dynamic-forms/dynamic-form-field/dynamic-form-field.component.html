@@ -70,17 +70,23 @@
     </ng-template>
 
     <ng-template #checkboxes>
-        <div class="checkboxes-control">
+        <div class="checkboxes-control"
+         [class.checkboxes-control-disabled]="ngControl.disabled">
             <div class="ag-mat-control-group-header">
                 <label>
-                    <mat-label class="ag-mat-control-group-label">{{ agControl.label }}</mat-label><span aria-hidden="true" class="ag-mat-control-group-label--required"> </span>
+                    <mat-label class="ag-mat-control-group-label">{{ agControl.label }}</mat-label><span aria-hidden="true" class="ag-mat-control-group-label--required" *ngIf="required"> </span>
                 </label>
-                <mat-error class="ag-mat-control-group-error mat-caption">This field is required</mat-error>  
+                <mat-error 
+                    *ngIf="! disabled && ngControl.dirty && ngControl.errors?.field"
+                    class="ag-mat-control-group-error mat-caption">
+                    {{ ngControl.errors?.field?.message }}
+                </mat-error>  
             </div>
 
             <mat-checkbox-group
                 [formControl]="this.ngControl"
                 [choices]="formattedChoices"
+                (change)="this.emitChange($event)"
             ></mat-checkbox-group>
         </div>
     </ng-template>
@@ -297,4 +303,3 @@
     </ng-template>
 
 </ng-container>
-

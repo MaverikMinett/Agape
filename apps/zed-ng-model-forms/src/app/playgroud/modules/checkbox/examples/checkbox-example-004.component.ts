@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 
-import { Elements, Enum, Field, Label, Model, Widget } from "@agape/model";
+import { Elements, Enum, Field, Label, Model, Required, Widget } from "@agape/model";
 import { DynamicFormGroup } from "apps/zed-ng-model-forms/src/app/dynamic-forms/dynamic-form-group";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 
@@ -19,13 +19,14 @@ enum Topping {
 
     @Field disabled: boolean
 
-    @Elements(Topping)
+    @Elements(Topping, { minElements: 2 })
     @Widget('checkboxes')
+    @Required
     @Field toppings: Topping[]
 }
 
 @Component({
-    selector: 'checkbox-example-003',
+    selector: 'checkbox-example-004',
     template: `
     <dynamic-form [group]="form">
 
@@ -35,7 +36,7 @@ enum Topping {
     </div>
     `,
 })
-export class CheckboxExample003 {
+export class CheckboxExample004 {
 
     form = new DynamicFormGroup(ExampleForm)
 

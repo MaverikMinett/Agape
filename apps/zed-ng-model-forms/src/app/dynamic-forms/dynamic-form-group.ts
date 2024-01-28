@@ -83,15 +83,26 @@ export class DynamicFormGroup<T extends Class=Class> {
     }
 
     private mergeOptions( options: DynamicFormGroupOptions<T> ) {
+        console.log("MERGE OPTIONS", options)
         if ( options ) {
             if ( options.fields ) {
                 this.options.fields ??= { }
                 for ( const fieldName of Object.keys(options.fields) ) {
                     this.options.fields[fieldName] ??= {}
                     this.options.fields[fieldName] = {...this.options.fields[fieldName], ...options.fields[fieldName]}
+                    if ('disabled' in options.fields[fieldName]) {
+                        options.fields[fieldName].disabled
+                            ? this.ngFormGroup.controls[fieldName].disable()
+                            : this.ngFormGroup.controls[fieldName].enable()
+                        this.updateValue()
+                    }
                 }
             }
         }
+    }
+
+    updateValue() {
+        this.value = this.ngFormGroup.value
     }
 
 }

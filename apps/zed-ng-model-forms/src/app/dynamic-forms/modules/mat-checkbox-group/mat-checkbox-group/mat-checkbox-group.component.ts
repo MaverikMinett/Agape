@@ -1,8 +1,7 @@
 import { Choice } from "@agape/model";
-import { Component, Input } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-
 
 @Component({
     selector: 'mat-checkbox-group',
@@ -20,7 +19,7 @@ export class MatCheckboxGroupComponent implements  ControlValueAccessor {
 
     value: any[] = []
 
-    onChange = (quantity) => {};
+    onChange = (quantity) => { };
 
     onTouched = () => {};
   
@@ -29,6 +28,8 @@ export class MatCheckboxGroupComponent implements  ControlValueAccessor {
     disabled = false;
 
     @Input() choices: Choice[]
+
+    @Output() change: EventEmitter<any> = new EventEmitter()
 
     onCheckboxChange(event:MatCheckboxChange, checkboxValue: any) {
         this.markAsTouched()
@@ -43,6 +44,7 @@ export class MatCheckboxGroupComponent implements  ControlValueAccessor {
             }
         }
         this.onChange(this.value)
+        this.change.emit(this.value)
     }
 
     writeValue(selectedOptions: any[]) {
@@ -68,6 +70,10 @@ export class MatCheckboxGroupComponent implements  ControlValueAccessor {
             this.onTouched();
             this.touched = true;
         }
+    }
+
+    setDisabledState(disabled: boolean) {
+        this.disabled = disabled;
     }
 
 }

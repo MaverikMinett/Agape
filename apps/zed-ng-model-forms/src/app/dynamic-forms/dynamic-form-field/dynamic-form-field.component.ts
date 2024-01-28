@@ -141,7 +141,9 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
 
     touched = false
 
-
+    get required() {
+        return this.ngControl?.hasValidator( Validators.required )
+    }
 
     ngControl: AbstractControl
 
@@ -221,10 +223,9 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
             }
         }
 
-        if ( changes['disabled'] ) {
-            this.disabled ? this.ngControl.disable() : this.ngControl.enable()
-        }
-
+        // if ( changes['disabled'] ) {
+        //     this.disabled ? this.ngControl.disable() : this.ngControl.enable()
+        // }
         
     }
 

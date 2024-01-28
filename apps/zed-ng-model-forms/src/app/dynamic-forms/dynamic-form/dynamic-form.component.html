@@ -8,7 +8,6 @@
             (ngModelChange)="emitNgModelChange(fieldName, $event)"
             [choices]="group.options?.fields?.[fieldName]?.choices"
             [choiceFormatter]="group.options?.fields?.[fieldName]?.choiceFormatter"
-            [disabled]="group.options?.fields?.[fieldName]?.disabled"
             ></dynamic-form-field> 
         </ng-container>
     </div>

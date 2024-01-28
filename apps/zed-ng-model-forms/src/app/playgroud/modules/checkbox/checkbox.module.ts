@@ -10,6 +10,7 @@ import { MatCheckboxGroupExample001 } from "./mat-checkbox-group-examples/mat-ch
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatCheckboxGroupModule } from "../../../dynamic-forms/modules/mat-checkbox-group/mat-checkbox-group.module";
 import { CheckboxExample003 } from "./examples/checkbox-example-003.component";
+import { CheckboxExample004 } from "./examples/checkbox-example-004.component";
 
 const routes: Route[] = [
     { path: 'playground/checkboxes', component: CheckboxPageComponent },
@@ -23,6 +24,7 @@ const routes: Route[] = [
         CheckboxExample001,
         CheckboxExample002,
         CheckboxExample003,
+        CheckboxExample004,
         MatCheckboxGroupExample001,
     ],
     imports: [

@@ -3,7 +3,9 @@
         <mat-checkbox
             *ngFor="let choice of choices"
             (change)="onCheckboxChange($event, choice.value)"
-            [checked]="value?.includes(choice.value)">
+            [checked]="value?.includes(choice.value)"
+            [disabled]="disabled"
+            >
             {{ choice.label }}
         </mat-checkbox>
     </ng-container>
