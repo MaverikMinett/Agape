@@ -1,4 +1,4 @@
-import { Choice, ChoiceFormatterFunction, FieldDescriptor, Model, ModelDescriptor, getFieldValidator, getValidators, validateField } from "@agape/model";
+import { Choice, ChoiceFormatterFunction, FieldDescriptor, Model, ModelDescriptor, WidgetType, getFieldValidator, getValidators, validateField } from "@agape/model";
 import { Class } from "@agape/types";
 import { Component, Host, Input, OnChanges, Optional, Output, Self, SimpleChanges, SkipSelf, EventEmitter, HostBinding, OnDestroy } from "@angular/core";
 import { DynamicFormControl } from "../dynamic-form-control";
@@ -46,6 +46,12 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
     @Input() choiceFormatter: ChoiceFormatterFunction
 
     @Input() disabled = false
+
+    @Input('widget') _widget: WidgetType
+
+    get widget() {
+        return this._widget ?? this.agControl?.widget
+    }
 
     resolvedChoiceItems: any[]
 

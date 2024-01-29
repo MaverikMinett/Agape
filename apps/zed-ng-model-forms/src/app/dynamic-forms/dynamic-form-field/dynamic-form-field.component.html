@@ -2,19 +2,19 @@
 
 <ng-container *ngIf="agControl">
 
-    <ng-container *ngIf="agControl.widget === 'checkbox'">
+    <ng-container *ngIf="widget === 'checkbox'">
         <ng-container *ngTemplateOutlet="checkbox"></ng-container>
     </ng-container>
 
-    <ng-container *ngIf="agControl.widget === 'checkboxes'">
+    <ng-container *ngIf="widget === 'checkboxes'">
         <ng-container *ngTemplateOutlet="checkboxes"></ng-container>
     </ng-container>
 
-    <ng-container *ngIf="agControl.widget === 'date'">
+    <ng-container *ngIf="widget === 'date'">
         <ng-container *ngTemplateOutlet="date"></ng-container>
     </ng-container>
 
-    <ng-container *ngIf="agControl.widget === 'input'">
+    <ng-container *ngIf="widget === 'input'">
         <ng-container *ngIf="agControl.type === 'string'">
             <ng-container *ngTemplateOutlet="inputString"></ng-container>
         </ng-container>
@@ -23,11 +23,15 @@
         </ng-container>
     </ng-container>
 
-    <ng-container *ngIf="agControl.widget === 'select'">
+    <ng-container *ngIf="widget === 'radio'">
+        <ng-container *ngTemplateOutlet="radio"></ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="widget === 'select'">
         <ng-container *ngTemplateOutlet="select"></ng-container>
     </ng-container>
 
-    <ng-container *ngIf="agControl.widget === 'textarea'">
+    <ng-container *ngIf="widget === 'textarea'">
         <ng-container *ngIf="agControl.autosize">
             <ng-container *ngTemplateOutlet="textareaAutosize"></ng-container>
         </ng-container>
@@ -196,6 +200,33 @@
             <mat-error *ngIf="this.ngControl.errors?.['field']">{{this.ngControl.errors?.['field'].message}}</mat-error>
         </mat-form-field>
     </ng-template>
+
+    <ng-template #radio>
+        <div class="radio-group-control"
+         [class.radio-group-control-disabled]="ngControl.disabled">
+            <div class="ag-mat-control-group-header">
+                <label>
+                    <mat-label class="ag-mat-control-group-label">{{ agControl.label }}</mat-label><span aria-hidden="true" class="ag-mat-control-group-label--required" *ngIf="required"> </span>
+                </label>
+                <mat-error 
+                    *ngIf="! disabled && ngControl.dirty && ngControl.errors?.field"
+                    class="ag-mat-control-group-error mat-caption">
+                    {{ ngControl.errors?.field?.message }}
+                </mat-error>  
+            </div>
+
+            <mat-radio-group 
+                [formControl]="this.ngControl"
+                (change)="this.emitChange($event)">
+                <mat-radio-button 
+                    *ngFor="let choice of formattedChoices"
+                    [value]="choice.value">
+                    {{ choice.label }}
+                </mat-radio-button>
+            </mat-radio-group>
+        </div>
+    </ng-template>
+
     <ng-template #select>
         <mat-form-field>
             <mat-label>{{agControl.label}}</mat-label>

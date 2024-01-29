@@ -1,4 +1,4 @@
-import { ChoiceFormatterFunction, Model, ModelDescriptor } from "@agape/model";
+import { ChoiceFormatterFunction, Model, ModelDescriptor, WidgetType } from "@agape/model";
 import { Class, Dictionary } from "@agape/types";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -12,6 +12,7 @@ export interface DynamicFormGroupFieldOptions {
     choiceFormatter?: ChoiceFormatterFunction
     disabled?: boolean
     on?: Dictionary<(...args: any[]) => any>
+    widget?: WidgetType
 }
 
 export class DynamicFormGroup<T extends Class=Class> {
@@ -37,10 +38,6 @@ export class DynamicFormGroup<T extends Class=Class> {
     get valid() {
         return this.ngFormGroup.valid
     }
-
-    // get value() {
-    //     return this.ngFormGroup.value
-    // }
 
     value: InstanceType<T>
 
@@ -72,7 +69,15 @@ export class DynamicFormGroup<T extends Class=Class> {
         for ( const field of this.modelDescriptor.fields.all() ) {
             const validators = []
             if ( field.required ) validators.push( Validators.required )
-            ngFormBuilderArgs[field.name] = [null, validators]
+
+            let fieldValue: any = null
+            if ( 'default' in field ) {
+                fieldValue = typeof field.default === 'function'
+                    ? fieldValue = field.default.call(null)
+                    : field.default
+            }
+
+            ngFormBuilderArgs[field.name] = [fieldValue, validators]
         }
 
         const ngFormGroup = new FormBuilder().group(ngFormBuilderArgs)

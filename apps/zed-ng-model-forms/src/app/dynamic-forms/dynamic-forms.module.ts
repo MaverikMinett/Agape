@@ -5,6 +5,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox"
 import { MatIconModule } from "@angular/material/icon"
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatRadioModule } from "@angular/material/radio"
 import { MatSelectModule } from "@angular/material/select";
 import { ChooseQuantityComponent } from "./choose-quantity-component/choose-quantity.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -33,6 +34,7 @@ import { MatCheckboxGroupModule } from "./modules/mat-checkbox-group/mat-checkbo
         MatCheckboxModule,
         MatDatepickerModule,
         MatInputModule,
+        MatRadioModule,
         MatSelectModule,
         MatIconModule,
 
