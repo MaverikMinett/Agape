@@ -1,6 +1,6 @@
 import { camelize, pluralize, tokenize, labelize } from "@agape/string";
 import { Class, Dictionary } from '@agape/types';
-import { Choice, ChoiceFormatterFunction, ValidatorFunction } from "./types";
+import { Choice, ValidatorFunction, WidgetType } from "./types";
 import { Document } from "./document";
 import { Model } from "./decorators/class/model";
 
@@ -180,7 +180,7 @@ export class FieldDescriptor {
 
     foreignDocument?: Class
 
-    default?: any
+    default?: string|number|boolean|( () => any )
 
     optional?: boolean
 
@@ -280,7 +280,7 @@ export class ElementDescriptor {
 
     designType: String|Number|Boolean|Date|Class|[String|Number|Boolean|Date|Class]
 
-    widget?: string;          // input, date, textarea, does not autopopulate
+    widget?: WidgetType;   // do not autopopulate
 
     enum?: object
 

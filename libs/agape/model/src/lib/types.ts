@@ -16,7 +16,7 @@ type ArrayErrors<T> = T extends Array<infer I> ? Array<ErrorReport<I>> : T
 
 
 type FieldType = 'integer'|'decimal'|'number'|'string'|'text'|'date'|'time';
-type WidgetType = 'input'|'date'|'number'|'textarea'|'time';
+// type WidgetType = 'input'|'date'|'number'|'textarea'|'time';
 // export type DesignType = String|Number|Boolean|Date|Class|[String]|[Number]|[Boolean]|[Date]|[Class]
 
 export interface Choice<T=any>  {
@@ -32,6 +32,7 @@ export interface TextFieldParams {
     rows?: number;
 }
 
+export type WidgetType = 'checkbox'|'date'|'input'|'radio'|'select'|'textarea'|string
 
 export type ChoiceFormatterFunction = (item: any) => Choice
 

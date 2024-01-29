@@ -1,15 +1,16 @@
 import { FieldDescriptorParams } from "../../descriptors";
+import { WidgetType } from "../../types";
 import { Model } from "../class/model";
 
 
 
 
-export function Widget( widget: string ) {
+export function Widget( widget: WidgetType ) {
 
     const params: FieldDescriptorParams = { widget }
 
     function Widget(target:any, name:string, propertyDescriptor?:TypedPropertyDescriptor<Function>) {
-        if ( propertyDescriptor ) throw new Error("Cannot use the Label decorator on a method")
+        if ( propertyDescriptor ) throw new Error("Cannot use the Widget decorator on a method")
         
         let model = Model.descriptor(target, true)
 
