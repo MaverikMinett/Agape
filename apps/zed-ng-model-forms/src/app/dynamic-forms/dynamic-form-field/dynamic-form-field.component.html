@@ -18,7 +18,7 @@
         <ng-container *ngIf="agControl.type === 'string'">
             <ng-container *ngTemplateOutlet="inputString"></ng-container>
         </ng-container>
-        <ng-container *ngIf="agControl.type === 'number'">
+        <ng-container *ngIf="agControl.type === 'number' || agControl.type === 'integer'">
             <ng-container *ngTemplateOutlet="inputNumber"></ng-container>
         </ng-container>
     </ng-container>

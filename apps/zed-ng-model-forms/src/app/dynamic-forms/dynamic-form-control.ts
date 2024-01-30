@@ -88,6 +88,8 @@ export class DynamicFormControl {
         if ( field.type ) this.type = field.type
         if ( field.widget ) this.widget = field.widget
 
+        console.log(field)
+
         if ( Array.isArray(field.designType) ) {
             this.type ??= 'array'
             this.multi = true

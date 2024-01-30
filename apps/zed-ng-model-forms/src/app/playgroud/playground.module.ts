@@ -5,6 +5,7 @@ import { PlaygroundIndexComponent } from "./components/playground-index/playgrou
 import { CheckboxModule } from "./modules/checkbox/checkbox.module";
 import { RadioModule } from "./modules/radio/radio.module";
 import { DateModule } from "./modules/date/date.module";
+import { NumberModule } from "./modules/number/number.module";
 
 const routes: Route[] = [
     // {
@@ -22,6 +23,7 @@ const routes: Route[] = [
         CheckboxModule,
         RadioModule,
         DateModule,
+        NumberModule,
         RouterModule.forChild(routes)
     ]
 })
