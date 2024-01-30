@@ -3,7 +3,7 @@ import { CheckboxPageComponent } from "./checkbox-page/checkbox-page.component";
 import { Route, RouterModule } from "@angular/router";
 import { CheckboxExample001 } from "./examples/checkbox-example-001.component";
 import { CommonModule } from "@angular/common";
-import { DynammicFormsModule } from "../../../dynamic-forms/dynamic-forms.module";
+import { DynamicFormsModule } from "../../../dynamic-forms/dynamic-forms.module";
 import { CheckboxExample002 } from "./examples/checkbox-example-002.component";
 import { MatCheckboxGroupPageComponent } from "./mat-checkbox-group-page/mat-checkbox-group-page.component";
 import { MatCheckboxGroupExample001 } from "./mat-checkbox-group-examples/mat-checkbox-group-example-001.component";
@@ -30,7 +30,7 @@ const routes: Route[] = [
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
-        DynammicFormsModule,
+        DynamicFormsModule,
         ReactiveFormsModule,
         MatCheckboxGroupModule
     ],

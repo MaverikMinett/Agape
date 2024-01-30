@@ -12,7 +12,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { FacilitiesIndexComponent } from "./facilities-index/facilities-index.component";
 import { EditFacilityReactiveComponent } from "./edit-facility-reactive/edit-facility-reactive.component";
 import { EditFacilityDynamicFieldsComponent } from "./edit-facility-dynamic-fields/edit-facility-dynamic-fields.component";
-import { DynammicFormsModule } from "../dynamic-forms/dynamic-forms.module";
+import { DynamicFormsModule } from "../dynamic-forms/dynamic-forms.module";
 import { EditFacilityDynamicFormComponent } from "./edit-facility-dynamic-form/edit-facility-dynamic-form.component";
 
 const routes: Route[] = [
@@ -46,7 +46,7 @@ const routes: Route[] = [
         ReactiveFormsModule,
         RouterModule.forChild(routes),
 
-        DynammicFormsModule,
+        DynamicFormsModule,
 
         MatFormFieldModule,
         MatInputModule,

@@ -101,6 +101,7 @@
             <input matInput 
             [formControl]="this.ngControl"
             [matDatepicker]="picker"
+            (dateChange)="this.emitChange($event)"
             (ngModelChange)="this.emitNgModelChange($event)"
             (blur)="this.emitCtrlBlur($event)"
             (click)="this.emitCtrlClick($event)"

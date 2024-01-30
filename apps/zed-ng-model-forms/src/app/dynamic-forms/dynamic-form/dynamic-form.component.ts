@@ -77,6 +77,8 @@ export class DynamicFormComponent {
     emitChange( fieldName: string, event: any ) {
         const fieldValue = this.group.ngFormGroup.value[fieldName]
 
+        console.log("FORM CHANGED", fieldName, event )
+
         this.group.updateValue()
 
         this.group.options?.fields?.[fieldName].on?.['change']?.(event)

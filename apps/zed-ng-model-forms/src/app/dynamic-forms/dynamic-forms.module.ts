@@ -42,4 +42,4 @@ import { MatCheckboxGroupModule } from "./modules/mat-checkbox-group/mat-checkbo
         MatCheckboxGroupModule,
     ]
 })
-export class DynammicFormsModule { }
+export class DynamicFormsModule { }

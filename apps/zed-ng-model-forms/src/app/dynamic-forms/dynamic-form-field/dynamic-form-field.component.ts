@@ -307,6 +307,7 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
     }
 
     emitChange(event: any) {
+        console.log("Emit Change Event", event)
         this.change.emit(event)
     }
 

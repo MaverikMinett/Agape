@@ -12,7 +12,7 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select"
 import { MatButtonModule } from "@angular/material/button";
 import { EditEmployeeDynamicFieldsComponent } from "./edit-employee-dynamic-fields/edit-employee-dynamic-fields.component";
-import { DynammicFormsModule } from "../dynamic-forms/dynamic-forms.module";
+import { DynamicFormsModule } from "../dynamic-forms/dynamic-forms.module";
 import { EditEmployeeDynamicFormComponent } from "./edit-employee-dynamic-form/edit-employee-dynamic-form.component";
 
 const routes: Route[] = [
@@ -45,7 +45,7 @@ const routes: Route[] = [
         CommonModule,
         ReactiveFormsModule,
         RouterModule.forChild(routes),
-        DynammicFormsModule,
+        DynamicFormsModule,
 
         MatFormFieldModule,
         MatInputModule,

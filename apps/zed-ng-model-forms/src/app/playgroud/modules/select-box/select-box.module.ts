@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { Route, RouterModule } from "@angular/router";
 import { SelectBoxPageComponent } from "./select-box-page/select-box-page.component";
 import { SelectBoxExample001 } from "./examples/select-box-example-001.component";
-import { DynammicFormsModule } from "../../../dynamic-forms/dynamic-forms.module";
+import { DynamicFormsModule } from "../../../dynamic-forms/dynamic-forms.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SelectBoxExample002 } from "./examples/select-box-example-002.component";
 import { CommonModule } from "@angular/common";
@@ -61,7 +61,7 @@ const routes: Route[] = [
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
-        DynammicFormsModule,
+        DynamicFormsModule,
         ReactiveFormsModule,
         MatCheckboxModule,
         MatFormFieldModule,

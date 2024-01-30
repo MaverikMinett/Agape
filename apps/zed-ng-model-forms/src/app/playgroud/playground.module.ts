@@ -4,6 +4,7 @@ import { Route, RouterModule } from "@angular/router";
 import { PlaygroundIndexComponent } from "./components/playground-index/playground-index.component";
 import { CheckboxModule } from "./modules/checkbox/checkbox.module";
 import { RadioModule } from "./modules/radio/radio.module";
+import { DateModule } from "./modules/date/date.module";
 
 const routes: Route[] = [
     // {
@@ -20,6 +21,7 @@ const routes: Route[] = [
         SelectBoxModule,
         CheckboxModule,
         RadioModule,
+        DateModule,
         RouterModule.forChild(routes)
     ]
 })
