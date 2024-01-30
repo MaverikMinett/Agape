@@ -46,6 +46,7 @@ export function getValidators( field: FieldDescriptor) {
     if ( field.designType === Number ) {
         if ( defined(field.min) ) validators.push( Validators.min(field.min) )
         if ( defined(field.max) ) validators.push( Validators.max(field.max) )
+        if ( field.type === 'integer' ) validators.push( Validators.integer )
     }
     else if ( field.designType === String ) {
         if ( defined(field.minLength) ) validators.push( Validators.maxLength(field.maxLength) )
@@ -69,6 +70,7 @@ export function getFieldValidator( field: FieldDescriptor ) {
     function fieldValidator(instance: any, value: any) {
         for ( let validator of validators ) {
             const errors = validator( value, instance )
+            console.log("ERRORS", errors)
             if ( errors ) {
                 let valid = false
                 let entries = Object.entries(errors)

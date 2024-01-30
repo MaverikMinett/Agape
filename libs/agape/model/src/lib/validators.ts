@@ -64,5 +64,15 @@ export namespace Validators {
                 : null
         }
     }
+
+    export function integer( value: any ) {
+        if ( value === undefined || value === null ) {
+            return null
+        }
+
+        return Number.isInteger(value)
+            ? null
+            : { integer: `Must be an integer` }
+    }
     
 }
