@@ -47,6 +47,7 @@ export function getValidators( field: FieldDescriptor) {
         if ( defined(field.min) ) validators.push( Validators.min(field.min) )
         if ( defined(field.max) ) validators.push( Validators.max(field.max) )
         if ( field.type === 'integer' ) validators.push( Validators.integer )
+        if ( field.type === 'decimal' ) validators.push( Validators.decimal(field.decimals) )
     }
     else if ( field.designType === String ) {
         if ( defined(field.minLength) ) validators.push( Validators.maxLength(field.maxLength) )

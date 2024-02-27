@@ -12,19 +12,19 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DynamicFormComponent } from "./dynamic-form/dynamic-form.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatCheckboxGroupModule } from "./modules/mat-checkbox-group/mat-checkbox-group.module";
-
+import { DecimalMaskModule } from "./modules/decimal-mask/decimal-mask.module";
 
 
 @NgModule({
     declarations: [
         DynamicFormFieldComponent,
         ChooseQuantityComponent,
-        DynamicFormComponent
+        DynamicFormComponent,
     ],
     exports: [
         DynamicFormFieldComponent,
         DynamicFormComponent,
-        ChooseQuantityComponent
+        ChooseQuantityComponent,
     ],
     imports: [
         CommonModule,
@@ -40,6 +40,7 @@ import { MatCheckboxGroupModule } from "./modules/mat-checkbox-group/mat-checkbo
 
         /* custom form controls */
         MatCheckboxGroupModule,
+        DecimalMaskModule
     ]
 })
 export class DynamicFormsModule { }

@@ -74,5 +74,26 @@ export namespace Validators {
             ? null
             : { integer: `Must be an integer` }
     }
+
+    export function decimal( decimals: number ) {
+        return function ( value: number ) {
+
+            console.log("VALIDATE DECIMAL", value, decimals)
+
+            if ( value === undefined || value === null ) {
+                return null
+            }
+
+            const numberAsString = value.toString()
+            const [int,afterPoint] = numberAsString.split('.')
+            if ( ! afterPoint || afterPoint.length === 0 ){
+                return null
+            }
+            if ( afterPoint.length > decimals ) {
+                return { decimal: `Exceeds maximum of ${decimals} decimals`}
+            }
+            return null
+        }
+    }
     
 }

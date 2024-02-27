@@ -169,6 +169,8 @@ export class DynamicFormFieldComponent implements OnChanges, ControlValueAccesso
     }
 
     resolveNgFormControlByName( name: string ) {
+        console.log(this.controlContainer)
+        console.log(this.controlContainer.control.get(name))
         return this.controlContainer.control.get(name)
     }
 

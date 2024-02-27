@@ -21,6 +21,9 @@
         <ng-container *ngIf="agControl.type === 'number' || agControl.type === 'integer'">
             <ng-container *ngTemplateOutlet="inputNumber"></ng-container>
         </ng-container>
+        <ng-cotnainer *ngIf="agControl.type === 'decimal'">
+            <ng-container *ngTemplateOutlet="inputDecimal"></ng-container>
+        </ng-cotnainer>
     </ng-container>
 
     <ng-container *ngIf="widget === 'radio'">
@@ -173,6 +176,45 @@
                 type="number" 
                 [min]="agControl.min" 
                 [max]="agControl.max"
+                [step]="agControl.step"
+                [formControl]="this.ngControl"
+                (ngModelChange)="this.emitNgModelChange($event)"
+                (blur)="this.emitCtrlBlur($event)"
+                (click)="this.emitCtrlClick($event)"
+                (contextmenu)="this.emitCtrlContextmenu($event)"
+                (copy)="this.emitCtrlCopy($event)"
+                (dblclick)="this.emitCtrlDblclick($event)"
+                (focus)="this.emitCtrlFocus($event)"
+                (focusin)="this.emitCtrlFocusin($event)"
+                (focusout)="this.emitCtrlFocusout($event)"
+                (keydown)="this.emitCtrlKeydown($event)"
+                (keyup)="this.emitCtrlKeyup($event)"
+                (keypress)="this.emitCtrlKeypress($event)"
+                (mousedown)="this.emitCtrlMousedown($event)"
+                (mouseenter)="this.emitCtrlMouseenter($event)"
+                (mouseleave)="this.emitCtrlMouseleave($event)"
+                (mousemove)="this.emitCtrlMousemove($event)"
+                (mouseout)="this.emitCtrlMouseout($event)"
+                (mouseover)="this.emitCtrlMouseover($event)"
+                (mouseup)="this.emitCtrlMouseup($event)"
+                (paste)="this.emitCtrlPaste($event)"
+                (scroll)="this.emitCtrlScroll($event)"
+                (scrollend)="this.emitCtrlScrollend($event)"
+                (wheel)="this.emitCtrlWheel($event)"
+            >
+            <mat-error *ngIf="this.ngControl.errors?.['field']">{{this.ngControl.errors?.['field'].message}}</mat-error>
+        </mat-form-field>
+    </ng-template>
+    <ng-template #inputDecimal>
+        <mat-form-field>
+            <mat-label>{{agControl.label}}</mat-label>
+            <input matInput 
+                type="number" 
+                [min]="agControl.min" 
+                [max]="agControl.max"
+                [step]="agControl.step"
+                [decimals]="agControl.decimals"
+                [input]="controlContainer.form.value[fieldName]"
                 [formControl]="this.ngControl"
                 (ngModelChange)="this.emitNgModelChange($event)"
                 (blur)="this.emitCtrlBlur($event)"

@@ -11,13 +11,18 @@ export class DynamicFormControl {
 
     label: string
 
-    min: number
-
-    max: number
-
     choices: Choice[]
 
     required: boolean
+
+    /* number */
+    min?: number
+
+    max?: number
+
+    step?: number
+
+    decimals?: number
 
     /* textarea */
     autosize?: boolean
@@ -79,16 +84,25 @@ export class DynamicFormControl {
         }
         else if ( field.enum ) this.choices = enumToChoices( field.enum )
 
-        console.log(field)
-        console.log(this)
-
+        if ( this.type === 'decimal' ) {
+            if ( 'step' in field ) {
+                this.step = field.step
+            }
+            else {
+                const nZeros = field.decimals - 1
+                let zeros = ''
+                for ( let i=0; i<nZeros; i++) {
+                    zeros += '0'
+                }
+                this.step = Number(`0.${zeros}1`)
+            }
+            this.decimals = field.decimals
+        }
     }
 
     buildTypeAndWidgetFromFieldDescriptor( field: FieldDescriptor ) {
         if ( field.type ) this.type = field.type
         if ( field.widget ) this.widget = field.widget
-
-        console.log(field)
 
         if ( Array.isArray(field.designType) ) {
             this.type ??= 'array'

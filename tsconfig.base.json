@@ -41,7 +41,7 @@
       "@agape/terminal": ["libs/agape/terminal/src/index.ts"],
       "@agape/types": ["libs/agape/types/src/index.ts"],
       "@agape/ui": ["libs/agape/ui/src/index.ts"],
-      "@agape/validator": ["libs/agape/validator/src/index.ts"],
+      "@agape/validate": ["libs/agape/validate/src/index.ts"],
       "@lib/api": ["libs/lib-api/src/index.ts"],
       "@lib/express": ["libs/lib-express/src/index.ts"],
       "@lib/server": ["libs/lib-server/src/index.ts"],

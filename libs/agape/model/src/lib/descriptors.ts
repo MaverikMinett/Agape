@@ -193,6 +193,8 @@ export class FieldDescriptor {
 
     decimals?: number
 
+    step?: number
+
     // for strings
     trim?: boolean
 
