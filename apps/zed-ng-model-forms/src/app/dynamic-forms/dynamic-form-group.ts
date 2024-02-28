@@ -2,6 +2,9 @@ import { ChoiceFormatterFunction, Model, ModelDescriptor, WidgetType } from "@ag
 import { Class, Dictionary } from "@agape/types";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
+import { AugmentedAbstractControl, AugmentedFormGroup } from "./types/augmented-abstract-control";
+import { EventEmitter } from "@angular/core";
+
 
 export interface DynamicFormGroupOptions<T> {
     fields?: { [K in keyof T]?: DynamicFormGroupFieldOptions }
@@ -17,7 +20,7 @@ export interface DynamicFormGroupFieldOptions {
 
 export class DynamicFormGroup<T extends Class=Class> {
 
-    ngFormGroup: FormGroup
+    ngFormGroup: AugmentedFormGroup
 
     model: T
 
@@ -82,9 +85,18 @@ export class DynamicFormGroup<T extends Class=Class> {
 
         const ngFormGroup = new FormBuilder().group(ngFormBuilderArgs)
 
-        this.ngFormGroup = ngFormGroup
+        this.ngFormGroup = this.augmentNgFormControls(ngFormGroup)
 
         this.value = ngFormGroup.value as any
+    }
+
+    private augmentNgFormControls( ngFormGroup: FormGroup ) {
+        for ( const [controlName, ngFormControl] of Object.entries(ngFormGroup.controls) ) {
+           const augmentedFormControl: AugmentedAbstractControl = ngFormControl as any
+           augmentedFormControl.valuePatched = new EventEmitter<any>()
+        }
+
+        return ngFormGroup as AugmentedFormGroup
     }
 
     private mergeOptions( options: DynamicFormGroupOptions<T> ) {
@@ -108,6 +120,16 @@ export class DynamicFormGroup<T extends Class=Class> {
 
     updateValue() {
         this.value = this.ngFormGroup.value
+    }
+
+    patchValue(value: Partial<InstanceType<T>>) {
+        this.ngFormGroup.patchValue(value)
+
+        for ( let key of Object.keys(value) ) {
+            const augmentedNgFormControl = this.ngFormGroup.controls[key].valuePatched.emit(this.ngFormGroup.value[key])
+        }
+
+        this.value = this.ngFormGroup.value as any
     }
 
 }

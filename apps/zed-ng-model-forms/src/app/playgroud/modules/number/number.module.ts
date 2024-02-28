@@ -11,6 +11,7 @@ import { DecimalMaskExample001 } from "./decimal-mask-examples/decimal-mask-exam
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DecimalMaskModule } from "../../../dynamic-forms/modules/decimal-mask/decimal-mask.module";
 import { DecimalMaskExample002 } from "./decimal-mask-examples/decimal-mask-example-002";
+import { NumberExample004 } from "./examples/number-example-004";
 
 
 const routes: Route[] = [
@@ -31,6 +32,7 @@ const routes: Route[] = [
         NumberExample001,
         NumberExample002,
         NumberExample003,
+        NumberExample004,
         DecimalMaskExample001,
         DecimalMaskExample002
     ],
